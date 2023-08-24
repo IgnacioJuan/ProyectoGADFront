@@ -1,0 +1,57 @@
+<body>
+  <div class="card">
+    <h1 style="padding: 10px; text-align: center">
+      <strong>Listado de Evidencias</strong>
+    </h1>
+    <div class="card-body">
+      <div role="search" id="buscar">
+        <input class="form-control" type="text" placeholder="Buscar" aria-label="Search" [(ngModel)]="searchText" />
+      </div>
+      <div class="row">
+        <div class="col-md-8">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Id</th>
+                <th>Evidencia</th>
+                <th>Borrar</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!--             <tr *ngFor="let file of fileInfos | async">-->
+              <tr *ngFor="let file of aRCHI | buscar : searchText">
+                <td>{{file.id_archivo}}</td>
+                <td> <a href="{{ file.enlace }}"> {{ file.nombre }} </a></td>
+                <td>
+                  <button class="btn btn-danger" style="background-color: red; margin-right: 5%" role="button"
+                    (click)="elim(file.nombre,file)">
+                    <i class="fa fa-trash"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <br />
+            <div class="form-group">
+              <label id="id_evidencia">Actividad: {{activ.nombre}}</label>
+            </div>
+            <div class="form-group">
+              <label for="archivo">Archivo:</label>
+              <input id="archivo" type="file" (change)="onFileChange($event)" />
+            </div>
+            <div class="form-group">
+              <label for="descripcion">Descripción:</label>
+              <textarea id="descripcion" class="form-control" [(ngModel)]="descripcion"></textarea>
+            </div>
+            <button class="btn btn-primary" type="button" (click)="onUpload()" [disabled]="!filearchivo">
+              Subir archivo
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>

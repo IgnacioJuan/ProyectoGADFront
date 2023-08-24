@@ -1,0 +1,63 @@
+<body>
+  <div class="container bg-light border border-start-0 rounded-4">
+    <div class="container contenedor">
+      <h1 class="text-center">DETALLE DEL MODELO</h1>
+      <h1>Nombre del Modelo</h1>
+      <div *ngIf="model">
+        <b>ID: {{ model.id_modelo }}</b>
+        <br />
+        <b>NOMBRE: {{ model.nombre }}</b>
+        <br />
+        <b>FECHA INICIO: {{ model.fecha_inicio | date : "dd/MM/yyyy" }}</b>
+        <br />
+        <b>FECHA FIN: {{ model.fecha_fin | date : "dd/MM/yyyy" }}</b>
+        <br />
+      </div>
+    </div>
+
+    <div class="table-container">
+      <table
+        mat-table
+        [dataSource]="dataSource"
+        multiTemplateDataRows
+        class="mat-elevation-z8"
+      >
+        <ng-container
+          matColumnDef="{{ column }}"
+          *ngFor="let column of columnsToDisplay"
+        >
+          <th mat-header-cell *matHeaderCellDef>{{ columnNames[column] }}</th>
+          <td mat-cell *matCellDef="let element">{{ element[column] }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="expandedDetail">
+          <td
+            mat-cell
+            *matCellDef="let element"
+            [attr.colspan]="columnsToDisplayWithExpand.length"
+          ></td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+        <tr
+          mat-row
+          *matRowDef="let element; columns: columnsToDisplay"
+          class="example-element-row"
+          (click)="mostrar(element)"
+        ></tr>
+        <tr
+          mat-row
+          *matRowDef="let row; columns: ['expandedDetail']"
+          class="example-detail-row"
+        ></tr>
+      </table>
+      <mat-paginator
+        #paginator
+        [pageSizeOptions]="[2, 10, 20]"
+        showFirstLastButtons
+        aria-label="Seleccione"
+      >
+      </mat-paginator>
+    </div>
+  </div>
+</body>

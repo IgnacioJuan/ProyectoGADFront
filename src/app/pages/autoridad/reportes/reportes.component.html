@@ -1,0 +1,91 @@
+<label for="" class="labePrincipal"> </label>
+
+<body>
+    <div class="container bg-light border border-start-0 rounded-4">
+
+        <blockquote class="blockquote text-dark" style="margin-top: 5%">
+            <h1><strong> LISTADO DE CRITERIOS</strong></h1>
+        </blockquote>
+
+        <div class="container" *ngFor="let item of listaCriterios">
+            <div class="row">
+
+                <div class="col">
+                    <div class="card" style="width: 35rem;">
+
+                        <label class="textTitulo" for=""> <strong> {{item.nombre}} </strong> </label>
+
+
+                        <div class="card-body">
+
+                            <div style="display: flex;">
+                                <button (click)="editar(item)" type="button" class="btn btn-primary"
+                                    data-bs-toggle="modal" data-bs-target="#exampleModal" style="margin-right: 10px">
+                                    Gráfica del porcentaje de Indicadores
+                                </button>
+                                <button style="padding: 0% 10px;" (click)="editar(item)" type="button"
+                                    class="btn btn-primary">
+                                    Grafica del porcentaje de Criterio
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+        <mat-card class="floating-card">
+            <!-- Contenido de la tarjeta -->
+            <div style="align-content: center;" class="card-body">
+                <canvas baseChart [type]="'pie'" [datasets]="pieChartDatasets2" [labels]="pieChartLabels2"
+                    [options]="pieChartOptions2" [plugins]="pieChartPlugins2" [legend]="pieChartLegend2">
+                </canvas>
+            </div>
+        </mat-card>
+
+        <div class="container" (click)=" getButtonCriterio2()">
+            <div class="card" style="width: 35rem; height: 500px; align-items:center;
+            display: flex;
+            justify-content: center;" style="background-color: rgb(233, 227, 227); ">
+                <div style="align-content: center; background-color: rgb(236, 235, 235);" class="card-body">
+
+                    <div style="display: block; align-items: center; align-content: center;">
+                        <!-- <canvas style="width: 70%; height: 400px; align-items: center; align-content: center;" baseChart width="400" height="400" [type]="'line'" [data]="lineChartData"
+                            [options]="lineChartOptions" [legend]="lineChartLegend">
+                        </canvas> -->
+
+                        <canvas baseChart [data]="barChartData" [options]="barChartOptions" [plugins]="barChartPlugins"
+                            [legend]="barChartLegend" [type]="'bar'">
+                        </canvas>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">INDICADORES</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <canvas baseChart [type]="'pie'" [datasets]="pieChartDatasets" [labels]="pieChartLabels"
+                    [options]="pieChartOptions" [plugins]="pieChartPlugins" [legend]="pieChartLegend">
+                </canvas>
+
+
+                <!-- Modal -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

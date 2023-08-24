@@ -1,0 +1,57 @@
+
+<body>
+  <!-- <section class="vh-100" style="background-color: inherit; border: none;"> -->
+    <div class="container" style="background-color: inherit; border: none;">
+      <div class="row d-flex justify-content-center align-items-center" style="background-color: inherit; border: none;">
+        <div class="col col-lg-12 mb-8 mb-lg-0" style="background-color: inherit; border: none;">
+          <div class="row g-0" style="background-color: inherit; border: none;">
+            <div class="col-md-7 gradient-custom text-center text-white" style="background-color: inherit; border: none;">
+              <div class="d-flex justify-content-center align-items-center" style="height: 100%; background-color: inherit; border: none;">
+                <img src="../../../assets/LOGO CUADRADO_SIN FONDO.png" width="70%" height="auto" style="border: none;" />
+              </div>
+            </div>
+            <div class="col-md-5">
+              <mat-card class="panelform">
+                <h1 class="text-center" style="margin-top: 6%"><strong>BIENVENIDO</strong></h1>
+                <form (ngSubmit)="formSubmit()">
+                  <mat-form-field class="full-width" appearance="outline">
+                    <mat-icon matPrefix class="mat-icon-start"
+                      >account_circle</mat-icon
+                    >
+                    <mat-label>Nombre de usuario</mat-label>
+                    <input
+                      required
+                      [(ngModel)]="loginData.username"
+                      name="username"
+                      matInput
+                      placeholder="Digite su nombre de usuario"
+                    />
+                  </mat-form-field>
+                  <mat-form-field class="full-width" appearance="outline">
+                    <mat-icon matPrefix class="mat-icon-start">lock</mat-icon>
+                    <mat-label>Contraseña</mat-label>
+                    <input
+                      [(ngModel)]="loginData.password"
+                      name="password"
+                      required
+                      type="password"
+                      matInput
+                      placeholder="Digite su contraseña"
+                    />
+                  </mat-form-field>
+                  <br /><br />
+                  <div class=" text-center">
+                    <button type="submit" mat-raised-button color="primary">
+                      Iniciar sesión
+                    </button>
+                  </div>
+                  <br /><br />
+                </form>
+              </mat-card>
+            </div>
+          </div>
+        </div>
+    </div>
+  </div>
+<!-- </section> -->
+</body>
