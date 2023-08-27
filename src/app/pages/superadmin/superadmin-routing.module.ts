@@ -11,7 +11,7 @@ import { EvidenciasComponent } from './pages/evidencias/evidencias.component';
 import { EvidenciaAtrasadaComponent } from './pages/evidencia-atrasada/evidencia-atrasada.component';
 import { CriterioReporteComponent } from './pages/criterio-reporte/criterio-reporte.component';
 import { DashboardComponent } from '../admin/dashboard/dashboard.component';
-
+import { ObjetivoodsListaComponent } from './pages/objetivoods-lista/objetivoods-lista.component';
 const routes: Routes = [{
   path: 'dashboard',
   component: DashboardComponent2,
@@ -82,11 +82,18 @@ const routes: Routes = [{
   canActivate: [RoleguardGuard],
   data: { allowedRoles: ['SUPERADMIN', 'ADMIN'] }
 },
+  {
+    path: 'objetivoods-lista',
+    component: ObjetivoodsListaComponent,
+    pathMatch: 'full',
+    canActivate: [RoleguardGuard], // Asegúrate de que el guard sea el adecuado
+    data: { allowedRoles: ['SUPERADMIN', 'ADMIN'] } // Ajusta los roles permitidos
+  },
 {
   path: 'modelo',
   loadChildren: () => import("./modelo/modelo.module").then(m => m.ModeloModule)
 },
-{ 
+{
   path: 'ponderacion',
   loadChildren: () => import("./ponderacion/ponderacion.module").then(m => m.PonderacionModule)
 },
