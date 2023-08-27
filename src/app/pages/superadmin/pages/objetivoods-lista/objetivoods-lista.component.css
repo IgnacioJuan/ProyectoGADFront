@@ -1,0 +1,11 @@
+.btn-new {
+  background-color: yellow; /* Cambia el color de fondo a amarillo */
+  color: black; /* Cambia el color del texto a negro */
+  margin-left: 2%; /* Aplica margen izquierdo */
+  font-weight: bold;
+}
+
+/* Estilo para el ícono con la clase .btn-custom-green-icon */
+.btn-custom-green-icon {
+  color: green; /* Cambia el color del ícono a verde */
+}
