@@ -5,14 +5,15 @@ export class Proyecto {
     nombre!: string;                        
     objetivo!: string;
     meta!: string;
-    procentaje_alcance!: number;
+    porcentaje_alcance!: number;
     fecha_inicio!: string;
     estado!: string;
     visible!: boolean;
     pnd!: any;//ObjetivoPND
     ods!: any;//ObjetivoOds
     modelopoa!: any;//ModeloPoa
-    programa!: any;//Indicador
+    programa!: any;//Programa
+    indicador!: any;//Indicador
     competencia!: any;//Competencia
 }
 
