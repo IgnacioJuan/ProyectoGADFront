@@ -8,12 +8,14 @@ import { CriterioSubcriteriosProjection } from 'src/app/interface/CriterioSubcri
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 
+
+
 @Component({
-  selector: 'app-criterios',
-  templateUrl: './criterios.component.html',
-  styleUrls: ['./criterios.component.css']
+  selector: 'app-crear-programa',
+  templateUrl: './crear-programa.component.html',
+  styleUrls: ['./crear-programa.component.css']
 })
-export class CriteriosComponent implements OnInit {
+export class CrearComponent implements OnInit {
   frmCriterio: FormGroup;
   guardadoExitoso: boolean = false;
   miModal!: ElementRef;
@@ -36,7 +38,8 @@ export class CriteriosComponent implements OnInit {
         : startIndex + pageSize;
     return `${startIndex + 1} - ${endIndex} de ${length}`;
   };
-  //
+
+
   public crite = new Criterio();
   criterios: CriterioSubcriteriosProjection[] = [];
   
