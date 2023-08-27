@@ -109,6 +109,10 @@ const routes: Routes = [{
   path: 'flujo-modelo',
   loadChildren: () => import("./flujo-modelo/flujo-modelo.module").then(m => m.FlujoModeloModule)
 },
+{
+  path: 'flujo_Componentes',
+  loadChildren: () => import("./flujo-componentes/flujo-componentes.module").then(m => m.FlujoComponentesModule)
+},
 ];
 
 @NgModule({
