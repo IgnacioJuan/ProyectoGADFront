@@ -185,6 +185,7 @@ export class ModeloComponent {
   }
 
   verDetalles(modelo_poa: any) {
+    modelo_poa.usuario=null;
     this.router.navigate(['/sup/flujo-modelo/modelo-proyecto'], { state: { data: modelo_poa } });
   }
 

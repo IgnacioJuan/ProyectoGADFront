@@ -9,7 +9,7 @@ export class Proyecto {
     fecha_inicio!: string;
     estado!: string;
     visible!: boolean;
-    pnd!: any;//ObjetivoPND
+    pnd!: { id_objetivo_pnd: number, /* otras propiedades de pnd */ };//ObjetivoPND
     ods!: any;//ObjetivoOds
     modelopoa!: any;//ModeloPoa
     programa!: any;//Programa

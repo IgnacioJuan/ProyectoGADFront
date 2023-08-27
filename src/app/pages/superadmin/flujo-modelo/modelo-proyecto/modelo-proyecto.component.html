@@ -315,224 +315,231 @@
 
                       <!-- Segundo tab: Resto del formulario -->
                       <mat-tab label="Configurar Parametros">
-                        <label for="pnd">PND:</label>
-                        <div class="d-flex">
-                          <input
-                            class="form-control me-2"
-                            formControlName="pnd"
-                            type="text"
-                            id="pnd"
-                            name="pnd"
-                            [(ngModel)]="selectedPND"
-                            style="width: 30%; margin-bottom: 10px"
-                            [disabled]="true"
-                          />
-                          <select
-                            class="form-control"
-                            (change)="onPNDSelected($event)"
-                          >
-                            <option value="" disabled selected>
-                              Seleccione una opción
-                            </option>
-                            <option
-                              *ngFor="let option of pndOptions"
-                              [value]="option.id"
+                        <div class="form-group">
+                          <label for="pnd">PND:</label>
+                          <div class="d-flex">
+                            <input
+                              class="form-control me-2"
+                              formControlName="pnd"
+                              type="text"
+                              id="pnd"
+                              name="pnd"
+                              style="width: 30%; margin-bottom: 10px"
+                              [disabled]="true"
+                            />
+                            <select
+                              class="form-control"
+                              (change)="onPNDSelected($event)"
+                              formControlName="pnd"
                             >
-                              {{ option.nombre }}
-                            </option>
-                          </select>
-                        </div>
-                        <div
-                          class="alert alert-danger"
-                          *ngIf="
-                            frmProyecto.controls['pnd'].invalid &&
-                            frmProyecto.controls['pnd'].touched
-                          "
-                        >
+                              <option value="" disabled selected>
+                                Seleccione una opción
+                              </option>
+                              <option
+                                *ngFor="let option of pndOptions"
+                                [value]="option.id"
+                              >
+                                {{ option.nombre }}
+                              </option>
+                            </select>
+                          </div>
                           <div
+                            class="alert alert-danger"
                             *ngIf="
-                              frmProyecto.controls['pnd'].hasError('required')
+                              frmProyecto.controls['pnd'].invalid &&
+                              frmProyecto.controls['pnd'].touched
                             "
                           >
-                            Debe ingresar un pnd
+                            <div
+                              *ngIf="
+                                frmProyecto.controls['pnd'].hasError('required')
+                              "
+                            >
+                              Debe ingresar un pnd
+                            </div>
                           </div>
                         </div>
+                        <div class="form-group">
+                          <label for="ods">ODS:</label>
+                          <div class="d-flex">
+                            <input
+                              class="form-control me-2"
+                              formControlName="ods"
+                              type="text"
+                              id="ods"
+                              name="ods"
+                              style="width: 30%; margin-bottom: 10px"
+                              [disabled]="true"
+                            />
+                            <select
+                              class="form-control"
+                              (change)="onODSSelected($event)"
+                              formControlName="ods"
 
-                        <label for="ods">ODS:</label>
-                        <div class="d-flex">
-                          <input
-                            class="form-control me-2"
-                            formControlName="ods"
-                            type="text"
-                            id="ods"
-                            name="ods"
-                            [(ngModel)]="selectedODS"
-                            style="width: 30%; margin-bottom: 10px"
-                            [disabled]="true"
-                          />
-                          <select
-                            class="form-control"
-                            (change)="onODSSelected($event)"
-                          >
-                            <option value="" disabled selected>
-                              Seleccione una opción
-                            </option>
-                            <option
-                              *ngFor="let option of odsOptions"
-                              [value]="option.id"
                             >
-                              {{ option.nombre }}
-                            </option>
-                          </select>
-                        </div>
-                        <div
-                          class="alert alert-danger"
-                          *ngIf="
-                            frmProyecto.controls['ods'].invalid &&
-                            frmProyecto.controls['ods'].touched
-                          "
-                        >
+                              <option value="" disabled selected>
+                                Seleccione una opción
+                              </option>
+                              <option
+                                *ngFor="let option of odsOptions"
+                                [value]="option.id"
+                              >
+                                {{ option.nombre }}
+                              </option>
+                            </select>
+                          </div>
                           <div
+                            class="alert alert-danger"
                             *ngIf="
-                              frmProyecto.controls['ods'].hasError('required')
+                              frmProyecto.controls['ods'].invalid &&
+                              frmProyecto.controls['ods'].touched
                             "
                           >
-                            Debe ingresar una ods
+                            <div
+                              *ngIf="
+                                frmProyecto.controls['ods'].hasError('required')
+                              "
+                            >
+                              Debe ingresar una ods
+                            </div>
                           </div>
                         </div>
-
-                        <label for="programa">Programa:</label>
-                        <div class="d-flex">
-                          <input
-                            class="form-control me-2"
-                            formControlName="programa"
-                            type="text"
-                            id="programa"
-                            name="programa"
-                            [(ngModel)]="selectedPrograma"
-                            style="width: 30%; margin-bottom: 10px"
-                            [disabled]="true"
-                          />
-                          <select
-                            class="form-control"
-                            (change)="onProgramaSelected($event)"
-                          >
-                            <option value="" disabled selected>
-                              Seleccione una opción
-                            </option>
-                            <option
-                              *ngFor="let option of programaOptions"
-                              [value]="option.id"
+                        <div class="form-group">
+                          <label for="programa">Programa:</label>
+                          <div class="d-flex">
+                            <input
+                              class="form-control me-2"
+                              formControlName="programa"
+                              type="text"
+                              id="programa"
+                              name="programa"
+                               style="width: 30%; margin-bottom: 10px"
+                              [disabled]="true"
+                            />
+                            <select
+                              class="form-control"
+                              (change)="onProgramaSelected($event)"
+                              formControlName="programa"
                             >
-                              {{ option.nombre }}
-                            </option>
-                          </select>
-                        </div>
-                        <div
-                          class="alert alert-danger"
-                          *ngIf="
-                            frmProyecto.controls['programa'].invalid &&
-                            frmProyecto.controls['programa'].touched
-                          "
-                        >
+                              <option value="" disabled selected>
+                                Seleccione una opción
+                              </option>
+                              <option
+                                *ngFor="let option of programaOptions"
+                                [value]="option.id"
+                              >
+                                {{ option.nombre }}
+                              </option>
+                            </select>
+                          </div>
                           <div
+                            class="alert alert-danger"
                             *ngIf="
-                              frmProyecto.controls['programa'].hasError(
-                                'required'
-                              )
+                              frmProyecto.controls['programa'].invalid &&
+                              frmProyecto.controls['programa'].touched
                             "
                           >
-                            Debe ingresar un programa
+                            <div
+                              *ngIf="
+                                frmProyecto.controls['programa'].hasError(
+                                  'required'
+                                )
+                              "
+                            >
+                              Debe ingresar un programa
+                            </div>
                           </div>
                         </div>
-
-                        <label for="indicador">Indicador:</label>
-                        <div class="d-flex">
-                          <input
-                            class="form-control me-2"
-                            formControlName="indicador"
-                            type="text"
-                            id="indicador"
-                            name="indicador"
-                            [(ngModel)]="selectedIndicador"
-                            style="width: 30%; margin-bottom: 10px"
-                            [disabled]="true"
-                          />
-                          <select
-                            class="form-control"
-                            (change)="onIndicadorSelected($event)"
-                          >
-                            <option value="" disabled selected>
-                              Seleccione una opción
-                            </option>
-                            <option
-                              *ngFor="let option of indicadorOptions"
-                              [value]="option.id"
+                        <div class="form-group">
+                          <label for="indicador">Indicador:</label>
+                          <div class="d-flex">
+                            <input
+                              class="form-control me-2"
+                              formControlName="indicador"
+                              type="text"
+                              id="indicador"
+                              name="indicador"
+                               style="width: 30%; margin-bottom: 10px"
+                              [disabled]="true"
+                            />
+                            <select
+                              class="form-control"
+                              (change)="onIndicadorSelected($event)"
+                              formControlName="indicador"
                             >
-                              {{ option.nombre }}
-                            </option>
-                          </select>
-                        </div>
-                        <div
-                          class="alert alert-danger"
-                          *ngIf="
-                            frmProyecto.controls['indicador'].invalid &&
-                            frmProyecto.controls['indicador'].touched
-                          "
-                        >
+                              <option value="" disabled selected>
+                                Seleccione una opción
+                              </option>
+                              <option
+                                *ngFor="let option of indicadorOptions"
+                                [value]="option.id"
+                              >
+                                {{ option.nombre }}
+                              </option>
+                            </select>
+                          </div>
                           <div
+                            class="alert alert-danger"
                             *ngIf="
-                              frmProyecto.controls['indicador'].hasError(
-                                'required'
-                              )
+                              frmProyecto.controls['indicador'].invalid &&
+                              frmProyecto.controls['indicador'].touched
                             "
                           >
-                            Debe ingresar un indicador
+                            <div
+                              *ngIf="
+                                frmProyecto.controls['indicador'].hasError(
+                                  'required'
+                                )
+                              "
+                            >
+                              Debe ingresar un indicador
+                            </div>
                           </div>
                         </div>
-
-                        <label for="competencia">Competencia:</label>
-                        <div class="d-flex">
-                          <input
-                            class="form-control me-2"
-                            formControlName="competencia"
-                            type="text"
-                            id="competencia"
-                            name="competencia"
-                            [(ngModel)]="selectedCompetencia"
-                            style="width: 30%; margin-bottom: 10px"
-                            [disabled]="true"
-                          />
-                          <select
-                            class="form-control"
-                            (change)="onCompetenciaSelected($event)"
-                          >
-                            <option value="" disabled selected>
-                              Seleccione una opción
-                            </option>
-                            <option
-                              *ngFor="let option of competenciaOptions"
-                              [value]="option.id"
+                        <div class="form-group">
+                          <label for="competencia">Competencia:</label>
+                          <div class="d-flex">
+                            <input
+                              class="form-control me-2"
+                              formControlName="competencia"
+                              type="text"
+                              id="competencia"
+                              name="competencia"
+                               style="width: 30%; margin-bottom: 10px"
+                              [disabled]="true"
+                            />
+                            <select
+                              class="form-control"
+                              (change)="onCompetenciaSelected($event)"
+                              formControlName="competencia"
                             >
-                              {{ option.nombre }}
-                            </option>
-                          </select>
-                        </div>
-                        <div
-                          class="alert alert-danger"
-                          *ngIf="
-                            frmProyecto.controls['competencia'].invalid &&
-                            frmProyecto.controls['competencia'].touched
-                          "
-                        >
+                              <option value="" disabled selected>
+                                Seleccione una opción
+                              </option>
+                              <option
+                                *ngFor="let option of competenciaOptions"
+                                [value]="option.id"
+                              >
+                                {{ option.nombre }}
+                              </option>
+                            </select>
+                          </div>
                           <div
+                            class="alert alert-danger"
                             *ngIf="
-                              frmProyecto.controls['competencia'].hasError(
-                                'required'
-                              )
+                              frmProyecto.controls['competencia'].invalid &&
+                              frmProyecto.controls['competencia'].touched
                             "
                           >
-                            Debe ingresar una competencia
+                            <div
+                              *ngIf="
+                                frmProyecto.controls['competencia'].hasError(
+                                  'required'
+                                )
+                              "
+                            >
+                              Debe ingresar una competencia
+                            </div>
                           </div>
                         </div>
                       </mat-tab>
@@ -555,7 +562,7 @@
                     *ngIf="!subcrite.id_proyecto"
                     data-dismiss="modal"
                     data-bs-dismiss="modal"
-                    [disabled]="!frmProyecto.valid"
+                    [disabled]="!frmProyecto.valid || !isDisabledFieldsValid()"
                   >
                     Agregar
                   </button>
@@ -571,41 +578,6 @@
                   </button>
                 </div>
               </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Modal para la lista de valores del pnd -->
-        <div
-          class="modal fade modal-stack"
-          id="listaPND"
-          tabindex="-1"
-          aria-labelledby="exampleModalLabel"
-          aria-hidden="true"
-          data-bs-backdrop="static"
-        >
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header bg-green">
-                <h3 class="modal-title">
-                  <i class="fas fa-clipboard"></i> Listado de PND
-                </h3>
-                <button
-                  type="button"
-                  class="btn-close"
-                  data-bs-dismiss="modal"
-                  aria-label="Close"
-                ></button>
-              </div>
-              <div class="modal-body">Listado de pnd</div>
-              <button
-                type="button"
-                class="btn btn-primary"
-                data-bs-toggle="modal"
-                data-bs-target="#materiaModal"
-              >
-                S
-              </button>
             </div>
           </div>
         </div>
