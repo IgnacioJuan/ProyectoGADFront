@@ -8,7 +8,6 @@ import { Criterio } from 'src/app/models/Criterio';
 import { ObjetivoPDOT } from 'src/app/models/ObjetivoPDOT';
 import { Subcriterio } from 'src/app/models/Subcriterio';
 import { ObjetivoPdotService } from 'src/app/services/objetivo-pdot.service';
-import { SubcriteriosService } from 'src/app/services/subcriterios.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -17,7 +16,6 @@ import Swal from 'sweetalert2';
   styleUrls: ['./componente-objetivo-pdot.component.css']
 })
 export class ComponenteObjetivoPdotComponent  implements OnInit {
-//frmSubcriterio: FormGroup;
 formObjetivoPdot: FormGroup;
 guardadoExitoso: boolean = false;
 //tabla
@@ -40,27 +38,26 @@ rango:any= (page: number, pageSize: number, length: number) => {
  return `${startIndex + 1} - ${endIndex} de ${length}`;
 };
 //
-criterio: Criterio = new Criterio();
 componente: Componentes = new Componentes();
-
-subcriterios: any[] = [];
 objetivoPDOT: any[] = [];
 
 miModal!: ElementRef;
 public subcrite = new Subcriterio();
 public objePDOT = new ObjetivoPDOT();
 
-filterPost = '';
-dataSource = new MatTableDataSource<ObjetivoPDOT>();
+  //Buscar
+  filterPost = '';
+  filteredComponentes: any[] = [];
+  resultadosEncontrados: boolean = true;
 
-//dataSource = new MatTableDataSource<SubcriterioIndicadoresProjection>();
+dataSource = new MatTableDataSource<ObjetivoPDOT>();
 columnasUsuario: string[] = ['id_objetivo_pdot', 'nombre', 'descripcion', 'cantidadMetas', 'actions'];
 
 @ViewChild('datosModalRef') datosModalRef: any;
 @ViewChild(MatPaginator, { static: false }) paginator?: MatPaginator;
 
 constructor(
-  private subcriterioservice: SubcriteriosService,private paginatorIntl: MatPaginatorIntl,
+  private paginatorIntl: MatPaginatorIntl,
   private router: Router, private fb: FormBuilder,
   private objetivoPdotService: ObjetivoPdotService,
 ) {
@@ -201,14 +198,19 @@ verComponentes() {
   this.router.navigate(['/sup/flujo_Componentes/componentesSuper']);
 }
 
-aplicarFiltro() {
-  if (this.filterPost) {
-    const lowerCaseFilter = this.filterPost.toLowerCase();
-    this.dataSource.data = this.dataSource.data.filter((item: any) => {
-      return JSON.stringify(item).toLowerCase().includes(lowerCaseFilter);
-    });
-  } else {
-    this.dataSource.data = this.subcriterios;;
-  }
+
+
+buscar() {
+  // Filtra los componentes basados en el filtro
+  this.filteredComponentes = this.objetivoPDOT.filter((objetivo) =>
+    objetivo.nombre.toLowerCase().includes(this.filterPost.toLowerCase())
+  );
+
+  // Actualiza los datos del dataSource con los resultados filtrados
+  this.dataSource.data = this.filteredComponentes;
+
+  // Verifica si se encontraron resultados
+  this.resultadosEncontrados = this.filteredComponentes.length > 0;
 }
+
 }

@@ -18,9 +18,10 @@
               type="text"
               class="form-control"
               name="filterPost3"
-              placeholder="Buscar..."
+              placeholder="Buscar por nombre ..."
               [(ngModel)]="filterPost"
-              (input)="aplicarFiltro()"
+              (input)="buscar()"
+              (ngModelChange)="buscar()"
             />
           </div>
           <br />
@@ -114,6 +115,9 @@
               previousPageLabel="Anterior"
             >
             </mat-paginator>
+            <div *ngIf="!resultadosEncontrados" class="alert alert-warning">
+              No se encontraron resultados.
+            </div>
           </div>
           <div
             class="modal fade"

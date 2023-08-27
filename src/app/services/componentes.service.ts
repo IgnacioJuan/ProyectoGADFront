@@ -27,4 +27,9 @@ export class ComponentesService {
   }
 
 
+
+  buscar(comp: string): Observable<any> {
+    return this.http.get(`${baserUrl}/api/componente/buscarComponenteLike/${comp}`);
+  }
+
 }

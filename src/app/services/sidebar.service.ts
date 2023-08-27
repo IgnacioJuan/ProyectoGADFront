@@ -75,9 +75,7 @@ export class SidebarService {
       submenu: [
         { titulo: 'Lista de Criterios', url: 'sup/flujo-criterio/criterioSuper', icono: 'fas fa-cubes' },
         { titulo: 'Lista de Subcriterios', url: 'sup/subcriterioSuper', icono: 'fas fa-cubes' },
-        { titulo: 'Lista de Indicadores', url: 'sup/indicadoreSuper', icono: 'fas fa-cubes' }
-,    { titulo: 'Lista de Componentes', url: 'sup/flujo_Componentes/componentesSuper', icono: 'fas fa-cubes' },
-
+        { titulo: 'Lista de Indicadores', url: 'sup/indicadoreSuper', icono: 'fas fa-cubes' },
         { titulo: 'Reporte de Criterios', url: 'sup/criterio_reporte', icono: 'fas fa-cubes' }
       ]
     },

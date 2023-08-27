@@ -7,9 +7,9 @@ import { CriterioSubcriteriosProjection } from 'src/app/interface/CriterioSubcri
 import { Componentes } from 'src/app/models/Componentes';
 import { Criterio } from 'src/app/models/Criterio';
 import { ComponentesService } from 'src/app/services/componentes.service';
-import { CriteriosService } from 'src/app/services/criterios.service';
 import { ObjetivoPdotService } from 'src/app/services/objetivo-pdot.service';
 import Swal from 'sweetalert2';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
   selector: 'app-componentes',
@@ -40,17 +40,17 @@ export class ComponentesComponent  implements OnInit {
     return `${startIndex + 1} - ${endIndex} de ${length}`;
   };
   //
-  public crite = new Criterio();
   public componentes = new Componentes();
-
-  criterios: CriterioSubcriteriosProjection[] = [];
   listaComponentes: Componentes[] = [];
+  numeroObjetivos:number=0;
 
-numeroObjetivos:number=0;
-  filterPost = '';
-  //dataSource = new MatTableDataSource<CriterioSubcriteriosProjection>();
+
+  //Buscar
+  filterPost: string = "";
+  filteredComponentes: any[] = [];
+  resultadosEncontrados: boolean = true;
+
   dataSource = new MatTableDataSource<Componentes>();
-  //dataSource3 = new MatTableDataSource<Componentes>();
 
   columnasUsuario: string[] = ['id_componente', 'codigo', 'nombre', 'descripcion', 'cantidadObjetivoPDOT', 'actions'];
 
@@ -58,7 +58,7 @@ numeroObjetivos:number=0;
   @ViewChild(MatPaginator, { static: false }) paginator?: MatPaginator;
 
   constructor(
-    private criterioservice: CriteriosService,private paginatorIntl: MatPaginatorIntl,
+    private paginatorIntl: MatPaginatorIntl,
     private router: Router, private fb: FormBuilder,
     private componentesService: ComponentesService,
     private objetivoPDOTService: ObjetivoPdotService
@@ -107,8 +107,9 @@ numeroObjetivos:number=0;
           )
         }
       );
-
   }
+
+
   eliminar(componente: any) {
     Swal.fire({
       title: 'Estas seguro de eliminar el registro?',
@@ -116,13 +117,11 @@ numeroObjetivos:number=0;
       confirmButtonText: 'Cacelar',
       denyButtonText: `Eliminar`,
     }).then((result) => {
-      /* Read more about isConfirmed, isDenied below */
       if (!result.isConfirmed) {
         this.componentesService.eliminar(componente).subscribe(
           (response) => {
             this.listar()
             Swal.fire('Eliminado!', '', 'success')
-
           }
         );
       }
@@ -181,15 +180,19 @@ numeroObjetivos:number=0;
   verDetalles(componente: any) {
     this.router.navigate(['/sup/flujo_Componentes/componente_objetivoPDOT'], { state: { data: componente } });
   }
+ 
+  
 
-  aplicarFiltro() {
-    if (this.filterPost) {
-      const lowerCaseFilter = this.filterPost.toLowerCase();
-      this.dataSource.data = this.dataSource.data.filter((item: any) => {
-        return JSON.stringify(item).toLowerCase().includes(lowerCaseFilter);
-      });
-    } else {
-     // this.dataSource.data = this.criterios;;
-    }
+  buscar() {
+    // Filtra los componentes basados en el filtro
+    this.filteredComponentes = this.listaComponentes.filter((componente) =>
+      componente.nombre.toLowerCase().includes(this.filterPost.toLowerCase())
+    );
+  
+    // Actualiza los datos del dataSource con los resultados filtrados
+    this.dataSource.data = this.filteredComponentes;
+  
+    // Verifica si se encontraron resultados
+    this.resultadosEncontrados = this.filteredComponentes.length > 0;
   }
 }

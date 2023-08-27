@@ -41,10 +41,8 @@ rango:any= (page: number, pageSize: number, length: number) => {
       : startIndex + pageSize;
   return `${startIndex + 1} - ${endIndex} de ${length}`;
 };
-//
-indicadors: any[] = [];
-subcriterio: Subcriterio = new Subcriterio();
-criterio: Criterio = new Criterio();
+
+
 
 ///////
 objPDOT: ObjetivoPDOT = new ObjetivoPDOT();
@@ -57,10 +55,11 @@ miModal!: ElementRef;
 public indic = new Indicador();
 public metaPDOT = new MetasPDOT();
 
-selectedTipo: string="";
-
+//Buscar
 filterPost = '';
-//dataSource = new MatTableDataSource<IndicadorEvidenciasProjection>();
+filteredComponentes: any[] = [];
+resultadosEncontrados: boolean = true;
+
 dataSource = new MatTableDataSource<MetasPDOT>();
 
 columnasUsuario: string[] = ['id_meta_pdot', 'nombre', 'descripcion','porcentaje_meta', 'cantidadIndicadores', 'actions'];
@@ -68,7 +67,7 @@ columnasUsuario: string[] = ['id_meta_pdot', 'nombre', 'descripcion','porcentaje
 @ViewChild('datosModalRef') datosModalRef: any;
 @ViewChild(MatPaginator, { static: false }) paginator?: MatPaginator;
 
-constructor(private indicadorservice: IndicadoresService,private paginatorIntl: MatPaginatorIntl,
+constructor(private paginatorIntl: MatPaginatorIntl,
   private router: Router, private fb: FormBuilder,
   private route: ActivatedRoute,
   private metaPDOTService: MetasPdotService
@@ -221,15 +220,17 @@ verComponentes() {
   this.router.navigate(['/sup/flujo_Componentes/componentesSuper']);
 }
 
-aplicarFiltro() {
-  if (this.filterPost) {
-    const lowerCaseFilter = this.filterPost.toLowerCase();
-    this.dataSource.data = this.dataSource.data.filter((item: any) => {
-      return JSON.stringify(item).toLowerCase().includes(lowerCaseFilter);
-    });
-  } else {
-    this.dataSource.data = this.indicadors;;
-  }
+buscar() {
+  // Filtra los componentes basados en el filtro
+  this.filteredComponentes = this.listaMetasPdot.filter((meta) =>
+    meta.nombre.toLowerCase().includes(this.filterPost.toLowerCase())
+  );
+
+  // Actualiza los datos del dataSource con los resultados filtrados
+  this.dataSource.data = this.filteredComponentes;
+
+  // Verifica si se encontraron resultados
+  this.resultadosEncontrados = this.filteredComponentes.length > 0;
 }
 
 }

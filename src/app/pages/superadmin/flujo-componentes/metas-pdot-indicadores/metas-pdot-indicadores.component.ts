@@ -62,11 +62,14 @@ public indic = new Indicador();
 
 selectedTipo: string="";
 
+//Buscar
 filterPost = '';
-//dataSource = new MatTableDataSource<IndicadorEvidenciasProjection>();
+filteredComponentes: any[] = [];
+resultadosEncontrados: boolean = true;
+
+
 dataSource = new MatTableDataSource<Indicadores>();
 
-//columnasUsuario: string[] = ['id_indicador', 'nombre', 'descripcion','tipo_evaluacion',  'actions'];
 columnasUsuario: string[] = ['id_indicador', 'nombre', 'descripcion',  'actions'];
 
 @ViewChild('datosModalRef') datosModalRef: any;
@@ -222,16 +225,16 @@ verComponentes() {
   this.router.navigate(['/sup/flujo_Componentes/componentesSuper']);
 }
 
+buscar() {
+  // Filtra los componentes basados en el filtro
+  this.filteredComponentes = this.listadoIndicadores.filter((indicador) =>
+    indicador.nombre.toLowerCase().includes(this.filterPost.toLowerCase())
+  );
 
+  // Actualiza los datos del dataSource con los resultados filtrados
+  this.dataSource.data = this.filteredComponentes;
 
-aplicarFiltro() {
-  if (this.filterPost) {
-    const lowerCaseFilter = this.filterPost.toLowerCase();
-    this.dataSource.data = this.dataSource.data.filter((item: any) => {
-      return JSON.stringify(item).toLowerCase().includes(lowerCaseFilter);
-    });
-  } else {
-    this.dataSource.data = this.indicadors;;
-  }
+  // Verifica si se encontraron resultados
+  this.resultadosEncontrados = this.filteredComponentes.length > 0;
 }
 }

@@ -30,5 +30,11 @@ export class ObjetivoPdotService {
      listarObjetivosPdotsPorIdComponente(idComponente: number): Observable<ObjetivoPDOT[]> {
       return this.http.get<ObjetivoPDOT[]>(`${baserUrl}/api/objetivopdot/listaObjetivosPdots/`+idComponente);
     }
+
+
+    buscar(objt: string): Observable<any> {
+      return this.http.get(`${baserUrl}/api/objetivopdot/buscarObjetivoPdotLike/${objt}`);
+    }
+  
  
 }
