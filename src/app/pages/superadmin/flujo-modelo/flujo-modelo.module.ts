@@ -7,6 +7,7 @@ import { ModeloProyectoComponent } from './modelo-proyecto/modelo-proyecto.compo
 import { ProyectoPoaComponent } from './proyecto-poa/proyecto-poa.component';
 import { PoaActividadComponent } from './poa-actividad/poa-actividad.component';
 import { ActividadEvidenciaComponent } from './actividad-evidencia/actividad-evidencia.component';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 
 @NgModule({
@@ -19,7 +20,8 @@ import { ActividadEvidenciaComponent } from './actividad-evidencia/actividad-evi
   ],
   imports: [
     CommonModule,
-    FlujoModeloRoutingModule
+    FlujoModeloRoutingModule,
+    SharedModule
   ]
 })
 export class FlujoModeloModule { }
