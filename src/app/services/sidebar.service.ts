@@ -11,6 +11,7 @@ export class SidebarService {
       icono: 'nav-icon fas fa-users',
       titulo: "Asignación",
       submenu: [
+        { titulo: 'Asignar Actividad', url: 'adm/asignacion-actividades/poa-actividad', icono: 'fas fa-check-square' },
         { titulo: 'Asignar Evidencia', url: 'adm/asignaEvidencia', icono: 'fas fa-check-square' }
       ]
     },
