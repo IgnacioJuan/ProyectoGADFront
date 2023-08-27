@@ -32,4 +32,20 @@ export class ProyectoService {
   }
 
  
+  //Listas para crear el proyecto en el flujo proyecto
+  getPNDOptions(): Observable<any[]> {
+    return this.http.get<any[]>(`${baserUrl}/api/objetivopnd/listar`);
+  }
+  getODSOptions(): Observable<any[]> {
+    return this.http.get<any[]>(`${baserUrl}/api/objetivosods/listar`);
+  }
+  getProgramaOptions(): Observable<any[]> {
+    return this.http.get<any[]>(`${baserUrl}/api/programa/listar`);
+  }
+  getIndicadorOptions(): Observable<any[]> {
+    return this.http.get<any[]>(`${baserUrl}/api/Indicador/listar`);
+  }
+  getCompetenciaOptions(): Observable<any[]> {
+    return this.http.get<any[]>(`${baserUrl}/api/competencia/listar`);
+  }
 }

@@ -1,3 +1,4 @@
+import { usuario } from './../../../../models/Usuario';
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
@@ -78,12 +79,11 @@ export class ModeloProyectoComponent {
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator || null;
-
+    this.alimentarOptions();
   }
   ngOnInit() {
     const data = history.state.data;
     this.modelopoa = data;
-    console.log(this.modelopoa);
     if (this.modelopoa == undefined) {
       this.router.navigate(['user-dashboard']);
       location.replace('/use/user-dashboard');
@@ -106,7 +106,6 @@ export class ModeloProyectoComponent {
       indicador: { id_indicador: this.frmProyecto.value.indicador },
       competencia: { id_competencia: this.frmProyecto.value.competencia }
     };
-    console.log(this.subcrite);
     this.proyectoservice.crear(this.subcrite)
       .subscribe(
         (response: any) => {
@@ -171,11 +170,11 @@ export class ModeloProyectoComponent {
       meta: new FormControl(proyecto.meta),
       porcentaje_alcance: new FormControl(proyecto.porcentaje_alcance),
       fecha_inicio: new FormControl(proyecto.fecha_inicio),
-      pnd: new FormControl(proyecto.pnd.id_objetivo_pnd),
-      ods: new FormControl(proyecto.ods.id_objetivo_ods),
-      programa: new FormControl(proyecto.programa.id_programa),
-      indicador: new FormControl(proyecto.indicador.id_indicador),
-      competencia: new FormControl(proyecto.competencia.id_competencia),
+      pnd: new FormControl(proyecto.pnd?.id_objetivo_pnd),
+      ods: new FormControl(proyecto.ods?.id_objetivo_ods),
+      programa: new FormControl(proyecto.programa?.id_programa),
+      indicador: new FormControl(proyecto.indicador?.id_indicador),
+      competencia: new FormControl(proyecto.competencia?.id_competencia),
 
     });
   }
@@ -191,18 +190,25 @@ export class ModeloProyectoComponent {
   }
 
   actualizar() {
+
     this.subcrite.nombre = this.frmProyecto.value.nombre;
     this.subcrite.codigo = this.frmProyecto.value.codigo;
     this.subcrite.objetivo = this.frmProyecto.value.objetivo;
     this.subcrite.meta = this.frmProyecto.value.meta;
     this.subcrite.porcentaje_alcance = this.frmProyecto.value.porcentaje_alcance;
     this.subcrite.fecha_inicio = this.frmProyecto.value.fecha_inicio;
-    this.subcrite.pnd.id_objetivo_pnd = this.frmProyecto.value.id_objetivo_pnd;
-    this.subcrite.ods.id_objetivo_ods = this.frmProyecto.value.id_objetivo_ods;
-    this.subcrite.programa.id_programa = this.frmProyecto.value.id_programa;
-    this.subcrite.indicador.id_indicador = this.frmProyecto.value.id_indicador;
-    this.subcrite.competencia.id_competencia = this.frmProyecto.value.id_competencia;
 
+    this.subcrite = {
+      ...this.subcrite,
+      modelopoa: this.modelopoa,
+      pnd: { id_objetivo_pnd: this.frmProyecto.value.pnd },
+      ods: { id_objetivo_ods: this.frmProyecto.value.ods },
+      programa: { id_programa: this.frmProyecto.value.programa },
+      indicador: { id_indicador: this.frmProyecto.value.indicador },
+      competencia: { id_competencia: this.frmProyecto.value.competencia }
+    };
+    this.subcrite.modelopoa.usuario= null;
+    console.log(this.subcrite)
     this.proyectoservice.actualizar(this.subcrite.id_proyecto, this.subcrite)
       .subscribe((response: any) => {
         this.subcrite = new Proyecto();
@@ -244,11 +250,51 @@ export class ModeloProyectoComponent {
     //   }
     // }
   }
+
+  alimentarOptions():void{
+    this.proyectoservice.getPNDOptions().subscribe(
+      (data: any[]) => {
+        this.pndOptions = data;
+      },
+      (error: any) => {
+        console.error('Error al listar los proyectos:', error);
+      }
+    );
+    this.proyectoservice.getODSOptions().subscribe(
+      (data: any[]) => {
+        this.odsOptions = data;
+      },
+      (error: any) => {
+        console.error('Error al listar los proyectos:', error);
+      }
+    );
+    this.proyectoservice.getProgramaOptions().subscribe(
+      (data: any[]) => {
+        this.programaOptions = data;
+      },
+      (error: any) => {
+        console.error('Error al listar los proyectos:', error);
+      }
+    );
+    this.proyectoservice.getIndicadorOptions().subscribe(
+      (data: any[]) => {
+        this.indicadorOptions = data;
+      },
+      (error: any) => {
+        console.error('Error al listar los proyectos:', error);
+      }
+    );
+    this.proyectoservice.getCompetenciaOptions().subscribe(
+      (data: any[]) => {
+        this.competenciaOptions = data;
+      },
+      (error: any) => {
+        console.error('Error al listar los proyectos:', error);
+      }
+    );
+  }
   selectedPND: number | null = null; // El valor seleccionado se almacenará aquí
   pndOptions: any[] = [
-    { id: 1, nombre: 'Opción 1' },
-    { id: 2, nombre: 'Opción 2' },
-    { id: 3, nombre: 'Opción 3' }
   ];
   onPNDSelected(event: any): void {
     const selectedId = parseInt(event.target.value, 10); // Convertir el valor a número
@@ -257,9 +303,6 @@ export class ModeloProyectoComponent {
 
   selectedODS: number | null = null; // El valor seleccionado se almacenará aquí
   odsOptions: any[] = [
-    { id: 1, nombre: 'Opción 1' },
-    { id: 2, nombre: 'Opción 2' },
-    { id: 3, nombre: 'Opción 3' }
   ];
   onODSSelected(event: any): void {
     const selectedId = parseInt(event.target.value, 10); // Convertir el valor a número
@@ -268,9 +311,6 @@ export class ModeloProyectoComponent {
 
   selectedPrograma: number | null = null; // El valor seleccionado se almacenará aquí
   programaOptions: any[] = [
-    { id: 1, nombre: 'Opción 1' },
-    { id: 2, nombre: 'Opción 2' },
-    { id: 3, nombre: 'Opción 3' }
   ];
   onProgramaSelected(event: any): void {
     const selectedId = parseInt(event.target.value, 10); // Convertir el valor a número
@@ -279,9 +319,6 @@ export class ModeloProyectoComponent {
 
   selectedIndicador: number | null = null; // El valor seleccionado se almacenará aquí
   indicadorOptions: any[] = [
-    { id: 1, nombre: 'Opción 1' },
-    { id: 2, nombre: 'Opción 2' },
-    { id: 3, nombre: 'Opción 3' }
   ];
   onIndicadorSelected(event: any): void {
     const selectedId = parseInt(event.target.value, 10); // Convertir el valor a número
@@ -290,9 +327,6 @@ export class ModeloProyectoComponent {
 
   selectedCompetencia: number | null = null; // El valor seleccionado se almacenará aquí
   competenciaOptions: any[] = [
-    { id: 1, nombre: 'Opción 1' },
-    { id: 2, nombre: 'Opción 2' },
-    { id: 3, nombre: 'Opción 3' }
   ];
   onCompetenciaSelected(event: any): void {
     const selectedId = parseInt(event.target.value, 10); // Convertir el valor a número
