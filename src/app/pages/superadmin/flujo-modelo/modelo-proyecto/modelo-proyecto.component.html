@@ -1,1 +1,615 @@
-<p>modelo-proyecto works!</p>
+<body>
+  <div class="container bg-light border border-start-0 rounded-4">
+    <blockquote class="blockquote text-dark" style="margin-top: 5%">
+      <h1 style="text-transform: uppercase">
+        <strong
+          ><a style="cursor: pointer" (click)="verModeloPoas()"
+            >LISTADO MODELOS
+          </a>
+          >
+          <a>{{ modelopoa.nombre }} </a></strong
+        >
+      </h1>
+    </blockquote>
+    <div class="card">
+      <div class="card-body">
+        <div class="form-group">
+          <input
+            type="text"
+            class="form-control"
+            name="filterPost3"
+            placeholder="Buscar..."
+            [(ngModel)]="filterPost"
+            (input)="aplicarFiltro()"
+          />
+        </div>
+        <br />
+        <button
+          type="button"
+          class="btn btn-primary"
+          data-bs-toggle="modal"
+          data-bs-target="#materiaModal"
+        >
+          CREAR NUEVO PROYECTO
+        </button>
+        <br />
+        <br />
+        <br />
+        <div
+          class="mat-elevation-z8 table-responsive"
+          style="margin-bottom: 5%"
+        >
+          <table mat-table [dataSource]="dataSource">
+            <ng-container matColumnDef="id_proyecto">
+              <th mat-header-cell *matHeaderCellDef>ID</th>
+              <td mat-cell *matCellDef="let elemento">
+                {{ elemento.id_proyecto }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="nombre">
+              <th mat-header-cell *matHeaderCellDef>NOMBRE</th>
+              <td mat-cell *matCellDef="let elemento">
+                {{ elemento.nombre }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="codigo">
+              <th mat-header-cell *matHeaderCellDef>CODIGO</th>
+              <td mat-cell *matCellDef="let elemento">
+                {{ elemento.codigo }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="objetivo">
+              <th mat-header-cell *matHeaderCellDef>OBJETIVO</th>
+              <td mat-cell *matCellDef="let elemento">
+                {{ elemento.codigo }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="meta">
+              <th mat-header-cell *matHeaderCellDef>META</th>
+              <td mat-cell *matCellDef="let elemento">
+                {{ elemento.codigo }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="poa">
+              <th mat-header-cell *matHeaderCellDef>POA</th>
+              <td mat-cell *matCellDef="let elemento">
+                <button
+                  class="btn btn-primary"
+                  role="button"
+                  (click)="verDetalles(elemento)"
+                >
+                  <div class="d-flex">
+                    <i class="fa fa-folder-open"></i>
+                  </div>
+                </button>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef>ACCIONES</th>
+              <td mat-cell *matCellDef="let element">
+                <button
+                  class="btn btn-danger"
+                  style="background-color: red"
+                  (click)="eliminar(element)"
+                  style="margin-right: 5%"
+                >
+                  <i class="fas fa-user-times"></i>
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-primary"
+                  data-bs-toggle="modal"
+                  data-bs-target="#materiaModal"
+                  style="margin-right: 5%"
+                  (click)="editDatos(element)"
+                >
+                  <i class="fas fa-edit"></i>
+                </button>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="columnasUsuario"></tr>
+            <tr mat-row *matRowDef="let fila; columns: columnasUsuario"></tr>
+          </table>
+          <mat-paginator
+            [pageSizeOptions]="[5, 10, 20]"
+            showFirstLastButtons
+            aria-label="Select page of periodic elements"
+            itemsPerPageLabel="Items por página:"
+            nextPageLabel="Siguiente"
+            previousPageLabel="Anterior"
+          >
+          </mat-paginator>
+        </div>
+
+        <!-- Modal para el PROYECTO -->
+        <div
+          class="modal fade modal-stack"
+          id="materiaModal"
+          tabindex="-1"
+          aria-labelledby="exampleModalLabel"
+          aria-hidden="true"
+          (hidden.bs.modal)="limpiarFormulario()"
+        >
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header bg-green">
+                <h3 class="modal-title">
+                  <i class="fas fa-clipboard"></i> Proyecto
+                </h3>
+                <button
+                  type="button"
+                  class="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div class="modal-body">
+                <form
+                  [formGroup]="frmProyecto"
+                  (ngSubmit)="guardar()"
+                  id="formulario"
+                >
+                  <div>
+                    <mat-tab-group>
+                      <mat-tab label="Datos Generales">
+                        <label for="nombre">Nombre:</label>
+                        <input
+                          class="form-control"
+                          formControlName="nombre"
+                          type="text"
+                          id="nombre"
+                          name="nombre"
+                          style="margin-bottom: 10px"
+                        />
+                        <div
+                          class="alert alert-danger"
+                          *ngIf="
+                            frmProyecto.controls['nombre'].invalid &&
+                            frmProyecto.controls['nombre'].touched
+                          "
+                        >
+                          <div
+                            *ngIf="
+                              frmProyecto.controls['nombre'].hasError(
+                                'required'
+                              )
+                            "
+                          >
+                            Debe ingresar un nombre
+                          </div>
+                        </div>
+
+                        <label for="codigo">Codigo:</label>
+                        <textarea
+                          class="form-control"
+                          formControlName="codigo"
+                          id="codigo"
+                          name="codigo"
+                          style="margin-bottom: 10px"
+                        ></textarea>
+                        <div
+                          class="alert alert-danger"
+                          *ngIf="
+                            frmProyecto.controls['codigo'].invalid &&
+                            frmProyecto.controls['codigo'].touched
+                          "
+                        >
+                          <div
+                            *ngIf="
+                              frmProyecto.controls['codigo'].hasError(
+                                'required'
+                              )
+                            "
+                          >
+                            El codigo no puede estar vacia
+                          </div>
+                          <div
+                            *ngIf="
+                              frmProyecto.controls['codigo'].hasError(
+                                'maxlength'
+                              )
+                            "
+                          >
+                            Excedio el numero de caracteres permitido
+                          </div>
+                        </div>
+
+                        <label for="objetivo">Objetivo:</label>
+                        <input
+                          class="form-control"
+                          formControlName="objetivo"
+                          type="text"
+                          id="objetivo"
+                          name="objetivo"
+                          style="margin-bottom: 10px"
+                        />
+                        <div
+                          class="alert alert-danger"
+                          *ngIf="
+                            frmProyecto.controls['objetivo'].invalid &&
+                            frmProyecto.controls['objetivo'].touched
+                          "
+                        >
+                          <div
+                            *ngIf="
+                              frmProyecto.controls['objetivo'].hasError(
+                                'required'
+                              )
+                            "
+                          >
+                            Debe ingresar un objetivo
+                          </div>
+                        </div>
+
+                        <label for="meta">Meta:</label>
+                        <input
+                          class="form-control"
+                          formControlName="meta"
+                          type="text"
+                          id="meta"
+                          name="meta"
+                          style="margin-bottom: 10px"
+                        />
+                        <div
+                          class="alert alert-danger"
+                          *ngIf="
+                            frmProyecto.controls['meta'].invalid &&
+                            frmProyecto.controls['meta'].touched
+                          "
+                        >
+                          <div
+                            *ngIf="
+                              frmProyecto.controls['meta'].hasError('required')
+                            "
+                          >
+                            Debe ingresar una meta
+                          </div>
+                        </div>
+
+                        <label for="porcentaje_alcance">Porcentaje:</label>
+                        <input
+                          class="form-control"
+                          formControlName="porcentaje_alcance"
+                          type="number"
+                          id="porcentaje_alcance"
+                          name="porcentaje_alcance"
+                          style="margin-bottom: 10px"
+                        />
+                        <div
+                          class="alert alert-danger"
+                          *ngIf="
+                            frmProyecto.controls['porcentaje_alcance']
+                              .invalid &&
+                            frmProyecto.controls['porcentaje_alcance'].touched
+                          "
+                        >
+                          <div
+                            *ngIf="
+                              frmProyecto.controls[
+                                'porcentaje_alcance'
+                              ].hasError('required')
+                            "
+                          >
+                            Debe ingresar un porcentaje
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                          <label for="fecha_inicio">Fecha de inicio:</label>
+                          <div class="input-group">
+                            <input
+                              type="date"
+                              id="fecha_inicio"
+                              name="fecha_inicio"
+                              formControlName="fecha_inicio"
+                              class="form-control"
+                              [min]="fechaMinima"
+                              [max]="fechaMax"
+                              (change)="validarFechas()"
+                            />
+                          </div>
+                        </div>
+                      </mat-tab>
+
+                      <!-- Segundo tab: Resto del formulario -->
+                      <mat-tab label="Configurar Parametros">
+                        <label for="pnd">PND:</label>
+                        <div class="d-flex">
+                          <input
+                            class="form-control me-2"
+                            formControlName="pnd"
+                            type="text"
+                            id="pnd"
+                            name="pnd"
+                            [(ngModel)]="selectedPND"
+                            style="width: 30%; margin-bottom: 10px"
+                            [disabled]="true"
+                          />
+                          <select
+                            class="form-control"
+                            (change)="onPNDSelected($event)"
+                          >
+                            <option value="" disabled selected>
+                              Seleccione una opción
+                            </option>
+                            <option
+                              *ngFor="let option of pndOptions"
+                              [value]="option.id"
+                            >
+                              {{ option.nombre }}
+                            </option>
+                          </select>
+                        </div>
+                        <div
+                          class="alert alert-danger"
+                          *ngIf="
+                            frmProyecto.controls['pnd'].invalid &&
+                            frmProyecto.controls['pnd'].touched
+                          "
+                        >
+                          <div
+                            *ngIf="
+                              frmProyecto.controls['pnd'].hasError('required')
+                            "
+                          >
+                            Debe ingresar un pnd
+                          </div>
+                        </div>
+
+                        <label for="ods">ODS:</label>
+                        <div class="d-flex">
+                          <input
+                            class="form-control me-2"
+                            formControlName="ods"
+                            type="text"
+                            id="ods"
+                            name="ods"
+                            [(ngModel)]="selectedODS"
+                            style="width: 30%; margin-bottom: 10px"
+                            [disabled]="true"
+                          />
+                          <select
+                            class="form-control"
+                            (change)="onODSSelected($event)"
+                          >
+                            <option value="" disabled selected>
+                              Seleccione una opción
+                            </option>
+                            <option
+                              *ngFor="let option of odsOptions"
+                              [value]="option.id"
+                            >
+                              {{ option.nombre }}
+                            </option>
+                          </select>
+                        </div>
+                        <div
+                          class="alert alert-danger"
+                          *ngIf="
+                            frmProyecto.controls['ods'].invalid &&
+                            frmProyecto.controls['ods'].touched
+                          "
+                        >
+                          <div
+                            *ngIf="
+                              frmProyecto.controls['ods'].hasError('required')
+                            "
+                          >
+                            Debe ingresar una ods
+                          </div>
+                        </div>
+
+                        <label for="programa">Programa:</label>
+                        <div class="d-flex">
+                          <input
+                            class="form-control me-2"
+                            formControlName="programa"
+                            type="text"
+                            id="programa"
+                            name="programa"
+                            [(ngModel)]="selectedPrograma"
+                            style="width: 30%; margin-bottom: 10px"
+                            [disabled]="true"
+                          />
+                          <select
+                            class="form-control"
+                            (change)="onProgramaSelected($event)"
+                          >
+                            <option value="" disabled selected>
+                              Seleccione una opción
+                            </option>
+                            <option
+                              *ngFor="let option of programaOptions"
+                              [value]="option.id"
+                            >
+                              {{ option.nombre }}
+                            </option>
+                          </select>
+                        </div>
+                        <div
+                          class="alert alert-danger"
+                          *ngIf="
+                            frmProyecto.controls['programa'].invalid &&
+                            frmProyecto.controls['programa'].touched
+                          "
+                        >
+                          <div
+                            *ngIf="
+                              frmProyecto.controls['programa'].hasError(
+                                'required'
+                              )
+                            "
+                          >
+                            Debe ingresar un programa
+                          </div>
+                        </div>
+
+                        <label for="indicador">Indicador:</label>
+                        <div class="d-flex">
+                          <input
+                            class="form-control me-2"
+                            formControlName="indicador"
+                            type="text"
+                            id="indicador"
+                            name="indicador"
+                            [(ngModel)]="selectedIndicador"
+                            style="width: 30%; margin-bottom: 10px"
+                            [disabled]="true"
+                          />
+                          <select
+                            class="form-control"
+                            (change)="onIndicadorSelected($event)"
+                          >
+                            <option value="" disabled selected>
+                              Seleccione una opción
+                            </option>
+                            <option
+                              *ngFor="let option of indicadorOptions"
+                              [value]="option.id"
+                            >
+                              {{ option.nombre }}
+                            </option>
+                          </select>
+                        </div>
+                        <div
+                          class="alert alert-danger"
+                          *ngIf="
+                            frmProyecto.controls['indicador'].invalid &&
+                            frmProyecto.controls['indicador'].touched
+                          "
+                        >
+                          <div
+                            *ngIf="
+                              frmProyecto.controls['indicador'].hasError(
+                                'required'
+                              )
+                            "
+                          >
+                            Debe ingresar un indicador
+                          </div>
+                        </div>
+
+                        <label for="competencia">Competencia:</label>
+                        <div class="d-flex">
+                          <input
+                            class="form-control me-2"
+                            formControlName="competencia"
+                            type="text"
+                            id="competencia"
+                            name="competencia"
+                            [(ngModel)]="selectedCompetencia"
+                            style="width: 30%; margin-bottom: 10px"
+                            [disabled]="true"
+                          />
+                          <select
+                            class="form-control"
+                            (change)="onCompetenciaSelected($event)"
+                          >
+                            <option value="" disabled selected>
+                              Seleccione una opción
+                            </option>
+                            <option
+                              *ngFor="let option of competenciaOptions"
+                              [value]="option.id"
+                            >
+                              {{ option.nombre }}
+                            </option>
+                          </select>
+                        </div>
+                        <div
+                          class="alert alert-danger"
+                          *ngIf="
+                            frmProyecto.controls['competencia'].invalid &&
+                            frmProyecto.controls['competencia'].touched
+                          "
+                        >
+                          <div
+                            *ngIf="
+                              frmProyecto.controls['competencia'].hasError(
+                                'required'
+                              )
+                            "
+                          >
+                            Debe ingresar una competencia
+                          </div>
+                        </div>
+                      </mat-tab>
+                    </mat-tab-group>
+                  </div>
+                </form>
+                <div class="modal-footer">
+                  <button
+                    type="button"
+                    form="formulario"
+                    class="btn btn-warning"
+                    data-bs-dismiss="modal"
+                  >
+                    Cancelar
+                  </button>
+                  <button
+                    type="submit"
+                    class="btn btn-primary"
+                    form="formulario"
+                    *ngIf="!subcrite.id_proyecto"
+                    data-dismiss="modal"
+                    data-bs-dismiss="modal"
+                    [disabled]="!frmProyecto.valid"
+                  >
+                    Agregar
+                  </button>
+                  <button
+                    class="btn btn-primary"
+                    *ngIf="subcrite.id_proyecto"
+                    data-dismiss="modal"
+                    data-bs-dismiss="modal"
+                    (click)="actualizar()"
+                    [disabled]="!frmProyecto.valid"
+                  >
+                    Actualizar
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modal para la lista de valores del pnd -->
+        <div
+          class="modal fade modal-stack"
+          id="listaPND"
+          tabindex="-1"
+          aria-labelledby="exampleModalLabel"
+          aria-hidden="true"
+          data-bs-backdrop="static"
+        >
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header bg-green">
+                <h3 class="modal-title">
+                  <i class="fas fa-clipboard"></i> Listado de PND
+                </h3>
+                <button
+                  type="button"
+                  class="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div class="modal-body">Listado de pnd</div>
+              <button
+                type="button"
+                class="btn btn-primary"
+                data-bs-toggle="modal"
+                data-bs-target="#materiaModal"
+              >
+                S
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>

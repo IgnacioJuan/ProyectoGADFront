@@ -40,8 +40,8 @@ export class SidebarService {
       icono: 'nav-icon fas fa-solid fa-list',
       titulo: "Configurar Modelo",
       submenu: [
-        { titulo: 'Modelo', url: 'sup/flujo-modelo/modelo', icono: 'fas fa-list-ul ' }
-
+        { titulo: 'Modelo', url: 'sup/flujo-modelo/modelo', icono: 'fas fa-list-ul ' },
+        { titulo: 'Indicador', url: 'sup/flujo_Componentes/componentesSuper', icono: 'fas fa-list-ul ' }
       ]
     },
     {

@@ -4,6 +4,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { padNumber } from '@ng-bootstrap/ng-bootstrap/util/util';
 import { ModeloPoa } from 'src/app/models/ModeloPoa';
 import { Proyecto } from 'src/app/models/Proyecto';
@@ -50,9 +51,11 @@ export class ModeloProyectoComponent {
   @ViewChild('datosModalRef') datosModalRef: any;
   @ViewChild(MatPaginator, { static: false }) paginator?: MatPaginator;
 
+  fechaMinima: string = "";
+  fechaMax: string = "";
   constructor(
     private proyectoservice: ProyectoService,private paginatorIntl: MatPaginatorIntl,
-    private router: Router, private fb: FormBuilder
+    private router: Router, private fb: FormBuilder, private modalService: NgbModal
   ) {
     this.frmProyecto = fb.group({
       nombre: ['', Validators.required],
@@ -61,10 +64,11 @@ export class ModeloProyectoComponent {
       meta: ['', [Validators.required]],
       porcentaje_alcance: ['', [Validators.required]],
       fecha_inicio: ['', [Validators.required]],
-      padNumberods: ['', [Validators.required]],
-      programa: ['', [Validators.required]],
-      indicador: ['', [Validators.required]],
-      competencia: ['', [Validators.required]],
+      pnd: [{value:'', disabled: true} , [Validators.required]],
+      ods: [{value:'', disabled: true} , [Validators.required]],
+      programa: [{value:'', disabled: true} , [Validators.required]],
+      indicador: [{value:'', disabled: true} , [Validators.required]],
+      competencia:[{value:'', disabled: true} , [Validators.required]],
 
     });
     this.paginatorIntl.nextPageLabel = this.nextPageLabel;
@@ -210,5 +214,75 @@ export class ModeloProyectoComponent {
     } else {
       this.dataSource.data = this.proyectos;;
     }
+  }
+
+  validarFechas(): void {
+    // const fechaInicio = this.frmModeloPoa.get('fecha_inicial')?.value as string;
+    // const fechaFin = this.frmModeloPoa.get('fecha_final')?.value as string;
+
+    // if (fechaInicio && fechaFin) {
+    //   const dateInicio = new Date(fechaInicio);
+    //   const dateFin = new Date(fechaFin);
+
+    //   if (dateFin < dateInicio) {
+    //     this.frmModeloPoa.setErrors({ fechasInvalidas: true });
+    //   } else {
+    //     this.frmModeloPoa.setErrors(null);
+    //   }
+    // }
+  }
+  selectedPND: number  | null = null; // El valor seleccionado se almacenará aquí
+  pndOptions: any[] = [
+    { id: 1, nombre: 'Opción 1' },
+    { id: 2, nombre: 'Opción 2' },
+    { id: 3, nombre: 'Opción 3' }
+  ]; 
+  onPNDSelected(event: any): void {
+    const selectedId = parseInt(event.target.value, 10); // Convertir el valor a número
+    this.selectedPND = selectedId;
+  }
+
+  selectedODS: number  | null = null; // El valor seleccionado se almacenará aquí
+  odsOptions: any[] = [
+    { id: 1, nombre: 'Opción 1' },
+    { id: 2, nombre: 'Opción 2' },
+    { id: 3, nombre: 'Opción 3' }
+  ]; 
+  onODSSelected(event: any): void {
+    const selectedId = parseInt(event.target.value, 10); // Convertir el valor a número
+    this.selectedODS = selectedId;
+  }
+
+  selectedPrograma: number  | null = null; // El valor seleccionado se almacenará aquí
+  programaOptions: any[] = [
+    { id: 1, nombre: 'Opción 1' },
+    { id: 2, nombre: 'Opción 2' },
+    { id: 3, nombre: 'Opción 3' }
+  ]; 
+  onProgramaSelected(event: any): void {
+    const selectedId = parseInt(event.target.value, 10); // Convertir el valor a número
+    this.selectedPrograma = selectedId;
+  }
+
+  selectedIndicador: number  | null = null; // El valor seleccionado se almacenará aquí
+  indicadorOptions: any[] = [
+    { id: 1, nombre: 'Opción 1' },
+    { id: 2, nombre: 'Opción 2' },
+    { id: 3, nombre: 'Opción 3' }
+  ]; 
+  onIndicadorSelected(event: any): void {
+    const selectedId = parseInt(event.target.value, 10); // Convertir el valor a número
+    this.selectedIndicador = selectedId;
+  }
+
+  selectedCompetencia: number  | null = null; // El valor seleccionado se almacenará aquí
+  competenciaOptions: any[] = [
+    { id: 1, nombre: 'Opción 1' },
+    { id: 2, nombre: 'Opción 2' },
+    { id: 3, nombre: 'Opción 3' }
+  ]; 
+  onCompetenciaSelected(event: any): void {
+    const selectedId = parseInt(event.target.value, 10); // Convertir el valor a número
+    this.selectedCompetencia = selectedId;
   }
 }
