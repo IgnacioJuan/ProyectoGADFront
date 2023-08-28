@@ -46,7 +46,7 @@ export class ActividadesComponent implements OnInit{
   resultadosEncontrados: boolean = true;
 
   dataSource = new MatTableDataSource<ActividadesPoa>();
-  columnasUsuario: string[] = ['id_actividad', 'nombre', 'descripcion', 'presupuesto_referencial', 'codificado', 'ejecutado', 'saldo'];
+  columnasUsuario: string[] = ['id_actividad', 'nombre', 'descripcion', 'presupuesto_referencial', 'codificado', 'ejecutado', 'saldo','actions'];
 
   @ViewChild('datosModalRef') datosModalRef: any;
   @ViewChild(MatPaginator, { static: false }) paginator?: MatPaginator;
@@ -81,6 +81,13 @@ export class ActividadesComponent implements OnInit{
     }
     this.listar(this.poa.id_poa)
   } 
+
+  verPoas() {
+    this.router.navigate(['/adm/asignacion-actividades/poa-actividad']);
+  }
+  asignarResponsable() {
+    this.router.navigate(['/adm/asignacion-actividades/actividad-responsable']);
+  }
  
   guardar() {
     this.actividad = this.frmActividad.value;
@@ -113,7 +120,7 @@ export class ActividadesComponent implements OnInit{
     this.actividadservice.getActividadesPoa(poaId).subscribe(
       (data: any[]) => {
         this.actividades = data;
-        //this.dataSource.data = this.actividades;
+        this.dataSource.data = this.actividades;
       },
       (error: any) => {
         console.error('Error al listar las actividades:', error);

@@ -1,8 +1,14 @@
 <body>
     <div class="container bg-light border border-start-0 rounded-4">
-      <blockquote style="margin-top: 5%">
-        <h1 class="titulo" style="text-transform: uppercase" >
-          <strong>ACTIVIDADES</strong>
+      <blockquote class="blockquote text-dark" style="margin-top: 5%">
+        <h1 style="text-transform: uppercase">
+          <strong
+            ><a class="titulo" style="cursor: pointer" (click)=" verPoas()"
+              >LISTADO POAS
+            </a>
+            >
+            <a class="titulo">ACTIVIDADES </a></strong
+          >
         </h1>
       </blockquote>
       <div class="card">
@@ -79,6 +85,19 @@
                   {{ elemento.saldo }}
                 </td>
               </ng-container>
+              <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef>ACCIONES</th>
+                <td mat-cell *matCellDef="let elemento">
+                  <button
+                    class="btn btn-primary"
+                    role="button"
+                    (click)="asignarResponsable()"
+                  >
+                  <i class="fas fa-edit"></i>
+                  </button>
+                </td>
+              </ng-container>
+
               <tr mat-header-row *matHeaderRowDef="columnasUsuario"></tr>
               <tr mat-row *matRowDef="let fila; columns: columnasUsuario"></tr>
             </table>
