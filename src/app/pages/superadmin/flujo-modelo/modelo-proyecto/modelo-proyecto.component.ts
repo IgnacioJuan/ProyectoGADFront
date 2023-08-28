@@ -218,7 +218,7 @@ export class ModeloProyectoComponent {
   }
 
   verDetalles(proyecto: any) {
-    this.router.navigate(['/sup/flujo-modelo/proyecto-poa'], { state: { data: proyecto, criterio: this.modelopoa } });
+    this.router.navigate(['/sup/flujo-modelo/proyecto-poa'], { state: { proyecto: proyecto, modelo: this.modelopoa } });
   }
   verModeloPoas() {
     this.router.navigate(['/sup/flujo-modelo/modelo']);

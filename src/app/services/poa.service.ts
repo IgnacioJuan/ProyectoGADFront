@@ -10,6 +10,7 @@ import { CriterioSubcriteriosProjection } from '../interface/CriterioSubcriterio
 import { proyeccionCriterio } from '../pages/admin/aprobar-rechazar-admin/proyecciones-testeo/proyeccionCriterio';
 import { IndicadorProjection } from '../interface/IndicadorProjection';
 import { PoaActividadProjection } from '../interface/PoaActividadProjection';
+import { Poa } from '../models/Poa';
 
 @Injectable({
   providedIn: 'root'
@@ -46,5 +47,8 @@ export class PoaService {
 
   obtenerDatosPoas(): Observable<PoaActividadProjection[]> {
     return this.http.get<PoaActividadProjection[]>(`${baserUrl}/api/poa/datosPoas`);
+  }
+  listarPoasdelProyecto(id:number, estado:string): Observable<Poa[]> {
+    return this.http.get<Poa[]>(`${baserUrl}/api/poa/listardelProyecto/${id}/${estado}`);
   }
 }
