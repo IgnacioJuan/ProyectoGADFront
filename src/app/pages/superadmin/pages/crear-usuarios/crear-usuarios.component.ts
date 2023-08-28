@@ -125,9 +125,9 @@ export class CrearUsuariosComponent implements OnInit {
     const dialogRef = this.dialog.open(DialogoUsuariosComponent, { width: '100%' });
 
     dialogRef.afterClosed().subscribe(result => {
-      if (result) { // Si el resultado es 'true', entonces el usuario se guardó correctamente.
-        this.Listado();
-      }
+      // Si el resultado es 'true', entonces el usuario se guardó correctamente.
+      this.Listado();
+
     });
   }
 

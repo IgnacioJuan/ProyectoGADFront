@@ -53,7 +53,7 @@ export class DialogoUsuariosComponent implements OnInit {
       rol: ['', Validators.required]
     });
 
-
+    
     /*this.rolService.getRoles().subscribe((roles) => {
       this.roles = roles;
     });*/
