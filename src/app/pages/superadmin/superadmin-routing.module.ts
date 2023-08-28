@@ -128,6 +128,10 @@ const routes: Routes = [{
   path: 'flujo_Componentes',
   loadChildren: () => import("./flujo-componentes/flujo-componentes.module").then(m => m.FlujoComponentesModule)
 },
+  {
+    path: 'ejes',
+    loadChildren: () => import("./ejes/ejes.module").then(m => m.EjesModule)
+  },
 ];
 
 @NgModule({
