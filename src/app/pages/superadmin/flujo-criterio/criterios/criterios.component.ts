@@ -43,7 +43,7 @@ export class CriteriosComponent implements OnInit {
 
   filterPost = '';
   dataSource = new MatTableDataSource<CriterioSubcriteriosProjection>();
-  columnasUsuario: string[] = ['id_criterio', 'nombre', 'descripcion', 'actions'];
+  columnasUsuario: string[] = ['id_criterio', 'nombre', 'descripcion', 'cantidadSubcriterios', 'actions'];
 
   @ViewChild('datosModalRef') datosModalRef: any;
   @ViewChild(MatPaginator, { static: false }) paginator?: MatPaginator;
@@ -69,8 +69,6 @@ export class CriteriosComponent implements OnInit {
   }
   ngOnInit(): void {
     this.listar();
-
-    this.cargarDatosQuemados();
   }
   
  
@@ -171,27 +169,6 @@ export class CriteriosComponent implements OnInit {
       this.dataSource.data = this.criterios;;
     }
   }
-
-  cargarDatosQuemados(): void {
-    // Simulamos 20 registros iniciales para cargar en la tabla
-    const registrosQuemados: CriterioSubcriteriosProjection[] = [];
-  
-    for (let i = 1; i <= 20; i++) {
-      const nuevoRegistro: CriterioSubcriteriosProjection = {
-        id_criterio: i,
-        nombre: `Nombre ${i}`,
-        descripcion: `Descripción ${i}`,
-        visible: false,
-        cantidadSubcriterios: 0
-      };
-  
-      registrosQuemados.push(nuevoRegistro);
-    }
-  
-    this.criterios = registrosQuemados;
-    this.dataSource.data = this.criterios;
-  }
-
 
 
   
