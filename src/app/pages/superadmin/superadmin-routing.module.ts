@@ -105,6 +105,10 @@ const routes: Routes = [{
   path: 'formula',
   loadChildren: () => import("./formula/formula.module").then(m => m.FormulaModule)
 },
+  {
+    path: 'ejes',
+    loadChildren: () => import("./ejes/ejes.module").then(m => m.EjesModule)
+  },
 ];
 
 @NgModule({
