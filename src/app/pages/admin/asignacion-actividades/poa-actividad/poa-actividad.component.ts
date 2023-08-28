@@ -37,8 +37,8 @@ export class PoaActividadComponent implements OnInit{
 
   filterPost = '';
   dataSource = new MatTableDataSource<PoaActividadProjection>();
-  columnasPoa: string[] = ['id_poa', 'fecha_inicio', 'fecha_fin', 'line_base', 'meta_alcanzar','meta_fisica','avance_real','localizacion',
-  'cobertura','barrio','comunidad','nombre_funcionario','cargo','recursos_propios','transferencias_gobierno','convenio','estado', 'actions'];
+  columnasPoa: string[] = ['id_poa', 'meta_alcanzar','meta_fisica','avance_real','fecha_inicio', 'fecha_fin','localizacion',
+  'cobertura','barrio','comunidad','nombre_funcionario','cargo','recursos_propios','transferencias_gobierno','convenio','linea_base'];
 
   @ViewChild('datosModalRef') datosModalRef: any;
   @ViewChild(MatPaginator, { static: false }) paginator?: MatPaginator;
@@ -79,7 +79,7 @@ export class PoaActividadComponent implements OnInit{
   }
 
   verActividades(poa: any) {
-    this.router.navigate(['/adm/asignacion-actividades/actividad-responsable'], { state: { data: poa } });
+    this.router.navigate(['/adm/asignacion-actividades/actividades'], { state: { data: poa } });
   }
 
   aplicarFiltro() {

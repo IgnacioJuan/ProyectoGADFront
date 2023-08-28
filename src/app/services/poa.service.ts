@@ -45,6 +45,6 @@ export class PoaService {
   }
 
   obtenerDatosPoas(): Observable<PoaActividadProjection[]> {
-    return this.http.get<PoaActividadProjection[]>(`${baserUrl}/api/poa/datosPoas`);
+    return this.http.get<PoaActividadProjection[]>(`${baserUrl}/api/poa/listarPoasAprobados`);
   }
 }

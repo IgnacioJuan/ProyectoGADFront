@@ -1,11 +1,10 @@
 export interface PoaActividadProjection {
     id_poa: number;
-    fecha_inicio: Date;
-    fecha_fin: Date;
-    linea_base: string;
     meta_alcanzar: number;
     meta_fisica: number;
     avance_real: number;
+    fecha_inicio: Date;
+    fecha_fin: Date;
     localizacion: string;
     cobertura: string;
     barrio: string;
@@ -14,6 +13,7 @@ export interface PoaActividadProjection {
     cargo: string;
     recursos_propios: number;
     transferencias_gobierno: number;
-    convenio: number;
+    convenios: number;
+    linea_base: string;
     cantidadActividades: number;
 }
