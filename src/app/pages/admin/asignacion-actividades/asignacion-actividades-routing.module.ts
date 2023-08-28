@@ -4,11 +4,18 @@ import { SuperGuard } from 'src/app/services/Guards/super.guard';
 import { PoaActividadComponent } from './poa-actividad/poa-actividad.component';
 import { AdminGuard } from 'src/app/services/Guards/admin.guard';
 import { ActividadesResponsableComponent } from '../../responsable/actividades-responsable/actividades-responsable.component';
+import { ActividadesComponent } from './actividades/actividades.component';
 
 const routes: Routes = [
   {
     path: 'poa-actividad',
     component: PoaActividadComponent,
+    pathMatch: 'full',
+    canActivate: [AdminGuard]
+  },
+  {
+    path: 'actividades',
+    component: ActividadesComponent,
     pathMatch: 'full',
     canActivate: [AdminGuard]
   },

@@ -5,12 +5,14 @@ import { AsignacionActividadesRoutingModule } from './asignacion-actividades-rou
 import { SharedModule } from 'src/app/shared/shared.module';
 import { PoaActividadComponent } from './poa-actividad/poa-actividad.component';
 import { ActividadResponsableComponent } from './actividad-responsable/actividad-responsable.component';
+import { ActividadesComponent } from './actividades/actividades.component';
 
 
 @NgModule({
   declarations: [
     PoaActividadComponent,
-    ActividadResponsableComponent
+    ActividadResponsableComponent,
+    ActividadesComponent
 
   ],
   imports: [
