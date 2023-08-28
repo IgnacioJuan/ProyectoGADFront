@@ -4,6 +4,7 @@ import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { PoaActividadProjection } from 'src/app/interface/PoaActividadProjection';
+import { ActividadesPoa } from 'src/app/models/ActividadesPoa';
 import { PoaService } from 'src/app/services/poa.service';
 
 @Component({
@@ -12,7 +13,6 @@ import { PoaService } from 'src/app/services/poa.service';
   styleUrls: ['./poa-actividad.component.css']
 })
 export class PoaActividadComponent implements OnInit{
-  frmPoa: FormGroup;
   itemsPerPageLabel = 'Poas por página';
   nextPageLabel = 'Siguiente';
   lastPageLabel = 'Última';
@@ -34,8 +34,11 @@ export class PoaActividadComponent implements OnInit{
 
   //public poa = new Poa();
   poas: PoaActividadProjection[] = [];
+  public activ = new ActividadesPoa();
 
   filterPost = '';
+  filteredPoas: any[] = [];
+  resultadosEncontrados: boolean = true;
   dataSource = new MatTableDataSource<PoaActividadProjection>();
   columnasPoa: string[] = ['id_poa','fecha_inicio','fecha_fin','localizacion','cobertura','barrio','comunidad','nombre_funcionario','cargo','recursos_propios','recursos_externos','linea_base','cantidadActividades'];
 
@@ -44,12 +47,9 @@ export class PoaActividadComponent implements OnInit{
 
   constructor(
     private poaservice: PoaService,private paginatorIntl: MatPaginatorIntl,
-    private router: Router, private fb: FormBuilder
+    private router: Router, private fb: FormBuilder,
+    
   ) {
-    this.frmPoa = fb.group({
-      nombre: ['', Validators.required],
-      descripcion: ['', [Validators.required]]
-    });
     this.paginatorIntl.nextPageLabel = this.nextPageLabel;
     this.paginatorIntl.lastPageLabel = this.lastPageLabel;
     this.paginatorIntl.firstPageLabel=this.firstPageLabel;

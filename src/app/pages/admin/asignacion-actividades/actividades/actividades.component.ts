@@ -4,7 +4,8 @@ import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { ActividadesPoa } from 'src/app/models/ActividadesPoa';
-import { ActividadespoaService } from 'src/app/services/actividadespoa';
+import { Poa } from 'src/app/models/Poa';
+import { ActividadespoaService } from 'src/app/services/actividadespoa.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -15,7 +16,6 @@ import Swal from 'sweetalert2';
 export class ActividadesComponent implements OnInit{
   frmActividad: FormGroup;
   guardadoExitoso: boolean = false;
-  miModal!: ElementRef;
   //tabla
   itemsPerPageLabel = 'Actividades por página';
   nextPageLabel = 'Siguiente';
@@ -36,11 +36,15 @@ export class ActividadesComponent implements OnInit{
     return `${startIndex + 1} - ${endIndex} de ${length}`;
   };
   //
-  public actividad = new ActividadesPoa();
+  poa: Poa = new Poa();
   actividades: any[] = []; 
-  
+  miModal!: ElementRef;
+  public actividad = new ActividadesPoa();
 
   filterPost = '';
+  filteredPoas: any[] = [];
+  resultadosEncontrados: boolean = true;
+
   dataSource = new MatTableDataSource<ActividadesPoa>();
   columnasUsuario: string[] = ['id_actividad', 'nombre', 'descripcion', 'presupuesto_referencial', 'codificado', 'ejecutado', 'saldo'];
 
@@ -68,17 +72,25 @@ export class ActividadesComponent implements OnInit{
 
   }
   ngOnInit(): void {
-    this.listar();
+    const data = history.state.data;
+    this.poa = data;
+    console.log(this.poa);
+    if (this.poa == undefined) {
+      this.router.navigate(['user-dashboard']);
+      location.replace('/use/user-dashboard');
+    }
+    this.listar(this.poa.id_poa)
   } 
  
   guardar() {
     this.actividad = this.frmActividad.value;
+    this.actividad.poa = this.poa;
     this.actividadservice.crear(this.actividad)
       .subscribe(
         (response) => {
           console.log('Actividad creada con éxito:', response);
           this.guardadoExitoso = true;
-          this.listar();
+          this.listar(this.poa.id_poa);
           Swal.fire(
             'Exitoso',
             'Se ha completado el registro con exito',
@@ -97,11 +109,11 @@ export class ActividadesComponent implements OnInit{
 
   }
 
-  listar(): void {
-    this.actividadservice.getActividades().subscribe(
-      (data: ActividadesPoa[]) => {
+  listar(poaId:number): void {
+    this.actividadservice.getActividadesPoa(poaId).subscribe(
+      (data: any[]) => {
         this.actividades = data;
-        this.dataSource.data = this.actividades;
+        //this.dataSource.data = this.actividades;
       },
       (error: any) => {
         console.error('Error al listar las actividades:', error);
@@ -116,11 +128,10 @@ export class ActividadesComponent implements OnInit{
       confirmButtonText: 'Cancelar',
       denyButtonText: `Eliminar`,
     }).then((result) => {
-      /* Read more about isConfirmed, isDenied below */
       if (!result.isConfirmed) {
         this.actividadservice.eliminarActividad(activ).subscribe(
           (response) => {
-            this.listar()
+            this.listar(this.poa.id_poa)
             Swal.fire('Eliminado!', '', 'success')
 
           }
