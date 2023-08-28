@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { UsuarioService } from 'src/app/services/usuario.service';
@@ -36,14 +36,13 @@ export class DialogoUsuariosComponent implements OnInit {
 
   ngOnInit(): void {
     this.firstFormGroup = this._formBuilder.group({
-      cedula: ['', Validators.required],
-      primer_nombre: ['', Validators.required],
-      segundo_nombre: [''],
-      primer_apellido: ['', Validators.required],
-      segundo_apellido: [''],
+      cedula: ['', [Validators.required, validarCedula]],
+      primer_nombre: ['', [Validators.required, validarNombreApellido]],
+      segundo_nombre: ['', [Validators.required, validarNombreApellido]],
+      primer_apellido: ['', [Validators.required, validarNombreApellido]],
+      segundo_apellido: ['', [Validators.required, validarNombreApellido]],
+      celular: ['', [Validators.required, validarCelular]],
       correo: ['', [Validators.required, Validators.email]],
-      direccion: [''],
-      celular: ['', Validators.required],
       visible: [true]
     });
 
@@ -53,7 +52,7 @@ export class DialogoUsuariosComponent implements OnInit {
       rol: ['', Validators.required]
     });
 
-    
+
     /*this.rolService.getRoles().subscribe((roles) => {
       this.roles = roles;
     });*/
@@ -74,7 +73,7 @@ export class DialogoUsuariosComponent implements OnInit {
         this.usuarioService.createUsuario(usuario, idRol).subscribe(() => {
           Swal.fire('Usuario guardado', 'Usuario registrado con éxito en el sistema', 'success');
           this.dialogRef.close();
-          
+
         }, (error) => {
           console.error(error);
           this.snack.open('Error al guardar el usuario', 'Aceptar', {
@@ -98,4 +97,27 @@ export class DialogoUsuariosComponent implements OnInit {
     this.dialogRef.close();
   }
 
+}
+
+//validaciones meh
+function validarCedula(control: FormControl): { [key: string]: boolean } | null {
+  const cedula = control.value;
+  if (!cedula.match(/^\d{10}$/)) {
+    return { 'cedulaInvalida': true };
+  }
+  // Aquí puedes agregar la validación específica para cédulas ecuatorianas si lo necesitas.
+  return null;
+}
+
+function validarNombreApellido(control: FormControl): { [key: string]: boolean } | null {
+  if (control.value && (control.value.length < 3 || /\d/.test(control.value))) {
+    return { 'nombreApellidoInvalido': true };
+  }
+  return null;
+}
+function validarCelular(control: FormControl): { [key: string]: boolean } | null {
+  if (!control.value.match(/^\d{10}$/)) {
+    return { 'celularInvalido': true };
+  }
+  return null;
 }
