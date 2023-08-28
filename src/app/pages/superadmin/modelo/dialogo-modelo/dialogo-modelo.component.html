@@ -99,9 +99,9 @@
 <mat-dialog-actions align="end">
   <button class="btn btn-warning" mat-dialog-close>Cancelar</button>
   <button class="btn btn-primary" cdkFocusInitial (click)="createModelo()">Guardar</button>
-  <div *ngIf="copiando" class="fullscreen-spinner">
+  <!--<div *ngIf="copiando" class="fullscreen-spinner">
     <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" size = "medium" color = "#fff" type = "line-spin-fade"><p style="color: white" > Copiando modelo... </p></ngx-spinner>
-  </div>
+  </div> -->
   <button class="btn btn-primary" *ngIf="idmax !== null && idmax !== 0 && idmax !== undefined" (click)="copiarmodelo()">Copiar modelo</button>
 
   <!-- 

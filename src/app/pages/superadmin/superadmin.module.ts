@@ -14,6 +14,8 @@ import { CriterioReporteComponent } from './pages/criterio-reporte/criterio-repo
 import { EvidenciaAtrasadaComponent } from './pages/evidencia-atrasada/evidencia-atrasada.component';
 
 import { SharedModule } from 'src/app/shared/shared.module';
+import { DialogoUsuariosComponent } from './pages/dialogo-usuarios/dialogo-usuarios.component';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [
@@ -26,12 +28,13 @@ import { SharedModule } from 'src/app/shared/shared.module';
     SubcriteriosComponent,
     CriterioReporteComponent,
     EvidenciaAtrasadaComponent,
+    DialogoUsuariosComponent,
   ],
   imports: [
     CommonModule,
     SuperadminRoutingModule,
-    
-    SharedModule,
+    MatSnackBarModule,
+    SharedModule
   ]
 })
 export class SuperadminModule { }

@@ -11,6 +11,7 @@ import { EvidenciasComponent } from './pages/evidencias/evidencias.component';
 import { EvidenciaAtrasadaComponent } from './pages/evidencia-atrasada/evidencia-atrasada.component';
 import { CriterioReporteComponent } from './pages/criterio-reporte/criterio-reporte.component';
 import { DashboardComponent } from '../admin/dashboard/dashboard.component';
+import { DialogoUsuariosComponent } from './pages/dialogo-usuarios/dialogo-usuarios.component';
 
 const routes: Routes = [{
   path: 'dashboard',
@@ -22,6 +23,12 @@ const routes: Routes = [{
 {
   path: 'usuarios',
   component: CrearUsuariosComponent,
+  pathMatch: 'full',
+  canActivate: [SuperGuard]
+},
+{
+  path: 'crearUsu',
+  component: DialogoUsuariosComponent,
   pathMatch: 'full',
   canActivate: [SuperGuard]
 },
@@ -86,7 +93,7 @@ const routes: Routes = [{
   path: 'modelo',
   loadChildren: () => import("./modelo/modelo.module").then(m => m.ModeloModule)
 },
-{ 
+{
   path: 'ponderacion',
   loadChildren: () => import("./ponderacion/ponderacion.module").then(m => m.PonderacionModule)
 },
