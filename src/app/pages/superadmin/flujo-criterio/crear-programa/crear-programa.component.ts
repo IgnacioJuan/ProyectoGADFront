@@ -1,12 +1,12 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, NgModule, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { Criterio } from 'src/app/models/Criterio';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
-import { CriteriosService } from 'src/app/services/criterios.service';
+import { ProgramaService } from 'src/app/services/programa.service';
 import Swal from 'sweetalert2';
-import { CriterioSubcriteriosProjection } from 'src/app/interface/CriterioSubcriteriosProjection';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
+import { Programa } from 'src/app/models/Programa';
+
 
 
 
@@ -20,7 +20,7 @@ export class CrearComponent implements OnInit {
   guardadoExitoso: boolean = false;
   miModal!: ElementRef;
   //tabla
-  itemsPerPageLabel = 'Criterios por página';
+  itemsPerPageLabel = 'Programas por página';
   nextPageLabel = 'Siguiente';
   lastPageLabel = 'Última';
   firstPageLabel='Primera';
@@ -40,19 +40,19 @@ export class CrearComponent implements OnInit {
   };
 
 
-  public crite = new Criterio();
-  criterios: CriterioSubcriteriosProjection[] = [];
+  public crite = new Programa();
+  criterios: Programa[] = [];
   
 
   filterPost = '';
-  dataSource = new MatTableDataSource<CriterioSubcriteriosProjection>();
-  columnasUsuario: string[] = ['id_criterio', 'nombre', 'descripcion', 'actions'];
+  dataSource = new MatTableDataSource<Programa>();
+  columnasUsuario: string[] = ['id_programa', 'nombre', 'descripcion', 'actions'];
 
   @ViewChild('datosModalRef') datosModalRef: any;
   @ViewChild(MatPaginator, { static: false }) paginator?: MatPaginator;
 
   constructor(
-    private criterioservice: CriteriosService,private paginatorIntl: MatPaginatorIntl,
+    private programaservice: ProgramaService,private paginatorIntl: MatPaginatorIntl,
     private router: Router, private fb: FormBuilder
   ) {
     this.frmCriterio = fb.group({
@@ -68,18 +68,15 @@ export class CrearComponent implements OnInit {
   }
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator || null;
-
   }
   ngOnInit(): void {
     this.listar();
 
-    this.cargarDatosQuemados();
   }
-  
- 
+
   guardar() {
     this.crite = this.frmCriterio.value;
-    this.criterioservice.crear(this.crite)
+    this.programaservice.crear(this.crite)
       .subscribe(
         (response) => {
           console.log('Criterio creado con éxito:', response);
@@ -102,7 +99,7 @@ export class CrearComponent implements OnInit {
       );
 
   }
-  eliminar(criterio: any) {
+    eliminar(id: any) {
     Swal.fire({
       title: 'Estas seguro de eliminar el registro?',
       showDenyButton: true,
@@ -111,7 +108,7 @@ export class CrearComponent implements OnInit {
     }).then((result) => {
       /* Read more about isConfirmed, isDenied below */
       if (!result.isConfirmed) {
-        this.criterioservice.eliminar(criterio).subscribe(
+        this.programaservice.eliminarLogic(id).subscribe(
           (response) => {
             this.listar()
             Swal.fire('Eliminado!', '', 'success')
@@ -123,8 +120,10 @@ export class CrearComponent implements OnInit {
 
   }
 
+  
+  //////////
   listar(): void {
-    this.criterioservice.obtenerDatosCriterios().subscribe(
+    this.programaservice.listar().subscribe(
       (data: any[]) => {
         this.criterios = data;
         this.dataSource.data = this.criterios;
@@ -135,7 +134,7 @@ export class CrearComponent implements OnInit {
     );
   }
 
-  editDatos(criterio: Criterio) {
+  editDatos(criterio: Programa) {
     this.crite = criterio;
     this.frmCriterio = new FormGroup({
       nombre: new FormControl(criterio.nombre),
@@ -146,15 +145,15 @@ export class CrearComponent implements OnInit {
 
   limpiarFormulario() {
     this.frmCriterio.reset();
-    this.crite = new Criterio;
+    this.crite = new Programa;
   }
 
   actualizar() {
     this.crite.nombre = this.frmCriterio.value.nombre;
     this.crite.descripcion = this.frmCriterio.value.descripcion;
-    this.criterioservice.actualizar(this.crite.id_criterio, this.crite)
+    this.programaservice.actualizar(this.crite.id_programa, this.crite)
       .subscribe(response => {
-        this.crite = new Criterio();
+        this.crite = new Programa();
         this.listar();
         Swal.fire('Operacion exitosa!', 'El registro se actualizo con exito', 'success')
       });
@@ -173,29 +172,7 @@ export class CrearComponent implements OnInit {
     } else {
       this.dataSource.data = this.criterios;;
     }
-  }
+  }  
 
-  cargarDatosQuemados(): void {
-    // Simulamos 20 registros iniciales para cargar en la tabla
-    const registrosQuemados: CriterioSubcriteriosProjection[] = [];
-  
-    for (let i = 1; i <= 20; i++) {
-      const nuevoRegistro: CriterioSubcriteriosProjection = {
-        id_criterio: i,
-        nombre: `Nombre ${i}`,
-        descripcion: `Descripción ${i}`,
-        visible: false,
-        cantidadSubcriterios: 0
-      };
-  
-      registrosQuemados.push(nuevoRegistro);
-    }
-  
-    this.criterios = registrosQuemados;
-    this.dataSource.data = this.criterios;
-  }
-
-
-
-  
 }
+

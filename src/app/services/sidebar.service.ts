@@ -80,6 +80,14 @@ export class SidebarService {
         { titulo: 'Reporte de Criterios', url: 'sup/criterio_reporte', icono: 'fas fa-cubes' }
       ]
     },
+    {
+      icono: 'nav-icon fas fa-solid fa-list',
+      titulo: "Programa",
+      submenu: [
+        { titulo: 'Nuevo Programa', url: 'sup/flujo-criterio/crearpro', icono: 'fas fa-cubes' }
+     
+      ]
+    },
 
     // {
     //   icono: 'nav-icon fas fas fa-star',
