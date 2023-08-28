@@ -134,13 +134,13 @@
                     <div
                       class="alert alert-danger"
                       *ngIf="
-                        frmCriterio.controls['nombre'].invalid &&
-                        frmCriterio.controls['nombre'].touched
+                      frmCriterio.controls['nombre'].invalid &&
+                      frmCriterio.controls['nombre'].touched
                       "
                     >
                       <div
                         *ngIf="
-                          frmCriterio.controls['nombre'].hasError('required')
+                        frmCriterio.controls['nombre'].hasError('required')
                         "
                       >
                         Debe ingresar un nombre
@@ -157,13 +157,13 @@
                     <div
                       class="alert alert-danger"
                       *ngIf="
-                        frmCriterio.controls['descripcion'].invalid &&
-                        frmCriterio.controls['descripcion'].touched
+                      frmCriterio.controls['descripcion'].invalid &&
+                      frmCriterio.controls['descripcion'].touched
                       "
                     >
                       <div
                         *ngIf="
-                          frmCriterio.controls['descripcion'].hasError(
+                        frmCriterio.controls['descripcion'].hasError(
                             'required'
                           )
                         "
@@ -172,7 +172,7 @@
                       </div>
                       <div
                         *ngIf="
-                          frmCriterio.controls['descripcion'].hasError(
+                        frmCriterio.controls['descripcion'].hasError(
                             'maxlength'
                           )
                         "
