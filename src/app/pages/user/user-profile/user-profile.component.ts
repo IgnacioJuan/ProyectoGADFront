@@ -58,9 +58,7 @@ export class UserProfileComponent implements OnInit {
   }
 
   Actualizar(usuariosdit: Usuario2) {
-    console.log(usuariosdit)
     usuariosdit.id = this.user.id;
-    console.log(usuariosdit)
     this.user.password = usuariosdit.password;
     Swal.fire({
       title: 'Esta seguro de cambiar su contraseña?',

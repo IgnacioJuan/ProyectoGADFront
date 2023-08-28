@@ -12,6 +12,11 @@ import { EvidenciaAtrasadaComponent } from './pages/evidencia-atrasada/evidencia
 import { CriterioReporteComponent } from './pages/criterio-reporte/criterio-reporte.component';
 import { DashboardComponent } from '../admin/dashboard/dashboard.component';
 import { ObjetivoodsListaComponent } from './pages/objetivoods-lista/objetivoods-lista.component';
+import { DialogoUsuariosComponent } from './pages/dialogo-usuarios/dialogo-usuarios.component';
+import { CrearComponent } from './pages/crear-programa/crear-programa.component';
+import { AprobarPoaComponent } from './pages/aprobar-poa/aprobar-poa/aprobar-poa.component';
+import { DetallePoaComponent } from './pages/poacc/detalle-poa/detalle-poa/detalle-poa.component';
+
 const routes: Routes = [{
   path: 'dashboard',
   component: DashboardComponent2,
@@ -22,6 +27,12 @@ const routes: Routes = [{
 {
   path: 'usuarios',
   component: CrearUsuariosComponent,
+  pathMatch: 'full',
+  canActivate: [SuperGuard]
+},
+{
+  path: 'crearUsu',
+  component: DialogoUsuariosComponent,
   pathMatch: 'full',
   canActivate: [SuperGuard]
 },
@@ -67,6 +78,26 @@ const routes: Routes = [{
 
 }
   ,
+{
+  path: 'crearpro',
+  component: CrearComponent,
+  pathMatch: 'full',
+  canActivate: [SuperGuard]
+},
+{
+  path: 'aprobar-poa',
+  component: AprobarPoaComponent,
+  pathMatch: 'full',
+  canActivate: [SuperGuard]
+},
+
+{
+  path: 'detalle-poa',
+  component: DetallePoaComponent,
+  pathMatch: 'full',
+  canActivate: [SuperGuard]
+},
+
 //Compartidas
 {
   path: 'criterio_reporte',
@@ -82,13 +113,13 @@ const routes: Routes = [{
   canActivate: [RoleguardGuard],
   data: { allowedRoles: ['SUPERADMIN', 'ADMIN'] }
 },
-  {
-    path: 'objetivoods-lista',
-    component: ObjetivoodsListaComponent,
-    pathMatch: 'full',
-    canActivate: [RoleguardGuard], // Asegúrate de que el guard sea el adecuado
-    data: { allowedRoles: ['SUPERADMIN', 'ADMIN'] } // Ajusta los roles permitidos
-  },
+{
+  path: 'objetivoods-lista',
+  component: ObjetivoodsListaComponent,
+  pathMatch: 'full',
+  canActivate: [RoleguardGuard], // Asegúrate de que el guard sea el adecuado
+  data: { allowedRoles: ['SUPERADMIN', 'ADMIN'] } // Ajusta los roles permitidos
+},
 {
   path: 'modelo',
   loadChildren: () => import("./modelo/modelo.module").then(m => m.ModeloModule)
@@ -104,6 +135,14 @@ const routes: Routes = [{
 {
   path: 'formula',
   loadChildren: () => import("./formula/formula.module").then(m => m.FormulaModule)
+},
+{
+  path: 'flujo-modelo',
+  loadChildren: () => import("./flujo-modelo/flujo-modelo.module").then(m => m.FlujoModeloModule)
+},
+{
+  path: 'flujo_Componentes',
+  loadChildren: () => import("./flujo-componentes/flujo-componentes.module").then(m => m.FlujoComponentesModule)
 },
   {
     path: 'ejes',
