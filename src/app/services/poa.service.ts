@@ -3,12 +3,6 @@ import { Criterio } from '../models/Criterio';
 import { map, Observable, catchError, of } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import baserUrl from './helper';
-import { Modelo } from '../models/Modelo';
-import { Observacion } from '../models/Observacion';
-import { Persona2 } from '../models/Persona2';
-import { CriterioSubcriteriosProjection } from '../interface/CriterioSubcriteriosProjection';
-import { proyeccionCriterio } from '../pages/admin/aprobar-rechazar-admin/proyecciones-testeo/proyeccionCriterio';
-import { IndicadorProjection } from '../interface/IndicadorProjection';
 import { PoaActividadProjection } from '../interface/PoaActividadProjection';
 
 @Injectable({
