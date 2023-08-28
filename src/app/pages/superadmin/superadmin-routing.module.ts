@@ -14,6 +14,8 @@ import { DashboardComponent } from '../admin/dashboard/dashboard.component';
 import { ObjetivoodsListaComponent } from './pages/objetivoods-lista/objetivoods-lista.component';
 import { DialogoUsuariosComponent } from './pages/dialogo-usuarios/dialogo-usuarios.component';
 import { CrearComponent } from './pages/crear-programa/crear-programa.component';
+import { AprobarPoaComponent } from './pages/aprobar-poa/aprobar-poa/aprobar-poa.component';
+import { DetallePoaComponent } from './pages/poacc/detalle-poa/detalle-poa/detalle-poa.component';
 
 const routes: Routes = [{
   path: 'dashboard',
@@ -82,6 +84,20 @@ const routes: Routes = [{
   pathMatch: 'full',
   canActivate: [SuperGuard]
 },
+{
+  path: 'aprobar-poa',
+  component: AprobarPoaComponent,
+  pathMatch: 'full',
+  canActivate: [SuperGuard]
+},
+
+{
+  path: 'detalle-poa',
+  component: DetallePoaComponent,
+  pathMatch: 'full',
+  canActivate: [SuperGuard]
+},
+
 //Compartidas
 {
   path: 'criterio_reporte',
