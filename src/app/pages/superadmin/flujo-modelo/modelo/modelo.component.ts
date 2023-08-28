@@ -174,8 +174,13 @@ export class ModeloComponent {
   }
 
   actualizar() {
+    
     this.crite.nombre = this.frmModeloPoa.value.nombre;
     this.crite.descripcion = this.frmModeloPoa.value.descripcion;
+    this.crite.fecha_inicial = this.frmModeloPoa.value.fecha_inicial
+    this.crite.fecha_final = this.frmModeloPoa.value.fecha_final;
+    this.crite.usuario=null;
+    console.log(this.crite)
     this.modeloPoaservice.actualizar(this.crite.id_modelo_poa, this.crite)
       .subscribe(response => {
         this.crite = new ModeloPoa();
