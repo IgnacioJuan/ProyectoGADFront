@@ -14,7 +14,7 @@ import { CriterioReporteComponent } from './pages/criterio-reporte/criterio-repo
 import { EvidenciaAtrasadaComponent } from './pages/evidencia-atrasada/evidencia-atrasada.component';
 
 import { SharedModule } from 'src/app/shared/shared.module';
-
+import { ObjetivoodsListaComponent } from './pages/objetivoods-lista/objetivoods-lista.component';
 @NgModule({
   declarations: [
     DashboardComponent2,
@@ -26,11 +26,12 @@ import { SharedModule } from 'src/app/shared/shared.module';
     SubcriteriosComponent,
     CriterioReporteComponent,
     EvidenciaAtrasadaComponent,
+    ObjetivoodsListaComponent,
   ],
   imports: [
     CommonModule,
     SuperadminRoutingModule,
-    
+
     SharedModule,
   ]
 })

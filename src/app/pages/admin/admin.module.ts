@@ -28,8 +28,6 @@ import { SharedModule } from 'src/app/shared/shared.module';
     AsignacionEvidenciaComponent,
     AprobarRechazarAdminComponent,
     AprobarRechazarDetalleAdminComponent,
-
-
   ],
   imports: [
     CommonModule,
