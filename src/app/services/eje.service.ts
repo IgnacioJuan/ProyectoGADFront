@@ -19,5 +19,12 @@ export class EjeService {
     return this.httpClient.post(`${baserUrl}/api/eje/crear`, r);
   }
 
+  eliminareje(comp: any): Observable<any> {
+    return this.httpClient.put(`${baserUrl}/api/eje/eliminarlogic/${comp.id_eje}`, comp);
+  }
+
+  actualizareje(id: any, comp: any): Observable<any> {
+    return this.httpClient.put(`${baserUrl}/api/eje/actualizar/${id}`, comp);
+  }
 
 }

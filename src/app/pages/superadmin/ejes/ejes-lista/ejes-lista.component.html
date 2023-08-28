@@ -60,10 +60,10 @@
               </button>
             </td>
             <td>
-              <button class="btn btn-sm btn-custom-yellow">
+              <button class="btn btn-sm btn-custom-yellow" >
                 <i class="fas fa-edit" style="color: yellow; font-size: 24px;"></i>
               </button>
-              <button class="btn btn-sm btn-custom-red">
+              <button class="btn btn-sm btn-custom-red" (click)="eliminareje(eje)">
                 <i class="fas fa-trash-alt" style="color: red; font-size: 24px;"></i>
               </button>
             </td>
@@ -85,10 +85,10 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
       </div>
       <div class="modal-body">
-        <form>
+        <form [formGroup]="ejeForm" >
           <div class="mb-3">
             <label for="nombreInput" class="form-label">Nombre</label>
-            <input type="text" class="form-control" id="nombreInput" [(ngModel)]="ejeobjeto.nombre"  placeholder="Ingrese el nombre" >
+            <input type="text" class="form-control" id="nombreInput" placeholder="Ingrese el nombre" formControlName="nombre">
           </div>
 
         </form>
@@ -97,7 +97,7 @@
         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
           <i class="fas fa-times"></i> Cancelar
         </button>
-        <button type="button" class="btn btn-warning" (click)="guardareje()">
+        <button type="button" class="btn btn-warning" (click)="guardareje()" data-bs-dismiss="modal">
           <i class="fas fa-save text-muted"></i> Guardar
         </button>
       </div>
