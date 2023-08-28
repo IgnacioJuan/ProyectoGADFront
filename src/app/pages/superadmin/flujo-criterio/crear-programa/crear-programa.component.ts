@@ -7,9 +7,6 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 import { Programa } from 'src/app/models/Programa';
 
-
-
-
 @Component({
   selector: 'app-crear-programa',
   templateUrl: './crear-programa.component.html',
@@ -40,8 +37,8 @@ export class CrearComponent implements OnInit {
   };
 
 
-  public crite = new Programa();
-  criterios: Programa[] = [];
+  public progra = new Programa();
+  programas: Programa[] = [];
   
 
   filterPost = '';
@@ -75,8 +72,8 @@ export class CrearComponent implements OnInit {
   }
 
   guardar() {
-    this.crite = this.frmCriterio.value;
-    this.programaservice.crear(this.crite)
+    this.progra = this.frmCriterio.value;
+    this.programaservice.crear(this.progra)
       .subscribe(
         (response) => {
           console.log('Criterio creado con éxito:', response);
@@ -120,13 +117,11 @@ export class CrearComponent implements OnInit {
 
   }
 
-  
-  //////////
   listar(): void {
     this.programaservice.listar().subscribe(
       (data: any[]) => {
-        this.criterios = data;
-        this.dataSource.data = this.criterios;
+        this.programas = data;
+        this.dataSource.data = this.programas;
       },
       (error: any) => {
         console.error('Error al listar los criterios:', error);
@@ -135,7 +130,7 @@ export class CrearComponent implements OnInit {
   }
 
   editDatos(criterio: Programa) {
-    this.crite = criterio;
+    this.progra = criterio;
     this.frmCriterio = new FormGroup({
       nombre: new FormControl(criterio.nombre),
       descripcion: new FormControl(criterio.descripcion)
@@ -145,15 +140,15 @@ export class CrearComponent implements OnInit {
 
   limpiarFormulario() {
     this.frmCriterio.reset();
-    this.crite = new Programa;
+    this.progra = new Programa;
   }
 
   actualizar() {
-    this.crite.nombre = this.frmCriterio.value.nombre;
-    this.crite.descripcion = this.frmCriterio.value.descripcion;
-    this.programaservice.actualizar(this.crite.id_programa, this.crite)
+    this.progra.nombre = this.frmCriterio.value.nombre;
+    this.progra.descripcion = this.frmCriterio.value.descripcion;
+    this.programaservice.actualizar(this.progra.id_programa, this.progra)
       .subscribe(response => {
-        this.crite = new Programa();
+        this.progra = new Programa();
         this.listar();
         Swal.fire('Operacion exitosa!', 'El registro se actualizo con exito', 'success')
       });
@@ -170,7 +165,7 @@ export class CrearComponent implements OnInit {
         return JSON.stringify(item).toLowerCase().includes(lowerCaseFilter);
       });
     } else {
-      this.dataSource.data = this.criterios;;
+      this.dataSource.data = this.programas;;
     }
   }  
 
