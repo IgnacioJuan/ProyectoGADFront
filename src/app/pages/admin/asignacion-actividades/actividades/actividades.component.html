@@ -18,8 +18,19 @@
                 (input)="aplicarFiltro()"
               />
             </div>
-  
             <br />
+            <button
+          type="button"
+          class="btn btn-primary"
+          data-bs-toggle="modal"
+          style="background-color: green"
+
+          data-bs-target="#materiaModal"
+        >
+          NUEVA ACTIVIDAD
+        </button>
+        <br/>
+        <br/>
           </div>
           <div
             class="mat-elevation-z8 table-responsive"
@@ -68,7 +79,6 @@
                   {{ elemento.saldo }}
                 </td>
               </ng-container>
-  
               <tr mat-header-row *matHeaderRowDef="columnasUsuario"></tr>
               <tr mat-row *matRowDef="let fila; columns: columnasUsuario"></tr>
             </table>
@@ -82,6 +92,149 @@
             >
             </mat-paginator>
           </div>
+          <div
+          class="modal fade"
+          id="materiaModal"
+          tabindex="-1"
+          aria-labelledby="exampleModalLabel"
+          aria-hidden="true"
+          (hidden.bs.modal)="limpiarFormulario()"
+        >
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header"  style="background-color: darkgreen; color: white;">
+                <h3 class="modal-title">
+                  <i class="fa fa-info-circle"></i> ACTIVIDAD
+                </h3>
+                <button
+                  type="button"
+                  class="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div class="modal-body">
+                <form
+                  [formGroup]="frmActividad"
+                  (ngSubmit)="guardar()"
+                  id="formulario"
+                >
+                  <div>
+                    <label for="nombre">Nombre:</label>
+                    <input
+                      class="form-control"
+                      formControlName="nombre"
+                      type="text"
+                      id="nombre"
+                      name="nombre"
+                      style="margin-bottom: 10px"
+                    />
+                    <div
+                      class="alert alert-danger"
+                      *ngIf="
+                      frmActividad.controls['nombre'].invalid &&
+                      frmActividad.controls['nombre'].touched
+                      "
+                    >
+                      <div
+                        *ngIf="
+                        frmActividad.controls['nombre'].hasError('required')
+                        "
+                      >
+                        Debe ingresar un nombre
+                      </div>
+                    </div>
+                    <label for="nombre">Descripcion:</label>
+                    <input
+                      class="form-control"
+                      formControlName="descripcion"
+                      type="text"
+                      id="descripcion"
+                      name="descripcion"
+                      style="margin-bottom: 10px"
+                    />
+                    <div
+                      class="alert alert-danger"
+                      *ngIf="
+                      frmActividad.controls['descripcion'].invalid &&
+                      frmActividad.controls['descripcion'].touched
+                      "
+                    >
+                      <div
+                        *ngIf="
+                        frmActividad.controls['descripcion'].hasError('required')
+                        "
+                      >
+                        Debe ingresar una descripcion de la actividad
+                      </div>
+                    </div>
+                    <label for="descripcion">Presupuesto Referencial:</label>
+                    <input
+                      class="form-control"
+                      formControlName="presupuesto_referencial"
+                      id="presupuesto_referencial"
+                      name="presupuesto_referencial"
+                      style="margin-bottom: 10px"
+                    />
+                    <div
+                      class="alert alert-danger"
+                      *ngIf="
+                      frmActividad.controls['presupuesto_referencial'].invalid &&
+                      frmActividad.controls['presupuesto_referencial'].touched
+                      "
+                    >
+                      <div
+                        *ngIf="
+                        frmActividad.controls['presupuesto_referencial'].hasError(
+                            'required'
+                          )
+                        "
+                      >
+                        Asigne un presupuesto referencial a la actividad
+                      </div>
+                    </div>
+                  </div>
+                </form>
+                <div class="modal-footer">
+                  <button
+                    type="button"
+                    form="formulario"
+                    class="btn btn-warning"
+                    data-bs-dismiss="modal"
+                  >
+                    Cancelar
+                  </button>
+                  <button
+                    type="submit"
+                    class="btn btn-primary"
+                    form="formulario"
+                    *ngIf="!actividad.id_actividad"
+                    data-dismiss="modal"
+                    data-bs-dismiss="modal"
+                    style="background-color: green"
+
+                    [disabled]="!frmActividad.valid"
+                  >
+                    Agregar
+                  </button>
+                  <!--
+                  <button
+                    class="btn btn-primary"
+                    *ngIf="actividad.id_actividad"
+                    data-dismiss="modal"
+                    data-bs-dismiss="modal"
+                    style="background-color: green"
+
+                    (click)="actualizar()"
+                    [disabled]="!frmActividad.valid"
+                  >
+                    Actualizar
+                  </button>-->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
         </div>
       </div>
     </div>
