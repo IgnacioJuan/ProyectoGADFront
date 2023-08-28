@@ -25,9 +25,8 @@ const routes: Routes = [
     component: IndicadoresEvidenciaComponent,
     pathMatch: 'full',
     canActivate: [SuperGuard]
-
-  }
-  ,
+  },
+ 
   {
     path: 'subcriterios-indicador',
     component: SubcriteriosIndicadorComponent,

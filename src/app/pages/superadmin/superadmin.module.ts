@@ -15,6 +15,12 @@ import { EvidenciaAtrasadaComponent } from './pages/evidencia-atrasada/evidencia
 
 import { SharedModule } from 'src/app/shared/shared.module';
 import { ObjetivoodsListaComponent } from './pages/objetivoods-lista/objetivoods-lista.component';
+import { DialogoUsuariosComponent } from './pages/dialogo-usuarios/dialogo-usuarios.component';
+import { CrearComponent } from './pages/crear-programa/crear-programa.component';
+import { AprobarPoaComponent } from './pages/aprobar-poa/aprobar-poa/aprobar-poa.component';
+import { DetallePoaComponent } from './pages/poacc/detalle-poa/detalle-poa/detalle-poa.component';
+
+
 @NgModule({
   declarations: [
     DashboardComponent2,
@@ -27,12 +33,17 @@ import { ObjetivoodsListaComponent } from './pages/objetivoods-lista/objetivoods
     CriterioReporteComponent,
     EvidenciaAtrasadaComponent,
     ObjetivoodsListaComponent,
+    DialogoUsuariosComponent,
+    CrearComponent,
+    AprobarPoaComponent,
+    DetallePoaComponent,
+
   ],
   imports: [
     CommonModule,
     SuperadminRoutingModule,
-
     SharedModule,
+
   ]
 })
 export class SuperadminModule { }

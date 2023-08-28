@@ -4,6 +4,7 @@ import { map, Observable, catchError, of } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import baserUrl from './helper';
 import { PoaActividadProjection } from '../interface/PoaActividadProjection';
+import { Poa } from '../models/Poa';
 
 @Injectable({
   providedIn: 'root'
@@ -40,5 +41,8 @@ export class PoaService {
 
   obtenerDatosPoas(): Observable<PoaActividadProjection[]> {
     return this.http.get<PoaActividadProjection[]>(`${baserUrl}/api/poa/listarPoasAprobados`);
+  }
+  listarPoasdelProyecto(id:number, estado:string): Observable<Poa[]> {
+    return this.http.get<Poa[]>(`${baserUrl}/api/poa/listardelProyecto/${id}/${estado}`);
   }
 }

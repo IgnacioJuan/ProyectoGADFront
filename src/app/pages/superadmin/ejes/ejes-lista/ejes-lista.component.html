@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Aquí incluye las hojas de estilo y scripts de Bootstrap si no lo has hecho ya -->
+  <title>Tu título aquí</title>
+</head>
+<body>
+<div class="container bg-light border border-start-0 rounded-4">
+  <blockquote class="blockquote text-dark" style="margin-top: 5%">
+    <h1 style="text-transform: uppercase">
+      <strong><a>Ejes</a></strong>
+    </h1>
+  </blockquote>
+  <div class="card">
+    <div class="card-body">
+
+      <div class="d-flex">
+        <div class="input-group" style="width: 250px;">
+          <input type="text" placeholder="Buscar" class="form-control rounded-left">
+          <div class="input-group-append">
+            <button class="btn btn-outline-secondary" type="button">
+              <i class="fas fa-search"></i>
+            </button>
+          </div>
+        </div>
+        <button
+          type="button"
+          class="btn btn-custom-yellow btn-new"
+          style="margin-left: 70%;"
+          data-bs-toggle="modal"
+          data-bs-target="#nuevoModal"
+        >
+          <i class="fas fa-plus btn-custom-green-icon"></i> Nuevo
+        </button>
+      </div>
+      <br />
+      <div class="mat-elevation-z8 table-responsive" style="margin-bottom: 5%">
+        <table class="table table-hover">
+          <thead>
+          <tr>
+            <th>ID</th>
+            <th>NOMBRE</th>
+            <th>OBJETIVO PND</th>
+            <th>ACCIONES</th>
+
+
+          </tr>
+          </thead>
+          <tbody>
+          <!-- Aquí van datos con el ngFor para llenar la tabla -->
+          <tr>
+            <td>Dato 1</td>
+            <td>Dato 2</td>
+            <td>Dato 3</td>
+            <td>
+              <button class="btn btn-sm btn-custom-yellow">
+                <i class="fas fa-edit" style="color: yellow; font-size: 24px;"></i>
+              </button>
+              <button class="btn btn-sm btn-custom-red">
+                <i class="fas fa-trash-alt" style="color: red; font-size: 24px;"></i>
+              </button>
+            </td>
+
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Codigo para el modal al presionar en nuevo y se abre una ventana-->
+<div class="modal fade" id="nuevoModal" tabindex="-1" aria-labelledby="nuevoModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-success text-white"> <!-- Aquí agregamos las clases -->
+        <h5 class="modal-title fs-4" id="nuevoModalLabel">NUEVO EJE</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="mb-3">
+            <label for="nombreInput" class="form-label">Nombre</label>
+            <input type="text" class="form-control" id="nombreInput" placeholder="Ingrese el nombre">
+          </div>
+          <div class="mb-3">
+            <label for="descripcionInput" class="form-label">Descripción</label>
+            <textarea class="form-control" id="descripcionInput" placeholder="Ingrese la descripción" rows="4"></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
+          <i class="fas fa-times"></i> Cancelar
+        </button>
+        <button type="button" class="btn btn-warning">
+          <i class="fas fa-save text-muted"></i> Guardar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
