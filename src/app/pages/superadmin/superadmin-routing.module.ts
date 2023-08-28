@@ -12,6 +12,8 @@ import { EvidenciaAtrasadaComponent } from './pages/evidencia-atrasada/evidencia
 import { CriterioReporteComponent } from './pages/criterio-reporte/criterio-reporte.component';
 import { DashboardComponent } from '../admin/dashboard/dashboard.component';
 import { ObjetivoodsListaComponent } from './pages/objetivoods-lista/objetivoods-lista.component';
+import { DialogoUsuariosComponent } from './pages/dialogo-usuarios/dialogo-usuarios.component';
+
 const routes: Routes = [{
   path: 'dashboard',
   component: DashboardComponent2,
@@ -22,6 +24,12 @@ const routes: Routes = [{
 {
   path: 'usuarios',
   component: CrearUsuariosComponent,
+  pathMatch: 'full',
+  canActivate: [SuperGuard]
+},
+{
+  path: 'crearUsu',
+  component: DialogoUsuariosComponent,
   pathMatch: 'full',
   canActivate: [SuperGuard]
 },

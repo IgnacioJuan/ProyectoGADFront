@@ -15,6 +15,9 @@ import { EvidenciaAtrasadaComponent } from './pages/evidencia-atrasada/evidencia
 
 import { SharedModule } from 'src/app/shared/shared.module';
 import { ObjetivoodsListaComponent } from './pages/objetivoods-lista/objetivoods-lista.component';
+import { DialogoUsuariosComponent } from './pages/dialogo-usuarios/dialogo-usuarios.component';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+
 @NgModule({
   declarations: [
     DashboardComponent2,
@@ -27,12 +30,15 @@ import { ObjetivoodsListaComponent } from './pages/objetivoods-lista/objetivoods
     CriterioReporteComponent,
     EvidenciaAtrasadaComponent,
     ObjetivoodsListaComponent,
+    DialogoUsuariosComponent,
   ],
   imports: [
     CommonModule,
     SuperadminRoutingModule,
 
     SharedModule,
+    MatSnackBarModule,
+    SharedModule
   ]
 })
 export class SuperadminModule { }
