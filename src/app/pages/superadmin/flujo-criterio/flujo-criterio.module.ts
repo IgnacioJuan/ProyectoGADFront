@@ -8,13 +8,12 @@ import { CriteriosSubcriterioComponent } from './criterios-subcriterio/criterios
 import { SubcriteriosIndicadorComponent } from './subcriterios-indicador/subcriterios-indicador.component';
 import { EvaluacionCuantitativaComponent } from './evaluacion-cuantitativa/evaluacion-cuantitativa.component';
 import { SharedModule } from 'src/app/shared/shared.module';
-import { CrearComponent } from './crear-programa/crear-programa.component';
 
 
 @NgModule({
   declarations: [
     CriteriosComponent,
-    CrearComponent,
+    
     IndicadoresEvidenciaComponent,
     CriteriosSubcriterioComponent,
     SubcriteriosIndicadorComponent,

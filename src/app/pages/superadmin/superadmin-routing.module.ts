@@ -13,6 +13,7 @@ import { CriterioReporteComponent } from './pages/criterio-reporte/criterio-repo
 import { DashboardComponent } from '../admin/dashboard/dashboard.component';
 import { ObjetivoodsListaComponent } from './pages/objetivoods-lista/objetivoods-lista.component';
 import { DialogoUsuariosComponent } from './pages/dialogo-usuarios/dialogo-usuarios.component';
+import { CrearComponent } from './pages/crear-programa/crear-programa.component';
 
 const routes: Routes = [{
   path: 'dashboard',
@@ -75,6 +76,12 @@ const routes: Routes = [{
 
 }
   ,
+{
+  path: 'crearpro',
+  component: CrearComponent,
+  pathMatch: 'full',
+  canActivate: [SuperGuard]
+},
 //Compartidas
 {
   path: 'criterio_reporte',
@@ -90,13 +97,13 @@ const routes: Routes = [{
   canActivate: [RoleguardGuard],
   data: { allowedRoles: ['SUPERADMIN', 'ADMIN'] }
 },
-  {
-    path: 'objetivoods-lista',
-    component: ObjetivoodsListaComponent,
-    pathMatch: 'full',
-    canActivate: [RoleguardGuard], // Asegúrate de que el guard sea el adecuado
-    data: { allowedRoles: ['SUPERADMIN', 'ADMIN'] } // Ajusta los roles permitidos
-  },
+{
+  path: 'objetivoods-lista',
+  component: ObjetivoodsListaComponent,
+  pathMatch: 'full',
+  canActivate: [RoleguardGuard], // Asegúrate de que el guard sea el adecuado
+  data: { allowedRoles: ['SUPERADMIN', 'ADMIN'] } // Ajusta los roles permitidos
+},
 {
   path: 'modelo',
   loadChildren: () => import("./modelo/modelo.module").then(m => m.ModeloModule)

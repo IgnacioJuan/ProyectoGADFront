@@ -41,7 +41,8 @@ export class SidebarService {
       titulo: "Configurar Modelo",
       submenu: [
         { titulo: 'Modelo', url: 'sup/flujo-modelo/modelo', icono: 'fas fa-list-ul ' },
-        { titulo: 'Indicador', url: 'sup/flujo_Componentes/componentesSuper', icono: 'fas fa-list-ul ' }
+        { titulo: 'Indicador', url: 'sup/flujo_Componentes/componentesSuper', icono: 'fas fa-list-ul ' },
+        { titulo: 'Programas', url: 'sup/crearpro', icono: 'fas fa-list-ul ' }
       ]
     },
     {

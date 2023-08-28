@@ -17,6 +17,7 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { ObjetivoodsListaComponent } from './pages/objetivoods-lista/objetivoods-lista.component';
 import { DialogoUsuariosComponent } from './pages/dialogo-usuarios/dialogo-usuarios.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { CrearComponent } from './pages/crear-programa/crear-programa.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     EvidenciaAtrasadaComponent,
     ObjetivoodsListaComponent,
     DialogoUsuariosComponent,
+    CrearComponent,
   ],
   imports: [
     CommonModule,
