@@ -37,14 +37,12 @@ export class ActividadesComponent implements OnInit{
   };
   //
   public actividad = new ActividadesPoa();
-  actividades: any[] = [];  
-
-  //criterios: CriterioSubcriteriosProjection[] = [];
+  actividades: any[] = []; 
   
 
   filterPost = '';
   dataSource = new MatTableDataSource<ActividadesPoa>();
-  columnasUsuario: string[] = ['id_actividad', 'nombre', 'observaciones', 'presupuesto_referencial', 'codificado', 'ejecutado', 'saldo'];
+  columnasUsuario: string[] = ['id_actividad', 'nombre', 'descripcion', 'presupuesto_referencial', 'codificado', 'ejecutado', 'saldo'];
 
   @ViewChild('datosModalRef') datosModalRef: any;
   @ViewChild(MatPaginator, { static: false }) paginator?: MatPaginator;
@@ -54,7 +52,9 @@ export class ActividadesComponent implements OnInit{
     private router: Router, private fb: FormBuilder
   ) {
     this.frmActividad = fb.group({
-      nombre: ['', Validators.required]
+      nombre: ['', Validators.required],
+      descripcion: ['', Validators.required],
+      presupuesto_referencial: ['', Validators.required]
     });
     this.paginatorIntl.nextPageLabel = this.nextPageLabel;
     this.paginatorIntl.lastPageLabel = this.lastPageLabel;

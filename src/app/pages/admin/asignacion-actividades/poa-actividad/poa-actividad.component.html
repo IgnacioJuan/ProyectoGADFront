@@ -1,7 +1,7 @@
 <body>
     <div class="container bg-light border border-start-0 rounded-4">
-      <blockquote class="blockquote text-dark" style="margin-top: 5%">
-        <h1><strong> LISTADO POAS</strong></h1>
+      <blockquote style="margin-top: 5%">
+        <h1 class="titulo" style="text-transform: uppercase"><strong> LISTADO POAS</strong></h1>
       </blockquote>
       <div></div>
   
@@ -28,24 +28,6 @@
                 <th mat-header-cell *matHeaderCellDef>ID</th>
                 <td mat-cell *matCellDef="let elemento">
                   {{ elemento.id_poa }}
-                </td>
-              </ng-container>
-              <ng-container matColumnDef="meta_alcanzar">
-                <th mat-header-cell *matHeaderCellDef>META ALCANZAR</th>
-                <td mat-cell *matCellDef="let elemento">
-                  {{ elemento.meta_alcanzar }}
-                </td>
-              </ng-container>
-              <ng-container matColumnDef="meta_fisica">
-                <th mat-header-cell *matHeaderCellDef>META FISICA</th>
-                <td mat-cell *matCellDef="let elemento">
-                  {{ elemento.meta_fisica }}
-                </td>
-              </ng-container>
-              <ng-container matColumnDef="avance_real">
-                <th mat-header-cell *matHeaderCellDef>AVANCE REAL</th>
-                <td mat-cell *matCellDef="let elemento">
-                  {{ elemento.avance_real }}
                 </td>
               </ng-container>
               <ng-container matColumnDef="fecha_inicio">
@@ -102,16 +84,10 @@
                   {{ elemento.recursos_propios }}
                 </td>
               </ng-container>
-              <ng-container matColumnDef="transferencias_gobierno">
+              <ng-container matColumnDef="recursos_externos">
                 <th mat-header-cell *matHeaderCellDef>R.EXTERNOS</th>
                 <td mat-cell *matCellDef="let elemento">
-                  {{ elemento.transferencias_gobierno }}
-                </td>
-              </ng-container>
-              <ng-container matColumnDef="convenios">
-                <th mat-header-cell *matHeaderCellDef>CONVENIOS</th>
-                <td mat-cell *matCellDef="let elemento">
-                  {{ elemento.convenios }}
+                  {{ elemento.recursos_externos }}
                 </td>
               </ng-container>
                 <ng-container matColumnDef="linea_base">

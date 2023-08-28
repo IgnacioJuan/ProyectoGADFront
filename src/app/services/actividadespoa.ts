@@ -24,7 +24,7 @@ export class ActividadespoaService {
   //Metodo para listar
 
   getActividades(): Observable<ActividadesPoa[]> {
-    return this.http.get<ActividadesPoa[]>(`${baserUrl}/api/actividades/listarModeloActivPoaAprov`);
+    return this.http.get<ActividadesPoa[]>(`${baserUrl}/api/actividades/listar`);
   }
 
   eliminarActividad(acti: any): Observable<any> {

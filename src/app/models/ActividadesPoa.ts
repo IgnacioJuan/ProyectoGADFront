@@ -1,7 +1,8 @@
 export class ActividadesPoa {
     id_actividad!: number;
     nombre!: string;
-    observaciones!: string;
+    descripcion!: string;
+    //observaciones!: string;
     presupuesto_referencial!: number;
     codificado!: number;
     ejecutado!: number;
