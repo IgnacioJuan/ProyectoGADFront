@@ -18,8 +18,8 @@ export class ActividadespoaService {
     );
   }
 
-  actualizar(id: any, crite: any): Observable<any> {
-    return this.http.put(`${baserUrl}/api/actividades/actualizar/${id}`, crite);
+  actualizar(id: any, acti: any): Observable<any> {
+    return this.http.put(`${baserUrl}/api/actividades/actualizar/${id}`, acti);
   }
   //Metodo para listar
 

@@ -5,8 +5,12 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { ActividadesPoa } from 'src/app/models/ActividadesPoa';
 import { Poa } from 'src/app/models/Poa';
+import { Usuario2 } from 'src/app/models/Usuario2';
 import { ActividadespoaService } from 'src/app/services/actividadespoa.service';
+import { UsuarioService } from 'src/app/services/usuario.service';
 import Swal from 'sweetalert2';
+import * as jQuery from 'jquery';
+(window as any).jQuery = jQuery;
 
 @Component({
   selector: 'app-actividades',
@@ -41,6 +45,7 @@ export class ActividadesComponent implements OnInit{
   actividades: any[] = []; 
   miModal!: ElementRef;
   public actividad = new ActividadesPoa();
+  usuarios: Usuario2[] = [];
 
   filterPost = '';
   filteredPoas: any[] = [];
@@ -54,7 +59,7 @@ export class ActividadesComponent implements OnInit{
 
   constructor(
     private actividadservice: ActividadespoaService,private paginatorIntl: MatPaginatorIntl,
-    private router: Router, private fb: FormBuilder
+    private router: Router, private fb: FormBuilder, private userService: UsuarioService
   ) {
     this.frmActividad = fb.group({
       nombre: ['', Validators.required],
@@ -62,7 +67,7 @@ export class ActividadesComponent implements OnInit{
       presupuesto_referencial: ['', Validators.required]
     });
     this.frmActResp = fb.group({
-      responsable: ['', Validators.required]
+      usuario: ['', Validators.required]
     });
     this.paginatorIntl.nextPageLabel = this.nextPageLabel;
     this.paginatorIntl.lastPageLabel = this.lastPageLabel;
@@ -77,6 +82,7 @@ export class ActividadesComponent implements OnInit{
   }
   ngOnInit(): void {
     const data = history.state.data;
+    this.cargarUsuarios();
     this.poa = data;
     console.log(this.poa);
     if (this.poa == undefined) {
@@ -89,8 +95,16 @@ export class ActividadesComponent implements OnInit{
   verPoas() {
     this.router.navigate(['/adm/asignacion-actividades/poa-actividad']);
   }
-  asignarResponsable() {
-    this.router.navigate(['/adm/asignacion-actividades/actividad-responsable']);
+  
+  cargarUsuarios() {
+    this.userService.getUsuariosList().subscribe(
+      (data: Usuario2[]) => {
+        this.usuarios = data;
+      },
+      (error: any) => {
+        console.error('Error al cargar usuarios:', error);
+      }
+    );
   }
  
   guardar() {
@@ -117,9 +131,37 @@ export class ActividadesComponent implements OnInit{
           )
         }
       );
-
   }
 
+guardarResponsable() {
+  if (this.frmActResp.valid) {
+    const selectedUsuario = this.frmActResp.get('usuario')?.value;
+    this.actividad.usuario = selectedUsuario;
+    console.log(selectedUsuario);
+    this.actividadservice.actualizar(this.actividad.id_actividad, this.actividad)
+      .subscribe(
+        (response) => {
+          this.actividad = new ActividadesPoa();
+          this.frmActResp.reset();
+          this.listar(this.poa.id_poa);
+          Swal.fire(
+            'Exitoso',
+            'Se ha asignado el responsable con éxito',
+            'success'
+          );
+        },
+        (error) => {
+          console.error('Error al actualizar la actividad:', error);
+          Swal.fire(
+            'Error',
+            'Ha ocurrido un error',
+            'warning'
+          );
+        }
+      );
+  }
+}
+  
   listar(poaId:number): void {
     this.actividadservice.getActividadesPoa(poaId).subscribe(
       (data: any[]) => {

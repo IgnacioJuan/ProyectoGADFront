@@ -169,47 +169,39 @@
           </div>
         </div>
       </div>
-      <div class="modal fade" id="asignarResponsableModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
-          (hidden.bs.modal)="limpiar()">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header" style="background-color: darkgreen; color: white;">
-                <h3 class="modal-title">
-                  <i class="fa fa-info-circle"></i>ASIGNACION RESPONSABLE
-                </h3>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
-              <div class="modal-body">
-                <form [formGroup]="frmActividad" (ngSubmit)="guardar()" id="formulario">
-                  <div>
-                    <label for="nombre">Lista de Usuarios:</label>
-                    <input class="form-control" formControlName="nombre" type="text" id="nombre" name="nombre"
-                      style="margin-bottom: 10px" />
-                    <div class="alert alert-danger" *ngIf="
-                      frmActividad.controls['nombre'].invalid &&
-                      frmActividad.controls['nombre'].touched
-                      ">
-                      <div *ngIf="
-                        frmActividad.controls['nombre'].hasError('required')
-                        ">
-                        Debe ingresar un nombre
-                      </div>
-                    </div>
+      <div class="modal fade" id="asignarResponsableModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" (hidden.bs.modal)="limpiar()">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header" style="background-color: darkgreen; color: white;">
+              <h3 class="modal-title">
+                <i class="fa fa-info-circle"></i>ASIGNACION RESPONSABLE
+              </h3>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <form [formGroup]="frmActResp" (ngSubmit)="guardarResponsable()" id="formularioResponsable">
+                <div>
+                  <label for="usuario">Lista de Usuarios:</label>
+                  <select class="form-control" formControlName="usuario" id="usuario" name="usuario" style="margin-bottom: 10px">
+                    <option *ngFor="let usuario of usuarios" [ngValue]="usuario.id">{{usuario.username}}<!--{{ usuario.persona.primer_apellido }} {{ usuario.persona.primer_nombre }}--></option>
+                  </select>
+                  <div class="alert alert-danger" *ngIf="frmActResp.controls['usuario'].invalid && frmActResp.controls['usuario'].touched">
+                    <div *ngIf="frmActResp.controls['usuario'].hasError('required')">Debe seleccionar un responsable</div>
                   </div>
-                </form>
-                <div class="modal-footer">
-                  <button type="button" form="formulario" class="btn btn-warning" data-bs-dismiss="modal">
-                    Cancelar
-                  </button>
-                  <button type="submit" class="btn btn-primary" form="formulario" *ngIf="!actividad.id_actividad"
-                    data-dismiss="modal" data-bs-dismiss="modal" style="background-color: green"
-                    [disabled]="!frmActividad.valid">
-                    Guardar
-                  </button>
                 </div>
+              </form>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-warning" data-bs-dismiss="modal">
+                  Cancelar
+                </button>
+                <button type="submit" class="btn btn-primary" form="formularioResponsable" *ngIf="!actividad.id_actividad"
+                  data-dismiss="modal" data-bs-dismiss="modal" style="background-color: green" [disabled]="!frmActResp.valid">
+                  Guardar
+                </button>
               </div>
             </div>
           </div>
+        </div>
       </div>
     </div>
   </div>
