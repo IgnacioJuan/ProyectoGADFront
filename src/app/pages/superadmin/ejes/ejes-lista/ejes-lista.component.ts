@@ -39,6 +39,7 @@ export class EjesListaComponent implements OnInit{
   private obtenerejes(){
     this.ejeServicio.obtenerListaejes().subscribe(dato => {
       this.ejeslista = dato;
+      console.log(this.ejeslista,"lista de ejes");
     });
   }
 guardareje(){

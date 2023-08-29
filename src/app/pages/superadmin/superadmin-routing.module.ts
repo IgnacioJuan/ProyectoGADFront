@@ -16,6 +16,7 @@ import { DialogoUsuariosComponent } from './pages/dialogo-usuarios/dialogo-usuar
 import { CrearComponent } from './pages/crear-programa/crear-programa.component';
 import { AprobarPoaComponent } from './pages/aprobar-poa/aprobar-poa/aprobar-poa.component';
 import { DetallePoaComponent } from './pages/poacc/detalle-poa/detalle-poa/detalle-poa.component';
+import { ReporteavancepoaComponent } from './reporteavancepoa/reporteavancepoa.component';
 
 const routes: Routes = [{
   path: 'dashboard',
@@ -112,6 +113,12 @@ const routes: Routes = [{
   pathMatch: 'full',
   canActivate: [RoleguardGuard],
   data: { allowedRoles: ['SUPERADMIN', 'ADMIN'] }
+},
+{
+  path: 'reportePoa',
+  component: ReporteavancepoaComponent,
+  pathMatch: 'full',
+ canActivate: [SuperGuard]
 },
 {
   path: 'objetivoods-lista',
