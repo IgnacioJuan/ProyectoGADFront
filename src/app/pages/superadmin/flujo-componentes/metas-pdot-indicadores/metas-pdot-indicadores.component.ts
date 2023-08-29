@@ -65,7 +65,7 @@ resultadosEncontrados: boolean = true;
 
 dataSource = new MatTableDataSource<Indicadores>();
 
-columnasUsuario: string[] = ['id_indicador', 'nombre', 'descripcion','tipo_evaluacion',  'actions'];
+columnasUsuario: string[] = ['id_indicador', 'nombre', 'descripcion','tipoEvaluacion',  'actions'];
 
 @ViewChild('datosModalRef') datosModalRef: any;
 @ViewChild(MatPaginator, { static: false }) paginator?: MatPaginator;
