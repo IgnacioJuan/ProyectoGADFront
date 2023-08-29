@@ -49,11 +49,11 @@
           </thead>
           <tbody>
           <!-- Aquí van datos con el ngFor para llenar la tabla -->
-          <tr>
-            <td>Dato 1</td>
-            <td>Dato 2</td>
-            <td>Dato 3</td>
-            <td>Dato 4</td>
+          <tr *ngFor="let objetivo of objetivosodslista">
+            <td>{{ objetivo.id_objetivo_ods }}</td>
+            <td>{{ objetivo.nombre }}</td>
+            <td>{{ objetivo.descripcion }}</td>
+
             <td>
               <button class="btn btn-sm btn-custom-yellow">
                 <i class="fas fa-edit" style="color: yellow; font-size: 24px;"></i>
