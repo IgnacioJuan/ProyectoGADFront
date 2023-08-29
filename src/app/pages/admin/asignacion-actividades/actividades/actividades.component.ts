@@ -15,6 +15,7 @@ import Swal from 'sweetalert2';
 })
 export class ActividadesComponent implements OnInit{
   frmActividad: FormGroup;
+  frmActResp: FormGroup;
   guardadoExitoso: boolean = false;
   //tabla
   itemsPerPageLabel = 'Actividades por página';
@@ -59,6 +60,9 @@ export class ActividadesComponent implements OnInit{
       nombre: ['', Validators.required],
       descripcion: ['', Validators.required],
       presupuesto_referencial: ['', Validators.required]
+    });
+    this.frmActResp = fb.group({
+      responsable: ['', Validators.required]
     });
     this.paginatorIntl.nextPageLabel = this.nextPageLabel;
     this.paginatorIntl.lastPageLabel = this.lastPageLabel;
@@ -153,6 +157,10 @@ export class ActividadesComponent implements OnInit{
     this.actividad = new ActividadesPoa;
   }
 
+  limpiar() {
+    this.frmActResp.reset();
+    this.actividad = new ActividadesPoa;
+  }
   aplicarFiltro() {
     if (this.filterPost) {
       const lowerCaseFilter = this.filterPost.toLowerCase();
