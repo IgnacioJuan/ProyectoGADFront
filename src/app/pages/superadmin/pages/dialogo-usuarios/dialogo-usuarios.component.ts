@@ -97,6 +97,20 @@ export class DialogoUsuariosComponent implements OnInit {
     this.dialogRef.close();
   }
 
+
+  resetForm() {
+    this.firstFormGroup.reset({
+      cedula: '',
+      primer_nombre: '',
+      segundo_nombre: '',
+      primer_apellido: '',
+      segundo_apellido: '',
+      celular: '',
+      correo: '',
+      visible: true
+    });
+  }
+
 }
 
 //validaciones meh
