@@ -37,8 +37,9 @@ export class EjesListaComponent implements OnInit{
   }
 
   private obtenerejes(){
-    this.ejeServicio.obtenerListaejes().subscribe(dato => {
+    this.ejeServicio.obtenerListaejes1().subscribe(dato => {
       this.ejeslista = dato;
+      console.log(this.ejeslista,"lista de jees")
     });
   }
 guardareje(){
