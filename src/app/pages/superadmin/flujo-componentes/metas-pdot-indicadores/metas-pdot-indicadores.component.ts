@@ -5,14 +5,10 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
 import { Componentes } from 'src/app/models/Componentes';
-import { Criterio } from 'src/app/models/Criterio';
-import { Indicador } from 'src/app/models/Indicador';
 import { Indicadores } from 'src/app/models/Indicadores';
 import { MetasPDOT } from 'src/app/models/MetasPDOT';
 import { ObjetivoPDOT } from 'src/app/models/ObjetivoPDOT';
-import { Subcriterio } from 'src/app/models/Subcriterio';
 import { IndicadorService } from 'src/app/services/indicador.service';
-import { IndicadoresService } from 'src/app/services/indicadores.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -53,7 +49,6 @@ listadoIndicadores: Indicadores[] = [];
 public indicad = new Indicadores();
 
 miModal!: ElementRef;
-public indic = new Indicador();
 
 selectedTipo: string="";
 
@@ -65,12 +60,12 @@ resultadosEncontrados: boolean = true;
 
 dataSource = new MatTableDataSource<Indicadores>();
 
-columnasUsuario: string[] = ['id_indicador', 'nombre', 'descripcion','tipoEvaluacion',  'actions'];
+columnasUsuario: string[] = ['id_indicador', 'nombre', 'descripcion','tipo_evaluacion',  'actions'];
 
 @ViewChild('datosModalRef') datosModalRef: any;
 @ViewChild(MatPaginator, { static: false }) paginator?: MatPaginator;
 
-constructor(private indicadorservice: IndicadoresService,private paginatorIntl: MatPaginatorIntl,
+constructor(private indicadorservice: IndicadorService,private paginatorIntl: MatPaginatorIntl,
   private router: Router, private fb: FormBuilder,
   private route: ActivatedRoute,
   private indicadorService: IndicadorService
@@ -181,7 +176,9 @@ listar(): void {
 }*/
 
 editDatos(indicador: Indicadores) {
+
   this.indicad = indicador;
+  console.log(this.indicad)
   this.formIndicador = new FormGroup({
     nombre: new FormControl(indicador.nombre),
     descripcion: new FormControl(indicador.descripcion),
@@ -198,10 +195,13 @@ actualizar() {
   this.indicad.nombre = this.formIndicador.value.nombre;
   this.indicad.descripcion = this.formIndicador.value.descripcion;
   this.indicad.tipo_evaluacion = this.formIndicador.value.tipo_evaluacion;
+  this.indicad.visible = true
 
-  this.indicadorservice.actualizar(this.indic.id_indicador, this.indic)
+  this.indicad.metapdot = this.metaPDOT;
+
+  this.indicadorservice.actualizar(this.indicad.id_indicador, this.indicad)
     .subscribe((response: any) => {
-      this.indic = new Indicador();
+      this.indicad = new Indicadores();
       this.listar(this.metaPDOT.id_meta_pdot);
       Swal.fire('Operacion exitosa!', 'El registro se actualizo con exito', 'success')
 

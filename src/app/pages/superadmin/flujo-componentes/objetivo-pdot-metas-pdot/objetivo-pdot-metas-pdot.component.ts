@@ -62,7 +62,7 @@ resultadosEncontrados: boolean = true;
 
 dataSource = new MatTableDataSource<MetasPDOT>();
 
-columnasUsuario: string[] = ['id_meta_pdot', 'nombre', 'descripcion','porcentaje_meta', 'cantidadIndicadores', 'actions'];
+columnasUsuario: string[] = ['id_meta_pdot', 'nombre', 'descripcion','meta_final', 'linea_base', 'cantidadIndicadores', 'actions'];
 
 @ViewChild('datosModalRef') datosModalRef: any;
 @ViewChild(MatPaginator, { static: false }) paginator?: MatPaginator;
@@ -75,7 +75,9 @@ constructor(private paginatorIntl: MatPaginatorIntl,
   this.formMeta = fb.group({
     nombre: ['', Validators.required],
     descripcion: ['', [Validators.required]],
-    porcentaje_meta: ['', Validators.required],
+    meta_final: ['', Validators.required],
+    linea_base: ['', Validators.required],
+
   });
   this.paginatorIntl.nextPageLabel = this.nextPageLabel;
   this.paginatorIntl.lastPageLabel = this.lastPageLabel;
@@ -184,7 +186,9 @@ editDatos(meta: MetasPDOT) {
   this.formMeta = new FormGroup({
     nombre: new FormControl(meta.nombre),
     descripcion: new FormControl(meta.descripcion),
-    porcentaje_meta: new FormControl(meta.porcentaje_meta),
+    meta_final: new FormControl(meta.meta_final),
+    linea_base: new FormControl(meta.linea_base),
+
   });
 }
 
@@ -196,7 +200,11 @@ limpiarFormulario() {
 actualizar() {
   this.metaPDOT.nombre = this.formMeta.value.nombre;
   this.metaPDOT.descripcion = this.formMeta.value.descripcion;
-  this.metaPDOT.porcentaje_meta = this.formMeta.value.porcentaje_meta;
+  this.metaPDOT.meta_final = this.formMeta.value.meta_final;
+  this.metaPDOT.linea_base = this.formMeta.value.linea_base;
+  this.metaPDOT.objetivopdot = this.objPDOT;
+  this.metaPDOT.visible = true;
+
   this.metaPDOTService.actualizar(this.metaPDOT.id_meta_pdot, this.metaPDOT)
     .subscribe((response: any) => {
       this.metaPDOT = new MetasPDOT;
