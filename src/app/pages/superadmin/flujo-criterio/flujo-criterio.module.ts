@@ -8,8 +8,6 @@ import { CriteriosSubcriterioComponent } from './criterios-subcriterio/criterios
 import { SubcriteriosIndicadorComponent } from './subcriterios-indicador/subcriterios-indicador.component';
 import { EvaluacionCuantitativaComponent } from './evaluacion-cuantitativa/evaluacion-cuantitativa.component';
 import { SharedModule } from 'src/app/shared/shared.module';
-import { CrearcompetenciaComponent } from './crear-competencia/crear-competencia.component';
-
 
 @NgModule({
   declarations: [
@@ -19,7 +17,7 @@ import { CrearcompetenciaComponent } from './crear-competencia/crear-competencia
     CriteriosSubcriterioComponent,
     SubcriteriosIndicadorComponent,
     EvaluacionCuantitativaComponent,
-    CrearcompetenciaComponent
+    
     
     
 

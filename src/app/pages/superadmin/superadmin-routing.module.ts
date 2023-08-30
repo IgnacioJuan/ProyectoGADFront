@@ -16,6 +16,7 @@ import { DialogoUsuariosComponent } from './pages/dialogo-usuarios/dialogo-usuar
 import { CrearComponent } from './pages/crear-programa/crear-programa.component';
 import { AprobarPoaComponent } from './pages/aprobar-poa/aprobar-poa/aprobar-poa.component';
 import { DetallePoaComponent } from './pages/poacc/detalle-poa/detalle-poa/detalle-poa.component';
+import { CrearcompetenciaComponent } from './pages/crear-competencia/crear-competencia.component';
 
 const routes: Routes = [{
   path: 'dashboard',
@@ -147,6 +148,13 @@ const routes: Routes = [{
   {
     path: 'ejes',
     loadChildren: () => import("./ejes/ejes.module").then(m => m.EjesModule)
+  },
+
+  {
+    path: 'crearcompe',
+    component: CrearcompetenciaComponent,
+    pathMatch: 'full',
+    canActivate: [SuperGuard]
   },
 ];
 

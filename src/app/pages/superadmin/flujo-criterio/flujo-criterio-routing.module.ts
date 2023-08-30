@@ -6,7 +6,6 @@ import { SubcriteriosIndicadorComponent } from './subcriterios-indicador/subcrit
 import { IndicadoresEvidenciaComponent } from './indicadores-evidencia/indicadores-evidencia.component';
 import { CriteriosSubcriterioComponent } from './criterios-subcriterio/criterios-subcriterio.component';
 import { CriteriosComponent } from './criterios/criterios.component';
-import { CrearcompetenciaComponent } from './crear-competencia/crear-competencia.component';
 
 const routes: Routes = [
   {
@@ -28,12 +27,7 @@ const routes: Routes = [
     canActivate: [SuperGuard]
   },
  
-  {
-    path: 'crearcompe',
-    component: CrearcompetenciaComponent,
-    pathMatch: 'full',
-    canActivate: [SuperGuard]
-  },
+ 
   {
     path: 'subcriterios-indicador',
     component: SubcriteriosIndicadorComponent,

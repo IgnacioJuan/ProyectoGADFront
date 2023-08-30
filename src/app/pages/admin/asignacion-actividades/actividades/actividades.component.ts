@@ -10,7 +10,7 @@ import { ActividadespoaService } from 'src/app/services/actividadespoa.service';
 import { UsuarioService } from 'src/app/services/usuario.service';
 import Swal from 'sweetalert2';
 //import * as jQuery from 'jquery';
-import { AprobacionActividad } from 'src/app/models/AprobacionActividad';
+//import { AprobacionActividad } from 'src/app/models/AprobacionActividad';
 //(window as any).jQuery = jQuery;
 
 @Component({
