@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Criterio } from '../models/Criterio';
-import { map, Observable, catchError, of } from 'rxjs';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { map, Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 import baserUrl from './helper';
 import { PoaActividadProjection } from '../interface/PoaActividadProjection';
 import { Poa } from '../models/Poa';

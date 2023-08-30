@@ -12,4 +12,5 @@ export interface PoaActividadProjection {
     recursos_externos: number;
     linea_base: string;
     cantidadActividades: number;
+    
 }
