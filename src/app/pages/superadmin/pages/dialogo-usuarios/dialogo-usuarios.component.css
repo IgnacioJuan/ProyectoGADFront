@@ -14,7 +14,8 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 10px;
-    margin-top: 20px; /* Espacio adicional en la parte superior */
+    margin-top: 20px;
+    /* Espacio adicional en la parte superior */
 }
 
 mat-form-field {
@@ -42,3 +43,32 @@ mat-form-field .mat-form-field-wrapper .mat-form-field-flex .mat-form-field-infi
     padding: 10px 20px;
 }
 
+.custom-colorRegresar {
+    color: #1F7B81;
+}
+
+.custom-colorSiguiente {
+    color: #1F7B81;
+}
+
+.custom-colorBorrar {
+    color: #2AABBD;
+}
+
+.custom-colorCancel {
+    color: #FF0000;
+}
+
+.custom-colorGuardar {
+    color: #343298;
+}
+
+mat-error {
+    color: red;
+    font-weight: bold;
+}
+
+.custom-red-button {
+    background-color: #FF0000;
+    color: #FFFFFF; /* Color del texto */
+}

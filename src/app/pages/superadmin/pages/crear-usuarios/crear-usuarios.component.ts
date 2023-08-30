@@ -299,8 +299,6 @@ export class CrearUsuariosComponent implements OnInit {
     )
   }
 
-
-
   public seleccionar(element: any) {
 
     this.personaSele.cedula = element.cedula;
@@ -484,6 +482,39 @@ export class CrearUsuariosComponent implements OnInit {
     if (usuariosdit.usuario.username == "") {
       usuariosdit.usuario.username = this.usuariosEdit.usuario.username
     }
+
+    if (usuariosdit.usuario.persona.cedula == "") {
+      usuariosdit.usuario.persona.cedula = this.usuariosEdit.usuario.persona.cedula
+    }
+
+    if (usuariosdit.usuario.persona.primer_nombre == "") {
+      usuariosdit.usuario.persona.primer_nombre = this.usuariosEdit.usuario.persona.primer_nombre
+    }
+
+    if (usuariosdit.usuario.persona.primer_apellido == "") {
+      usuariosdit.usuario.persona.primer_apellido = this.usuariosEdit.usuario.persona.primer_apellido
+    }
+
+    if (usuariosdit.usuario.persona.segundo_nombre == "") {
+      usuariosdit.usuario.persona.segundo_nombre = this.usuariosEdit.usuario.persona.segundo_nombre
+    }
+
+    if (usuariosdit.usuario.persona.segundo_apellido == "") { 
+      usuariosdit.usuario.persona.segundo_apellido = this.usuariosEdit.usuario.persona.segundo_apellido
+    }
+
+    if (usuariosdit.usuario.persona.direccion == "") {
+      usuariosdit.usuario.persona.direccion = this.usuariosEdit.usuario.persona.direccion
+    }
+
+    if (usuariosdit.usuario.persona.correo == "") {
+      usuariosdit.usuario.persona.correo = this.usuariosEdit.usuario.persona.correo
+    }
+
+    if (usuariosdit.usuario.persona.celular == "") {
+      usuariosdit.usuario.persona.celular = this.usuariosEdit.usuario.persona.celular
+    }
+
     usuariosdit.usuarioRolId = this.usuariosEdit.usuarioRolId;
     console.log(usuariosdit);
 
@@ -503,6 +534,7 @@ export class CrearUsuariosComponent implements OnInit {
               'success'
             );
             this.Listado();
+            
             this.usuariosEdit = new UsuarioRol();
             this.usuariosEditGuar = new UsuarioRol();
           });
