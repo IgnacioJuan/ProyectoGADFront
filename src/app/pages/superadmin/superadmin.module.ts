@@ -20,6 +20,7 @@ import { CrearComponent } from './pages/crear-programa/crear-programa.component'
 import { AprobarPoaComponent } from './pages/aprobar-poa/aprobar-poa/aprobar-poa.component';
 import { DetallePoaComponent } from './pages/poacc/detalle-poa/detalle-poa/detalle-poa.component';
 import { ReporteavancepoaComponent } from './reporteavancepoa/reporteavancepoa.component';
+import { ReporteEspecificoPoaComponent } from './reporte-especifico-poa/reporte-especifico-poa.component';
 
 
 @NgModule({
@@ -39,6 +40,7 @@ import { ReporteavancepoaComponent } from './reporteavancepoa/reporteavancepoa.c
     AprobarPoaComponent,
     DetallePoaComponent,
     ReporteavancepoaComponent,
+    ReporteEspecificoPoaComponent,
 
   ],
   imports: [
