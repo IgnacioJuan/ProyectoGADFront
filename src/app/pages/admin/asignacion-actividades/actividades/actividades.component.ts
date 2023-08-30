@@ -41,7 +41,7 @@ export class ActividadesComponent implements OnInit{
   };
   //
   poa: Poa = new Poa();
-  actividades: ActividadesPoa[] = []; 
+  actividades: any = []; 
   miModal!: ElementRef;
   public actividad = new ActividadesPoa();
   public aprobAct = new AprobacionActividad();
@@ -55,7 +55,7 @@ export class ActividadesComponent implements OnInit{
 
   dataSource = new MatTableDataSource<ActividadesPoa>();
   //aqui se cambia
-  columnasUsuario: string[] = ['id_actividad', 'nombre', 'descripcion', 'presupuesto_referencial', 'recursos_propios','recursos_externos','codificado', 'ejecutado', 'saldo','actions'];
+  columnasUsuario: string[] = ['id_actividad', 'nombre', 'descripcion', 'presupuesto_referencial', 'recursos_propios','codificado', 'devengado', 'estado','actions'];
 
   @ViewChild('datosModalRef') datosModalRef: any;
   @ViewChild(MatPaginator, { static: false }) paginator?: MatPaginator;
@@ -69,7 +69,8 @@ export class ActividadesComponent implements OnInit{
       descripcion: ['', Validators.required],
       presupuesto_referencial: ['', Validators.required],
       recursos_propios: ['', Validators.required],
-      recursos_externos: ['', Validators.required]
+      codificado: ['', Validators.required],
+      devengado: ['', Validators.required]
     });
     this.frmActResp = fb.group({
       usuario: ['', Validators.required]
@@ -90,10 +91,6 @@ export class ActividadesComponent implements OnInit{
     this.cargarUsuarios();
     this.poa = data;
     console.log(this.poa);
-    if (this.poa == undefined) {
-      this.router.navigate(['user-dashboard']);
-      location.replace('/use/user-dashboard');
-    }
     this.listar(this.poa.id_poa)
   } 
 
@@ -115,6 +112,7 @@ export class ActividadesComponent implements OnInit{
   guardar() {
     this.actividad = this.frmActividad.value;
     this.actividad.poa = this.poa;
+    this.actividad.estado = 'pendiente';
     this.actividadservice.crear(this.actividad)
       .subscribe(
         (response) => {

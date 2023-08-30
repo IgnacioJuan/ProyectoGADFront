@@ -41,7 +41,7 @@ export class PoaActividadComponent implements OnInit{
   filteredPoas: any[] = [];
   resultadosEncontrados: boolean = true;
   dataSource = new MatTableDataSource<PoaActividadProjection>();
-  columnasPoa: string[] = ['id_poa','fecha_inicio','fecha_fin','localizacion','cobertura','barrio','comunidad','nombre_funcionario','cargo','linea_base','tipo_periodo','cantidadActividades'];
+  columnasPoa: string[] = ['id_poa','fecha_inicio','fecha_fin','localizacion','cobertura','barrio','comunidad','linea_base','tipo_periodo','cantidadActividades'];
 
   @ViewChild('datosModalRef') datosModalRef: any;
   @ViewChild(MatPaginator, { static: false }) paginator?: MatPaginator;
