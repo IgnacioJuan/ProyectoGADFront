@@ -73,18 +73,25 @@
                 {{ elemento.estado }}
               </td>
             </ng-container>
+            <ng-container matColumnDef="responsable">
+              <th mat-header-cell *matHeaderCellDef>USUARIO</th>
+              <td mat-cell *matCellDef="let elemento">
+                {{ elemento.responsable }}
+              </td>
+            </ng-container>
             <ng-container matColumnDef="actions">
               <th mat-header-cell *matHeaderCellDef>ACCIONES</th>
               <td mat-cell *matCellDef="let element">
                 <button class="btn btn-sm btn-custom-red" (click)="eliminar(element)" title="Eliminar actividad">
                   <i class="fas fa-trash-alt" style="color: red; font-size: 24px;"></i>
                 </button>
-                <button type="button" class="btn btn-sm btn-custom-yellow" data-bs-toggle="modal" data-bs-target="#materiaModal"
-                 (click)="editDatos(element)" title="Editar Datos">
+                <button type="button" class="btn btn-sm btn-custom-yellow" data-bs-toggle="modal"
+                  data-bs-target="#materiaModal" (click)="editDatos(element)" title="Editar Datos">
                   <i class="fas fa-edit" style="color: yellow; font-size: 24px;"></i>
                 </button>
                 <button class="btn btn-md btn-custom-green" role="button" data-bs-toggle="modal"
-                  data-bs-target="#asignarResponsableModal" title="Asignar un responsable">
+                  data-bs-target="#asignarResponsableModal" title="Asignar un responsable"
+                  (click)="abrirModalAsignarResponsable(element.id_actividad)">
                   <i class="fas fa-user" style="color: hsl(156, 81%, 21%); font-size: 24px;"></i>
                 </button>
               </td>
@@ -97,9 +104,6 @@
             aria-label="Select page of periodic elements" itemsPerPageLabel="Items por página:"
             nextPageLabel="Siguiente" previousPageLabel="Anterior">
           </mat-paginator>
-          <div *ngIf="!resultadosEncontrados" class="alert alert-warning">
-            No se encontraron resultados.
-          </div>
         </div>
         <div class="modal fade" id="materiaModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
           (hidden.bs.modal)="limpiarFormulario()">

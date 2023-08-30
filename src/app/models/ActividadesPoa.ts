@@ -2,7 +2,7 @@ import { Poa } from "./Poa";
 import { Usuario2 } from "./Usuario2";
 
 export class ActividadesPoa {
-    id_actividad: number =0;
+    id_actividad!: number;
     nombre!: string;
     descripcion!: string;
     presupuesto_referencial!: number;
@@ -11,7 +11,7 @@ export class ActividadesPoa {
     recursos_propios!: number;
     estado!: string
     visible!: boolean;
-    usuario!:Usuario2;
+    responsable!: string;
+    usuario: Usuario2 = new Usuario2();
     poa!: Poa;
-    
 }

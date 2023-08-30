@@ -29,6 +29,10 @@ export class ActividadespoaService {
     return this.http.get<ActividadesPoa[]>(`${baserUrl}/api/actividades/listarActividadesPoa/${poaId}`);
   }
 
+  getActividadPorId(id: number): Observable<ActividadesPoa> {
+    return this.http.get<ActividadesPoa>(`${baserUrl}/api/actividades/buscar/${id}`);
+  }
+
   eliminarActividad(acti: any): Observable<any> {
     return this.http.put(`${baserUrl}/api/actividades/eliminarlogic/${acti.id_actividad}`, acti);
   }

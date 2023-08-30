@@ -16,7 +16,7 @@ import { AprobacionActividad } from 'src/app/models/AprobacionActividad';
   templateUrl: './actividades.component.html',
   styleUrls: ['./actividades.component.css']
 })
-export class ActividadesComponent implements OnInit{
+export class ActividadesComponent implements OnInit {
   frmActividad: FormGroup;
   frmActResp: FormGroup;
   guardadoExitoso: boolean = false;
@@ -24,13 +24,13 @@ export class ActividadesComponent implements OnInit{
   itemsPerPageLabel = 'Actividades por página';
   nextPageLabel = 'Siguiente';
   lastPageLabel = 'Última';
-  firstPageLabel='Primera';
-  previousPageLabel='Anterior';
-  rango:any= (page: number, pageSize: number, length: number) => {
+  firstPageLabel = 'Primera';
+  previousPageLabel = 'Anterior';
+  rango: any = (page: number, pageSize: number, length: number) => {
     if (length == 0 || pageSize == 0) {
       return `0 de ${length}`;
     }
-  
+
     length = Math.max(length, 0);
     const startIndex = page * pageSize;
     const endIndex =
@@ -41,13 +41,13 @@ export class ActividadesComponent implements OnInit{
   };
   //
   poa: Poa = new Poa();
-  actividades: any = []; 
+  actividades: any = [];
   miModal!: ElementRef;
   public actividad = new ActividadesPoa();
   public aprobAct = new AprobacionActividad();
   usuarios: Usuario2[] = [];
 
-  //poaId!: number;
+  poaId!: number;
 
   filterPost: string = "";
   filteredPoas: any[] = [];
@@ -55,13 +55,13 @@ export class ActividadesComponent implements OnInit{
 
   dataSource = new MatTableDataSource<ActividadesPoa>();
   //aqui se cambia
-  columnasUsuario: string[] = ['id_actividad', 'nombre', 'descripcion', 'presupuesto_referencial', 'recursos_propios','codificado', 'devengado', 'estado','actions'];
+  columnasUsuario: string[] = ['id_actividad', 'nombre', 'descripcion', 'presupuesto_referencial', 'recursos_propios', 'codificado', 'devengado', 'estado','responsable', 'actions'];
 
   @ViewChild('datosModalRef') datosModalRef: any;
   @ViewChild(MatPaginator, { static: false }) paginator?: MatPaginator;
 
   constructor(
-    private actividadservice: ActividadespoaService,private paginatorIntl: MatPaginatorIntl,
+    private actividadservice: ActividadespoaService, private paginatorIntl: MatPaginatorIntl,
     private router: Router, private fb: FormBuilder, private userService: UsuarioService
   ) {
     this.frmActividad = fb.group({
@@ -77,10 +77,10 @@ export class ActividadesComponent implements OnInit{
     });
     this.paginatorIntl.nextPageLabel = this.nextPageLabel;
     this.paginatorIntl.lastPageLabel = this.lastPageLabel;
-    this.paginatorIntl.firstPageLabel=this.firstPageLabel;
-    this.paginatorIntl.previousPageLabel=this.previousPageLabel;
+    this.paginatorIntl.firstPageLabel = this.firstPageLabel;
+    this.paginatorIntl.previousPageLabel = this.previousPageLabel;
     this.paginatorIntl.itemsPerPageLabel = this.itemsPerPageLabel;
-    this.paginatorIntl.getRangeLabel=this.rango;
+    this.paginatorIntl.getRangeLabel = this.rango;
   }
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator || null;
@@ -88,16 +88,16 @@ export class ActividadesComponent implements OnInit{
   }
   ngOnInit(): void {
     const data = history.state.data;
-    //this.cargarUsuarios();
+    this.cargarUsuarios();
     this.poa = data;
     console.log(this.poa);
     this.listar(this.poa.id_poa)
-  } 
+  }
 
   verPoas() {
     this.router.navigate(['/adm/asignacion-actividades/poa-actividad']);
   }
-  
+
   cargarUsuarios() {
     this.userService.getUsuariosList().subscribe(
       (data: Usuario2[]) => {
@@ -108,7 +108,7 @@ export class ActividadesComponent implements OnInit{
       }
     );
   }
- 
+
   guardar() {
     this.actividad = this.frmActividad.value;
     this.actividad.poa = this.poa;
@@ -116,13 +116,13 @@ export class ActividadesComponent implements OnInit{
     this.actividadservice.crear(this.actividad)
       .subscribe(
         (response) => {
-    
+
           console.log('Actividad creada con éxito:', response);
           this.guardadoExitoso = true;
           const idActividadCreada = response.id_actividad;
           const idPoa = this.poa.id_poa;
           this.crearAprobacion(response);
-          console.log(idActividadCreada+' '+idPoa);
+          console.log(idActividadCreada + ' ' + idPoa);
           this.listar(idPoa);
           Swal.fire(
             'Exitoso',
@@ -141,9 +141,9 @@ export class ActividadesComponent implements OnInit{
       );
   }
 
-  crearAprobacion(actividad: any ) {
-    this.aprobAct.estado='pendiente';
-    this.aprobAct.observacion='';
+  crearAprobacion(actividad: any) {
+    this.aprobAct.estado = 'pendiente';
+    this.aprobAct.observacion = '';
     this.aprobAct.actividad = actividad;
     this.aprobAct.poa = this.poa;
     this.actividadservice.crearRelacionAprobacion(this.aprobAct).subscribe(
@@ -156,36 +156,55 @@ export class ActividadesComponent implements OnInit{
     );
   }
 
-guardarResponsable() {
-  if (this.frmActResp.valid) {
-    const selectedUsuario = this.frmActResp.get('usuario')?.value;
-    this.actividad.usuario = selectedUsuario;
-    console.log(selectedUsuario);
-    this.actividadservice.actualizar(this.actividad.id_actividad, this.actividad)
-      .subscribe(
-        (response) => {
-          this.actividad = new ActividadesPoa();
-          this.frmActResp.reset();
-          this.listar(this.poa.id_poa);
-          Swal.fire(
-            'Exitoso',
-            'Se ha asignado el responsable con éxito',
-            'success'
-          );
-        },
-        (error) => {
-          console.error('Error al actualizar la actividad:', error);
-          Swal.fire(
-            'Error',
-            'Ha ocurrido un error',
-            'warning'
-          );
-        }
-      );
+  idActividadSeleccionada!: number;
+
+  abrirModalAsignarResponsable(idActividad: number) {
+    this.idActividadSeleccionada = idActividad;
   }
-}
+
+  guardarResponsable() {
+    if (this.frmActResp.valid) {
+      const selectedUsuario = this.frmActResp.get('usuario')?.value;
   
-  listar(poaId:number): void {
+      this.actividadservice.getActividadPorId(this.idActividadSeleccionada)
+        .subscribe(
+          (actividadToUpdate: ActividadesPoa) => {
+            actividadToUpdate.usuario = selectedUsuario;
+  
+            this.actividadservice.actualizar(this.idActividadSeleccionada, actividadToUpdate)
+              .subscribe(
+                () => {
+                  this.frmActResp.reset();
+                  this.listar(this.poa.id_poa);
+                  Swal.fire(
+                    'Exitoso',
+                    'Se ha asignado el responsable con éxito',
+                    'success'
+                  );
+                },
+                (error) => {
+                  console.error('Error al actualizar el responsable:', error);
+                  Swal.fire(
+                    'Error',
+                    'Ha ocurrido un error',
+                    'warning'
+                  );
+                }
+              );
+          },
+          (error: any) => {
+            console.error('Error al obtener la actividad:', error);
+            Swal.fire(
+              'Error',
+              'Ha ocurrido un error',
+              'warning'
+            );
+          }
+        );
+    }
+  }  
+  
+  listar(poaId: number): void {
     this.dataSource.data = [];
     this.actividadservice.getActividadesPoa(poaId).subscribe(
       (data: any[]) => {
@@ -198,6 +217,67 @@ guardarResponsable() {
     );
   }
 
+  editDatos(activ: ActividadesPoa) {
+    this.actividad = activ;
+    this.frmActividad = new FormGroup({
+      nombre: new FormControl(this.actividad.nombre),
+      descripcion: new FormControl(this.actividad.descripcion),
+      presupuesto_referencial: new FormControl(this.actividad.presupuesto_referencial),
+      recursos_propios: new FormControl(this.actividad.recursos_propios),
+      codificado: new FormControl(this.actividad.codificado),
+      devengado: new FormControl(this.actividad.devengado)
+    });
+  }
+
+  //PRUEBAS ACTUALIZAR
+  actualizar1() {
+    this.actividad.nombre = this.frmActividad.value.nombre;
+    this.actividad.descripcion = this.frmActividad.value.descripcion;
+    this.actividad.presupuesto_referencial = this.frmActividad.value.presupuesto_referencial;
+    this.actividad.recursos_propios = this.frmActividad.value.recursos_propios;
+    this.actividad.codificado = this.frmActividad.value.codificado;
+    this.actividad.devengado = this.frmActividad.value.devengado;
+    this.actividad.estado = 'pendiente';
+    this.actividadservice.actualizar(this.actividad.id_actividad, this.actividad)
+      .subscribe(response => {
+        this.actividad = new ActividadesPoa();
+        this.listar(this.poa.id_poa);
+        Swal.fire('Operacion exitosa!', 'El registro se actualizo con exito', 'success')
+      });
+  }
+  
+  actualizar2() {
+    const usuarioAsignado = this.actividad.usuario; // Guardar el usuario antes de actualizar
+    console.log("ID USUARIO : "+usuarioAsignado)
+    this.actividad.nombre = this.frmActividad.value.nombre;
+    this.actividad.descripcion = this.frmActividad.value.descripcion;
+    this.actividad.presupuesto_referencial = this.frmActividad.value.presupuesto_referencial;
+    this.actividad.recursos_propios = this.frmActividad.value.recursos_propios;
+    this.actividad.codificado = this.frmActividad.value.codificado;
+    this.actividad.devengado = this.frmActividad.value.devengado;
+    this.actividad.estado = 'pendiente';
+    this.actividad.usuario = usuarioAsignado; // Restaurar el usuario asignado
+    this.actividadservice.actualizar(this.actividad.id_actividad, this.actividad)
+      .subscribe(response => {
+        this.actividad = new ActividadesPoa();
+        this.listar(this.poa.id_poa);
+        Swal.fire('Operacion exitosa!', 'El registro se actualizo con exito', 'success')
+      });
+  }
+
+  actualizar() {
+    const usuarioAsignado = this.actividad.usuario;
+    const datosActualizados = { ...this.frmActividad.value };
+    delete datosActualizados.usuario; // Elimina el campo usuario del objeto actualizado
+    this.actividad = { ...this.actividad, ...datosActualizados, usuario: usuarioAsignado };
+    this.actividadservice.actualizar(this.actividad.id_actividad, this.actividad)
+      .subscribe(response => {
+        this.actividad = new ActividadesPoa();
+        this.listar(this.poa.id_poa);
+        Swal.fire('Operacion exitosa!', 'El registro se actualizo con exito', 'success')
+      });
+  }
+  
   eliminar(activ: any) {
     Swal.fire({
       title: 'Estas seguro de eliminar el registro?',
@@ -236,33 +316,5 @@ guardarResponsable() {
     } else {
       this.dataSource.data = this.actividades;
     }
-  }
-
-  editDatos(activ: ActividadesPoa) {
-    this.actividad = activ;
-    this.frmActividad = new FormGroup({
-      nombre: new FormControl(this.actividad.nombre),
-      descripcion: new FormControl(this.actividad.descripcion),
-      presupuesto_referencial: new FormControl(this.actividad.presupuesto_referencial),
-      recursos_propios: new FormControl(this.actividad.recursos_propios),
-      codificado: new FormControl(this.actividad.codificado),
-      devengado: new FormControl(this.actividad.devengado)
-    });
-  }
-
-  actualizar() {
-    this.actividad.nombre = this.frmActividad.value.nombre;
-    this.actividad.descripcion = this.frmActividad.value.descripcion;
-    this.actividad.presupuesto_referencial = this.frmActividad.value.presupuesto_referencial;
-    this.actividad.recursos_propios = this.frmActividad.value.recursos_propios;
-    this.actividad.codificado = this.frmActividad.value.codificado;
-    this.actividad.devengado = this.frmActividad.value.devengado;
-    this.actividad.estado = 'pendiente';
-    this.actividadservice.actualizar(this.actividad.id_actividad, this.actividad)
-      .subscribe(response => {
-        this.actividad = new ActividadesPoa();
-        this.listar(this.poa.id_poa);
-        Swal.fire('Operacion exitosa!', 'El registro se actualizo con exito', 'success')
-      });
   }
 }
