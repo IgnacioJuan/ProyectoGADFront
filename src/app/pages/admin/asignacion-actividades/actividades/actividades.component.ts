@@ -10,6 +10,7 @@ import { ActividadespoaService } from 'src/app/services/actividadespoa.service';
 import { UsuarioService } from 'src/app/services/usuario.service';
 import Swal from 'sweetalert2';
 import * as jQuery from 'jquery';
+import { AprobacionActividad } from 'src/app/models/AprobacionActividad';
 (window as any).jQuery = jQuery;
 
 @Component({
@@ -42,17 +43,20 @@ export class ActividadesComponent implements OnInit{
   };
   //
   poa: Poa = new Poa();
-  actividades: any[] = []; 
+  actividades: ActividadesPoa[] = []; 
   miModal!: ElementRef;
   public actividad = new ActividadesPoa();
+  public aprobAct = new AprobacionActividad();
   usuarios: Usuario2[] = [];
+
+  poaId!: number;
 
   filterPost = '';
   filteredPoas: any[] = [];
   resultadosEncontrados: boolean = true;
 
   dataSource = new MatTableDataSource<ActividadesPoa>();
-  columnasUsuario: string[] = ['id_actividad', 'nombre', 'descripcion', 'presupuesto_referencial', 'codificado', 'ejecutado', 'saldo','actions'];
+  columnasUsuario: string[] = ['id_actividad', 'nombre', 'descripcion', 'presupuesto_referencial', 'recursos_propios','recursos_externos','codificado', 'ejecutado', 'saldo','actions'];
 
   @ViewChild('datosModalRef') datosModalRef: any;
   @ViewChild(MatPaginator, { static: false }) paginator?: MatPaginator;
@@ -64,7 +68,9 @@ export class ActividadesComponent implements OnInit{
     this.frmActividad = fb.group({
       nombre: ['', Validators.required],
       descripcion: ['', Validators.required],
-      presupuesto_referencial: ['', Validators.required]
+      presupuesto_referencial: ['', Validators.required],
+      recursos_propios: ['', Validators.required],
+      recursos_externos: ['', Validators.required]
     });
     this.frmActResp = fb.group({
       usuario: ['', Validators.required]
@@ -113,9 +119,14 @@ export class ActividadesComponent implements OnInit{
     this.actividadservice.crear(this.actividad)
       .subscribe(
         (response) => {
+    
           console.log('Actividad creada con éxito:', response);
           this.guardadoExitoso = true;
-          this.listar(this.poa.id_poa);
+          const idActividadCreada = response.id_actividad;
+          const idPoa = this.poa.id_poa;
+          this.crearAprobacion(response);
+          console.log(idActividadCreada+' '+idPoa);
+          this.listar(idPoa);
           Swal.fire(
             'Exitoso',
             'Se ha completado el registro con exito',
@@ -131,6 +142,21 @@ export class ActividadesComponent implements OnInit{
           )
         }
       );
+  }
+
+  crearAprobacion(actividad: any ) {
+    this.aprobAct.estado='pendiente';
+    this.aprobAct.observacion='';
+    this.aprobAct.actividad = actividad;
+    this.aprobAct.poa = this.poa;
+    this.actividadservice.crearRelacionAprobacion(this.aprobAct).subscribe(
+      (response) => {
+        console.log('Relación de aprobación creada:', response);
+      },
+      (error) => {
+        console.error('Error al crear la relación de aprobación:', error);
+      }
+    );
   }
 
 guardarResponsable() {
@@ -163,6 +189,7 @@ guardarResponsable() {
 }
   
   listar(poaId:number): void {
+    this.dataSource.data = [];
     this.actividadservice.getActividadesPoa(poaId).subscribe(
       (data: any[]) => {
         this.actividades = data;
