@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
@@ -47,9 +47,9 @@ export class ActividadesComponent implements OnInit{
   public aprobAct = new AprobacionActividad();
   usuarios: Usuario2[] = [];
 
-  poaId!: number;
+  //poaId!: number;
 
-  filterPost = '';
+  filterPost: string = "";
   filteredPoas: any[] = [];
   resultadosEncontrados: boolean = true;
 
@@ -88,7 +88,7 @@ export class ActividadesComponent implements OnInit{
   }
   ngOnInit(): void {
     const data = history.state.data;
-    this.cargarUsuarios();
+    //this.cargarUsuarios();
     this.poa = data;
     console.log(this.poa);
     this.listar(this.poa.id_poa)
@@ -236,5 +236,33 @@ guardarResponsable() {
     } else {
       this.dataSource.data = this.actividades;
     }
+  }
+
+  editDatos(activ: ActividadesPoa) {
+    this.actividad = activ;
+    this.frmActividad = new FormGroup({
+      nombre: new FormControl(this.actividad.nombre),
+      descripcion: new FormControl(this.actividad.descripcion),
+      presupuesto_referencial: new FormControl(this.actividad.presupuesto_referencial),
+      recursos_propios: new FormControl(this.actividad.recursos_propios),
+      codificado: new FormControl(this.actividad.codificado),
+      devengado: new FormControl(this.actividad.devengado)
+    });
+  }
+
+  actualizar() {
+    this.actividad.nombre = this.frmActividad.value.nombre;
+    this.actividad.descripcion = this.frmActividad.value.descripcion;
+    this.actividad.presupuesto_referencial = this.frmActividad.value.presupuesto_referencial;
+    this.actividad.recursos_propios = this.frmActividad.value.recursos_propios;
+    this.actividad.codificado = this.frmActividad.value.codificado;
+    this.actividad.devengado = this.frmActividad.value.devengado;
+    this.actividad.estado = 'pendiente';
+    this.actividadservice.actualizar(this.actividad.id_actividad, this.actividad)
+      .subscribe(response => {
+        this.actividad = new ActividadesPoa();
+        this.listar(this.poa.id_poa);
+        Swal.fire('Operacion exitosa!', 'El registro se actualizo con exito', 'success')
+      });
   }
 }

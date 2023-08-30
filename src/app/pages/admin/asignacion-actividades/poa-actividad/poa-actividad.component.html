@@ -82,7 +82,7 @@
               <th mat-header-cell *matHeaderCellDef>ACTIVIDADES</th>
               <td mat-cell *matCellDef="let elemento">
                 <button
-                  class="btn btn-primary"
+                class="btn btn-md btn-custom-green"
                   role="button"
                   (click)="verActividades(elemento)"
                 >
@@ -90,7 +90,7 @@
                     <span class="badge">{{
                       elemento.cantidadActividades
                     }}</span>
-                    <i class="fa fa-folder-open"></i>
+                    <i class="fa fa-folder-open" style="color: green; font-size: 28px;"></i>
                   </div>
                 </button>
               </td>
