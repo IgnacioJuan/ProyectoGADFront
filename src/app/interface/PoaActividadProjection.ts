@@ -11,4 +11,5 @@ export interface PoaActividadProjection {
     tipo_periodo: string;
     linea_base: string;
     cantidadActividades: number;
+    
 }

@@ -54,6 +54,7 @@ export class ActividadesComponent implements OnInit{
   resultadosEncontrados: boolean = true;
 
   dataSource = new MatTableDataSource<ActividadesPoa>();
+  //aqui se cambia
   columnasUsuario: string[] = ['id_actividad', 'nombre', 'descripcion', 'presupuesto_referencial', 'recursos_propios','recursos_externos','codificado', 'ejecutado', 'saldo','actions'];
 
   @ViewChild('datosModalRef') datosModalRef: any;

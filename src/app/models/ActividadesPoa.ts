@@ -14,4 +14,5 @@ export class ActividadesPoa {
     visible!: boolean;
     usuario:Usuario2|null=null;
     poa: Poa | null = null;
+    
 }
