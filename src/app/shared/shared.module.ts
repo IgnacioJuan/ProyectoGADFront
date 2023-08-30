@@ -1,5 +1,6 @@
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgIf } from '@angular/common';
 import { BuscarPipe } from './buscar.pipe';
 import { BuscarUsuarioPipe } from './buscar-usuario.pipe';
 
@@ -119,7 +120,10 @@ import { MatSortModule } from '@angular/material/sort';
     NgxChartsModule,
     MatTabsModule,
     NgxSpinnerModule,
-    MatSortModule
+    MatSortModule,
+    
+    MatProgressBarModule,
+    NgIf,
   ],
 })
 export class SharedModule { }

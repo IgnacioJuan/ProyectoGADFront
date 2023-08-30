@@ -36,12 +36,7 @@ const routes: Routes = [
 
 
 
-  //PATHS DE AUTORIDAD
-  {
-    path: 'aut',
-    loadChildren: () => import("./pages/autoridad/autoridad.module").then(m => m.AutoridadModule)
-  },
-  
+
   //Otros Paths
   {
     path: 'use',
