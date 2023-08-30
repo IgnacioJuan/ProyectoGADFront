@@ -8,7 +8,8 @@ export interface PoaActividadProjection {
     comunidad: string;
     nombre_funcionario: string;
     cargo: string;
-    tipo_periodo: string;
+    recursos_propios: number;
+    recursos_externos: number;
     linea_base: string;
     cantidadActividades: number;
 }

@@ -1,5 +1,5 @@
 export class Poa {
-    id_poa: number = 0;
+    id_poa!: number;
     meta_alcanzar!: number; 
     meta_fisica!: number; 
     avance_real!: number; 
@@ -11,7 +11,9 @@ export class Poa {
     comunidad!: string; 
     nombre_funcionario!: string; 
     cargo!: string; 
-    tipo_periodo!: string;
+    recursos_propios!: number; 
+    transferencias_gobierno!: number; 
+    convenios!: number; 
     estado!: string; 
     linea_base!: string; 
     visible!: boolean;
