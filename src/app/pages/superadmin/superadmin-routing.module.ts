@@ -164,6 +164,10 @@ const routes: Routes = [{
     pathMatch: 'full',
     canActivate: [SuperGuard]
   },
+  {
+    path: 'actividades-presupuestos',
+    loadChildren: () => import("./actividades-presupuestos/actividades-presupuestos.module").then(m => m.ActividadesPresupuestosModule)
+  }
 ];
 
 @NgModule({
