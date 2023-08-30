@@ -1,5 +1,5 @@
 export class Poa {
-    id_proyecto!: number;
+    id_poa!: number;
     meta_alcanzar!: number; 
     meta_fisica!: number; 
     avance_real!: number; 

@@ -4,8 +4,14 @@ import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { ActividadesPoa } from 'src/app/models/ActividadesPoa';
-import { ActividadespoaService } from 'src/app/services/actividadespoa';
+import { Poa } from 'src/app/models/Poa';
+import { Usuario2 } from 'src/app/models/Usuario2';
+import { ActividadespoaService } from 'src/app/services/actividadespoa.service';
+import { UsuarioService } from 'src/app/services/usuario.service';
 import Swal from 'sweetalert2';
+//import * as jQuery from 'jquery';
+//import { AprobacionActividad } from 'src/app/models/AprobacionActividad';
+//(window as any).jQuery = jQuery;
 
 @Component({
   selector: 'app-actividades',
@@ -14,8 +20,8 @@ import Swal from 'sweetalert2';
 })
 export class ActividadesComponent implements OnInit{
   frmActividad: FormGroup;
+  frmActResp: FormGroup;
   guardadoExitoso: boolean = false;
-  miModal!: ElementRef;
   //tabla
   itemsPerPageLabel = 'Actividades por página';
   nextPageLabel = 'Siguiente';
@@ -36,25 +42,33 @@ export class ActividadesComponent implements OnInit{
     return `${startIndex + 1} - ${endIndex} de ${length}`;
   };
   //
+  poa: Poa = new Poa();
+  actividades: any[] = []; 
+  miModal!: ElementRef;
   public actividad = new ActividadesPoa();
-  actividades: any[] = [];  
-
-  //criterios: CriterioSubcriteriosProjection[] = [];
-  
+  usuarios: Usuario2[] = [];
 
   filterPost = '';
+  filteredPoas: any[] = [];
+  resultadosEncontrados: boolean = true;
+
   dataSource = new MatTableDataSource<ActividadesPoa>();
-  columnasUsuario: string[] = ['id_actividad', 'nombre', 'observaciones', 'presupuesto_referencial', 'codificado', 'ejecutado', 'saldo'];
+  columnasUsuario: string[] = ['id_actividad', 'nombre', 'descripcion', 'presupuesto_referencial', 'codificado', 'ejecutado', 'saldo','actions'];
 
   @ViewChild('datosModalRef') datosModalRef: any;
   @ViewChild(MatPaginator, { static: false }) paginator?: MatPaginator;
 
   constructor(
     private actividadservice: ActividadespoaService,private paginatorIntl: MatPaginatorIntl,
-    private router: Router, private fb: FormBuilder
+    private router: Router, private fb: FormBuilder, private userService: UsuarioService
   ) {
     this.frmActividad = fb.group({
-      nombre: ['', Validators.required]
+      nombre: ['', Validators.required],
+      descripcion: ['', Validators.required],
+      presupuesto_referencial: ['', Validators.required]
+    });
+    this.frmActResp = fb.group({
+      usuario: ['', Validators.required]
     });
     this.paginatorIntl.nextPageLabel = this.nextPageLabel;
     this.paginatorIntl.lastPageLabel = this.lastPageLabel;
@@ -68,17 +82,41 @@ export class ActividadesComponent implements OnInit{
 
   }
   ngOnInit(): void {
-    this.listar();
+    const data = history.state.data;
+    this.cargarUsuarios();
+    this.poa = data;
+    console.log(this.poa);
+    if (this.poa == undefined) {
+      this.router.navigate(['user-dashboard']);
+      location.replace('/use/user-dashboard');
+    }
+    this.listar(this.poa.id_poa)
   } 
+
+  verPoas() {
+    this.router.navigate(['/adm/asignacion-actividades/poa-actividad']);
+  }
+  
+  cargarUsuarios() {
+    this.userService.getUsuariosList().subscribe(
+      (data: Usuario2[]) => {
+        this.usuarios = data;
+      },
+      (error: any) => {
+        console.error('Error al cargar usuarios:', error);
+      }
+    );
+  }
  
   guardar() {
     this.actividad = this.frmActividad.value;
+    this.actividad.poa = this.poa;
     this.actividadservice.crear(this.actividad)
       .subscribe(
         (response) => {
           console.log('Actividad creada con éxito:', response);
           this.guardadoExitoso = true;
-          this.listar();
+          this.listar(this.poa.id_poa);
           Swal.fire(
             'Exitoso',
             'Se ha completado el registro con exito',
@@ -94,12 +132,40 @@ export class ActividadesComponent implements OnInit{
           )
         }
       );
-
   }
 
-  listar(): void {
-    this.actividadservice.getActividades().subscribe(
-      (data: ActividadesPoa[]) => {
+guardarResponsable() {
+  if (this.frmActResp.valid) {
+    const selectedUsuario = this.frmActResp.get('usuario')?.value;
+    this.actividad.usuario = selectedUsuario;
+    console.log(selectedUsuario);
+    this.actividadservice.actualizar(this.actividad.id_actividad, this.actividad)
+      .subscribe(
+        (response) => {
+          this.actividad = new ActividadesPoa();
+          this.frmActResp.reset();
+          this.listar(this.poa.id_poa);
+          Swal.fire(
+            'Exitoso',
+            'Se ha asignado el responsable con éxito',
+            'success'
+          );
+        },
+        (error) => {
+          console.error('Error al actualizar la actividad:', error);
+          Swal.fire(
+            'Error',
+            'Ha ocurrido un error',
+            'warning'
+          );
+        }
+      );
+  }
+}
+  
+  listar(poaId:number): void {
+    this.actividadservice.getActividadesPoa(poaId).subscribe(
+      (data: any[]) => {
         this.actividades = data;
         this.dataSource.data = this.actividades;
       },
@@ -116,11 +182,10 @@ export class ActividadesComponent implements OnInit{
       confirmButtonText: 'Cancelar',
       denyButtonText: `Eliminar`,
     }).then((result) => {
-      /* Read more about isConfirmed, isDenied below */
       if (!result.isConfirmed) {
         this.actividadservice.eliminarActividad(activ).subscribe(
           (response) => {
-            this.listar()
+            this.listar(this.poa.id_poa)
             Swal.fire('Eliminado!', '', 'success')
 
           }
@@ -135,6 +200,10 @@ export class ActividadesComponent implements OnInit{
     this.actividad = new ActividadesPoa;
   }
 
+  limpiar() {
+    this.frmActResp.reset();
+    this.actividad = new ActividadesPoa;
+  }
   aplicarFiltro() {
     if (this.filterPost) {
       const lowerCaseFilter = this.filterPost.toLowerCase();

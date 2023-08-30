@@ -27,6 +27,7 @@ const routes: Routes = [
     canActivate: [SuperGuard]
   },
  
+ 
   {
     path: 'subcriterios-indicador',
     component: SubcriteriosIndicadorComponent,

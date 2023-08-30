@@ -18,31 +18,17 @@ export class ActividadespoaService {
     );
   }
 
-  actualizar(id: any, crite: any): Observable<any> {
-    return this.http.put(`${baserUrl}/api/actividades/actualizar/${id}`, crite);
+  actualizar(id: any, acti: any): Observable<any> {
+    return this.http.put(`${baserUrl}/api/actividades/actualizar/${id}`, acti);
   }
   //Metodo para listar
 
-  getActividades(): Observable<ActividadesPoa[]> {
-    return this.http.get<ActividadesPoa[]>(`${baserUrl}/api/actividades/listarModeloActivPoaAprov`);
+  getActividadesPoa(poaId: number): Observable<ActividadesPoa[]> {
+    return this.http.get<ActividadesPoa[]>(`${baserUrl}/api/actividades/listarActividadesPoa/`+poaId);
   }
 
   eliminarActividad(acti: any): Observable<any> {
     return this.http.put(`${baserUrl}/api/actividades/eliminarlogic/${acti.id_actividad}`, acti);
-  }
-
-  //Listar por usuario
-  public getAsignacionUsuario(user: String): Observable<Evidencia[]> {
-    return this.http.get<Evidencia[]>(`${baserUrl}/api/asignacionevidencia/listarEviUsua/` + user);
-  }
-
-  public geteviasig(user: String): Observable<Evidencia[]> {
-    return this.http.get<Evidencia[]>(`${baserUrl}/api/evidencia/buscarev/${user}`);
-  }
-
-  //LISTAR RESPONSABLE AUN NO HAY
-  public listarUsuario(): Observable<any[]> {
-    return this.http.get<any[]>(`${baserUrl}/usuarios/listarRespActividad`);
   }
 
 
