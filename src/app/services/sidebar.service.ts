@@ -45,6 +45,8 @@ export class SidebarService {
         { titulo: 'Programas', url: 'sup/crearpro', icono: 'fas fa-list-ul ' },
         { titulo: 'Componentes', url: 'sup/ejes/ejestabla', icono: 'fas fa-list-ul ' },
         { titulo: 'Competencia', url: 'sup/crearcompe', icono: 'fas fa-list-ul ' },
+        { titulo: 'ODS', url: 'sup/objetivoods-lista', icono: 'fas fa-list-ul ' },
+
       ]
     },
     {
@@ -52,24 +54,6 @@ export class SidebarService {
       titulo: "Usuarios",
       submenu: [
         { titulo: 'Lista de Usuarios', url: 'sup/usuarios', icono: 'fas fa-list-ul ' }
-
-      ]
-    },
-
-    {
-      icono: 'nav-icon fas   fa-users',
-      titulo: "Programa",
-      submenu: [
-        { titulo: 'Crear nuevo progrma', url: 'sup/flujo-criterio/crearpro', icono: 'fas fa-list-ul ' }
-
-      ]
-    },
-
-    {
-      icono: 'nav-icon fas   fa-users',
-      titulo: "Competencia COOTAD",
-      submenu: [
-        { titulo: 'Competencia Cootad', url: 'sup/flujo-criterio/crearcompe', icono: 'fas fa-list-ul ' }
 
       ]
     },
