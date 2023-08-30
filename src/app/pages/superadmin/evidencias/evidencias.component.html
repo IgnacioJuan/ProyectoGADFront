@@ -1,0 +1,56 @@
+<body>
+
+    <div class="container bg-light border border-start-0 rounded-4">
+        <div class="container text-center">
+            <figure class="text-center text-dark" style="margin-top: 5%; font-style: italic">
+                <blockquote class="blockquote text-dark">
+                    <h1><strong> LISTA DE EVIDENCIAS RECHAZADAS</strong></h1>
+                </blockquote>
+            </figure>
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>NOMBRE</th>
+                                    <th>DESCRIPCIÓN</th>
+                                    <th>FECHA</th>
+                                    <th>NOMBRE ACTIVIDAD</th>
+                                    <th>ACCIONES</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>Toma de Fotos</td>
+                                    <td>wefsfsf</td>
+                                    <td>15-10-2022</td>
+                                    <td>Socialización</td>
+                                    <td> <button class="btn btn-primary" style="background-color: yellowgreen"
+                                            style="margin-right: 5%">VER
+
+                                        </button>
+
+                                        <button class="btn btn-primary" style="background-color: yellowgreen"
+                                            style="margin-right: 5%">ELIMINAR
+
+                                        </button>
+                                    </td>
+
+                                </tr>
+                            </tbody>
+                        </table>
+                        <mat-paginator #paginator [pageSizeOptions]="[1,10, 20]" showFirstLastButtons
+                            aria-label="Seleccione">
+                        </mat-paginator>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</body>

@@ -78,18 +78,24 @@
                   {{ elemento.cargo }}
                 </td>
               </ng-container>
+              <ng-container matColumnDef="recursos_propios">
+                <th mat-header-cell *matHeaderCellDef>R.PROPIOS</th>
+                <td mat-cell *matCellDef="let elemento">
+                  {{ elemento.recursos_propios }}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="recursos_externos">
+                <th mat-header-cell *matHeaderCellDef>R.EXTERNOS</th>
+                <td mat-cell *matCellDef="let elemento">
+                  {{ elemento.recursos_externos }}
+                </td>
+              </ng-container>
                 <ng-container matColumnDef="linea_base">
                   <th mat-header-cell *matHeaderCellDef>LINEA BASE</th>
                   <td mat-cell *matCellDef="let elemento">
                     {{ elemento.linea_base }}
                   </td>
               </ng-container>
-            <ng-container matColumnDef="tipo_periodo">
-              <th mat-header-cell *matHeaderCellDef>PERIODO</th>
-              <td mat-cell *matCellDef="let elemento">
-                {{ elemento.tipo_periodo }}
-              </td>
-          </ng-container>
               <ng-container matColumnDef="cantidadActividades">
                 <th mat-header-cell *matHeaderCellDef>ACTIVIDADES</th>
                 <td mat-cell *matCellDef="let elemento">
