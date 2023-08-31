@@ -15,18 +15,35 @@ export class ArchivoService {
   baserrl= environment.baserUrl;
 
   constructor(private http: HttpClient) { }
-  cargar(file: File, descripcion: string, id_evidencia: number): Observable<HttpEvent<any>> {
+  cargarpparagad(file: File, descripcion: string, valor: number, id_evidencia: number): Observable<HttpEvent<any>> {
     const formData: FormData = new FormData();
     formData.append('file', file);
     formData.append('descripcion', descripcion);
+    formData.append('valor', valor.toString());
     formData.append('id_evidencia', id_evidencia.toString());
+ 
     const req = new HttpRequest('POST', `${this.baserrl}/archivo/upload`, formData, {
       reportProgress: true,
-      responseType: 'json'
+     responseType: 'json'
     });
+ 
     return this.http.request(req);
   }
-
+ 
+   cargar(file: File, descripcion: string,  id_evidencia: number): Observable<HttpEvent<any>> {
+     const formData: FormData = new FormData();
+     formData.append('file', file);
+     formData.append('descripcion', descripcion);
+     formData.append('id_evidencia', id_evidencia.toString());
+  
+     const req = new HttpRequest('POST', `${this.baserrl}/archivo/upload`, formData, {
+       reportProgress: true,
+      responseType: 'json'
+     });
+  
+     return this.http.request(req);
+   }
+  
 cargarArchivo(file: File, descripcion: string): Observable<any> {
   const formData = new FormData();
   formData.append('file', file);
