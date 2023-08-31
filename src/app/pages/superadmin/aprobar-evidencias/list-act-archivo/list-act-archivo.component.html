@@ -81,6 +81,7 @@
                   role="button"
                   data-bs-toggle="modal"
                   data-bs-target="#materiaModal"
+                  [disabled]="elemento.estado !== 'PENDIENTE'"
                 (click)="seleccionar(elemento)"
                 >
                   <div class="d-flex">
