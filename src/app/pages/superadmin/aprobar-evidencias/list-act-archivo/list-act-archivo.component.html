@@ -30,8 +30,6 @@
         />
   
       <br />
-
-
        
         <div class="mat-elevation-z8 table-responsive"  style="margin-bottom: 5%"  >
             <table mat-table [dataSource]="dataSource2">
@@ -153,6 +151,7 @@
                 class="btn-close"
                 data-bs-dismiss="modal"
                 aria-label="Close"
+                (click)="Limpiar()"
               ></button>
             </div>
             <div class="modal-body">
@@ -212,6 +211,7 @@
                   form="formulario"
                   class="btn btn-warning"
                   data-bs-dismiss="modal"
+                  (click)="Limpiar()"
                 >
                   Cancelar
                 </button>
