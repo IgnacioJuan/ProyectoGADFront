@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -8,6 +8,7 @@ import { ArchivoService } from 'src/app/services/archivo.service';
 import { LoginService } from 'src/app/services/login.service';
 import Swal from 'sweetalert2';
 import { Actividad_arch } from 'src/app/services/actividad_arch';
+import { MatPaginator } from '@angular/material/paginator';
 @Component({
   selector: 'app-subir_archivo_acti_desig',
   templateUrl: './subir_archivo_acti_desig.component.html',
@@ -21,7 +22,7 @@ export class Subir_archivo_acti_desigComponent implements OnInit {
   user: any = null;
   aRCHI!: Archivo[];
   filearchivo!: File;
-    archivon=new Actividad_arch();
+public archivon=new Archivo();
    // Crear una fuente de datos para la tabla
  dataSource = new MatTableDataSource<Archivo>();
  formulario: FormGroup;
@@ -45,6 +46,14 @@ export class Subir_archivo_acti_desigComponent implements OnInit {
   }
   @ViewChild('fileInput') fileInput!: ElementRef;
  
+  ngAfterViewInit() {
+    console.log('Paginator:', this.paginator);
+    if (this.paginator) {
+      this.dataSource.paginator = this.paginator;
+    }
+  }
+  @ViewChild(MatPaginator)
+  paginator!: MatPaginator;
   
   activ: Actividad_arch = new Actividad_arch();
   archi: Archivo = new Archivo()
@@ -177,5 +186,55 @@ aplicarFiltro() {
     this.listar();
     }
 }
+editar(id_archi:any): void {
+  // ... existing upload logic ...
+
+  this.archivo.editArchivo(id_archi,this.filearchivo, this.descripcion, this.valor, this.activ.id_actividad)
+    .subscribe(
+      response => {
+        console.log('Archivo editado:', response);
+
+        Swal.fire({
+          title: '¡Éxito!',
+          text: 'El archivo se ha editado correctamente',
+          icon: 'success',
+          confirmButtonText: 'OK'
+        });
+
+        this.formulario.reset();
+        },
+      error => {
+        console.error('Error al editar el archivo:', error);
+
+        Swal.fire({
+          title: '¡Error!',
+          text: 'Ocurrió un error al editar el archivo',
+          icon: 'error',
+          confirmButtonText: 'OK'
+        });
+      }
+    );
+}
+archivoToEdit: any; 
+cargarDatosParaEditar(): void {
+  // Assuming archivoToEdit contains the data fetched from backend
+  if (this.archivoToEdit) {
+    this.descripcion = this.archivoToEdit.descripcion;
+    this.valor = this.archivoToEdit.valor;
+    // ... set other form field values ...
+  }
+}
+  editDatos(archi:Archivo) {
+    this.archivon = archi;
+    this.formulario = new FormGroup({
+      nombre: new FormControl(archi.nombre),
+      descripcion: new FormControl(archi.descripcion),
+     valor: new FormControl(archi.valor)
+    });
+  }
+
+  // Open the modal programmatically
+ // this.modalRef.nativeElement.click();
+
 
 }

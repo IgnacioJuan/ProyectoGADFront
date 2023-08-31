@@ -1,8 +1,8 @@
-import { HttpRequest } from '@angular/common/http';
+import { HttpHeaders, HttpRequest } from '@angular/common/http';
 import { HttpEvent } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, catchError, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
  import baserUrl from './helper';
 import { Archivo } from '../models/Archivo';
@@ -77,6 +77,32 @@ public getarchivoActividad(idActi: number): Observable<Archivo[]> {
 
 eliminar(archi:any): Observable<any> {
   return this.http.put(`${baserUrl}/archivo/eliminarlogic/${archi.id_archivo}`,archi);
+}
+
+
+editArchivo(
+  archivoId: number,
+  file: File,
+  descripcion: string,
+  valor: number,
+  idActividad: number
+): Observable<any> {
+  const formData: FormData = new FormData();
+  formData.append('file', file);
+  formData.append('descripcion', descripcion);
+  formData.append('valor', valor.toString());
+  formData.append('id_evidencia', idActividad.toString());
+  const url = `${baserUrl}/upload/${archivoId}`;
+  const headers = new HttpHeaders();
+
+  return this.http
+    .put(url, formData, { headers, observe: 'response' })
+    .pipe(catchError(this.handleError));
+}
+
+private handleError(error: any): Observable<never> {
+  console.error('An error occurred:', error);
+  return throwError('Something went wrong; please try again later.');
 }
 
 }
