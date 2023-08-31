@@ -1,12 +1,17 @@
+import { Poa } from "./Poa";
+import { Usuario2 } from "./Usuario2";
+
 export class ActividadesPoa {
     id_actividad!: number;
     nombre!: string;
-    observaciones!: string;
+    descripcion!: string;
     presupuesto_referencial!: number;
     codificado!: number;
-    ejecutado!: number;
-    saldo!: number;
+    devengado!: number;
+    recursos_propios!: number;
+    estado!: string
     visible!: boolean;
-   //evidencia:Evidencias|null=null;
-   //usuario:Usuario2|null=null;
+    responsable!: string;
+    usuario: Usuario2 = new Usuario2();
+    poa!: Poa;
 }

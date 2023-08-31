@@ -4,6 +4,8 @@ import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { PoaActividadProjection } from 'src/app/interface/PoaActividadProjection';
+import { ActividadesPoa } from 'src/app/models/ActividadesPoa';
+import { Poa } from 'src/app/models/Poa';
 import { PoaService } from 'src/app/services/poa.service';
 
 @Component({
@@ -12,7 +14,6 @@ import { PoaService } from 'src/app/services/poa.service';
   styleUrls: ['./poa-actividad.component.css']
 })
 export class PoaActividadComponent implements OnInit{
-  frmPoa: FormGroup;
   itemsPerPageLabel = 'Poas por página';
   nextPageLabel = 'Siguiente';
   lastPageLabel = 'Última';
@@ -32,25 +33,24 @@ export class PoaActividadComponent implements OnInit{
     return `${startIndex + 1} - ${endIndex} de ${length}`;
   };
 
-  //public poa = new Poa();
+  public poa = new Poa();
   poas: PoaActividadProjection[] = [];
+  public activ = new ActividadesPoa();
 
   filterPost = '';
+  filteredPoas: any[] = [];
+  resultadosEncontrados: boolean = true;
   dataSource = new MatTableDataSource<PoaActividadProjection>();
-  columnasPoa: string[] = ['id_poa', 'meta_alcanzar','meta_fisica','avance_real','fecha_inicio', 'fecha_fin','localizacion',
-  'cobertura','barrio','comunidad','nombre_funcionario','cargo','recursos_propios','transferencias_gobierno','convenios','linea_base','cantidadActividades'];
+  columnasPoa: string[] = ['id_poa','fecha_inicio','fecha_fin','localizacion','cobertura','barrio','comunidad','linea_base','tipo_periodo','cantidadActividades'];
 
   @ViewChild('datosModalRef') datosModalRef: any;
   @ViewChild(MatPaginator, { static: false }) paginator?: MatPaginator;
 
   constructor(
     private poaservice: PoaService,private paginatorIntl: MatPaginatorIntl,
-    private router: Router, private fb: FormBuilder
+    private router: Router, private fb: FormBuilder,
+    
   ) {
-    this.frmPoa = fb.group({
-      nombre: ['', Validators.required],
-      descripcion: ['', [Validators.required]]
-    });
     this.paginatorIntl.nextPageLabel = this.nextPageLabel;
     this.paginatorIntl.lastPageLabel = this.lastPageLabel;
     this.paginatorIntl.firstPageLabel=this.firstPageLabel;
