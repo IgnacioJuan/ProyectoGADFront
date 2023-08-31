@@ -10,7 +10,7 @@ import {Objetivoods} from "../models/objetivoods";
 })
 export class ObjetivoodsService {
 
-  constructor(private httpClient : HttpClient) { }
+  constructor(private httpClient : HttpClient) {  }
 
 
   obtenerListaobjetivoods(): Observable<Objetivoods[]>{
