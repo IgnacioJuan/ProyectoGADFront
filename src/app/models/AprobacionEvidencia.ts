@@ -2,10 +2,10 @@ import { Archivos } from "./Archivos";
 import { Usuario2 } from "./Usuario2";
 
 export class AprobacionEvidencia {
-    id_aprobacionevi: number = 0;
+    id_aprobacionevid: number = 0;
     estado: string = "";
     observacion: string = "";
     visible : boolean = false;
-    usuario:Usuario2 | null = null;
-    evidencia:Archivos | null= null;
+    usuario:Usuario2|null=null;
+    evidencia:Archivos | null= new Archivos();
 }

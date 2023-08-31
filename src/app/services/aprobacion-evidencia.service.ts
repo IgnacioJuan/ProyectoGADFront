@@ -28,9 +28,8 @@ export class AprobacionEvidenciaService {
   }
 
 
-
-  buscar(comp: string): Observable<any> {
-    return this.http.get(`${baserUrl}/api/componente/buscarComponenteLike/${comp}`);
+   // Método para listar las observaciones por id del archivo
+   listaraporbacionEviPorArchivo(idArchivo: number): Observable<AprobacionEvidencia[]> {
+    return this.http.get<AprobacionEvidencia[]>(`${baserUrl}/api/aprobacionevidencia/listaAprobacionEvidencia/`+idArchivo);
   }
-
 }

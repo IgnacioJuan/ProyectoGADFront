@@ -27,3 +27,30 @@
   .titulo {
     color: green;
   }
+/* Estilo para el botón con el pulgar arriba (verde) */
+.thumb-up {
+  background-color: green;
+  color: white;
+}
+
+/* Estilo para el botón con el pulgar abajo (rojo) */
+.thumb-down {
+  background-color: red;
+  color: white;
+}
+
+
+/* Establece un margen derecho a los elementos para crear separación horizontal */
+ .thumb-up, .thumb-down {
+  margin-right: 10px; /* Puedes ajustar el valor según tu preferencia */
+}
+
+/* Asegura que los elementos estén alineados horizontalmente */
+.mat-form-field, .thumb-up, .thumb-down {
+  vertical-align: top; /* Alinea los elementos en la parte superior */
+  display: inline-block; /* Coloca los elementos en línea horizontal */
+}
+
+.mat-form-field{
+  margin-left: 10px;
+}

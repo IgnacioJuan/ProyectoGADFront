@@ -5,6 +5,7 @@ export class Archivos {
   nombre: string = '';
   descripcion: string = '';
   enlace: string = '';
+  estado: string = '';
   fecha!: Date;
   valor: number = 0;
   visible: boolean = false;

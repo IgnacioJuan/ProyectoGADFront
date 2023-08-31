@@ -1,11 +1,9 @@
 import { ActividadesPoa } from 'src/app/models/ActividadesPoa';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { ActividadespoaService } from 'src/app/services/actividadespoa.service';
-import { ArchivoService } from 'src/app/services/archivo.service';
 import { Archivos } from 'src/app/models/Archivos';
 import { LoginService } from 'src/app/services/login.service';
 import { Poa } from 'src/app/models/Poa';
@@ -18,7 +16,6 @@ export class ListActivEvidenciaComponent implements OnInit {
 //Listar actividades-acrchivos-acitividad seleccionada
   public actividadSe = new ActividadesPoa();
   listaActividades: ActividadesPoa[] = [];
-  listaArchivos: Archivos[] = [];
   //Usuario logueado
   user: any = null;
   isLoggedIn = false;
@@ -34,7 +31,6 @@ export class ListActivEvidenciaComponent implements OnInit {
     private paginatorIntl: MatPaginatorIntl,
     private router: Router,
     private actividadService: ActividadespoaService,
-    private archivoService: ArchivoService,
     public login: LoginService,
 
   ) {
@@ -99,11 +95,6 @@ export class ListActivEvidenciaComponent implements OnInit {
 //Columnas tabla actividades
   columnasUsuario: string[] = ['id_actividad', 'nombre', 'descripcion', 'evidencias'];
 
-//Columnas tabla archivos
-  columnasArchivos: string[] = ['id_archivo', 'nombre', 'descripcion','enlace', 'fecha'];
-
-
-
   listar(idPoa: number): void {
     this.actividadService.getActividadesPoa(idPoa).subscribe(
       (data: any[]) => {
@@ -118,23 +109,6 @@ export class ListActivEvidenciaComponent implements OnInit {
     );
   }
 
-
-
-seleccionarActividad(activ: ActividadesPoa){
-  this.actividadSe=activ
-  this.archivoService.listarArchivosPorActividad(activ.id_actividad).subscribe(
-    (data: any[]) => {
-      this.listaArchivos = data;
-      console.log("Dataa")
-      console.log(data)
-      this.dataSource2.data = this.listaArchivos;
-    },
-    (error: any) => {
-      console.error('Error al listar los componentes:', error);
-    }
-  );
-
-}
 
 
 
@@ -159,7 +133,6 @@ seleccionarActividad(activ: ActividadesPoa){
   }
   //Ir archivos
 verDetalles(acti: any) {
-  this.router.navigate(['/sup/aprobarEvidencias/listPoaAprobarArchivoSuper'], { state: { data: acti } });
+  this.router.navigate(['/sup/aprobarEvidencias/listPoaAprobarArchivoSuper'], { state: { data: acti, poa: this.poa } });
 }
-
 }

@@ -6,18 +6,21 @@ import { ListPoaActividadComponent } from './list-poa-actividad/list-poa-activid
 import { ListActArchivoComponent } from './list-act-archivo/list-act-archivo.component';
 
 const routes: Routes = [
+  //Actividad
   {
     path: 'listActividadAprobar',
     component: ListActivEvidenciaComponent,
     pathMatch: 'full',
     canActivate: [SuperGuard]
   },
+  //POA
   {
     path: 'listPoaAprobarEvidenciaSuper',
     component: ListPoaActividadComponent,
     pathMatch: 'full',
     canActivate: [SuperGuard]
   },
+  //ARCHIVO
   {
     path: 'listPoaAprobarArchivoSuper',
     component: ListActArchivoComponent,

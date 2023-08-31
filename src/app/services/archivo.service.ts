@@ -67,12 +67,15 @@ eliminar(archi:any): Observable<any> {
 //Nuevos servicios
 
 
-  // Método para listar las metas Pdots por ID de objetivosPDOT
+  // Método para listar los archivos por actividad
+
   listarArchivosPorActividad(idActividad: number): Observable<Archivos[]> {
     return this.http.get<Archivos[]>(`${baserUrl}/archivo/buscararchivo/`+idActividad);
   }
+//Metodo para editar el estado 
 
-
-
+actualizar(id: any, archi: any): Observable<any> {
+  return this.http.put(`${baserUrl}/archivo/actualizar/${id}`, archi);
+}
 
 }
