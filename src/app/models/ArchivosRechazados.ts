@@ -11,6 +11,8 @@ export class ArchivosRechazados {
   valor: number = 0;
   visible: boolean = false;
 
+  actividad: Actividades | null = null;
+
 
 
 }

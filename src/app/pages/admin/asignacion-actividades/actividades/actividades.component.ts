@@ -9,9 +9,9 @@ import { Usuario2 } from 'src/app/models/Usuario2';
 import { ActividadespoaService } from 'src/app/services/actividadespoa.service';
 import { UsuarioService } from 'src/app/services/usuario.service';
 import Swal from 'sweetalert2';
-import * as jQuery from 'jquery';
+//import * as jQuery from 'jquery';
 import { AprobacionActividad } from 'src/app/models/AprobacionActividad';
-(window as any).jQuery = jQuery;
+//(window as any).jQuery = jQuery;
 
 @Component({
   selector: 'app-actividades',

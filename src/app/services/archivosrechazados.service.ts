@@ -16,7 +16,7 @@ export class ArchivosrechazadosService {
  
 
 get():Observable<ArchivosRechazados[]>{
-  return this.http.get<ArchivosRechazados[]>(`${baserUrl}/archivo/listarv`);
+  return this.http.get<ArchivosRechazados[]>(`${baserUrl}/archivo/listarrechazados`);
 }
 
   listar(){
