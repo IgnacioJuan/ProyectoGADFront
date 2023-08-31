@@ -157,7 +157,10 @@ const routes: Routes = [{
     path: 'ejes',
     loadChildren: () => import("./ejes/ejes.module").then(m => m.EjesModule)
   },
-
+  {
+    path: 'aprobarEvidencias',
+    loadChildren: () => import("./aprobar-evidencias/aprobar-evidencias.module").then(m => m.AprobarEvidenciasModule)
+  },
   {
     path: 'crearcompe',
     component: CrearcompetenciaComponent,

@@ -57,7 +57,14 @@ export class SidebarService {
 
       ]
     },
+    {
+      icono: 'nav-icon fas fa-tasks',
+      titulo: "Evaluar Evidencia",
+      submenu: [
+        { titulo: 'Aprobar/Rechazar Evidencia', url: 'sup/aprobarEvidencias/listPoaAprobarEvidenciaSuper', icono: 'fas fa-file-contract' }
 
+      ]
+    }
 
   ]
 

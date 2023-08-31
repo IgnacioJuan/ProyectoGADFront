@@ -7,6 +7,7 @@ import { environment } from 'src/environments/environment';
  import baserUrl from './helper';
 import { Archivo } from '../models/Archivo';
 import { ArchivoProjection } from '../interface/ArchivoProjection';
+import { Archivos } from '../models/Archivos';
 
 @Injectable({
   providedIn: 'root'
@@ -61,5 +62,17 @@ public getarchivoActividad(idActi: number): Observable<Archivo[]> {
 eliminar(archi:any): Observable<any> {
   return this.http.put(`${baserUrl}/archivo/eliminarlogic/${archi.id_archivo}`,archi);
 }
+
+
+//Nuevos servicios
+
+
+  // Método para listar las metas Pdots por ID de objetivosPDOT
+  listarArchivosPorActividad(idActividad: number): Observable<Archivos[]> {
+    return this.http.get<Archivos[]>(`${baserUrl}/archivo/buscararchivo/`+idActividad);
+  }
+
+
+
 
 }
