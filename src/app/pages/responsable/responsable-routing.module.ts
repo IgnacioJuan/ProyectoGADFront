@@ -8,9 +8,17 @@ import { ActividadCriterioDetalle } from './actividad-criterio-detalle/actividad
 import { ActividadCriterioSubcriterio } from './atividad-criterio-subcriterio/atividad-criterio-subcriterio.component';
 import { ActiviadDetalleIndicadorComponent } from './actividad-detalle-indicador/actividad-detalle-indicador.component';
 import { NormalGuard } from 'src/app/services/Guards/normal.guard';
+import { Subir_archivo_acti_desigComponent } from './subir-archivo-act/subir_archivo_acti_desig/subir_archivo_acti_desig.component';
+import { Actividades_desigComponent } from './subir-archivo-act/actividades_desig/actividades_desig.component';
 
 const routes: Routes = [
   {
+    path: 'activ',  // Cuando se navega a '/respon'
+    loadChildren: () => import("./subir-archivo-act/subir-archivo-act.module")
+      .then(m => m.SubirArchivoActModule)  // Cargar el módulo SubirArchivoActModule
+  },
+  
+{
     path: 'ActividadesResponsable',
     component: ActividadesResponsableComponent,
     pathMatch: 'full',

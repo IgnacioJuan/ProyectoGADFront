@@ -6,7 +6,7 @@ import baserUrl from './helper';
 import { Actividades } from '../models/actividades';
 import { ActividadesProjection } from '../interface/ActividadesProjection';
 import { ActivAprobadaProjection } from '../interface/ActivAprobadaProjection';
-
+import { Actividad_arch } from './actividad_arch';
 @Injectable({
   providedIn: 'root'
 })
@@ -82,5 +82,9 @@ public getActByUsua(idUsua: number): Observable<Actividades[]> {
 public getActUsu(idEvi: number): Observable<Actividades[]> {
   return this.http.get<Actividades[]>(`${baserUrl}/api/actividad/buscaractiv/${idEvi}`);
   
+}
+
+public listaractireponsa(idres: number): Observable<Actividad_arch[]> {
+  return this.http.get<Actividad_arch[]>(`${baserUrl}/api/actividades/actiresponsable/${idres}`);
 }
 }
