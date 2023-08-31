@@ -113,8 +113,8 @@
               <tr mat-header-row *matHeaderRowDef="columnasArchivos"></tr>
               <tr mat-row *matRowDef="let fila; columns: columnasArchivos"></tr>
             </table>
-          </div>
-          <mat-paginator
+
+            <mat-paginator
             [pageSizeOptions]="[5, 10, 20]"
             showFirstLastButtons
             aria-label="Select page of periodic elements"
@@ -126,9 +126,8 @@
           <div *ngIf="!resultadosEncontrados" class="alert alert-warning">
             No se encontraron resultados.
           </div>
-          
+          </div>
         </div>
-
         </div>
 
 
