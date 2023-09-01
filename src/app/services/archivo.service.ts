@@ -7,6 +7,7 @@ import { environment } from 'src/environments/environment';
  import baserUrl from './helper';
 import { Archivo } from '../models/Archivo';
 import { ArchivoProjection } from '../interface/ArchivoProjection';
+import { Archivos } from '../models/Archivos';
 
 @Injectable({
   providedIn: 'root'
@@ -103,6 +104,18 @@ editArchivo(
 private handleError(error: any): Observable<never> {
   console.error('An error occurred:', error);
   return throwError('Something went wrong; please try again later.');
+//Nuevos servicios
+
+}
+  // Método para listar los archivos por actividad
+
+  listarArchivosPorActividad(idActividad: number): Observable<Archivos[]> {
+    return this.http.get<Archivos[]>(`${baserUrl}/archivo/buscararchivo/`+idActividad);
+  }
+//Metodo para editar el estado 
+
+actualizar(id: any, archi: any): Observable<any> {
+  return this.http.put(`${baserUrl}/archivo/actualizar/${id}`, archi);
 }
 
 }

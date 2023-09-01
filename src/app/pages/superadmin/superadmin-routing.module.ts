@@ -88,6 +88,10 @@ const routes: Routes = [
     loadChildren: () => import("./ejes/ejes.module").then(m => m.EjesModule)
   },
   {
+    path: 'aprobarEvidencias',
+    loadChildren: () => import("./aprobar-evidencias/aprobar-evidencias.module").then(m => m.AprobarEvidenciasModule)
+  },
+  {
     path: 'resumen-evidencias-responsable',
     loadChildren: () => import("./resumen-evidencias-responsable/resumen-evidencias-responsable.module").then(m => m.ResumenEvidenciasResponsableModule)
   },

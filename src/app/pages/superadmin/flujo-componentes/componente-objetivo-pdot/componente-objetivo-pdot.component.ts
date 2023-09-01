@@ -182,6 +182,7 @@ limpiarFormulario() {
 actualizar() {
   this.objePDOT.nombre = this.formObjetivoPdot.value.nombre;
   this.objePDOT.descripcion = this.formObjetivoPdot.value.descripcion;
+  this.objePDOT.componente = this.componente;
 
   this.objetivoPdotService.actualizar(this.objePDOT.id_objetivo_pdot, this.objePDOT)
     .subscribe((response: any) => {
