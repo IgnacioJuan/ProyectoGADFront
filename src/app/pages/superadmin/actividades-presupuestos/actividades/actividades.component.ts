@@ -5,11 +5,18 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { ActividadesPoa } from 'src/app/models/ActividadesPoa';
 import { Poa } from 'src/app/models/Poa';
-import { Usuario2 } from 'src/app/models/Usuario2';
 import { ActividadespoaService } from 'src/app/services/actividadespoa.service';
 import { UsuarioService } from 'src/app/services/usuario.service';
 import Swal from 'sweetalert2';
-import { AprobacionActividad } from 'src/app/models/AprobacionActividad';
+import { PresupuestoExterno } from 'src/app/models/PresupuestoExterno';
+import { ReformaSuplemento } from 'src/app/models/ReformaSuplemento';
+import { ReformaTraspasoI } from 'src/app/models/ReformaTraspasoI';
+import { ReformaTraspasoD } from 'src/app/models/ReformaTraspasoD';
+import { PresupuestoExternoService } from 'src/app/services/presupuestoexterno.service';
+import { ReformaSuplementoService } from 'src/app/services/reformasuplemento.service';
+import { ReformaTraspasoIService } from 'src/app/services/reformatraspaso-i.service';
+import { ReformaTraspasoDService } from 'src/app/services/reformatraspaso-d.service';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-actividades',
@@ -17,8 +24,16 @@ import { AprobacionActividad } from 'src/app/models/AprobacionActividad';
   styleUrls: ['./actividades.component.css']
 })
 export class ListaActividadesComponent implements OnInit {
-  frmActResp: FormGroup;
-  guardadoExitoso: boolean = false;
+  frmPE: FormGroup;
+  frmRS: FormGroup;
+  frmRTI: FormGroup;
+  frmRTD: FormGroup;
+  guardadoExitoso1: boolean = false;
+  guardadoExitoso2: boolean = false;
+  guardadoExitoso3: boolean = false;
+  guardadoExitoso4: boolean = false;
+  
+
   //tabla
   itemsPerPageLabel = 'Actividades por página';
   nextPageLabel = 'Siguiente';
@@ -43,8 +58,10 @@ export class ListaActividadesComponent implements OnInit {
   actividades: any = [];
   miModal!: ElementRef;
   public actividad = new ActividadesPoa();
-  public aprobAct = new AprobacionActividad();
-  usuarios: Usuario2[] = [];
+  public presupuestoexterno = new PresupuestoExterno();
+  public reformasuplemento = new ReformaSuplemento();
+  public rtincremento = new ReformaTraspasoI();
+  public rtdecremento = new ReformaTraspasoD();
 
   poaId!: number;
 
@@ -61,11 +78,29 @@ export class ListaActividadesComponent implements OnInit {
 
   constructor(
     private actividadservice: ActividadespoaService, private paginatorIntl: MatPaginatorIntl,
-    private router: Router, private fb: FormBuilder, private userService: UsuarioService
+    private router: Router, private fb: FormBuilder, private userService: UsuarioService,
+    private pexternoservice: PresupuestoExternoService, private rsuplementoservice: ReformaSuplementoService,
+    private rtincrementoservice: ReformaTraspasoIService, private rtdecrementoservice: ReformaTraspasoDService
   ) {
-    this.frmActResp = fb.group({
-      usuario: ['', Validators.required]
+    this.frmPE = fb.group({
+      nombre_institucion: ['', [Validators.required, this.noCaracteresEspecialesValidator()]],
+      valor: ['', Validators.required],
+      observacion: ['', [this.noCaracteresEspecialesValidator1()]],
+      fecha: ['', Validators.required]
     });
+    this.frmRS = fb.group({
+      valor: ['', Validators.required],
+      fecha: ['', Validators.required]
+    });
+    this.frmRTI = fb.group({
+      valor: ['', Validators.required],
+      fecha: ['', Validators.required]
+    });
+    this.frmRTD = fb.group({
+      valor: ['', Validators.required],
+      fecha: ['', Validators.required]
+    });
+
     this.paginatorIntl.nextPageLabel = this.nextPageLabel;
     this.paginatorIntl.lastPageLabel = this.lastPageLabel;
     this.paginatorIntl.firstPageLabel = this.firstPageLabel;
@@ -79,35 +114,51 @@ export class ListaActividadesComponent implements OnInit {
   }
   ngOnInit(): void {
     const data = history.state.data;
-    this.cargarUsuarios();
     this.poa = data;
     console.log(this.poa);
     this.listar(this.poa.id_poa)
   }
 
-  verPoas() {
-    this.router.navigate(['/sup/actividades-presupuestos/tabla-poa']);
+  // VALIDACIONES
+  validarFechas(): void {
+    const fechaElegida = this.frmPE.get('fecha')?.value as string;
+    const fechaActual = new Date();
+    const fechaElegidaDate = new Date(fechaElegida);
+    
+    if (fechaElegidaDate < fechaActual) {
+      this.frmPE.get('fecha')?.setErrors({ fechaAnterior: true });
+    } else {
+      this.frmPE.get('fecha')?.setErrors(null);
+    }
   }
-
-  cargarUsuarios() {
-    this.userService.getUsuariosList().subscribe(
-      (data: Usuario2[]) => {
-        this.usuarios = data;
-      },
-      (error: any) => {
-        console.error('Error al cargar usuarios:', error);
+  noCaracteresEspecialesValidator1() {
+    return (control: any) => {
+      const pattern = /^[a-zA-Z0-9\s]*$/;
+      if (!control.value) {
+        return null;
+      } else if (!pattern.test(control.value)) {
+        return { caracteresEspeciales: true };
       }
-    );
+      return null;
+    };
+  }
+  noCaracteresEspecialesValidator() {
+    return (control: any) => {
+      const pattern = /^[a-zA-Z0-9\s]*$/;
+      if (!control.value) {
+        return { required: true }; // Retorna error si está vacío
+      } else if (!pattern.test(control.value)) {
+        return { caracteresEspeciales: true }; // Retorna error si contiene caracteres especiales
+      }
+      return null;
+    };
   }
 
-  idActividadSeleccionada!: number;
-
-  abrirModalAsignarResponsable(idActividad: number) {
-    this.idActividadSeleccionada = idActividad;
+  //PETICIONES | RUTAS
+  verPoas() {
+    this.router.navigate(['/sup/actividades-presupuestos/tabla-poas']);
   }
 
-   
-  
   listar(poaId: number): void {
     this.dataSource.data = [];
     this.actividadservice.getActividadesPoa(poaId).subscribe(
@@ -121,8 +172,135 @@ export class ListaActividadesComponent implements OnInit {
     );
   }
 
-  limpiar() {
-    this.frmActResp.reset();
+  selectedActividadId!: number;
+  abrirModal(actividadId: number) {
+    this.selectedActividadId = actividadId;
+  }
+  
+  guardarPE() {
+    this.presupuestoexterno = this.frmPE.value;
+    this.presupuestoexterno.actividad = new ActividadesPoa();
+    this.presupuestoexterno.actividad.id_actividad = this.selectedActividadId;
+  
+    this.pexternoservice.crear(this.presupuestoexterno)
+      .subscribe(
+        (response) => {
+          console.log('Presupuesto Externo creado con éxito: ', response);
+          this.guardadoExitoso1 = true;
+          this.listar(this.poa.id_poa);
+          Swal.fire(
+            'Exitoso',
+            'Se ha completado el registro con exito',
+            'success'
+          );
+        },
+        (error) => {
+          console.error('Error al crear la actividad: ', error);
+          Swal.fire(
+            'Error',
+            'Ha ocurrido un error',
+            'warning'
+          );
+        }
+      );
+  }
+  //Guardar Reforma Suplemento a Actividad
+  guardarRS() {
+    this.reformasuplemento = this.frmRS.value;
+    this.reformasuplemento.actividad = new ActividadesPoa();
+    this.reformasuplemento.actividad.id_actividad = this.selectedActividadId;
+    this.rsuplementoservice.crear(this.reformasuplemento)
+      .subscribe(
+        (response) => {
+          console.log('Reforma Suplemento agregada con éxito: ', response);
+          this.guardadoExitoso2 = true;
+          this.listar(this.poa.id_poa);
+          Swal.fire(
+            'Exitoso',
+            'Se ha completado el registro con exito',
+            'success'
+          )
+        },
+        (error) => {
+          console.error('Error al agregar reforma suplemento: ', error);
+          Swal.fire(
+            'Error',
+            'Ha ocurrido un error',
+            'warning'
+          )
+        }
+      );
+  }
+  //Guardar Reforma Traspaso Incremento a Actividad
+  guardarRTI() {
+    this.rtincremento = this.frmRTI.value;
+    this.rtincremento.actividad = new ActividadesPoa();
+    this.rtincremento.actividad.id_actividad = this.selectedActividadId;
+    this.rtincrementoservice.crear(this.rtincremento)
+      .subscribe(
+        (response) => {
+          console.log('Reforma Traspaso Incremento agregada con éxito: ', response);
+          this.guardadoExitoso3 = true;
+          this.listar(this.poa.id_poa);
+          Swal.fire(
+            'Exitoso',
+            'Se ha completado el registro con exito',
+            'success'
+          )
+        },
+        (error) => {
+          console.error('Error al agregar Reforma Traspaso Incremento; ', error);
+          Swal.fire(
+            'Error',
+            'Ha ocurrido un error',
+            'warning'
+          )
+        }
+      );
+  }
+
+  //Guardar Reforma Traspaso Decremento a Actividad
+  guardarRTD() {
+    this.rtdecremento = this.frmRTD.value;
+    this.rtdecremento.actividad = new ActividadesPoa();
+    this.rtdecremento.actividad.id_actividad = this.selectedActividadId;
+    this.rtdecrementoservice.crear(this.rtdecremento)
+      .subscribe(
+        (response) => {
+          console.log('Reforma Traspaso Decremento agregada con éxito: ', response);
+          this.guardadoExitoso4 = true;
+          this.listar(this.poa.id_poa);
+          Swal.fire(
+            'Exitoso',
+            'Se ha completado el registro con exito',
+            'success'
+          )
+        },
+        (error) => {
+          console.error('Error al agregar Reforma Traspaso Decremento: ', error);
+          Swal.fire(
+            'Error',
+            'Ha ocurrido un error',
+            'warning'
+          )
+        }
+      );
+  }
+  limpiarFormulario1() {
+    this.frmPE.reset();
+    this.actividad = new ActividadesPoa;
+  }
+
+  limpiarFormulario2() {
+    this.frmRS.reset();
+    this.actividad = new ActividadesPoa;
+  }
+  limpiarFormulario3() {
+    this.frmRTI.reset();
+    this.actividad = new ActividadesPoa;
+  }
+  limpiarFormulario4() {
+    this.frmRTD.reset();
     this.actividad = new ActividadesPoa;
   }
   aplicarFiltro() {

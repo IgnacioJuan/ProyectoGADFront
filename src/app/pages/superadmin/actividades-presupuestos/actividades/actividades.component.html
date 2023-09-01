@@ -71,14 +71,24 @@
             <ng-container matColumnDef="actions">
               <th mat-header-cell *matHeaderCellDef>ACCIONES</th>
               <td mat-cell *matCellDef="let element">
-                <button class="btn btn-md btn-custom-green" role="button" data-bs-toggle="modal"
-                  data-bs-target="#asignarResponsableModal" title="Asignar un responsable"
-                  (click)="abrirModalAsignarResponsable(element.id_actividad)">
-                  <i class="fas fa-user" style="color: hsl(156, 81%, 21%); font-size: 24px;"></i>
+                <button class="btn btn-sm btn-custom-red" title="Asignar Presupuesto Externo" data-bs-toggle="modal"
+                  data-bs-target="#materiaModal1" (click)="abrirModal(element.id_actividad)">
+                  <i class="fas fa-file-invoice-dollar" style="color:  hsl(156, 81%, 21%); font-size: 24px;"></i>
+                </button>
+                <button class="btn btn-sm btn-custom-red" title="Asignar Reforma Suplemento" data-bs-toggle="modal"
+                  data-bs-target="#materiaModal2" (click)="abrirModal(element.id_actividad)">
+                  <i class="fas fa-plus" style="color:  yellow; font-size: 24px;"></i>
+                </button>
+                <button class="btn btn-sm btn-custom-red" title="Asignar Traspaso Incremento" data-bs-toggle="modal"
+                  data-bs-target="#materiaModal3" (click)="abrirModal(element.id_actividad)">
+                  <i class="fas fa-chart-line" style="color:  blue; font-size: 24px;"></i>
+                </button>
+                <button class="btn btn-sm btn-custom-red" title="Asignar Traspaso Decremento" data-bs-toggle="modal"
+                  data-bs-target="#materiaModal4" (click)="abrirModal(element.id_actividad)">
+                  <i class="fas fa-chart-line icon-inverted" style="color:  red; font-size: 24px;"></i>
                 </button>
               </td>
             </ng-container>
-
             <tr mat-header-row *matHeaderRowDef="columnasUsuario"></tr>
             <tr mat-row *matRowDef="let fila; columns: columnasUsuario"></tr>
           </table>
@@ -87,43 +97,230 @@
             nextPageLabel="Siguiente" previousPageLabel="Anterior">
           </mat-paginator>
         </div>
-      </div>
-      <div class="modal fade" id="asignarResponsableModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-        aria-hidden="true" (hidden.bs.modal)="limpiar()">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header" style="background-color: darkgreen; color: white;">
-              <h3 class="modal-title">
-                <i class="fa fa-info-circle"></i>ASIGNACION RESPONSABLE
-              </h3>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <!--Modal 1 para presupuesto externo-->
+        <div class="modal fade" id="materiaModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
+          (hidden.bs.modal)="limpiarFormulario1()">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header" style="background-color: darkgreen; color: white;">
+                <h3 class="modal-title">
+                  <i class="fa fa-info-circle"></i> PRESUPUESTO EXTERNO
+                </h3>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <form [formGroup]="frmPE" (ngSubmit)="guardarPE()" id="formulario">
+                  <div>
+                    <label for="nombre_institucion">Contribuyente:</label>
+                    <input class="form-control" formControlName="nombre_institucion" type="text" id="nombre_institucion"
+                      name="nombre_institucion" style="margin-bottom: 10px" />
+                    <div class="alert alert-danger" *ngIf="
+                      frmPE.controls['nombre_institucion'].hasError('required') &&
+                      frmPE.controls['nombre_institucion'].touched">
+                      Debe ingresar un nombre de la institución contribuyente.
+                    </div>
+                    <div class="alert alert-danger" *ngIf="
+                      frmPE.controls['nombre_institucion'].hasError('caracteresEspeciales') &&
+                      frmPE.controls['nombre_institucion'].touched">
+                      El nombre no debe contener caracteres especiales.
+                    </div>
+
+                    <label for="valor">Valor Presupuesto:</label>
+                    <input class="form-control" formControlName="valor" type="number" id="valor" name="valor"
+                      style="margin-bottom: 10px" min="0" />
+                    <div class="alert alert-danger" *ngIf="
+                      frmPE.controls['valor'].invalid &&
+                      frmPE.controls['valor'].touched
+                      ">
+                      <div *ngIf="
+                        frmPE.controls['valor'].hasError('required')
+                        ">
+                        Debe ingresar un valor
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="fecha">Fecha:</label>
+                      <div class="input-group">
+                        <input type="date" id="fecha" name="fecha" formControlName="fecha" class="form-control"
+                          (change)="validarFechas()" />
+                      </div>
+                      <div class="alert alert-danger" *ngIf="frmPE.get('fecha')?.hasError('fechaAnterior')">
+                        No puedes elegir una fecha anterior al año actual.
+                      </div>
+                    </div>
+
+                    <label for="observacion">Observacion:</label>
+                    <textarea class="form-control" formControlName="observacion" id="observacion" name="observacion"
+                      style="margin-bottom: 10px" rows="3"></textarea>
+                    <div class="alert alert-danger" *ngIf="
+                      frmPE.controls['observacion'].hasError('caracteresEspeciales') &&
+                      frmPE.controls['observacion'].touched
+                    ">
+                      No debe contener caracteres especiales.
+                    </div>
+
+                  </div>
+                </form>
+                <div class="modal-footer">
+                  <button type="button" form="formulario" class="btn btn-warning" data-bs-dismiss="modal">
+                    Cancelar
+                  </button>
+                  <button type="submit" class="btn btn-primary" form="formulario"
+                    *ngIf="!presupuestoexterno.id_presupuesto_externo" data-dismiss="modal" data-bs-dismiss="modal"
+                    style="background-color: green" [disabled]="!frmPE.valid">
+                    Agregar
+                  </button>
+                </div>
+              </div>
             </div>
-            <div class="modal-body">
-              <form [formGroup]="frmActResp" id="formularioResponsable">
-                <div>
-                  <label for="usuario">Lista de Usuarios:</label>
-                  <select class="form-control" formControlName="usuario" id="usuario" name="usuario"
-                    style="margin-bottom: 10px">
-                    <option *ngFor="let usuario of usuarios" [ngValue]="usuario.id">
-                      {{ usuario.persona.primer_apellido }} {{ usuario.persona.primer_nombre }}
-                    </option>
-                  </select>
-                  <div class="alert alert-danger"
-                    *ngIf="frmActResp.controls['usuario'].invalid && frmActResp.controls['usuario'].touched">
-                    <div *ngIf="frmActResp.controls['usuario'].hasError('required')">Debe seleccionar un responsable
+          </div>
+        </div>
+        <!--Modal 2 para reforma suplemento-->
+        <div class="modal fade" id="materiaModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
+          (hidden.bs.modal)="limpiarFormulario2()">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header" style="background-color: darkgreen; color: white;">
+                <h3 class="modal-title">
+                  <i class="fa fa-info-circle"></i> REFORMA SUPLEMENTO
+                </h3>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <form [formGroup]="frmRS" (ngSubmit)="guardarRS()" id="formulario2">
+                  <div>
+                    <label for="valor">Valor Reforma Suplemento: </label>
+                    <input class="form-control" formControlName="valor" type="number" id="valor" name="valor"
+                      style="margin-bottom: 10px" min="0" />
+                    <div class="alert alert-danger" *ngIf="
+                    frmRS.controls['valor'].invalid &&
+                    frmRS.controls['valor'].touched
+                      ">
+                      <div *ngIf="
+                      frmRS.controls['valor'].hasError('required')
+                        ">
+                        Debe ingresar un valor
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="fecha">Fecha:</label>
+                      <div class="input-group">
+                        <input type="date" id="fecha" name="fecha" formControlName="fecha" class="form-control"
+                          (change)="validarFechas()" />
+                      </div>
                     </div>
                   </div>
+                </form>
+                <div class="modal-footer">
+                  <button type="button" form="formulario" class="btn btn-warning" data-bs-dismiss="modal">
+                    Cancelar
+                  </button>
+                  <button type="submit" class="btn btn-primary" form="formulario2"
+                    *ngIf="!reformasuplemento.id_ref_suplemento" data-dismiss="modal" data-bs-dismiss="modal"
+                    style="background-color: green" [disabled]="!frmRS.valid">
+                    Agregar
+                  </button>
                 </div>
-              </form>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-warning" data-bs-dismiss="modal">
-                  Cancelar
-                </button>
-                <button type="submit" class="btn btn-primary" form="formularioResponsable"
-                  *ngIf="!actividad.id_actividad" data-dismiss="modal" data-bs-dismiss="modal"
-                  style="background-color: green" [disabled]="!frmActResp.valid">
-                  Guardar
-                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--Modal 3 para reforma traspaso incremento-->
+        <div class="modal fade" id="materiaModal3" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
+          (hidden.bs.modal)="limpiarFormulario3()">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header" style="background-color: darkgreen; color: white;">
+                <h3 class="modal-title">
+                  <i class="fa fa-info-circle"></i> REFORMA TRASPASO INCREMENTO
+                </h3>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <form [formGroup]="frmRTI" (ngSubmit)="guardarRTI()" id="formulario3">
+                  <div>
+                    <label for="valor">Valor Traspaso Incremento:</label>
+                    <input class="form-control" formControlName="valor" type="number" id="valor" name="valor"
+                      style="margin-bottom: 10px" min="0" />
+                    <div class="alert alert-danger" *ngIf="
+                    frmRTI.controls['valor'].invalid &&
+                    frmRTI.controls['valor'].touched
+                      ">
+                      <div *ngIf="
+                      frmRTI.controls['valor'].hasError('required')
+                        ">
+                        Debe ingresar un valor
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="fecha">Fecha:</label>
+                      <div class="input-group">
+                        <input type="date" id="fecha" name="fecha" formControlName="fecha" class="form-control"
+                          (change)="validarFechas()" />
+                      </div>
+                    </div>
+                  </div>
+                </form>
+                <div class="modal-footer">
+                  <button type="button" form="formulario" class="btn btn-warning" data-bs-dismiss="modal">
+                    Cancelar
+                  </button>
+                  <button type="submit" class="btn btn-primary" form="formulario3" *ngIf="!rtincremento.id_reftras_i"
+                    data-dismiss="modal" data-bs-dismiss="modal" style="background-color: green"
+                    [disabled]="!frmRTI.valid">
+                    Agregar
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--Modal 4 para reforma traspaso decremento-->
+        <div class="modal fade" id="materiaModal4" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
+          (hidden.bs.modal)="limpiarFormulario4()">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header" style="background-color: darkgreen; color: white;">
+                <h3 class="modal-title">
+                  <i class="fa fa-info-circle"></i> REFORMA TRASPASO DECREMENTO
+                </h3>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <form [formGroup]="frmRTD" (ngSubmit)="guardarRTD()" id="formulario4">
+                  <div>
+                    <label for="valor">Valor Traspaso Decremento:</label>
+                    <input class="form-control" formControlName="valor" type="number" id="valor" name="valor"
+                      style="margin-bottom: 10px" min="0" />
+                    <div class="alert alert-danger" *ngIf="
+                    frmRTD.controls['valor'].invalid &&
+                    frmRTD.controls['valor'].touched
+                      ">
+                      <div *ngIf="
+                      frmRTD.controls['valor'].hasError('required')
+                        ">
+                        Debe ingresar un valor
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="fecha">Fecha:</label>
+                      <div class="input-group">
+                        <input type="date" id="fecha" name="fecha" formControlName="fecha" class="form-control"
+                          (change)="validarFechas()" />
+                      </div>
+                    </div>
+                  </div>
+                </form>
+                <div class="modal-footer">
+                  <button type="button" form="formulario" class="btn btn-warning" data-bs-dismiss="modal">
+                    Cancelar
+                  </button>
+                  <button type="submit" class="btn btn-primary" form="formulario4" *ngIf="!rtdecremento.id_reftras_d"
+                    data-dismiss="modal" data-bs-dismiss="modal" style="background-color: green"
+                    [disabled]="!frmRTD.valid">
+                    Agregar
+                  </button>
+                </div>
               </div>
             </div>
           </div>

@@ -4,6 +4,7 @@ import { Evidencia } from '../models/Evidencia';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import baserUrl from './helper';
 import { ActividadesPoa } from '../models/ActividadesPoa';
+import { ListaActividadesUsuario } from '../interface/ListaActividadesUsuario';
 
 @Injectable({
   providedIn: 'root'
@@ -35,5 +36,9 @@ export class ActividadespoaService {
 
   eliminarActividad(acti: any): Observable<any> {
     return this.http.put(`${baserUrl}/api/actividades/eliminarlogic/${acti.id_actividad}`, acti);
+  }
+
+  listarUsuariosActividades(): Observable<ListaActividadesUsuario[]> {
+    return this.http.get<ListaActividadesUsuario[]>(`${baserUrl}/api/actividades/listarUsuariosAsignadosAActividades`);
   }
 }
