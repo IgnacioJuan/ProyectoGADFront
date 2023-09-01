@@ -82,17 +82,15 @@ eliminar(archi:any): Observable<any> {
 
 editArchivo(
   archivoId: number,
-  file: File,
   descripcion: string,
   valor: number,
   idActividad: number
 ): Observable<any> {
   const formData: FormData = new FormData();
-  formData.append('file', file);
   formData.append('descripcion', descripcion);
   formData.append('valor', valor.toString());
   formData.append('id_evidencia', idActividad.toString());
-  const url = `${baserUrl}/upload/${archivoId}`;
+  const url = `${baserUrl}/archivo/editar/${archivoId}`;
   const headers = new HttpHeaders();
 
   return this.http
