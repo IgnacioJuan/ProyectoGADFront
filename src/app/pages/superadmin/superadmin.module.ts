@@ -19,7 +19,7 @@ import { DialogoUsuariosComponent } from './pages/dialogo-usuarios/dialogo-usuar
 import { CrearComponent } from './pages/crear-programa/crear-programa.component';
 import { AprobarPoaComponent } from './pages/aprobar-poa/aprobar-poa/aprobar-poa.component';
 import { DetallePoaComponent } from './pages/poacc/detalle-poa/detalle-poa/detalle-poa.component';
-import { ArchivosRechazadosComponent } from './archivos/archivos.component';
+
 
 
 @NgModule({
@@ -38,7 +38,6 @@ import { ArchivosRechazadosComponent } from './archivos/archivos.component';
     CrearComponent,
     AprobarPoaComponent,
     DetallePoaComponent,
-    ArchivosRechazadosComponent,
 
   ],
   imports: [

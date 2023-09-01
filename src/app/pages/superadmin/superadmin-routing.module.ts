@@ -16,7 +16,8 @@ import { DialogoUsuariosComponent } from './pages/dialogo-usuarios/dialogo-usuar
 import { CrearComponent } from './pages/crear-programa/crear-programa.component';
 import { AprobarPoaComponent } from './pages/aprobar-poa/aprobar-poa/aprobar-poa.component';
 import { DetallePoaComponent } from './pages/poacc/detalle-poa/detalle-poa/detalle-poa.component';
-import { ArchivosRechazadosComponent } from './archivos/archivos.component';
+
+
 
 const routes: Routes = [{
   path: 'dashboard',
@@ -32,12 +33,6 @@ const routes: Routes = [{
   canActivate: [SuperGuard]
 },
 
-{
-  path: 'evidenciarechazo',
-  component: ArchivosRechazadosComponent,
-  pathMatch: 'full',
-  canActivate: [SuperGuard]
-},
 {
   path: 'crearUsu',
   component: DialogoUsuariosComponent,
@@ -155,6 +150,10 @@ const routes: Routes = [{
   {
     path: 'ejes',
     loadChildren: () => import("./ejes/ejes.module").then(m => m.EjesModule)
+  },
+  {
+    path: 'archivos-rechazados',
+    loadChildren: () => import("./archivos-rechazados/evidencias-rechazadas.module").then(m => m.EvidenciasRechazadasModule)
   },
 ];
 

@@ -44,6 +44,7 @@ export class SidebarService {
         { titulo: 'Indicador', url: 'sup/flujo_Componentes/componentesSuper', icono: 'fas fa-list-ul ' },
         { titulo: 'Programas', url: 'sup/crearpro', icono: 'fas fa-list-ul ' },
         { titulo: 'Componentes', url: 'sup/ejes/ejestabla', icono: 'fas fa-list-ul ' },
+        { titulo: 'Evidencias Rechazadas', url: 'sup/archivos-rechazados/Actividades_Evi_Rechazados', icono: 'fas fa-list-ul ' },
 
       ]
     },
