@@ -6,4 +6,7 @@ export class ReformaTraspasoD {
     fecha!: Date;
     visible!: boolean;
     actividad: ActividadesPoa = new ActividadesPoa();
+
+    //no borrar es de uso para listar tablas presupuestos
+    nombreActividad!: string;
 }
