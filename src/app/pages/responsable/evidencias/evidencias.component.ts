@@ -66,6 +66,8 @@ export class EvidenciasResponComponent implements OnInit {
     }
   }
   @ViewChild('fileInput') fileInput!: ElementRef;
+
+  
   activ: Actividades = new Actividades();
   archi: Archivo = new Archivo()
   ngOnInit(): void {
