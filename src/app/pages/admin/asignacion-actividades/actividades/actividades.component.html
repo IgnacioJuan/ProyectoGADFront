@@ -10,18 +10,18 @@
     </blockquote>
     <div class="card">
       <div class="card-body">
-        <div role="search" id="buscar">
-          <div class="form-group">
+        <div class="form-group d-flex justify-between align-center" role="search" id="buscar">
+          <div class="input-container">
             <input type="text" class="form-control" name="filterPost3" placeholder="Buscar..." [(ngModel)]="filterPost"
               (input)="aplicarFiltro()" />
           </div>
-          <br />
-          <button type="button" class="btn btn-primary" data-bs-toggle="modal" style="background-color: green"
-            data-bs-target="#materiaModal">
-            NUEVA ACTIVIDAD
-          </button>
-          <br />
-          <br />
+          <div class="button-container">
+            <button mat-raised-button class="rounded-button" data-bs-toggle="modal" data-bs-target="#materiaModal"
+              style="background-color: rgba(212, 188, 55, 0.5); border: none; color: black; border-radius: 65px; margin-left: 14px;">
+              <mat-icon class="custom-color"> add </mat-icon>
+              Nuevo
+            </button>
+          </div>
         </div>
         <div class="mat-elevation-z8 table-responsive" style="margin-bottom: 5%">
           <table mat-table [dataSource]="dataSource">
@@ -73,12 +73,6 @@
                 {{ elemento.estado }}
               </td>
             </ng-container>
-            <ng-container matColumnDef="responsable">
-              <th mat-header-cell *matHeaderCellDef>USUARIO</th>
-              <td mat-cell *matCellDef="let elemento">
-                {{ elemento.responsable }}
-              </td>
-            </ng-container>
             <ng-container matColumnDef="actions">
               <th mat-header-cell *matHeaderCellDef>ACCIONES</th>
               <td mat-cell *matCellDef="let element">
@@ -96,7 +90,6 @@
                 </button>
               </td>
             </ng-container>
-
             <tr mat-header-row *matHeaderRowDef="columnasUsuario"></tr>
             <tr mat-row *matRowDef="let fila; columns: columnasUsuario"></tr>
           </table>
@@ -146,7 +139,7 @@
                     </div>
                     <label for="presupuesto_referencial">Presupuesto Referencial:</label>
                     <input class="form-control" formControlName="presupuesto_referencial" id="presupuesto_referencial"
-                      name="presupuesto_referencial" style="margin-bottom: 10px" />
+                      name="presupuesto_referencial" style="margin-bottom: 10px" type="number" min="0" />
                     <div class="alert alert-danger" *ngIf="
                       frmActividad.controls['presupuesto_referencial'].invalid &&
                       frmActividad.controls['presupuesto_referencial'].touched
@@ -161,7 +154,7 @@
                     </div>
                     <label for="recursos_propios">Valor Recursos Propios:</label>
                     <input class="form-control" formControlName="recursos_propios" id="recursos_propios"
-                      name="recursos_propios" style="margin-bottom: 10px" />
+                      name="recursos_propios" style="margin-bottom: 10px" type="number" min="0" />
                     <div class="alert alert-danger" *ngIf="
                       frmActividad.controls['recursos_propios'].invalid &&
                       frmActividad.controls['recursos_propios'].touched
@@ -174,7 +167,7 @@
                     </div>
                     <label for="codificado">Codificado:</label>
                     <input class="form-control" formControlName="codificado" id="codificado" name="codificado"
-                      style="margin-bottom: 10px" />
+                      style="margin-bottom: 10px" type="number" min="0" />
                     <div class="alert alert-danger" *ngIf="
                       frmActividad.controls['codificado'].invalid &&
                       frmActividad.controls['codificado'].touched
@@ -187,7 +180,7 @@
                     </div>
                     <label for="devengado">Devengado:</label>
                     <input class="form-control" formControlName="devengado" id="devengado" name="devengado"
-                      style="margin-bottom: 10px" />
+                      style="margin-bottom: 10px" type="number" min="0" />
                     <div class="alert alert-danger" *ngIf="
                       frmActividad.controls['devengado'].invalid &&
                       frmActividad.controls['devengado'].touched
@@ -219,46 +212,96 @@
             </div>
           </div>
         </div>
-      </div>
-      <div class="modal fade" id="asignarResponsableModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-        aria-hidden="true" (hidden.bs.modal)="limpiar()">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header" style="background-color: darkgreen; color: white;">
-              <h3 class="modal-title">
-                <i class="fa fa-info-circle"></i>ASIGNACION RESPONSABLE
-              </h3>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-              <form [formGroup]="frmActResp" (ngSubmit)="guardarResponsable()" id="formularioResponsable">
-                <div>
-                  <label for="usuario">Lista de Usuarios:</label>
-                  <select class="form-control" formControlName="usuario" id="usuario" name="usuario"
-                    style="margin-bottom: 10px">
-                    <option *ngFor="let usuario of usuarios" [ngValue]="usuario.id">
-                      {{ usuario.persona.primer_apellido }} {{ usuario.persona.primer_nombre }}
-                    </option>
-                  </select>
-                  <div class="alert alert-danger"
-                    *ngIf="frmActResp.controls['usuario'].invalid && frmActResp.controls['usuario'].touched">
-                    <div *ngIf="frmActResp.controls['usuario'].hasError('required')">Debe seleccionar un responsable
+        <div class="modal fade" id="asignarResponsableModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+          aria-hidden="true" (hidden.bs.modal)="limpiar()">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header" style="background-color: darkgreen; color: white;">
+                <h3 class="modal-title">
+                  <i class="fa fa-info-circle"></i>ASIGNACION RESPONSABLE
+                </h3>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <form [formGroup]="frmActResp" (ngSubmit)="guardarResponsable()" id="formularioResponsable">
+                  <div>
+                    <label for="usuario">Lista de Usuarios:</label>
+                    <select class="form-control" formControlName="usuario" id="usuario" name="usuario"
+                      style="margin-bottom: 10px">
+                      <option *ngFor="let usuario of usuarios" [ngValue]="usuario.id">
+                        {{ usuario.persona.primer_apellido }} {{ usuario.persona.primer_nombre }}
+                      </option>
+                    </select>
+                    <div class="alert alert-danger"
+                      *ngIf="frmActResp.controls['usuario'].invalid && frmActResp.controls['usuario'].touched">
+                      <div *ngIf="frmActResp.controls['usuario'].hasError('required')">Debe seleccionar un responsable
+                      </div>
                     </div>
                   </div>
+                </form>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-warning" data-bs-dismiss="modal">
+                    Cancelar
+                  </button>
+                  <button type="submit" class="btn btn-primary" form="formularioResponsable"
+                    *ngIf="!actividad.id_actividad" data-dismiss="modal" data-bs-dismiss="modal"
+                    style="background-color: green" [disabled]="!frmActResp.valid">
+                    Guardar
+                  </button>
                 </div>
-              </form>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-warning" data-bs-dismiss="modal">
-                  Cancelar
-                </button>
-                <button type="submit" class="btn btn-primary" form="formularioResponsable"
-                  *ngIf="!actividad.id_actividad" data-dismiss="modal" data-bs-dismiss="modal"
-                  style="background-color: green" [disabled]="!frmActResp.valid">
-                  Guardar
-                </button>
               </div>
             </div>
           </div>
+        </div>
+        <button mat-button (click)="mostrarTablaResponsables = !mostrarTablaResponsables" 
+          style="background-color: rgba(212, 188, 55, 0.5); border: none; color: black; border-radius: 65px;">
+          {{ mostrarTablaResponsables ? 'Ocultar Lista' : 'Listar Responsables' }}
+        </button>
+        <div *ngIf="mostrarTablaResponsables" class="mat-elevation-z8 table-responsive" >
+          <table mat-table [dataSource]="dataSource2">
+            <ng-container matColumnDef="id_usuario">
+              <th mat-header-cell *matHeaderCellDef>ID USUARIO</th>
+              <td mat-cell *matCellDef="let elemento">
+                {{ elemento.id_usuario }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="username">
+              <th mat-header-cell *matHeaderCellDef>NOMBRE USUARIO</th>
+              <td mat-cell *matCellDef="let elemento">
+                {{ elemento.username }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="nombre">
+              <th mat-header-cell *matHeaderCellDef>NOMBRE</th>
+              <td mat-cell *matCellDef="let elemento">
+                {{ elemento.nombre }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="apellido">
+              <th mat-header-cell *matHeaderCellDef>APELLIDO</th>
+              <td mat-cell *matCellDef="let elemento">
+                {{ elemento.apellido }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="cargo">
+              <th mat-header-cell *matHeaderCellDef>CARGO</th>
+              <td mat-cell *matCellDef="let elemento">
+                {{ elemento.cargo }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="nombreActividad">
+              <th mat-header-cell *matHeaderCellDef>ACTIVIDAD</th>
+              <td mat-cell *matCellDef="let elemento">
+                {{ elemento.nombreActividad }}
+              </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="columnasUsuario2"></tr>
+            <tr mat-row *matRowDef="let fila; columns: columnasUsuario2"></tr>
+          </table>
+          <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
+            aria-label="Select page of periodic elements" itemsPerPageLabel="Items por página:"
+            nextPageLabel="Siguiente" previousPageLabel="Anterior">
+          </mat-paginator>
         </div>
       </div>
     </div>
