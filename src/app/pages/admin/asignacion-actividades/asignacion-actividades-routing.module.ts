@@ -17,7 +17,7 @@ const routes: Routes = [
     component: ActividadesComponent,
     pathMatch: 'full',
     canActivate: [AdminGuard]
-  }
+  },
 ];
 
 @NgModule({

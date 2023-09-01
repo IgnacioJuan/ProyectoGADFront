@@ -4,7 +4,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { CriteriosService } from './services/criterios.service';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { authInterceptorProviders } from './services/auth/auth.interceptor';
@@ -29,7 +28,7 @@ import {FormsModule} from "@angular/forms";
     SharedModule
   ],
 
-  providers: [authInterceptorProviders, CriteriosService],
+  providers: [authInterceptorProviders],
   bootstrap: [AppComponent]
 })
 export class AppModule {

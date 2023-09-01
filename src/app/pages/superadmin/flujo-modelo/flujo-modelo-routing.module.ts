@@ -6,6 +6,7 @@ import { ModeloProyectoComponent } from './modelo-proyecto/modelo-proyecto.compo
 import { ProyectoPoaComponent } from './proyecto-poa/proyecto-poa.component';
 import { PoaActividadComponent } from './poa-actividad/poa-actividad.component';
 import { ActividadEvidenciaComponent } from './actividad-evidencia/actividad-evidencia.component';
+import { ListarpoaComponent } from '../flujo-criterio/listarpoa/listarpoa.component';
 
 const routes: Routes = [
   {
@@ -23,6 +24,12 @@ const routes: Routes = [
   {
     path: 'proyecto-poa',
     component: ProyectoPoaComponent,
+    pathMatch: 'full',
+    canActivate: [SuperGuard]
+  },
+  {
+  path: 'listar-poa',
+    component: ListarpoaComponent,
     pathMatch: 'full',
     canActivate: [SuperGuard]
   },

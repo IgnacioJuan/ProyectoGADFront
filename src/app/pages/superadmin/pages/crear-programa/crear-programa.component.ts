@@ -76,7 +76,7 @@ export class CrearComponent implements OnInit {
     this.programaservice.crear(this.progra)
       .subscribe(
         (response) => {
-          console.log('Criterio creado con éxito:', response);
+          console.log('Programa creado con éxito:', response);
           this.guardadoExitoso = true;
           this.listar();
           Swal.fire(
@@ -86,7 +86,7 @@ export class CrearComponent implements OnInit {
           )
         },
         (error) => {
-          console.error('Error al crear el criterio:', error);
+          console.error('Error al crear el programa:', error);
           Swal.fire(
             'Error',
             'Ha ocurrido un error',
@@ -124,16 +124,16 @@ export class CrearComponent implements OnInit {
         this.dataSource.data = this.programas;
       },
       (error: any) => {
-        console.error('Error al listar los criterios:', error);
+        console.error('Error al listar los programas:', error);
       }
     );
   }
 
-  editDatos(criterio: Programa) {
-    this.progra = criterio;
+  editDatos(pro: Programa) {
+    this.progra = pro;
     this.frmCriterio = new FormGroup({
-      nombre: new FormControl(criterio.nombre),
-      descripcion: new FormControl(criterio.descripcion)
+      nombre: new FormControl(pro.nombre),
+      descripcion: new FormControl(pro.descripcion)
 
     });
   }
@@ -154,10 +154,6 @@ export class CrearComponent implements OnInit {
       });
   }
 
-  verDetalles(criterio: any) {
-    this.router.navigate(['/sup/flujo-criterio/criterios-subcriterio'], { state: { data: criterio } });
-  }
-
   aplicarFiltro() {
     if (this.filterPost) {
       const lowerCaseFilter = this.filterPost.toLowerCase();
@@ -169,5 +165,5 @@ export class CrearComponent implements OnInit {
     }
   }  
 
-}
+} 
 

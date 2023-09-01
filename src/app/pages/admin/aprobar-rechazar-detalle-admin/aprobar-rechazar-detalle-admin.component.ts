@@ -14,7 +14,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { Notificacion } from 'src/app/models/Notificacion';
 import { NotificacionService } from 'src/app/services/notificacion.service';
 import { Observacion2 } from 'src/app/models/Observaciones2';
-import { CriteriosService } from 'src/app/services/criterios.service';
+//import { CriteriosService } from 'src/app/services/criterios.service';
 import { Actividades } from 'src/app/models/actividades';
 import { Usuario2 } from 'src/app/models/Usuario2';
 
@@ -101,7 +101,7 @@ export class AprobarRechazarDetalleAdminComponent implements OnInit {
     private archivo: ArchivoService,
     public login: LoginService,
     private notificationService: NotificacionService,
-    private serviceObser: CriteriosService
+    //private serviceObser: CriteriosService
   ) {}
 
   @ViewChild(MatPaginator, { static: false }) paginator?: MatPaginator;
