@@ -4,7 +4,6 @@ import { Evidencia } from '../models/Evidencia';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import baserUrl from './helper';
 import { ActividadesPoa } from '../models/ActividadesPoa';
-import { AprobacionActividad } from '../models/AprobacionActividad';
 
 @Injectable({
   providedIn: 'root'
@@ -28,6 +27,10 @@ export class ActividadespoaService {
 
   getActividadesPoa(poaId: number): Observable<ActividadesPoa[]> {
     return this.http.get<ActividadesPoa[]>(`${baserUrl}/api/actividades/listarActividadesPoa/${poaId}`);
+  }
+
+  getActividadPorId(id: number): Observable<ActividadesPoa> {
+    return this.http.get<ActividadesPoa>(`${baserUrl}/api/actividades/buscar/${id}`);
   }
 
   eliminarActividad(acti: any): Observable<any> {

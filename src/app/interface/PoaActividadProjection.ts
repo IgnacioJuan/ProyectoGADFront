@@ -6,9 +6,8 @@ export interface PoaActividadProjection {
     cobertura: string;
     barrio: string;
     comunidad: string;
-    nombre_funcionario: string;
-    cargo: string;
+    linea_base: number;
     tipo_periodo: string;
-    linea_base: string;
     cantidadActividades: number;
+    
 }

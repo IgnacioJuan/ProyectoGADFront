@@ -7,11 +7,11 @@ export class ActividadesPoa {
     descripcion!: string;
     presupuesto_referencial!: number;
     codificado!: number;
-    ejecutado!: number;
-    saldo!: number;
+    devengado!: number;
     recursos_propios!: number;
-    recursos_externos!: number;
+    estado!: string
     visible!: boolean;
-    usuario:Usuario2|null=null;
-    poa: Poa | null = null;
+    responsable!: string;
+    usuario: Usuario2 = new Usuario2();
+    poa!: Poa;
 }

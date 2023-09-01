@@ -16,6 +16,11 @@ import { DialogoUsuariosComponent } from './pages/dialogo-usuarios/dialogo-usuar
 import { CrearComponent } from './pages/crear-programa/crear-programa.component';
 import { AprobarPoaComponent } from './pages/aprobar-poa/aprobar-poa/aprobar-poa.component';
 import { DetallePoaComponent } from './pages/poacc/detalle-poa/detalle-poa/detalle-poa.component';
+import { CrearcompetenciaComponent } from './pages/crear-competencia/crear-competencia.component';
+import { EvidenciasRechazoComponent } from './evidencias/evidencias.component';
+import {
+  ResumenEvidenciasResponsableModule
+} from "./resumen-evidencias-responsable/resumen-evidencias-responsable.module";
 
 const routes: Routes = [{
   path: 'dashboard',
@@ -27,6 +32,13 @@ const routes: Routes = [{
 {
   path: 'usuarios',
   component: CrearUsuariosComponent,
+  pathMatch: 'full',
+  canActivate: [SuperGuard]
+},
+
+{
+  path: 'evidenciarechazo',
+  component: EvidenciasRechazoComponent,
   pathMatch: 'full',
   canActivate: [SuperGuard]
 },
@@ -147,6 +159,17 @@ const routes: Routes = [{
   {
     path: 'ejes',
     loadChildren: () => import("./ejes/ejes.module").then(m => m.EjesModule)
+  },
+  {
+    path: 'resumen-evidencias-responsable',
+    loadChildren: () => import("./resumen-evidencias-responsable/resumen-evidencias-responsable.module").then(m => m.ResumenEvidenciasResponsableModule)
+  },
+
+  {
+    path: 'crearcompe',
+    component: CrearcompetenciaComponent,
+    pathMatch: 'full',
+    canActivate: [SuperGuard]
   },
 ];
 

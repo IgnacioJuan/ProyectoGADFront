@@ -5,6 +5,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { PoaActividadProjection } from 'src/app/interface/PoaActividadProjection';
 import { ActividadesPoa } from 'src/app/models/ActividadesPoa';
+import { Poa } from 'src/app/models/Poa';
 import { PoaService } from 'src/app/services/poa.service';
 
 @Component({
@@ -32,7 +33,7 @@ export class PoaActividadComponent implements OnInit{
     return `${startIndex + 1} - ${endIndex} de ${length}`;
   };
 
-  //public poa = new Poa();
+  public poa = new Poa();
   poas: PoaActividadProjection[] = [];
   public activ = new ActividadesPoa();
 
@@ -40,7 +41,7 @@ export class PoaActividadComponent implements OnInit{
   filteredPoas: any[] = [];
   resultadosEncontrados: boolean = true;
   dataSource = new MatTableDataSource<PoaActividadProjection>();
-  columnasPoa: string[] = ['id_poa','fecha_inicio','fecha_fin','localizacion','cobertura','barrio','comunidad','nombre_funcionario','cargo','linea_base','tipo_periodo','cantidadActividades'];
+  columnasPoa: string[] = ['id_poa','fecha_inicio','fecha_fin','localizacion','cobertura','barrio','comunidad','linea_base','tipo_periodo','cantidadActividades'];
 
   @ViewChild('datosModalRef') datosModalRef: any;
   @ViewChild(MatPaginator, { static: false }) paginator?: MatPaginator;

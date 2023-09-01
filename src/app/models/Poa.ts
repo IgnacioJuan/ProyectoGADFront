@@ -1,19 +1,19 @@
+import { Usuario2 } from "./Usuario2";
+
 export class Poa {
-    id_poa: number = 0;
-    meta_alcanzar!: number; 
-    meta_fisica!: number; 
-    avance_real!: number; 
-    fecha_inicio!: string; 
-    fecha_fin!: string; 
-    localizacion!: string; 
-    cobertura!: string; 
+    id_poa!: number;
+    estado!: string;
+    tipo_periodo!: string;
     barrio!: string; 
     comunidad!: string; 
-    nombre_funcionario!: string; 
-    cargo!: string; 
-    tipo_periodo!: string;
-    estado!: string; 
-    linea_base!: string; 
+    localizacion!: string; 
+    fecha_inicio!: Date; 
+    fecha_fin!: Date; 
+    cobertura!: string;
+    linea_base!: number; 
+    meta_alcanzar!: number; 
+    meta_planificada!: number;
     visible!: boolean;
+    usuario!:Usuario2;
 }
 

@@ -270,7 +270,7 @@ notificaraprobadmin() {
 //
   onSelectionChange(event: MatSelectionListChange) {
     this.usuarioSeleccionado = event.options[0].value;
-    localStorage.setItem('idUsuario', this.usuarioSeleccionado.id.toString());
+    //localStorage.setItem('idUsuario', this.usuarioSeleccionado.id.toString());
     localStorage.setItem(
       'nombres',
       this.usuarioSeleccionado.persona.primer_nombre +

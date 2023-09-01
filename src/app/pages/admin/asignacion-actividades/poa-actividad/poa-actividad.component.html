@@ -1,127 +1,115 @@
 <body>
-    <div class="container bg-light border border-start-0 rounded-4">
-      <blockquote style="margin-top: 5%">
-        <h1 class="titulo" style="text-transform: uppercase"><strong> LISTADO POAS</strong></h1>
-      </blockquote>
-      <div></div>
-  
-      <div class="card">
-        <div class="card-body">
-          <div class="form-group">
-            <input
-              type="text"
-              class="form-control"
-              name="filterPost3"
-              placeholder="Buscar..."
-              [(ngModel)]="filterPost"
-              (input)="aplicarFiltro()"
-            />
-          </div>
-          <br />
-          <br />
-          <div
-            class="mat-elevation-z8 table-responsive"
-            style="margin-bottom: 5%"
-          >
-            <table mat-table [dataSource]="dataSource">
-              <ng-container matColumnDef="id_poa">
-                <th mat-header-cell *matHeaderCellDef>ID</th>
-                <td mat-cell *matCellDef="let elemento">
-                  {{ elemento.id_poa }}
-                </td>
-              </ng-container>
-              <ng-container matColumnDef="fecha_inicio">
-                <th mat-header-cell *matHeaderCellDef>FECHA INICIO</th>
-                <td mat-cell *matCellDef="let elemento">
-                  {{ elemento.fecha_inicio }}
-                </td>
-              </ng-container>
-              <ng-container matColumnDef="fecha_fin">
-                <th mat-header-cell *matHeaderCellDef>FECHA FIN</th>
-                <td mat-cell *matCellDef="let elemento">
-                  {{ elemento.fecha_fin }}
-                </td>
-              </ng-container>
-              <ng-container matColumnDef="localizacion">
-                <th mat-header-cell *matHeaderCellDef>LOCALIZACION</th>
-                <td mat-cell *matCellDef="let elemento">
-                  {{ elemento.localizacion }}
-                </td>
-              </ng-container>
-              <ng-container matColumnDef="cobertura">
-                <th mat-header-cell *matHeaderCellDef>COBERTURA</th>
-                <td mat-cell *matCellDef="let elemento">
-                  {{ elemento.cobertura }}
-                </td>
-              </ng-container>
-              <ng-container matColumnDef="barrio">
-                <th mat-header-cell *matHeaderCellDef>BARRIO</th>
-                <td mat-cell *matCellDef="let elemento">
-                  {{ elemento.barrio }}
-                </td>
-              </ng-container>
-              <ng-container matColumnDef="comunidad">
-                <th mat-header-cell *matHeaderCellDef>COMUNIDAD</th>
-                <td mat-cell *matCellDef="let elemento">
-                  {{ elemento.comunidad }}
-                </td>
-              </ng-container>
-              <ng-container matColumnDef="nombre_funcionario">
-                <th mat-header-cell *matHeaderCellDef>FUNCIONARIO</th>
-                <td mat-cell *matCellDef="let elemento">
-                  {{ elemento.nombre_funcionario }}
-                </td>
-              </ng-container>
-              <ng-container matColumnDef="cargo">
-                <th mat-header-cell *matHeaderCellDef>CARGO</th>
-                <td mat-cell *matCellDef="let elemento">
-                  {{ elemento.cargo }}
-                </td>
-              </ng-container>
-                <ng-container matColumnDef="linea_base">
-                  <th mat-header-cell *matHeaderCellDef>LINEA BASE</th>
-                  <td mat-cell *matCellDef="let elemento">
-                    {{ elemento.linea_base }}
-                  </td>
-              </ng-container>
-            <ng-container matColumnDef="tipo_periodo">
-              <th mat-header-cell *matHeaderCellDef>PERIODO</th>
+  <div class="container bg-light border border-start-0 rounded-4">
+    <blockquote style="margin-top: 5%">
+      <h1 class="titulo" style="text-transform: uppercase"><strong> LISTADO POAS</strong></h1>
+    </blockquote>
+    <div></div>
+
+    <div class="card">
+      <div class="card-body">
+        <div class="form-group">
+          <input
+            type="text"
+            class="form-control"
+            name="filterPost3"
+            placeholder="Buscar..."
+            [(ngModel)]="filterPost"
+            (input)="aplicarFiltro()"
+          />
+        </div>
+        <br />
+        <br />
+        <div
+          class="mat-elevation-z8 table-responsive"
+          style="margin-bottom: 5%"
+        >
+          <table mat-table [dataSource]="dataSource">
+            <ng-container matColumnDef="id_poa">
+              <th mat-header-cell *matHeaderCellDef>ID</th>
               <td mat-cell *matCellDef="let elemento">
-                {{ elemento.tipo_periodo }}
+                {{ elemento.id_poa }}
               </td>
-          </ng-container>
-              <ng-container matColumnDef="cantidadActividades">
-                <th mat-header-cell *matHeaderCellDef>ACTIVIDADES</th>
+            </ng-container>
+            <ng-container matColumnDef="fecha_inicio">
+              <th mat-header-cell *matHeaderCellDef>FECHA INICIO</th>
+              <td mat-cell *matCellDef="let elemento">
+                {{ elemento.fecha_inicio }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="fecha_fin">
+              <th mat-header-cell *matHeaderCellDef>FECHA FIN</th>
+              <td mat-cell *matCellDef="let elemento">
+                {{ elemento.fecha_fin }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="localizacion">
+              <th mat-header-cell *matHeaderCellDef>LOCALIZACION</th>
+              <td mat-cell *matCellDef="let elemento">
+                {{ elemento.localizacion }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="cobertura">
+              <th mat-header-cell *matHeaderCellDef>COBERTURA</th>
+              <td mat-cell *matCellDef="let elemento">
+                {{ elemento.cobertura }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="barrio">
+              <th mat-header-cell *matHeaderCellDef>BARRIO</th>
+              <td mat-cell *matCellDef="let elemento">
+                {{ elemento.barrio }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="comunidad">
+              <th mat-header-cell *matHeaderCellDef>COMUNIDAD</th>
+              <td mat-cell *matCellDef="let elemento">
+                {{ elemento.comunidad }}
+              </td>
+            </ng-container>
+              <ng-container matColumnDef="linea_base">
+                <th mat-header-cell *matHeaderCellDef>LINEA BASE</th>
                 <td mat-cell *matCellDef="let elemento">
-                  <button
-                    class="btn btn-primary"
-                    role="button"
-                    (click)="verActividades(elemento)"
-                  >
-                    <div class="d-flex">
-                      <span class="badge">{{
-                        elemento.cantidadActividades
-                      }}</span>
-                      <i class="fa fa-folder-open"></i>
-                    </div>
-                  </button>
+                  {{ elemento.linea_base }}
                 </td>
-              </ng-container>
-              <tr mat-header-row *matHeaderRowDef="columnasPoa"></tr>
-              <tr mat-row *matRowDef="let fila; columns: columnasPoa"></tr>
-            </table>
-            <mat-paginator
-              [pageSizeOptions]="[5, 10, 20]"
-              showFirstLastButtons
-              aria-label="Select page of periodic elements"
-              itemsPerPageLabel="Items por página:"
-              nextPageLabel="Siguiente"
-              previousPageLabel="Anterior"
-            >
-            </mat-paginator>
-          </div>
+            </ng-container>
+          <ng-container matColumnDef="tipo_periodo">
+            <th mat-header-cell *matHeaderCellDef>PERIODO</th>
+            <td mat-cell *matCellDef="let elemento">
+              {{ elemento.tipo_periodo }}
+            </td>
+        </ng-container>
+            <ng-container matColumnDef="cantidadActividades">
+              <th mat-header-cell *matHeaderCellDef>ACTIVIDADES</th>
+              <td mat-cell *matCellDef="let elemento">
+                <button
+                class="btn btn-md btn-custom-green"
+                  role="button"
+                  (click)="verActividades(elemento)"
+                >
+                  <div class="d-flex">
+                    <span class="badge">{{
+                      elemento.cantidadActividades
+                    }}</span>
+                    <i class="fa fa-folder-open" style="color: green; font-size: 28px;"></i>
+                  </div>
+                </button>
+              </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="columnasPoa"></tr>
+            <tr mat-row *matRowDef="let fila; columns: columnasPoa"></tr>
+          </table>
+          <mat-paginator
+            [pageSizeOptions]="[5, 10, 20]"
+            showFirstLastButtons
+            aria-label="Select page of periodic elements"
+            itemsPerPageLabel="Items por página:"
+            nextPageLabel="Siguiente"
+            previousPageLabel="Anterior"
+          >
+          </mat-paginator>
         </div>
       </div>
     </div>
-  </body>
-  
+  </div>
+</body>
+
