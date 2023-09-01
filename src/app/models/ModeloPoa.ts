@@ -8,6 +8,6 @@ export class ModeloPoa {
     fecha_final!: string;
     visible!: boolean;
     id_super_admin!: number;
-    usuario:Usuario2 = new Usuario2;                  
+    usuario:Usuario2 | null = new Usuario2;                  
 }
 

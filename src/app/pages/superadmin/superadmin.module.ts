@@ -16,6 +16,14 @@ import { EvidenciaAtrasadaComponent } from './pages/evidencia-atrasada/evidencia
 import { SharedModule } from 'src/app/shared/shared.module';
 import { ObjetivoodsListaComponent } from './pages/objetivoods-lista/objetivoods-lista.component';
 import { ListarpoaComponent } from './flujo-criterio/listarpoa/listarpoa.component';
+import { DialogoUsuariosComponent } from './pages/dialogo-usuarios/dialogo-usuarios.component';
+import { CrearComponent } from './pages/crear-programa/crear-programa.component';
+import { AprobarPoaComponent } from './pages/aprobar-poa/aprobar-poa/aprobar-poa.component';
+import { DetallePoaComponent } from './pages/poacc/detalle-poa/detalle-poa/detalle-poa.component';
+import { CrearcompetenciaComponent } from './pages/crear-competencia/crear-competencia.component';
+import { EvidenciasRechazoComponent } from './evidencias/evidencias.component';
+
+
 @NgModule({
   declarations: [
     DashboardComponent2,
@@ -28,14 +36,20 @@ import { ListarpoaComponent } from './flujo-criterio/listarpoa/listarpoa.compone
     CriterioReporteComponent,
     EvidenciaAtrasadaComponent,
     ObjetivoodsListaComponent,
-    ListarpoaComponent  
+    ListarpoaComponent,  
+    DialogoUsuariosComponent,
+    CrearComponent,
+    AprobarPoaComponent,
+    DetallePoaComponent,
+    CrearcompetenciaComponent,
+    EvidenciasRechazoComponent,
 
   ],
   imports: [
     CommonModule,
     SuperadminRoutingModule,
-
     SharedModule,
+
   ]
 })
 export class SuperadminModule { }

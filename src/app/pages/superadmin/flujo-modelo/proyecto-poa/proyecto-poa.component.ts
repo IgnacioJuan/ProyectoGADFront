@@ -40,8 +40,8 @@ export class ProyectoPoaComponent {
 
 
   filterPost = '';
-  dataSource = new MatTableDataSource<Poa>();
-  columnasUsuario: string[] = ['id_poa', 'meta_alcanzar', 'meta_fisica', 'fecha_inicio', 'fecha_fin', 'localizacion', 'actividades'
+  dataSource = new MatTableDataSource<Poa>();//, 'actividades'
+  columnasUsuario: string[] = ['id_poa', 'meta_alcanzar', 'meta_fisica', 'fecha_inicio', 'fecha_fin', 'localizacion'
   // 'actions'
 
 ];

@@ -11,7 +11,7 @@ export class SidebarService {
       icono: 'nav-icon fas fa-users',
       titulo: "Asignación",
       submenu: [
-        { titulo: 'Asignar Actividad', url: 'adm/asignacion-actividades/poa-actividad', icono: 'fas fa-check-square' },
+        { titulo: 'POA', url: 'adm/asignacion-actividades/poa-actividad', icono: 'fas fa-check-square' },
         { titulo: 'Asignar Evidencia', url: 'adm/asignaEvidencia', icono: 'fas fa-check-square' }
       ]
     },
@@ -41,7 +41,12 @@ export class SidebarService {
       titulo: "Configurar Modelo",
       submenu: [
         { titulo: 'Modelo', url: 'sup/flujo-modelo/modelo', icono: 'fas fa-list-ul ' },
-        { titulo: 'Indicador', url: 'sup/flujo_Componentes/componentesSuper', icono: 'fas fa-list-ul ' }
+        { titulo: 'Indicador', url: 'sup/flujo_Componentes/componentesSuper', icono: 'fas fa-list-ul ' },
+        { titulo: 'Programas', url: 'sup/crearpro', icono: 'fas fa-list-ul ' },
+        { titulo: 'Componentes', url: 'sup/ejes/ejestabla', icono: 'fas fa-list-ul ' },
+        { titulo: 'Competencia', url: 'sup/crearcompe', icono: 'fas fa-list-ul ' },
+        { titulo: 'ODS', url: 'sup/objetivoods-lista', icono: 'fas fa-list-ul ' },
+        { titulo: 'Presupuestos', url: 'sup/actividades-presupuestos/tabla-poas', icono: 'fas fa-list-ul ' }
       ]
     },
     {

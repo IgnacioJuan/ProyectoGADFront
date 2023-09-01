@@ -6,9 +6,9 @@ import { SubcriteriosIndicadorComponent } from './subcriterios-indicador/subcrit
 import { IndicadoresEvidenciaComponent } from './indicadores-evidencia/indicadores-evidencia.component';
 import { CriteriosSubcriterioComponent } from './criterios-subcriterio/criterios-subcriterio.component';
 import { CriteriosComponent } from './criterios/criterios.component';
-import { CrearComponent } from './crear-programa/crear-programa.component';
 import { CrearcompetenciaComponent } from './crear-competencia/crear-competencia.component';
 import { ListarpoaComponent } from './listarpoa/listarpoa.component';
+import { CrearComponent } from '../pages/crear-programa/crear-programa.component';
 
 const routes: Routes = [
   {
@@ -47,6 +47,8 @@ const routes: Routes = [
     pathMatch: 'full',
     canActivate: [SuperGuard]
   },
+ 
+ 
   {
     path: 'subcriterios-indicador',
     component: SubcriteriosIndicadorComponent,

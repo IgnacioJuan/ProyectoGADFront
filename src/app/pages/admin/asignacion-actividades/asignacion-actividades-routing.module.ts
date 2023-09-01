@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { SuperGuard } from 'src/app/services/Guards/super.guard';
 import { PoaActividadComponent } from './poa-actividad/poa-actividad.component';
 import { AdminGuard } from 'src/app/services/Guards/admin.guard';
-import { ActividadesResponsableComponent } from '../../responsable/actividades-responsable/actividades-responsable.component';
+import { ActividadesComponent } from './actividades/actividades.component';
 
 const routes: Routes = [
   {
@@ -13,8 +13,8 @@ const routes: Routes = [
     canActivate: [AdminGuard]
   },
   {
-    path: 'actividad-responsable',
-    component: ActividadesResponsableComponent,
+    path: 'actividades',
+    component: ActividadesComponent,
     pathMatch: 'full',
     canActivate: [AdminGuard]
   }

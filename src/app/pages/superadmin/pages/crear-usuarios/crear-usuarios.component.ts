@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
- import { UsuarioRol } from 'src/app/models/UsuarioRol';
- import { PersonaService } from 'src/app/services/persona.service';
+import { UsuarioRol } from 'src/app/models/UsuarioRol';
+import { PersonaService } from 'src/app/services/persona.service';
 import { UsuarioService } from 'src/app/services/usuario.service';
 import Swal from 'sweetalert2';
 import { UserService } from 'src/app/services/user.service';
@@ -9,10 +9,13 @@ import { FenixService } from 'src/app/services/fenix.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
- import { UsuariorolService } from 'src/app/services/usuariorol.service';
+import { UsuariorolService } from 'src/app/services/usuariorol.service';
 import { catchError, tap, throwError } from 'rxjs';
 import { Usuario2 } from 'src/app/models/Usuario2';
 import { Persona2 } from 'src/app/models/Persona2';
+import { Router } from '@angular/router';
+import { DialogoUsuariosComponent } from '../dialogo-usuarios/dialogo-usuarios.component';
+import { MatDialog } from '@angular/material/dialog';
 
 let ELEMENT_DATA: Fenix[] = [];
 
@@ -39,14 +42,14 @@ export class CrearUsuariosComponent implements OnInit {
   itemsPerPageLabel = 'Usuarios por página';
   nextPageLabel = 'Siguiente';
   lastPageLabel = 'Última';
-  firstPageLabel='Primera';
-  previousPageLabel='Anterior';
+  firstPageLabel = 'Primera';
+  previousPageLabel = 'Anterior';
 
-  rango:any= (page: number, pageSize: number, length: number) => {
+  rango: any = (page: number, pageSize: number, length: number) => {
     if (length == 0 || pageSize == 0) {
       return `0 de ${length}`;
     }
-  
+
     length = Math.max(length, 0);
     const startIndex = page * pageSize;
     const endIndex =
@@ -74,6 +77,8 @@ export class CrearUsuariosComponent implements OnInit {
   @ViewChild(MatPaginator, { static: false }) paginator?: MatPaginator;
   @ViewChild('modal') modal: any;
   constructor(
+    public dialog: MatDialog,
+    private router: Router,
     private personaService: PersonaService,
     private usuariosService: UsuarioService,
     private userService: UserService,
@@ -89,13 +94,11 @@ export class CrearUsuariosComponent implements OnInit {
     });
     this.paginatorIntl.nextPageLabel = this.nextPageLabel;
     this.paginatorIntl.lastPageLabel = this.lastPageLabel;
-    this.paginatorIntl.firstPageLabel=this.firstPageLabel;
-    this.paginatorIntl.previousPageLabel=this.previousPageLabel;
+    this.paginatorIntl.firstPageLabel = this.firstPageLabel;
+    this.paginatorIntl.previousPageLabel = this.previousPageLabel;
     this.paginatorIntl.itemsPerPageLabel = this.itemsPerPageLabel;
-    this.paginatorIntl.getRangeLabel=this.rango;
+    this.paginatorIntl.getRangeLabel = this.rango;
   }
-
-
 
   ngAfterViewInit() {
     this.dataSource2.paginator = this.paginator || null;
@@ -105,11 +108,8 @@ export class CrearUsuariosComponent implements OnInit {
 
     this.personaService.getPersonas().subscribe(
       listaPerso => this.listaPersonas = listaPerso);
-
-
     this.Listado();
   }
-
 
   Listado() {
     this.usuariorolservice.getusuarios().subscribe(
@@ -119,10 +119,17 @@ export class CrearUsuariosComponent implements OnInit {
         console.log(listaAsig)
       }
     );
-
-
   }
 
+  openDialog() {
+    const dialogRef = this.dialog.open(DialogoUsuariosComponent, { width: '100%' });
+
+    dialogRef.afterClosed().subscribe(result => {
+      // Si el resultado es 'true', entonces el usuario se guardó correctamente.
+      this.Listado();
+
+    });
+  }
 
   aplicarFiltro() {
     if (this.filterPost) {
@@ -135,9 +142,6 @@ export class CrearUsuariosComponent implements OnInit {
       this.dataSource2.data = this.listaUsuarios;;
     }
   }
-
-
-
 
   displayedColumns: string[] = [
     'cedula',
@@ -203,7 +207,7 @@ export class CrearUsuariosComponent implements OnInit {
 
   //consumir servicio de fenix para obtener datos de la persona por primer_nombre y segundo_nombre
   public consultarPorPrimerNombreSegundoNombre() {
-    if ((this.fenix.primer_nombre == null || this.fenix.primer_nombre == '')  && (this.fenix.segundo_nombre == null || this.fenix.segundo_nombre == '')) {
+    if ((this.fenix.primer_nombre == null || this.fenix.primer_nombre == '') && (this.fenix.segundo_nombre == null || this.fenix.segundo_nombre == '')) {
       Swal.fire('Error', 'Por favor, ingrese los nombres válidos', 'error');
       return;
     }
@@ -271,12 +275,12 @@ export class CrearUsuariosComponent implements OnInit {
     }
   }
 
-  public consultarPorNombreCompleto(){
-    if (this.fenix.primer_nombre == null && this.fenix.primer_apellido == null || this.fenix.primer_nombre == "" && this.fenix.primer_apellido == ""){
+  public consultarPorNombreCompleto() {
+    if (this.fenix.primer_nombre == null && this.fenix.primer_apellido == null || this.fenix.primer_nombre == "" && this.fenix.primer_apellido == "") {
       Swal.fire('Error', 'Debe llenar los campos', 'error');
-      return; 
+      return;
     }
-    this.fenix_service.getDocenteByNombresCompletos(this.fenix.primer_nombre,this.fenix.primer_apellido).subscribe(
+    this.fenix_service.getDocenteByNombresCompletos(this.fenix.primer_nombre, this.fenix.primer_apellido).subscribe(
       (result) => {
         this.dataSource = result;
         console.log(this.dataSource);
@@ -294,8 +298,6 @@ export class CrearUsuariosComponent implements OnInit {
       }
     )
   }
-
-
 
   public seleccionar(element: any) {
 
@@ -365,7 +367,7 @@ export class CrearUsuariosComponent implements OnInit {
   }
 
   crearUsuario() {
-    
+
     console.log(this.usuarioGuardar)
     this.usuariosService.createUsuario(this.usuarioGuardar, this.rol).subscribe(
       () => {
@@ -424,18 +426,10 @@ export class CrearUsuariosComponent implements OnInit {
     ).subscribe();
   }
 
-
-
-
-
-
   cerrarModal() {
     this.formulario.reset();
     this.formulario.markAsPristine();
   }
-
-
-
 
   validateRol(control: FormControl) {
     const selectedRol = control.value;
@@ -474,7 +468,6 @@ export class CrearUsuariosComponent implements OnInit {
     this.usuariosEdit = usuariossssss
   }
 
-
   compareRoles(role1: any, role2: any): boolean {
     return role1 && role2 ? role1.rolNombre === role2.rolNombre : role1 === role2;
   }
@@ -486,8 +479,45 @@ export class CrearUsuariosComponent implements OnInit {
     if (usuariosdit.usuario.password == "") {
       usuariosdit.usuario.password = this.usuariosEdit.usuario.password
     }
+    if (usuariosdit.usuario.username == "") {
+      usuariosdit.usuario.username = this.usuariosEdit.usuario.username
+    }
+
+    if (usuariosdit.usuario.persona.cedula == "") {
+      usuariosdit.usuario.persona.cedula = this.usuariosEdit.usuario.persona.cedula
+    }
+
+    if (usuariosdit.usuario.persona.primer_nombre == "") {
+      usuariosdit.usuario.persona.primer_nombre = this.usuariosEdit.usuario.persona.primer_nombre
+    }
+
+    if (usuariosdit.usuario.persona.primer_apellido == "") {
+      usuariosdit.usuario.persona.primer_apellido = this.usuariosEdit.usuario.persona.primer_apellido
+    }
+
+    if (usuariosdit.usuario.persona.segundo_nombre == "") {
+      usuariosdit.usuario.persona.segundo_nombre = this.usuariosEdit.usuario.persona.segundo_nombre
+    }
+
+    if (usuariosdit.usuario.persona.segundo_apellido == "") { 
+      usuariosdit.usuario.persona.segundo_apellido = this.usuariosEdit.usuario.persona.segundo_apellido
+    }
+
+    if (usuariosdit.usuario.persona.direccion == "") {
+      usuariosdit.usuario.persona.direccion = this.usuariosEdit.usuario.persona.direccion
+    }
+
+    if (usuariosdit.usuario.persona.correo == "") {
+      usuariosdit.usuario.persona.correo = this.usuariosEdit.usuario.persona.correo
+    }
+
+    if (usuariosdit.usuario.persona.celular == "") {
+      usuariosdit.usuario.persona.celular = this.usuariosEdit.usuario.persona.celular
+    }
+
     usuariosdit.usuarioRolId = this.usuariosEdit.usuarioRolId;
-    console.log(usuariosdit)
+    console.log(usuariosdit);
+
     Swal.fire({
       title: '¿Desea modificar los campos?',
       showCancelButton: true,
@@ -504,10 +534,11 @@ export class CrearUsuariosComponent implements OnInit {
               'success'
             );
             this.Listado();
-            this.usuariosEdit=new UsuarioRol();
-            this.usuariosEditGuar=new UsuarioRol();
+            
+            this.usuariosEdit = new UsuarioRol();
+            this.usuariosEditGuar = new UsuarioRol();
           });
-      } else{
+      } else {
         Swal.fire('Se ha cancelado la operación', '', 'info')
       }
     })

@@ -11,19 +11,21 @@ import { authInterceptorProviders } from './services/auth/auth.interceptor';
 import { SiderbarComponent } from './components/siderbar/siderbar.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { SharedModule } from './shared/shared.module';
+import {FormsModule} from "@angular/forms";
 
 @NgModule({
   declarations: [
     AppComponent,
     NavbarComponent,
     SiderbarComponent,
-    FooterComponent,
+    FooterComponent
   ],
   imports: [
     BrowserModule,
     CommonModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+    FormsModule,
     SharedModule
   ],
 

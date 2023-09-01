@@ -13,7 +13,6 @@ import { ObjetivoPDOT } from 'src/app/models/ObjetivoPDOT';
 import { Subcriterio } from 'src/app/models/Subcriterio';
 import { IndicadorService } from 'src/app/services/indicador.service';
 import { IndicadoresService } from 'src/app/services/indicadores.service';
-import { MetasPdotService } from 'src/app/services/metas-pdot.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -43,16 +42,12 @@ rango:any= (page: number, pageSize: number, length: number) => {
       : startIndex + pageSize;
   return `${startIndex + 1} - ${endIndex} de ${length}`;
 };
-//
-indicadors: any[] = [];
-subcriterio: Subcriterio = new Subcriterio();
-criterio: Criterio = new Criterio();
+
 
 ///////
 public objPDOT: ObjetivoPDOT = new ObjetivoPDOT();
 public componente: Componentes = new Componentes();
 public metaPDOT: MetasPDOT = new MetasPDOT();
-listaMetasPdot: MetasPDOT[] = [];
 
 listadoIndicadores: Indicadores[] = [];
 public indicad = new Indicadores();
@@ -70,7 +65,7 @@ resultadosEncontrados: boolean = true;
 
 dataSource = new MatTableDataSource<Indicadores>();
 
-columnasUsuario: string[] = ['id_indicador', 'nombre', 'descripcion',  'actions'];
+columnasUsuario: string[] = ['id_indicador', 'nombre', 'descripcion','tipoEvaluacion',  'actions'];
 
 @ViewChild('datosModalRef') datosModalRef: any;
 @ViewChild(MatPaginator, { static: false }) paginator?: MatPaginator;
@@ -190,7 +185,7 @@ editDatos(indicador: Indicadores) {
   this.formIndicador = new FormGroup({
     nombre: new FormControl(indicador.nombre),
     descripcion: new FormControl(indicador.descripcion),
-    tipo: new FormControl(indicador.tipo_evaluacion)
+    tipo_evaluacion: new FormControl(indicador.tipo_evaluacion)
   });
 }
 

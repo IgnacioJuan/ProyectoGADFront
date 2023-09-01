@@ -1,0 +1,193 @@
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css');
+
+.input-group {
+    margin-top: 10px;
+}
+
+.input-group .form-control {
+    height: auto;
+    border-radius: 20px;
+}
+
+.input-group .btn {
+    border-radius: 20px;
+}
+
+.input-group .fa-search {
+    font-size: 18px;
+}
+
+.tabla {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.tabla th,
+.tabla td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.tabla th {
+    background-color: #2260d3;
+    color: white;
+}
+
+.tabla td:last-child button {
+    margin-left: 8px;
+}
+
+/* Ultima columna */
+.tabla td:last-child {
+    width: 10%;
+    border-bottom-width: 2px;
+}
+
+#buscar {
+    width: 300px;
+    margin: 0 auto;
+}
+
+#titulo {
+    width: 300px;
+    margin: 0 auto;
+}
+
+.fa-trash {
+    color: red;
+}
+
+.fa-edit {
+    color: tomato;
+}
+
+body {
+    font: 1em/1.618 Inter, sans-serif;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 100vh;
+    padding: 30px;
+
+    color: #224;
+    background:
+        url(https://source.unsplash.com/E8Ufcyxz514/2400x1823) center / cover no-repeat fixed;
+}
+
+
+
+.table-container {
+    display: table;
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.table-row {
+    display: table-row;
+}
+
+.table-cell {
+    display: table-cell;
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+}
+
+.colspan-2 {
+    width: 100%;
+}
+
+.centered-cell {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.centered {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.wide-cell {
+    width: 20%;
+    /* Ajusta el ancho según tu preferencia */
+}
+
+.button-cell {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: background-color 0.3s;
+}
+
+.button:focus {
+    outline: none;
+}
+
+.button::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 0;
+    height: 0;
+    background-color: transparent;
+    border-radius: 50%;
+    opacity: 0;
+    transition: width 0.2s ease-out, height 0.2s ease-out, opacity 0.2s ease-out;
+}
+
+.button:focus::before {
+    width: 120%;
+    height: 120%;
+    opacity: 1;
+}
+
+/* matTextField */
+
+
+.example-full-width {
+    width: 100%;
+}
+
+table {
+    width: 100%;
+}
+
+.text-align-left {
+    text-align: right;
+}
+
+.wide-content-cell {
+    width: 50%;
+    /* Ajusta el ancho según tu preferencia */
+}
+
+.wide-rest-cell {
+    width: 25%;
+    /* Ajusta el ancho según tu preferencia */
+}
+
+/* editar boton eliminar */
+.btn-eliminar {
+    background-color: #ff0000;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
