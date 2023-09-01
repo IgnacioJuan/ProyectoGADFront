@@ -21,11 +21,15 @@ export class Subir_archivo_acti_desigComponent implements OnInit {
   isLoggedIn = false;
   user: any = null;
   aRCHI!: Archivo[];
+  
   filearchivo!: File;
+
 public archivon=new Archivo();
    // Crear una fuente de datos para la tabla
  dataSource = new MatTableDataSource<Archivo>();
  formulario: FormGroup;
+ @ViewChild('archivoInput') archivoInput!: ElementRef<HTMLInputElement>; // Note the "!" operator
+
    
   constructor(
     private archivo: ArchivoService,
@@ -33,6 +37,9 @@ public archivon=new Archivo();
     private fb: FormBuilder,
     private router: Router
   ) {
+    
+    this.archivoInput = new ElementRef<HTMLInputElement>(document.createElement('input'));
+  
     this.formulario = this.fb.group({
       descripcion: ['', [Validators.required, Validators.maxLength(255)]],
       valor: [0, Validators.required]
@@ -101,7 +108,8 @@ public archivon=new Archivo();
           confirmButtonText: 'OK'
         });
         this.descripcion = '';
-        this.listar();
+        this.valor=0;
+                this.listar();
       },
       error => {
         console.error('Error al subir el archivo:', error);
@@ -117,13 +125,14 @@ public archivon=new Archivo();
     // this.notificar();
     // this.notificaradmin();
   }
-
+  
   limpiarFormulario() {
+    this.isEditing=false;
     this.formulario.reset();
-    this.archi = new Archivo;
-  }
-
-
+    this.archivon = new Archivo(); // Reset archivo
+ 
+   }
+ 
   listar(): void {
     this.archivo.getarchivoActividad(this.activ.id_actividad).subscribe(data => {
       this.aRCHI = data;
@@ -186,10 +195,11 @@ aplicarFiltro() {
     this.listar();
     }
 }
-editar(id_archi:any): void {
-  // ... existing upload logic ...
+isEditing: boolean = false;
 
-  this.archivo.editArchivo(id_archi,this.filearchivo, this.descripcion, this.valor, this.activ.id_actividad)
+editar(id_archi: any): void {
+  
+  this.archivo.editArchivo(id_archi, this.descripcion, this.valor, this.activ.id_actividad)
     .subscribe(
       response => {
         console.log('Archivo editado:', response);
@@ -200,12 +210,14 @@ editar(id_archi:any): void {
           icon: 'success',
           confirmButtonText: 'OK'
         });
-
-        this.formulario.reset();
-        },
+ this.formulario.reset();
+        this.isEditing = false; 
+        this.listar();
+      },
       error => {
         console.error('Error al editar el archivo:', error);
 
+        this.isEditing = false; 
         Swal.fire({
           title: '¡Error!',
           text: 'Ocurrió un error al editar el archivo',
@@ -215,19 +227,12 @@ editar(id_archi:any): void {
       }
     );
 }
-archivoToEdit: any; 
-cargarDatosParaEditar(): void {
-  // Assuming archivoToEdit contains the data fetched from backend
-  if (this.archivoToEdit) {
-    this.descripcion = this.archivoToEdit.descripcion;
-    this.valor = this.archivoToEdit.valor;
-    // ... set other form field values ...
-  }
-}
+
   editDatos(archi:Archivo) {
+    
+  this.isEditing = true;
     this.archivon = archi;
     this.formulario = new FormGroup({
-      nombre: new FormControl(archi.nombre),
       descripcion: new FormControl(archi.descripcion),
      valor: new FormControl(archi.valor)
     });
