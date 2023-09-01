@@ -3,13 +3,11 @@ import {EjeService} from "../../../../services/eje.service";
 import {Eje} from "../../../../models/eje";
 import Swal from "sweetalert2";
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
-import {Componentes} from "../../../../models/Componentes";
-import {ComponentesService} from "../../../../services/componentes.service";
-import {Objetivopnd} from "../../../../models/objetivopnd";
+
 import {MatTableDataSource} from "@angular/material/table";
 import {MatPaginator, MatPaginatorIntl} from "@angular/material/paginator";
 import {Router} from "@angular/router";
-import {ObjetivopndService} from "../../../../services/objetivopnd.service";
+
 
 @Component({
   selector: 'app-ejes-lista',
@@ -60,7 +58,6 @@ export class EjesListaComponent implements OnInit{
   constructor(
     private paginatorIntl: MatPaginatorIntl,
     private router: Router, private fb: FormBuilder,
-    private objetivopndServicio: ObjetivopndService,
     private ejeServicio: EjeService
   ) {
     this.formComponentes = fb.group({
@@ -169,7 +166,7 @@ export class EjesListaComponent implements OnInit{
 
     this.componentes.nombre = this.formComponentes.value.nombre;
 
-    this.objetivopndServicio.actualizarobjetivopnd(this.componentes.id_eje, this.componentes)
+    this.ejeServicio.actualizareje(this.componentes.id_eje, this.componentes)
       .subscribe(response => {
         this.componentes = new Eje();
         this.listar();
