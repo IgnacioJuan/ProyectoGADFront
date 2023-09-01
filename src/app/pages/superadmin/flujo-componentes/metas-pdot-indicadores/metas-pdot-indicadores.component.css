@@ -1,10 +1,7 @@
 .btn-guardar {
     background-color: #D4BC37;
 }
-@font-face {
-    font-family: myFirstFont;
-  }
-  
+
   #calc{
     font-family:myFirstFont;
     font-size: 250%;

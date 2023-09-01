@@ -78,7 +78,7 @@ export class ListActArchivoComponent implements OnInit  {
    @ViewChild(MatPaginator, { static: false }) paginator?: MatPaginator;
 
   //tabla
-   itemsPerPageLabel = 'Componentes por página';
+   itemsPerPageLabel = 'Archivos por página';
    nextPageLabel = 'Siguiente';
    lastPageLabel = 'Última';
    firstPageLabel='Primera';
