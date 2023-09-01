@@ -1,4 +1,3 @@
-import { Actividades } from "./actividades";
 import { Actividad_arch } from "../services/actividad_arch";
 
 export class Archivo {

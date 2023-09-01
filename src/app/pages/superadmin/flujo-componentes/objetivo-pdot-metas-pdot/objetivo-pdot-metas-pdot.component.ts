@@ -5,12 +5,12 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
 import { Componentes } from 'src/app/models/Componentes';
-import { Criterio } from 'src/app/models/Criterio';
-import { Indicador } from 'src/app/models/Indicador';
+//import { Criterio } from 'src/app/models/Criterio';
+//import { Indicador } from 'src/app/models/Indicador';
 import { MetasPDOT } from 'src/app/models/MetasPDOT';
 import { ObjetivoPDOT } from 'src/app/models/ObjetivoPDOT';
-import { Subcriterio } from 'src/app/models/Subcriterio';
-import { IndicadoresService } from 'src/app/services/indicadores.service';
+//import { Subcriterio } from 'src/app/models/Subcriterio';
+//import { IndicadoresService } from 'src/app/services/indicadores.service';
 import { MetasPdotService } from 'src/app/services/metas-pdot.service';
 import Swal from 'sweetalert2';
 
@@ -52,7 +52,7 @@ listaMetasPdot: MetasPDOT[] = [];
 
 
 miModal!: ElementRef;
-public indic = new Indicador();
+//public indic = new Indicador();
 public metaPDOT = new MetasPDOT();
 
 //Buscar

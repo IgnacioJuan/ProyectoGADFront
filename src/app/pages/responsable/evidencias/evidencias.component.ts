@@ -7,7 +7,6 @@ import Swal from 'sweetalert2';
 import { ActividadService } from 'src/app/services/actividad.service';
 import { Evidencia } from 'src/app/models/Evidencia';
 import { EvidenciaService } from 'src/app/services/evidencia.service';
-import { Indicador } from 'src/app/models/Indicador';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Actividades } from 'src/app/models/actividades';
