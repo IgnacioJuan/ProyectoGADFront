@@ -28,4 +28,8 @@ export class ReformaTraspasoDService {
   eliminarReformaTD(rtd: any): Observable<any> {
     return this.http.put(`${baserUrl}/api/reformatraspaso_d/eliminarlogic/${rtd.id_reftras_d}`, rtd);
   }
+
+  listarRTDActividades(): Observable<ReformaTraspasoD[]> {
+    return this.http.get<ReformaTraspasoD[]>(`${baserUrl}/api/reformatraspaso_d/listarRTDActividades`);
+  }
 }
