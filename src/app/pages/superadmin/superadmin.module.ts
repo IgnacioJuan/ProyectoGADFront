@@ -16,12 +16,13 @@ import { ReporteavancepoaComponent } from './reporteavancepoa/reporteavancepoa.c
 import { ReporteEspecificoPoaComponent } from './reporte-especifico-poa/reporte-especifico-poa.component';
 import { CrearcompetenciaComponent } from './pages/crear-competencia/crear-competencia.component';
 //import { EvidenciasRechazoComponent } from './evidencias/evidencias.component';
-import { ArchivosRechazadosComponent } from './archivos/archivos.component';
+
 
 
 import { ListarpoaComponent } from './flujo-criterio/listarpoa/listarpoa.component';
 //import { EvidenciasRechazoComponent } from './evidencias/evidencias.component';
 import { ListarporUsuarioComponent } from './flujo-criterio/listarpoaporusuario/listarpoaporusuario.component';
+import { ArchivosRechazadosComponent } from './archivos-rechazados/archivos/archivos.component';
 
 
 @NgModule({

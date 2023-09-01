@@ -1,20 +1,19 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
 import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
-import { ArchivosRechazados } from 'src/app/models/ArchivosRechazados';
-import { ArchivosrechazadosService } from 'src/app/services/archivosrechazados.service';
+import { ActividadArchivosRechazados } from 'src/app/models/Actividad-ArchiRechazados';
+import { ActividadEvidenciarechazadaService } from 'src/app/services/actividad-evidenciarechazada.service';
 
 
 @Component({
-  selector: 'app-archivos',
-  templateUrl: './archivos.component.html',
-  styleUrls: ['./archivos.component.css']
+  selector: 'app-actividades-evidenciasrechazadas',
+  templateUrl: './actividades-evidenciasrechazadas.component.html',
+  styleUrls: ['./actividades-evidenciasrechazadas.component.css']
 })
-export class ArchivosRechazadosComponent implements OnInit {
+export class ActividadesEvidenciasrechazadasComponent implements OnInit {
   miModal!: ElementRef;
-  public evi = new ArchivosRechazados();
+  public evi = new ActividadArchivosRechazados();
   archivos: any[] = [];
 
   //tabla
@@ -30,24 +29,23 @@ export class ArchivosRechazadosComponent implements OnInit {
 
     length = Math.max(length, 0);
     const startIndex = page * pageSize;
-    const endIndex =
-      startIndex < length
-        ? Math.min(startIndex + pageSize, length)
-        : startIndex + pageSize;
+    const endIndex = startIndex < length
+      ? Math.min(startIndex + pageSize, length)
+      : startIndex + pageSize;
     return `${startIndex + 1} - ${endIndex} de ${length}`;
   };
 
   filterPost = '';
-  dataSource = new MatTableDataSource<ArchivosRechazados>();
+  dataSource = new MatTableDataSource<ActividadArchivosRechazados>();
 
-  columnasUsuario: string[] = ['id', 'nombre', 'descripcion', 'fecha', 'nombreactividad', 'acciones'];
+  columnasUsuario: string[] = ['id', 'nombre', 'descripcion', 'archivos'];
 
   @ViewChild('datosModalRef') datosModalRef: any;
   @ViewChild(MatPaginator, { static: false }) paginator?: MatPaginator;
 
 
 
-  constructor(private archivosrechazadosservice: ArchivosrechazadosService,
+  constructor(private archivosrechazadosservice: ActividadEvidenciarechazadaService,
     private paginatorIntl: MatPaginatorIntl, private router: Router
   ) {
     this.paginatorIntl.nextPageLabel = this.nextPageLabel;
@@ -58,19 +56,16 @@ export class ArchivosRechazadosComponent implements OnInit {
     this.paginatorIntl.getRangeLabel = this.rango;
   }
 
-
-  abrirArchivo() {
-    
-    const nuevaPaginaURL = 'https://scielo.conicyt.cl/pdf/rchnut/v44n2/art06.pdf'; // URL de la página externa
-    window.open(nuevaPaginaURL, '_blank');
-  }
-
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator || null;
 
   }
   ngOnInit() {
-    this.listar()
+    this.listar();
+  }
+
+  verDetalles(componente: any) {
+    this.router.navigate(['/sup/archivos-rechazados/Evi_Rechazados'], { state: { data: componente } });
   }
 
   listar(): void {
@@ -94,8 +89,5 @@ export class ArchivosRechazadosComponent implements OnInit {
       this.dataSource.data = this.archivos;;
     }
   }
-
-
-
 
 }

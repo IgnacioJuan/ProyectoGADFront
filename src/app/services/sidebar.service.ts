@@ -45,7 +45,9 @@ export class SidebarService {
         { titulo: 'Programas', url: 'sup/crearpro', icono: 'fas fa-list-ul ' },
         { titulo: 'Componentes', url: 'sup/ejes/ejestabla', icono: 'fas fa-list-ul ' },
         { titulo: 'Competencia', url: 'sup/crearcompe', icono: 'fas fa-list-ul ' },
-        { titulo: 'Presupuestos', url: 'sup/actividades-presupuestos/tabla-poas', icono: 'fas fa-list-ul ' }
+        { titulo: 'Presupuestos', url: 'sup/actividades-presupuestos/tabla-poas', icono: 'fas fa-list-ul ' },
+        { titulo: 'Evidencias Rechazadas', url: 'sup/archivos-rechazados/Actividades_Evi_Rechazados', icono: 'fas fa-list-ul ' },
+
       ]
     },
     {

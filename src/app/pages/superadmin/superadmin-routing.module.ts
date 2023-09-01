@@ -14,7 +14,8 @@ import { CrearcompetenciaComponent } from './pages/crear-competencia/crear-compe
 import {
   ResumenEvidenciasResponsableModule
 } from "./resumen-evidencias-responsable/resumen-evidencias-responsable.module";
-import { ArchivosRechazadosComponent } from './archivos/archivos.component';
+
+
 
 const routes: Routes = [
 {
@@ -24,12 +25,6 @@ const routes: Routes = [
   canActivate: [SuperGuard]
 },
 
-{
-  path: 'evidenciarechazo',
-  component: ArchivosRechazadosComponent,
-  pathMatch: 'full',
-  canActivate: [SuperGuard]
-},
 {
   path: 'crearUsu',
   component: DialogoUsuariosComponent,
@@ -107,6 +102,11 @@ const routes: Routes = [
     path: 'actividades-presupuestos',
     loadChildren: () => import("./actividades-presupuestos/actividades-presupuestos.module").then(m => m.ActividadesPresupuestosModule)
   },
+  {
+    path: 'archivos-rechazados',
+    loadChildren: () => import("./archivos-rechazados/evidencias-rechazadas.module").then(m => m.EvidenciasRechazadasModule)
+
+  }
 ];
 
 @NgModule({
