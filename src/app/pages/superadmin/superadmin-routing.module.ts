@@ -8,6 +8,7 @@ import { DialogoUsuariosComponent } from './pages/dialogo-usuarios/dialogo-usuar
 import { CrearComponent } from './pages/crear-programa/crear-programa.component';
 import { AprobarPoaComponent } from './pages/aprobar-poa/aprobar-poa/aprobar-poa.component';
 import { DetallePoaComponent } from './pages/poacc/detalle-poa/detalle-poa/detalle-poa.component';
+import { ReporteavancepoaComponent } from './reporteavancepoa/reporteavancepoa.component';
 import { CrearcompetenciaComponent } from './pages/crear-competencia/crear-competencia.component';
 import { EvidenciasRechazoComponent } from './evidencias/evidencias.component';
 import {
@@ -60,6 +61,12 @@ const routes: Routes = [
 
 //Compartidas
 
+{
+  path: 'reportePoa',
+  component: ReporteavancepoaComponent,
+  pathMatch: 'full',
+ canActivate: [SuperGuard]
+},
 {
   path: 'objetivoods-lista',
   component: ObjetivoodsListaComponent,

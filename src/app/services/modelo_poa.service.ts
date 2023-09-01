@@ -10,6 +10,10 @@ import baserUrl from './helper';
 export class ModeloPoaService {
 
   constructor(private http: HttpClient) { }
+  getModeloPoaById(id_modelo: number): Observable<any> {
+    return this.http.get(`${baserUrl}/api/modelopoa/buscar/${id_modelo}`);
+
+  }
 
   getModeloPoas(): Observable<ModeloPoa[]> {
     return this.http.get<ModeloPoa[]>(`${baserUrl}/api/modelopoa/listar_modelo`);
