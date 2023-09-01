@@ -32,8 +32,8 @@ import { ListarpoaComponent } from './flujo-criterio/listarpoa/listarpoa.compone
     ReporteEspecificoPoaComponent,
     CrearcompetenciaComponent,
     //EvidenciasRechazoComponent,
-    ListarpoaComponent  
-    //ArchivosRechazadosComponent,
+    ListarpoaComponent  ,
+    ArchivosRechazadosComponent,
 
   ],
   imports: [

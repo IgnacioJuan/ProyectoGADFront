@@ -10,6 +10,7 @@ import { AprobarPoaComponent } from './pages/aprobar-poa/aprobar-poa/aprobar-poa
 import { DetallePoaComponent } from './pages/poacc/detalle-poa/detalle-poa/detalle-poa.component';
 import { ReporteavancepoaComponent } from './reporteavancepoa/reporteavancepoa.component';
 import { CrearcompetenciaComponent } from './pages/crear-competencia/crear-competencia.component';
+//import { EvidenciasRechazoComponent } from './evidencias/evidencias.component';
 import {
   ResumenEvidenciasResponsableModule
 } from "./resumen-evidencias-responsable/resumen-evidencias-responsable.module";
@@ -105,7 +106,7 @@ const routes: Routes = [
   {
     path: 'actividades-presupuestos',
     loadChildren: () => import("./actividades-presupuestos/actividades-presupuestos.module").then(m => m.ActividadesPresupuestosModule)
-  }
+  },
 ];
 
 @NgModule({
