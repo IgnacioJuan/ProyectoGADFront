@@ -18,6 +18,7 @@ import { CrearcompetenciaComponent } from './pages/crear-competencia/crear-compe
 import { EvidenciasRechazoComponent } from './evidencias/evidencias.component';
 
 
+import { ListarpoaComponent } from './flujo-criterio/listarpoa/listarpoa.component';
 @NgModule({
   declarations: [
     CrearUsuariosComponent,
@@ -30,6 +31,7 @@ import { EvidenciasRechazoComponent } from './evidencias/evidencias.component';
     ReporteEspecificoPoaComponent,
     CrearcompetenciaComponent,
     EvidenciasRechazoComponent,
+    ListarpoaComponent  
 
   ],
   imports: [

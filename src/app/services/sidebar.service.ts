@@ -58,8 +58,16 @@ export class SidebarService {
       ]
     },
     {
-      icono: 'nav-icon fas fa-tasks',
-      titulo: "Evaluar Evidencia",
+      icono: 'nav-icon fas   fa-users',
+      titulo: "POA",
+      submenu: [
+        { titulo: 'Poas Rechazados', url: 'sup/flujo-criterio/listarpoa', icono: 'fas fa-list-ul ' }
+
+      ]
+    },
+    {
+      icono: 'nav-icon fas   fa-users',
+      titulo: "Programa",
       submenu: [
         { titulo: 'Aprobar/Rechazar Evidencia', url: 'sup/aprobarEvidencias/listPoaAprobarEvidenciaSuper', icono: 'fas fa-file-contract' }
 
