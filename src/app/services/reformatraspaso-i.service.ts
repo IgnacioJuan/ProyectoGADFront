@@ -28,4 +28,8 @@ export class ReformaTraspasoIService {
   eliminarPresupuestoE(rti: any): Observable<any> {
     return this.http.put(`${baserUrl}/api/reformatraspaso_i/eliminarlogic/${rti.id_reftras_i}`, rti);
   }
+
+  listarRTIActividades(): Observable<ReformaTraspasoI[]> {
+    return this.http.get<ReformaTraspasoI[]>(`${baserUrl}/api/reformatraspaso_i/listarRTIActividades`);
+  }
 }
