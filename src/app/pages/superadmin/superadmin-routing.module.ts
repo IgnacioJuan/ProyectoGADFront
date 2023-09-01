@@ -79,17 +79,10 @@ const routes: Routes = [
   path: 'flujo_Componentes',
   loadChildren: () => import("./flujo-componentes/flujo-componentes.module").then(m => m.FlujoComponentesModule)
 },
-  {
-    path: 'ejes',
-    loadChildren: () => import("./ejes/ejes.module").then(m => m.EjesModule)
-  },
+  
   {
     path: 'aprobarEvidencias',
     loadChildren: () => import("./aprobar-evidencias/aprobar-evidencias.module").then(m => m.AprobarEvidenciasModule)
-  },
-  {
-    path: 'resumen-evidencias-responsable',
-    loadChildren: () => import("./resumen-evidencias-responsable/resumen-evidencias-responsable.module").then(m => m.ResumenEvidenciasResponsableModule)
   },
 
   {
@@ -106,7 +99,27 @@ const routes: Routes = [
     path: 'archivos-rechazados',
     loadChildren: () => import("./archivos-rechazados/evidencias-rechazadas.module").then(m => m.EvidenciasRechazadasModule)
 
-  }
+  },
+{
+  path: 'ejes',
+  loadChildren: () => import("./ejes/ejes.module").then(m => m.EjesModule)
+},
+{
+  path: 'resumen-evidencias-responsable',
+  loadChildren: () => import("./resumen-evidencias-responsable/resumen-evidencias-responsable.module").then(m => m.ResumenEvidenciasResponsableModule)
+},
+{
+  path: 'usuario-actividades',
+  loadChildren: () => import("./usuario-actividades/usuario-actividades.module").then(m => m.UsuarioActividadesModule)
+},
+
+
+{
+  path: 'crearcompe',
+  component: CrearcompetenciaComponent,
+  pathMatch: 'full',
+  canActivate: [SuperGuard]
+},
 ];
 
 @NgModule({

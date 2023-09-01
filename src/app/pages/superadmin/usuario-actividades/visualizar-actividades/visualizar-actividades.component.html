@@ -1,1 +1,37 @@
-<p>visualizar-actividades works!</p>
+<body>
+    <div class="container bg-light border border-start-0 rounded-4">
+        <blockquote class="blockquote text-dark" style="margin-top: 5%">
+            <h1><strong>ACTIVIDADES ASIGNADAS</strong></h1>
+        </blockquote>
+
+        <div class="card">
+            <div class="card-body">
+                <input type="text" class="form-control" placeholder="Buscar....">
+            </div>
+            <br />
+            <br />
+            <div class="mat-elevation-z8 table-responsive" style="margin-bottom: 5%">
+                <table mat-table [dataSource]="dataSource">
+
+                    <ng-container matColumnDef="responsable">
+                        <th mat-header-cell *matHeaderCellDef>Responsable</th>
+                        <td mat-cell *matCellDef="let element">{{ element.responsable }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="cargo">
+                        <th mat-header-cell *matHeaderCellDef>Cargo</th>
+                        <td mat-cell *matCellDef="let element">{{ element.cargo }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="nactividades">
+                        <th mat-header-cell *matHeaderCellDef>N° Actividades</th>
+                        <td mat-cell *matCellDef="let element">{{ element.nactividades }}</td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
