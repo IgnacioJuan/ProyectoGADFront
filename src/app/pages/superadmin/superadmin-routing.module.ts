@@ -10,10 +10,10 @@ import { AprobarPoaComponent } from './pages/aprobar-poa/aprobar-poa/aprobar-poa
 import { DetallePoaComponent } from './pages/poacc/detalle-poa/detalle-poa/detalle-poa.component';
 import { ReporteavancepoaComponent } from './reporteavancepoa/reporteavancepoa.component';
 import { CrearcompetenciaComponent } from './pages/crear-competencia/crear-competencia.component';
-import { EvidenciasRechazoComponent } from './evidencias/evidencias.component';
 import {
   ResumenEvidenciasResponsableModule
 } from "./resumen-evidencias-responsable/resumen-evidencias-responsable.module";
+import { ArchivosRechazadosComponent } from './archivos/archivos.component';
 
 const routes: Routes = [
 {
@@ -25,7 +25,7 @@ const routes: Routes = [
 
 {
   path: 'evidenciarechazo',
-  component: EvidenciasRechazoComponent,
+  component: ArchivosRechazadosComponent,
   pathMatch: 'full',
   canActivate: [SuperGuard]
 },
