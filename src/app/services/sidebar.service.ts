@@ -55,6 +55,14 @@ export class SidebarService {
 
     {
       icono: 'nav-icon fas   fa-users',
+      titulo: "POA",
+      submenu: [
+        { titulo: 'Poas Rechazados', url: 'sup/flujo-criterio/listarpoa', icono: 'fas fa-list-ul ' }
+
+      ]
+    },
+    {
+      icono: 'nav-icon fas   fa-users',
       titulo: "Programa",
       submenu: [
         { titulo: 'Crear nuevo progrma', url: 'sup/flujo-criterio/crearpro', icono: 'fas fa-list-ul ' }

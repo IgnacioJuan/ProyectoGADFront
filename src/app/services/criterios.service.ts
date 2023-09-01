@@ -100,5 +100,5 @@ export class CriteriosService {
 
   getCriterioPorEvidenciaproyeccion(idEvidencia: number): Observable<proyeccionCriterio[]> {
     return this.http.get<proyeccionCriterio[]>(`${this.url}/obtenerNombreCriterioPorEvidenciaproyeccion/${idEvidencia}`);
-  }
+  }  
 }

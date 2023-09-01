@@ -8,6 +8,7 @@ import { CriteriosSubcriterioComponent } from './criterios-subcriterio/criterios
 import { CriteriosComponent } from './criterios/criterios.component';
 import { CrearComponent } from './crear-programa/crear-programa.component';
 import { CrearcompetenciaComponent } from './crear-competencia/crear-competencia.component';
+import { ListarpoaComponent } from './listarpoa/listarpoa.component';
 
 const routes: Routes = [
   {
@@ -31,6 +32,12 @@ const routes: Routes = [
   {
     path: 'crearpro',
     component: CrearComponent,
+    pathMatch: 'full',
+    canActivate: [SuperGuard]
+  },
+  {
+    path: 'listarpoa',
+    component: ListarpoaComponent,
     pathMatch: 'full',
     canActivate: [SuperGuard]
   },

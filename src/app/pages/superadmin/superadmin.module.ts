@@ -15,6 +15,7 @@ import { EvidenciaAtrasadaComponent } from './pages/evidencia-atrasada/evidencia
 
 import { SharedModule } from 'src/app/shared/shared.module';
 import { ObjetivoodsListaComponent } from './pages/objetivoods-lista/objetivoods-lista.component';
+import { ListarpoaComponent } from './flujo-criterio/listarpoa/listarpoa.component';
 @NgModule({
   declarations: [
     DashboardComponent2,
@@ -27,6 +28,8 @@ import { ObjetivoodsListaComponent } from './pages/objetivoods-lista/objetivoods
     CriterioReporteComponent,
     EvidenciaAtrasadaComponent,
     ObjetivoodsListaComponent,
+    ListarpoaComponent  
+
   ],
   imports: [
     CommonModule,
