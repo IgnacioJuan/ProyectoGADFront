@@ -74,7 +74,7 @@ export class ListActivEvidenciaComponent implements OnInit {
   @ViewChild(MatPaginator, { static: false }) paginator?: MatPaginator;
 
   //tabla
-  itemsPerPageLabel = 'Componentes por página';
+  itemsPerPageLabel = 'Actividades por página';
   nextPageLabel = 'Siguiente';
   lastPageLabel = 'Última';
   firstPageLabel='Primera';
