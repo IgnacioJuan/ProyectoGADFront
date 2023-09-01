@@ -22,6 +22,7 @@ import { AprobarPoaComponent } from './pages/aprobar-poa/aprobar-poa/aprobar-poa
 import { DetallePoaComponent } from './pages/poacc/detalle-poa/detalle-poa/detalle-poa.component';
 import { CrearcompetenciaComponent } from './pages/crear-competencia/crear-competencia.component';
 import { EvidenciasRechazoComponent } from './evidencias/evidencias.component';
+import { ListarporUsuarioComponent } from './flujo-criterio/listarpoaporusuario/listarpoaporusuario.component';
 
 
 @NgModule({
@@ -32,7 +33,6 @@ import { EvidenciasRechazoComponent } from './evidencias/evidencias.component';
     IndicadorComponent,
     EvidenciasComponent,
     ObcervacionesComponent,
-    SubcriteriosComponent,
     CriterioReporteComponent,
     EvidenciaAtrasadaComponent,
     ObjetivoodsListaComponent,
@@ -43,6 +43,7 @@ import { EvidenciasRechazoComponent } from './evidencias/evidencias.component';
     DetallePoaComponent,
     CrearcompetenciaComponent,
     EvidenciasRechazoComponent,
+    ListarporUsuarioComponent,
 
   ],
   imports: [

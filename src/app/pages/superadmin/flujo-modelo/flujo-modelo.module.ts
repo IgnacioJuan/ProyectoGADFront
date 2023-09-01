@@ -19,7 +19,6 @@ import { ListarporUsuarioComponent } from '../flujo-criterio/listarpoaporusuario
     ProyectoPoaComponent,
     PoaActividadComponent,
     ActividadEvidenciaComponent,
-    ListarporUsuarioComponent,
   ],
   imports: [
     CommonModule,

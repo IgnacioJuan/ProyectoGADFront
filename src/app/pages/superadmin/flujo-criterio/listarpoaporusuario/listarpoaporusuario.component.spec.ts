@@ -12,7 +12,7 @@ describe('PoaComponent', () => {
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(ListarporUsuarioComponent);
+    fixture = TestBed.createComponent(ListarporUsuarioComponent );
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

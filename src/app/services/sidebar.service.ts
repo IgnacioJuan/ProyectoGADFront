@@ -63,9 +63,11 @@ export class SidebarService {
       titulo: "POA",
       submenu: [
         { titulo: 'Poas Rechazados', url: 'sup/flujo-criterio/listarpoa', icono: 'fas fa-list-ul ' },
+        { titulo: 'Poas Asignados', url: 'sup/flujo-criterio/listarpoausu', icono: 'fas fa-list-ul ' }
 
 
-      ]
+
+      ] 
     },
     {
       icono: 'nav-icon fas   fa-users',

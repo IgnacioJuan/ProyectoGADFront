@@ -9,6 +9,7 @@ import { CriteriosComponent } from './criterios/criterios.component';
 import { IndicadoresEvidenciaComponent } from './indicadores-evidencia/indicadores-evidencia.component';
 import { ListarpoaComponent } from './listarpoa/listarpoa.component';
 import { SubcriteriosIndicadorComponent } from './subcriterios-indicador/subcriterios-indicador.component';
+import { ListarporUsuarioComponent } from './listarpoaporusuario/listarpoaporusuario.component';
 
 
 
@@ -40,6 +41,12 @@ const routes: Routes = [
   {
     path: 'listarpoa',
     component: ListarpoaComponent,
+    pathMatch: 'full',
+    canActivate: [SuperGuard]
+  },
+  {
+    path: 'listarpoausu',
+    component: ListarporUsuarioComponent,
     pathMatch: 'full',
     canActivate: [SuperGuard]
   },
