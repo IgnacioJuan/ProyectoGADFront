@@ -20,10 +20,16 @@ import { ArchivosRechazadosComponent } from './archivos/archivos.component';
 
 
 import { ListarpoaComponent } from './flujo-criterio/listarpoa/listarpoa.component';
+//import { EvidenciasRechazoComponent } from './evidencias/evidencias.component';
+import { ListarporUsuarioComponent } from './flujo-criterio/listarpoaporusuario/listarpoaporusuario.component';
+
+
 @NgModule({
   declarations: [
     CrearUsuariosComponent,
     ObjetivoodsListaComponent,
+    ObjetivoodsListaComponent,
+    ListarpoaComponent,  
     DialogoUsuariosComponent,
     CrearComponent,
     AprobarPoaComponent,
@@ -34,6 +40,8 @@ import { ListarpoaComponent } from './flujo-criterio/listarpoa/listarpoa.compone
     //EvidenciasRechazoComponent,
     ListarpoaComponent  ,
     ArchivosRechazadosComponent,
+    //EvidenciasRechazoComponent,
+    ListarporUsuarioComponent,
 
   ],
   imports: [

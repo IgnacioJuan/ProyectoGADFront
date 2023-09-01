@@ -4,7 +4,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import baserUrl from './helper';
 import { PoaActividadProjection } from '../interface/PoaActividadProjection';
 import { Poa } from '../models/Poa';
-import { PoaNoAprobadoDTO } from '../interface/PoaNoAprobadoDTO';
+import { PoaNoAprobadoProjection } from '../interface/PoaNoAprobadoProjection';
+import { PoaporUsuarioProjection } from '../interface/PoaporUsuarioProjection';
 
 @Injectable({
   providedIn: 'root'
@@ -47,7 +48,13 @@ export class PoaService {
   }
 
 
-  getNoAprobados(): Observable<PoaNoAprobadoDTO[]> {
-    return this.http.get<PoaNoAprobadoDTO[]>(`${baserUrl}/api/poa/noaprobados`);
+  getNoAprobados(): Observable<PoaNoAprobadoProjection[]> {
+    return this.http.get<PoaNoAprobadoProjection[]>(`${baserUrl}/api/poa/noaprobados`);
   }
+
+
+  getporUsuario(): Observable<PoaporUsuarioProjection[]> {
+    return this.http.get<PoaporUsuarioProjection[]>(`${baserUrl}/api/poa/listarporusuario`);
+  }
+
 }

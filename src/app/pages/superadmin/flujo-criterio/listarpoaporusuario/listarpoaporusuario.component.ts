@@ -4,18 +4,16 @@ import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms'
 import Swal from 'sweetalert2';
 import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 import { PoaService } from 'src/app/services/poa.service';
-import { Poa } from 'src/app/models/Poa';
 import { MatTableDataSource } from '@angular/material/table';
-import { log, number } from 'mathjs';
-import { PoaNoAprobadoProjection } from 'src/app/interface/PoaNoAprobadoProjection';
+import { PoaporUsuarioProjection } from 'src/app/interface/PoaporUsuarioProjection';
 
 @Component({
-  selector: 'app-crear-competencia',
-  templateUrl: './listarpoa.component.html',
-  styleUrls: ['./listarpoa.component.css']
+  selector: 'app-listarpoaporusuario',
+  templateUrl: './listarpoaporusuario.component.html',
+  styleUrls: ['./listarpoaporusuario.component.css']
 })
 
-export class ListarpoaComponent implements OnInit {
+export class ListarporUsuarioComponent implements OnInit {
   frmCriterio: FormGroup;
   guardadoExitoso: boolean = false;
   miModal!: ElementRef;
@@ -40,13 +38,13 @@ export class ListarpoaComponent implements OnInit {
   };
 
 
-  public compete = new PoaNoAprobadoProjection();
-  competencias: PoaNoAprobadoProjection[] = [];
+  public compete = new PoaporUsuarioProjection();
+  competencias: PoaporUsuarioProjection[] = [];
   
 
   filterPost = '';
-  dataSource = new MatTableDataSource<PoaNoAprobadoProjection>();
-  columnasUsuario: string[] = ['id_poa', 'nombre','fecha_inicio','fecha_fin', 'localizacion','barrio','comunidad', 'estado','observacion'];
+  dataSource = new MatTableDataSource<PoaporUsuarioProjection>();
+  columnasUsuario: string[] = ['username', 'nombre', 'localizacion','barrio', 'estado'];
 
 
 
@@ -76,15 +74,15 @@ export class ListarpoaComponent implements OnInit {
     this.listar( );
   }
 
-
+ 
   listar(): void {
-    this.poasservice.getNoAprobados().subscribe(
+    this.poasservice.getporUsuario().subscribe(
       (data: any[]) => {
         this.competencias = data;
         this.dataSource.data = this.competencias;
       },
       (error: any) => {
-        console.error('Error al listar los programas:', error);
+        console.error('Error al listar los usuarios:', error);
       }
     );
   }
