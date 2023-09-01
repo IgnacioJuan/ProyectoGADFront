@@ -2,13 +2,15 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { SuperGuard } from 'src/app/services/Guards/super.guard';
 import { EvaluacionCuantitativaComponent } from './evaluacion-cuantitativa/evaluacion-cuantitativa.component';
-import { SubcriteriosIndicadorComponent } from './subcriterios-indicador/subcriterios-indicador.component';
-import { IndicadoresEvidenciaComponent } from './indicadores-evidencia/indicadores-evidencia.component';
+import { CrearcompetenciaComponent } from '../pages/crear-competencia/crear-competencia.component';
+import { CrearComponent } from '../pages/crear-programa/crear-programa.component';
 import { CriteriosSubcriterioComponent } from './criterios-subcriterio/criterios-subcriterio.component';
 import { CriteriosComponent } from './criterios/criterios.component';
-import { CrearcompetenciaComponent } from './crear-competencia/crear-competencia.component';
+import { IndicadoresEvidenciaComponent } from './indicadores-evidencia/indicadores-evidencia.component';
 import { ListarpoaComponent } from './listarpoa/listarpoa.component';
-import { CrearComponent } from '../pages/crear-programa/crear-programa.component';
+import { SubcriteriosIndicadorComponent } from './subcriterios-indicador/subcriterios-indicador.component';
+
+
 
 const routes: Routes = [
   {
@@ -47,8 +49,6 @@ const routes: Routes = [
     pathMatch: 'full',
     canActivate: [SuperGuard]
   },
- 
- 
   {
     path: 'subcriterios-indicador',
     component: SubcriteriosIndicadorComponent,
