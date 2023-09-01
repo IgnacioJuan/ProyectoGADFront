@@ -38,7 +38,7 @@ export class ActividadesEvidenciasrechazadasComponent implements OnInit {
   filterPost = '';
   dataSource = new MatTableDataSource<ActividadArchivosRechazados>();
 
-  columnasUsuario: string[] = ['id', 'nombre', 'descripcion', 'acciones'];
+  columnasUsuario: string[] = ['id', 'nombre', 'descripcion', 'archivos'];
 
   @ViewChild('datosModalRef') datosModalRef: any;
   @ViewChild(MatPaginator, { static: false }) paginator?: MatPaginator;
@@ -54,13 +54,6 @@ export class ActividadesEvidenciasrechazadasComponent implements OnInit {
     this.paginatorIntl.previousPageLabel = this.previousPageLabel;
     this.paginatorIntl.itemsPerPageLabel = this.itemsPerPageLabel;
     this.paginatorIntl.getRangeLabel = this.rango;
-  }
-
-
-  abrirArchivo() {
-
-    const nuevaPaginaURL = 'https://scielo.conicyt.cl/pdf/rchnut/v44n2/art06.pdf'; // URL de la página externa
-    window.open(nuevaPaginaURL, '_blank');
   }
 
   ngAfterViewInit() {

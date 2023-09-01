@@ -3,6 +3,7 @@ import { FormBuilder } from '@angular/forms';
 import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
+import { ActividadArchivosRechazados } from 'src/app/models/Actividad-ArchiRechazados';
 import { ArchivosRechazados } from 'src/app/models/ArchivosRechazados';
 import { ArchivosrechazadosService } from 'src/app/services/archivosrechazados.service';
 
@@ -16,6 +17,7 @@ export class ArchivosRechazadosComponent implements OnInit {
   miModal!: ElementRef;
   public evi = new ArchivosRechazados();
   archivos: any[] = [];
+  archivo: ActividadArchivosRechazados = new ActividadArchivosRechazados();
 
   //tabla
   itemsPerPageLabel = 'Evidencias por página';
@@ -40,7 +42,7 @@ export class ArchivosRechazadosComponent implements OnInit {
   filterPost = '';
   dataSource = new MatTableDataSource<ArchivosRechazados>();
 
-  columnasUsuario: string[] = ['id', 'nombre', 'descripcion', 'fecha', 'nombreactividad', 'acciones'];
+  columnasUsuario: string[] = ['id', 'nombre', 'descripcion', 'fecha', 'acciones'];
 
   @ViewChild('datosModalRef') datosModalRef: any;
   @ViewChild(MatPaginator, { static: false }) paginator?: MatPaginator;
@@ -59,28 +61,35 @@ export class ArchivosRechazadosComponent implements OnInit {
   }
 
 
-  abrirArchivo() {
-    
-    const nuevaPaginaURL = 'https://scielo.conicyt.cl/pdf/rchnut/v44n2/art06.pdf'; // URL de la página externa
-    window.open(nuevaPaginaURL, '_blank');
-  }
-
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator || null;
 
   }
   ngOnInit() {
-    this.listar()
+    const data = history.state.data;
+    this.archivo = data;
+    console.log(this.archivo);
+    if (this.archivo == undefined) {
+      this.router.navigate(['user-dashboard']);
+      location.replace('/use/user-dashboard');
+    }
+    this.listararchi(this.archivo.id_actividad)
   }
 
-  listar(): void {
-    this.archivosrechazadosservice.get().subscribe(
+  verComponentes() {
+    this.router.navigate(['/sup/archivos-rechazados/Actividades_Evi_Rechazados']);
+  }
+
+
+  //listar archivos por id de actividad
+  listararchi(idActividad: number): void {
+    this.archivosrechazadosservice.getArchivosRechazados(idActividad).subscribe(
       (data: any[]) => {
         this.archivos = data;
         this.dataSource.data = this.archivos;
       },
       (error: any) => {
-        console.error('Error al listar las evidencias:', error);
+        console.error('Error al listar los archivos:', error);
       }
     );
   }

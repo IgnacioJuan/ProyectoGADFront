@@ -18,7 +18,7 @@ export class ActividadEvidenciarechazadaService {
   constructor(private http: HttpClient) { }
 
   get(): Observable<ActividadArchivosRechazados[]> {
-    return this.http.get<ActividadArchivosRechazados[]>(`${baserUrl}/api/actividades/listar`);
+    return this.http.get<ActividadArchivosRechazados[]>(`${baserUrl}/api/actividades/listarActEviRechazados`);
   }
 
   listar() {

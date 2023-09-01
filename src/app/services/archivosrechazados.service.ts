@@ -15,8 +15,9 @@ export class ArchivosrechazadosService {
   constructor(private http: HttpClient) { }
  
 
-get():Observable<ArchivosRechazados[]>{
-  return this.http.get<ArchivosRechazados[]>(`${baserUrl}/archivo/listarrechazados`);
+//Listar archivos rechazados por actividad
+public getArchivosRechazados(idActi: number): Observable<ArchivosRechazados[]> {
+  return this.http.get<ArchivosRechazados[]>(`${baserUrl}/archivo/listarrechazados/${idActi}`);
 }
 
   listar(){
