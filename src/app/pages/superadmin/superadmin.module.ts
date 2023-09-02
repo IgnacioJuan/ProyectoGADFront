@@ -19,7 +19,7 @@ import { DialogoUsuariosComponent } from './pages/dialogo-usuarios/dialogo-usuar
 import { CrearComponent } from './pages/crear-programa/crear-programa.component';
 import { AprobarPoaComponent } from './pages/aprobar-poa/aprobar-poa/aprobar-poa.component';
 import { DetallePoaComponent } from './pages/poacc/detalle-poa/detalle-poa/detalle-poa.component';
-import { ReporteavancepoaComponent } from './reporteavancepoa/reporteavancepoa.component';
+import { CustomDatePipe, ReporteavancepoaComponent } from './reporteavancepoa/reporteavancepoa.component';
 import { ReporteEspecificoPoaComponent } from './reporte-especifico-poa/reporte-especifico-poa.component';
 import { CrearcompetenciaComponent } from './pages/crear-competencia/crear-competencia.component';
 import { EvidenciasRechazoComponent } from './evidencias/evidencias.component';
@@ -45,6 +45,7 @@ import { EvidenciasRechazoComponent } from './evidencias/evidencias.component';
     ReporteEspecificoPoaComponent,
     CrearcompetenciaComponent,
     EvidenciasRechazoComponent,
+    CustomDatePipe,
 
   ],
   imports: [

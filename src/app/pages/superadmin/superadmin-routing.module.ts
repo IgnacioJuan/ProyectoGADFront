@@ -19,6 +19,7 @@ import { DetallePoaComponent } from './pages/poacc/detalle-poa/detalle-poa/detal
 import { ReporteavancepoaComponent } from './reporteavancepoa/reporteavancepoa.component';
 import { CrearcompetenciaComponent } from './pages/crear-competencia/crear-competencia.component';
 import { EvidenciasRechazoComponent } from './evidencias/evidencias.component';
+import { ReporteEspecificoPoaComponent } from './reporte-especifico-poa/reporte-especifico-poa.component';
 
 const routes: Routes = [{
   path: 'dashboard',
@@ -130,6 +131,18 @@ const routes: Routes = [{
  canActivate: [SuperGuard]
 },
 {
+  path: 'reporteEspecificoPoa',
+  component: ReporteEspecificoPoaComponent,
+  pathMatch: 'full',
+ canActivate: [SuperGuard]
+},
+{ path: 'reporteEspecificoPoa/:id', 
+component: ReporteEspecificoPoaComponent ,
+pathMatch: 'full',
+ canActivate: [SuperGuard]
+},
+
+{
   path: 'objetivoods-lista',
   component: ObjetivoodsListaComponent,
   pathMatch: 'full',
@@ -156,6 +169,7 @@ const routes: Routes = [{
   path: 'flujo-modelo',
   loadChildren: () => import("./flujo-modelo/flujo-modelo.module").then(m => m.FlujoModeloModule)
 },
+
 {
   path: 'flujo_Componentes',
   loadChildren: () => import("./flujo-componentes/flujo-componentes.module").then(m => m.FlujoComponentesModule)

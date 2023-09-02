@@ -1,214 +1,76 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { ModeloPoa } from 'src/app/models/ModeloPoa';
-import { ModeloPoaService } from 'src/app/services/modelo_poa.service';
+import { ActivatedRoute } from '@angular/router';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { PoaService } from 'src/app/services/poa.service';
+import { ProyectoService } from 'src/app/services/proyecto.service';
+import { Proyecto } from 'src/app/models/Proyecto';
+import { AprovacionPoa } from 'src/app/models/aprovacion-poa';
+import { AprobacionPoaService } from 'src/app/services/aprobacion-poa.service';
+import { Chart } from 'chart.js';
 
 @Component({
   selector: 'app-reporte-especifico-poa',
   templateUrl: './reporte-especifico-poa.component.html',
   styleUrls: ['./reporte-especifico-poa.component.css']
 })
-export class ReporteEspecificoPoaComponent implements OnInit{
-  
+export class ReporteEspecificoPoaComponent implements OnInit {
   @ViewChild("chart")
   chart: any;
-  model: ModeloPoa= new ModeloPoa();
-  dataSource: any;
-  asignacion: any;
-  // indicadorClase: Indicador = new Indicador();
-  title = 'ng-chart';
-  porcentaje!: number;
-  indicador: any;
-  // ponderacionClase: Ponderacion = new Ponderacion();
-  ponderacion: any;
-  guardarponde: any;
-  ponderacionv: any;
-  //Variable para ponderacion
-  fecha!: Date;
-  peso: number = 0;
-  porc_obtenido: number = 0;
-  porc_utilida_obtenida: number = 0;
-  valor_obtenido: number = 0;
-  // indicador1!: Indicador;
-  // modelo1!: Modelo;
-  i: any;
-  fechaSeleccionada: any;
-  conf: number = 0;
-
-
-  @ViewChild('miTabla', { static: true }) miTabla!: ElementRef;
+  id_poa: any; // Declarar una variable para almacenar el id_poa
+  proyectoDelPoa: Proyecto | null = null;
+  aprovacionPoa: AprovacionPoa[] = [];
 
   constructor(
-    // private indicadorservice: IndicadoresService,
-    private router: Router, private fb: FormBuilder,
-    public modeloService: ModeloPoaService,
-    // public asignacionIndicadorService: AsignacionIndicadorService,
-    // private servicePonderacion: PonderacionService,
-    private http: HttpClient,
-    private activatedRoute: ActivatedRoute
-
-
-  ) {
-  }
-
-
-
-  ocultarBoton: boolean = false;
-  // En tu componente
-
+    private route: ActivatedRoute,
+    private proyectoService: ProyectoService,
+    private poaService: PoaService,
+    private aproPoaService: AprobacionPoaService
+  ) {}
 
   ngOnInit(): void {
-    this.conf = 0;
-    this.activatedRoute.queryParams.subscribe(params => {
-      this.fechaSeleccionada = params['fecha']; // Obtener la fecha actual
-      this.conf = params['conf'];
-      if (this.conf == 1) {
-        this.ocultarBoton = true;
-      } else {
-        this.ocultarBoton = false;
-      }
-      console.log(this.fechaSeleccionada, this.conf, "fecah selecionada");
-      // Aquí puedes realizar cualquier otra lógica con la fecha seleccionada en el nuevo formato
-    });
-
-    console.log('Fecha seleccionada:', this.fechaSeleccionada);
-    //this.recibeIndicador();
-    // this.listPonderacion();
-
-
-
-
-
-
+    this.recibePoa();
   }
 
+  recibePoa() {
+    this.route.paramMap.subscribe(params => {
+      this.id_poa = params.get('id');
+      console.log('ID de POA seleccionado:', this.id_poa);
+      this.listarAprovacionPoa();
+    });
+  }
 
+  // Listar Asignación deL poa
+  listarAprovacionPoa() {
+    this.aproPoaService.getAprobacionPoa().subscribe(data => {
+      this.aprovacionPoa = data;
+      console.log(this.aprovacionPoa, "lista aprobación poa");
+      this.buscarProyectosRelacionados();
+    });
+  }
 
-  // recibeIndicador() {
+  buscarProyectosRelacionados(): void {
+    // Filtra la lista de aprobaciónPoa para encontrar los elementos que coinciden con el ID del POA
+    const poaId = parseInt(this.id_poa); // Convierte el ID de POA a número si es necesario
+    const proyectosRelacionados:any = this.aprovacionPoa
+      .filter(ap => ap.poa?.id_poa === poaId)
+      .map(ap => ap.proyecto?.id_proyecto);
 
-
-  //   let idModelo = localStorage.getItem("id");
-
-
-  //   this.modeloService.getModeloPoaById(Number(idModelo)).subscribe(dataModelo => {
-  //     this.model = dataModelo;
-  //     // Capturar el ID del indicador del modelo
-
-  //     this.asignacionIndicadorService.getAsignacionIndicadorByIdModelo(Number(idModelo)).subscribe(info => {
-
-  //       this.indicadorservice.getIndicadors().subscribe(result => {
-  //         this.dataSource = [];
-  //         this.asignacion = info;
-
-  //         console.log(this.conf);
-  //         if (this.conf == 1) {
-  //           this.dataSource = result.filter((indicador: any) => {
-  //             return info.some((asignacion: any) => {
-  //               return indicador.id_indicador === asignacion.indicador.id_indicador;
-
-  //             });
-
-  //           });
-  //           let valores = this.dataSource
-  //           // this.coloresTabla();
-
-  //           // this.getRowCountCriterio1(this.dataSource.subcriterio.criterio.nombre,this.i);
-  //           // this.getRowCountSubcriterio1(this.dataSource.subcriterio.nombre,this.i);
-  //           this.servicePonderacion.listarPonderacionPorFecha(this.fechaSeleccionada).subscribe(data => {
-  //             console.log("informacion", data);
-  //             valores.forEach((indicador: any) => {
-  //               const ponderacion = data.find((p: any) => indicador.id_indicador === p.indicador.id_indicador);
-  //               if (ponderacion) {
-  //                 indicador.peso = ponderacion.peso;
-  //                 indicador.porc_obtenido = ponderacion.porc_obtenido;
-  //                 indicador.porc_utilida_obtenida = ponderacion.porc_utilida_obtenida;
-  //                 indicador.valor_obtenido = ponderacion.valor_obtenido;
-  //               }
-  //             });
-  //             this.dataSource = valores;
-  //             console.log(this.dataSource);
-  //             // this.coloresTabla();
-  //             this.createChart();
-  //             //this.pieChart();
-  //             this.GraficaPastel();
-  //             this.calculatePromedioPorCriterio();
-
-  //             this.calcularTSumaPesos();
-  //             this.calcularUtilidad();
-  //             this.coloresTabla();
-  //           });
-
-
-
-  //         } else {
-  //           this.dataSource = result.filter((indicador: any) => {
-  //             return info.some((asignacion: any) => {
-  //               return indicador.id_indicador === asignacion.indicador.id_indicador;
-  //             });
-  //           });
-  //           this.createChart();
-  //           //this.pieChart();
-  //           this.GraficaPastel();
-  //           this.calculatePromedioPorCriterio();
-
-  //           this.calcularTSumaPesos();
-  //           this.calcularUtilidad();
-  //           this.coloresTabla();
-  //         }
-
-
-  //       });
-  //     });
-  //   });
-  // }
-
+    if (proyectosRelacionados.length > 0) {
+      // Utiliza los IDs de proyecto para obtener los proyectos relacionados
+      this.proyectoService.buscarProyectosPorIds(proyectosRelacionados).subscribe(
+        proyectos => {
+          // Ahora, tienes la lista de proyectos relacionados con el POA seleccionado
+          console.log('Proyectos relacionados:', proyectos);
+        },
+        error => {
+          console.error('Error al obtener los proyectos:', error);
+        }
+      );
+    } else {
+      console.error('No se encontraron elementos de AprobaciónPoa para el ID de POA:', poaId);
+    }
+  }
 
   
-
-
-
-  // //enviamos modelo
-  // enviarModelo(modelo: Modelo): void {
-  //   localStorage.setItem("id", modelo.id_modelo.toString());
-  //   this.model = modelo;
-  //   //this.router.navigate(['/detallemodelo']);
-  // }
-
-  // //Calculamos el promedio de cada criterio
-  // calculatePromedioPorCriterio() {
-  //   const promediosPorCriterio: { [criterio: string]: number } = {};
-  //   const conteoIndicadoresPorCriterio: { [criterio: string]: number } = {};
-
-  //   this.dataSource.forEach((indicador: any) => {
-  //     const criterioNombre = indicador.subcriterio.criterio?.nombre;
-  //     if (criterioNombre) {
-  //       if (promediosPorCriterio[criterioNombre]) {
-  //         promediosPorCriterio[criterioNombre] += indicador.porc_obtenido;
-  //         conteoIndicadoresPorCriterio[criterioNombre] += 1;
-  //       } else {
-  //         promediosPorCriterio[criterioNombre] = indicador.porc_obtenido;
-  //         conteoIndicadoresPorCriterio[criterioNombre] = 1;
-  //       }
-  //     }
-  //   });
-
-  //   Object.keys(promediosPorCriterio).forEach((criterio: string) => {
-  //     const indicadoresCount = conteoIndicadoresPorCriterio[criterio];
-  //     const promedioCriterio = promediosPorCriterio[criterio] / indicadoresCount;
-  //     promediosPorCriterio[criterio] = promedioCriterio;
-  //   });
-  //   console.log(promediosPorCriterio);
-
-  //   console.log(conteoIndicadoresPorCriterio);
-  // }
-
-
-
-
-
-  // ///Grafica del pastel
   // GraficaPastel() {
 
 
@@ -239,7 +101,7 @@ export class ReporteEspecificoPoaComponent implements OnInit{
 
   // }
 
-  // //Grafica de barras
+  //Grafica de barras
 
   // createChart() {
 
@@ -332,169 +194,6 @@ export class ReporteEspecificoPoaComponent implements OnInit{
   //   });
 
   // }
-
-
-
-  // //colores de la celda de la tabla
-  // coloresTabla() {
-  //   this.dataSource.forEach((indicador: any) => {
-
-  //     if (indicador.porc_obtenido > 75 && indicador.porc_obtenido <= 100) {
-  //       indicador.color = 'verde'; // Indicador con porcentaje mayor a 50% será de color verde
-  //     }
-  //     else if (indicador.porc_obtenido > 50 && indicador.porc_obtenido <= 75) {
-  //       indicador.color = 'amarillo'; // Indicador con porcentaje mayor a 50% será de color verde
-  //     }
-  //     else if (indicador.porc_obtenido > 25 && indicador.porc_obtenido <= 50) {
-  //       indicador.color = 'naranja'; // Indicador con porcentaje mayor a 50% será de color verde
-  //     } else if (indicador.porc_obtenido <= 25) {
-  //       indicador.color = 'rojo'; // Indicador con porcentaje menor a 30% será de color rojo
-  //     } else {
-  //       indicador.color = ''; // No se asigna ningún color a los indicadores que no cumplen las condiciones anteriores
-  //     }
-  //   });
-  // }
-
-  // //regreso al modelo
-  // verCriterios() {
-  //   this.router.navigate(['/detallemodelo']);
-  // }
-
-  // //lista de ponderacion 
-
-  // listPonderacion() {
-  //   this.servicePonderacion.listarPonderacion().subscribe(data => {
-  //     this.dataSource = data;
-
-  //   });
-  //   console.log(this.dataSource + 'listaaaaaaaaa');
-
-  // }
-
-
-  // //crear ponderacion
-  // crearPonderacion(ponderacionClase: Ponderacion) {
-
-
-  //   this.servicePonderacion.guardarPonderacion(ponderacionClase)
-  //     .subscribe(
-  //       (data: any) => {
-  //         console.log('Ponderacion creada con éxito:', data);
-  //         Swal.fire(
-  //           'Ponderacion Registrada!',
-  //           'success'
-  //         );
-  //         this.listarPonderacion();
-  //       },
-  //       (error: any) => {
-  //         console.error('Error al crear el subcriterio:', error);
-  //       }
-  //     );
-  //   //this.router.navigate(['/ponderacion']);
-
-
-  // }
-
-  // listarPonderacion() {
-  //   this.servicePonderacion.listarPonderacion().subscribe(data => {
-  //     this.dataSource = data;
-  //   });
-  // }
-
-  // //Para las tablas html no tocar ********************************************************************************
-  // // ...
-
-  // getRowCountCriterio(criterio: string, index: number): number {
-  //   this.metodoordenar();
-  //   let count = 1;
-  //   for (let i = index + 1; i < this.dataSource.length; i++) {
-  //     if (this.dataSource[i].subcriterio.criterio.nombre === criterio) {
-  //       count++;
-  //     } else {
-  //       break;
-  //     }
-  //   }
-  //   return count;
-  // }
-
-  // getRowCountSubcriterio(subcriterio: string, index: number): number {
-  //   this.metodoordenar();
-  //   let count = 1;
-  //   for (let i = index + 1; i < this.dataSource.length; i++) {
-  //     if (this.dataSource[i].subcriterio.nombre === subcriterio) {
-  //       count++;
-  //     } else {
-  //       break;
-  //     }
-  //   }
-  //   return count;
-  // }
-
-  // getRowCountCriterio1(criterio: string, index: number): number {
-  //   this.metodoordenar();
-  //   let count = 1;
-  //   for (let i = index + 1; i < this.dataSource.length; i++) {
-  //     if (this.dataSource[i].subcriterio.criterio.nombre === criterio) {
-  //       count++;
-  //     } else {
-  //       break;
-  //     }
-  //   }
-  //   return count;
-  // }
-
-
-  // getRowCountSubcriterio1(subcriterio: string, index: number): number {
-  //   this.metodoordenar();
-  //   let count = 1;
-  //   for (let i = index + 1; i < this.dataSource.length; i++) {
-  //     if (this.dataSource[i].subcriterio.nombre === subcriterio) {
-  //       count++;
-  //     } else {
-  //       break;
-  //     }
-  //   }
-  //   return count;
-  // }
-
-  // //para ordenar la tabla y no se repita
-  // metodoordenar() {
-  //   // Ordenar dataSource por subcriterio.criterio.nombre y subcriterio.nombre
-  //   this.dataSource.sort((a: any, b: any) => {
-  //     if (a.subcriterio.criterio.nombre < b.subcriterio.criterio.nombre) {
-  //       return -1;
-  //     }
-  //     if (a.subcriterio.criterio.nombre > b.subcriterio.criterio.nombre) {
-  //       return 1;
-  //     }
-  //     if (a.subcriterio.nombre < b.subcriterio.nombre) {
-  //       return -1;
-  //     }
-  //     if (a.subcriterio.nombre > b.subcriterio.nombre) {
-  //       return 1;
-  //     }
-  //     return 0;
-  //   });
-
-  // }
-
-
-  // //Suma de todos los pesos
-
-  // sumaTotalPesos: number = 0;
-
-  // calcularTSumaPesos(): void {
-  //   this.sumaTotalPesos = this.dataSource.reduce((suma: any, indicador: any) => suma + indicador.peso, 0);
-  //   console.log(this.sumaTotalPesos + ' : el total es')
-  // }
-
-  // //Calcular las uttilidades
-  // sumaUtilidad: number = 0;
-
-  // calcularUtilidad(): void {
-  //   this.sumaUtilidad = this.dataSource.reduce((suma: any, indicador: any) => suma + indicador.porc_utilida_obtenida, 0);
-  //   console.log(this.sumaUtilidad + ' : el total es')
-  // }
-
-
+  
+  
 }
