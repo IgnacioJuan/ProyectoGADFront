@@ -5,12 +5,13 @@ export class ActividadesPoa {
     id_actividad!: number;
     nombre!: string;
     descripcion!: string;
-    observaciones!: string;
     presupuesto_referencial!: number;
     codificado!: number;
-    ejecutado!: number;
-    saldo!: number;
+    devengado!: number;
+    recursos_propios!: number;
+    estado!: string
     visible!: boolean;
-    poa: Poa | null = null;
-    usuario:Usuario2|null=null;
+    responsable!: string;
+    usuario!: Usuario2;
+    poa!: Poa;
 }

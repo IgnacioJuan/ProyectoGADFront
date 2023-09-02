@@ -63,13 +63,18 @@
                 </td>
               </ng-container>
               <ng-container matColumnDef="meta_final">
-                <th mat-header-cell *matHeaderCellDef>PORCENTAJE</th>
+                <th mat-header-cell *matHeaderCellDef>META FINAL</th>
                 <td mat-cell *matCellDef="let elemento">
                   {{ elemento.meta_final }}
                 </td>
               </ng-container>
      
-              
+              <ng-container matColumnDef="linea_base">
+                <th mat-header-cell *matHeaderCellDef>LINEA BASE</th>
+                <td mat-cell *matCellDef="let elemento">
+                  {{ elemento.linea_base }}
+                </td>
+              </ng-container>
   
               <ng-container matColumnDef="cantidadIndicadores">
                 <th mat-header-cell *matHeaderCellDef>INDICADORES</th>
@@ -218,7 +223,7 @@
                         </div>
                       </div>
   
-                      <label for="meta_final">Porcentaje:</label>
+                      <label for="meta_final">Meta Final:</label>
                       <input
                         class="form-control"
                         formControlName="meta_final"
@@ -239,10 +244,34 @@
                           formMeta.controls['meta_final'].hasError('required')
                           "
                         >
-                          Debe ingresar un porcentaje
+                          Debe ingresar una meta final
                         </div>
                       </div>
   
+                      <label for="linea_base">Linea Base:</label>
+                      <input
+                        class="form-control"
+                        formControlName="linea_base"
+                        type="number"
+                        id="linea_base"
+                        name="linea_base"
+                        style="margin-bottom: 10px"
+                      />
+                      <div
+                        class="alert alert-danger"
+                        *ngIf="
+                        formMeta.controls['linea_base'].invalid &&
+                        formMeta.controls['linea_base'].touched
+                        "
+                      >
+                        <div
+                          *ngIf="
+                          formMeta.controls['linea_base'].hasError('required')
+                          "
+                        >
+                          Debe ingresar una linea base
+                        </div>
+                      </div>
                    
                     </div>
                   </form>

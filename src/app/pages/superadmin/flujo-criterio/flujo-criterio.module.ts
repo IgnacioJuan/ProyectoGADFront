@@ -9,6 +9,7 @@ import { SubcriteriosIndicadorComponent } from './subcriterios-indicador/subcrit
 import { EvaluacionCuantitativaComponent } from './evaluacion-cuantitativa/evaluacion-cuantitativa.component';
 import { SharedModule } from 'src/app/shared/shared.module';
 
+
 @NgModule({
   declarations: [
     CriteriosComponent,
@@ -19,7 +20,7 @@ import { SharedModule } from 'src/app/shared/shared.module';
     EvaluacionCuantitativaComponent,
     
     
-    
+  
 
   ],
   imports: [

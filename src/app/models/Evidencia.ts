@@ -1,5 +1,4 @@
 
-import { Indicador } from "./Indicador";
 
 export class Evidencia {
     id_evidencia: number = 0;
@@ -8,7 +7,7 @@ export class Evidencia {
     descripcion: string = "";
     visible: string = "";
     estado: string = "";
-    indicador:Indicador = new Indicador();
+    indicador:any = null;
 }
 
 

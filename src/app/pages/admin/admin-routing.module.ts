@@ -1,58 +1,17 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { DashboardComponent } from './dashboard/dashboard.component';
 import { AdminGuard } from 'src/app/services/Guards/admin.guard';
-import { CriteriosAdminComponent } from './criterios-admin/criterios-admin.component';
-import { SubcriteriosAdminComponent } from './subcriterios-admin/subcriterios-admin.component';
-import { IncadoresAdminComponent } from './incadores-admin/incadores-admin.component';
-import { EvalucionComponent } from './evalucion/evalucion.component';
-import { AsignaComponent } from './asigna/asigna.component';
+
 import { AprobarRechazarAdminComponent } from './aprobar-rechazar-admin/aprobar-rechazar-admin.component';
 import { RoleguardGuard } from 'src/app/services/Guards/roleguard.guard';
 import { AsignacionEvidenciaComponent } from './asignacion-evidencia/asignacion-evidencia.component';
 import { AprobarRechazarDetalleAdminComponent } from './aprobar-rechazar-detalle-admin/aprobar-rechazar-detalle-admin.component';
+import { RegistrarPoaComponent } from './poa/registrar-poa/registrar-poa.component';
 import { PoaActividadComponent } from './asignacion-actividades/poa-actividad/poa-actividad.component';
+import { RegistrarPoaComponent } from './poa/registrar-poa/registrar-poa.component';
 
 const routes: Routes = [
-  {
-    path: 'admin',
-    component: DashboardComponent,
-    pathMatch: 'full',
-    canActivate: [AdminGuard]
-  },
-  {
-    path: 'criterios',
-    component: CriteriosAdminComponent,
-    pathMatch: 'full',
-    canActivate: [AdminGuard]
-  }
-  ,
-
-  {
-    path: 'subcriterios',
-    component: SubcriteriosAdminComponent,
-    pathMatch: 'full',
-    canActivate: [AdminGuard]
-  },
-  {
-    path: 'indicadores',
-    component: IncadoresAdminComponent,
-    pathMatch: 'full',
-    canActivate: [AdminGuard]
-  },
-  {
-    path: 'evaluacion',
-    component: EvalucionComponent,
-    pathMatch: 'full',
-    canActivate: [AdminGuard]
-  },
-  {
-    path: 'asigna',
-    component: AsignaComponent,
-    pathMatch: 'full',
-    canActivate: [AdminGuard]
-  },
-
+  
   {
     path: 'apruebaAdmin',
     component: AprobarRechazarAdminComponent,
@@ -77,8 +36,16 @@ const routes: Routes = [
 
   },
   {
+    path: 'poa',
+    loadChildren: () => import("./poa/register-poa.module").then(m => m.RegisterPoaModule)
+  },{
     path: 'asignacion-actividades',
     loadChildren: () => import("./asignacion-actividades/asignacion-actividades.module").then(m => m.AsignacionActividadesModule)
+    
+  },
+  {
+    path: 'poa',
+    loadChildren: () => import("./poa/register-poa.module").then(m => m.RegisterPoaModule)
   },
 ];
 

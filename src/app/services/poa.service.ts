@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Criterio } from '../models/Criterio';
 import { map, Observable, catchError, of } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import baserUrl from './helper';
 import { PoaActividadProjection } from '../interface/PoaActividadProjection';
 import { Poa } from '../models/Poa';
+import { PoaNoAprobadoProjection } from '../interface/PoaNoAprobadoProjection';
+import { PoaporUsuarioProjection } from '../interface/PoaporUsuarioProjection';
 
 @Injectable({
   providedIn: 'root'
@@ -40,9 +41,20 @@ export class PoaService {
   }
 
   obtenerDatosPoas(): Observable<PoaActividadProjection[]> {
-    return this.http.get<PoaActividadProjection[]>(`${baserUrl}/api/poa/listarPoasModelo`);
+    return this.http.get<PoaActividadProjection[]>(`${baserUrl}/api/poa/listarPoasDeModelo`);
   }
-  listarPoasdelProyecto(id:number, estado:string): Observable<Poa[]> {
-    return this.http.get<Poa[]>(`${baserUrl}/api/poa/listardelProyecto/${id}/${estado}`);
+  listarPoasdelProyecto(estado:string): Observable<Poa[]> {
+    return this.http.get<Poa[]>(`${baserUrl}/api/poa/listardelProyecto/${estado}`);
   }
+
+
+  getNoAprobados(): Observable<PoaNoAprobadoProjection[]> {
+    return this.http.get<PoaNoAprobadoProjection[]>(`${baserUrl}/api/poa/noaprobados`);
+  }
+
+
+  getporUsuario(): Observable<PoaporUsuarioProjection[]> {
+    return this.http.get<PoaporUsuarioProjection[]>(`${baserUrl}/api/poa/listarporusuario`);
+  }
+
 }
