@@ -1,0 +1,9 @@
+.mi-card {
+    max-width: 200px; /* Ajusta el ancho máximo según tu preferencia */
+    /* Otros estilos si los tienes */
+}
+
+.shorter-card {
+    max-width: 300px; /* Ajusta el ancho máximo para hacerlo más corto horizontalmente */
+    /* Otros estilos específicos para este caso si los tienes */
+}

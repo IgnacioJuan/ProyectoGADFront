@@ -1,24 +1,23 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { SuperGuard } from 'src/app/services/Guards/super.guard';
-import { DashboardComponent2 } from './pages/dashboard/dashboard.component';
 import { CrearUsuariosComponent } from './pages/crear-usuarios/crear-usuarios.component';
-import { ObcervacionesComponent } from './pages/observaciones/obcervaciones.component';
 import { RoleguardGuard } from 'src/app/services/Guards/roleguard.guard';
-import { SubcriteriosComponent } from './pages/subcriterios/subcriterios.component';
-import { IndicadorComponent } from './pages/indicador/indicador.component';
-import { EvidenciasComponent } from './pages/evidencias/evidencias.component';
-import { EvidenciaAtrasadaComponent } from './pages/evidencia-atrasada/evidencia-atrasada.component';
-import { CriterioReporteComponent } from './pages/criterio-reporte/criterio-reporte.component';
-import { DashboardComponent } from '../admin/dashboard/dashboard.component';
 import { ObjetivoodsListaComponent } from './pages/objetivoods-lista/objetivoods-lista.component';
-const routes: Routes = [{
-  path: 'dashboard',
-  component: DashboardComponent2,
-  pathMatch: 'full',
-  canActivate: [SuperGuard]
-}
-  ,
+import { DialogoUsuariosComponent } from './pages/dialogo-usuarios/dialogo-usuarios.component';
+import { CrearComponent } from './pages/crear-programa/crear-programa.component';
+import { AprobarPoaComponent } from './pages/aprobar-poa/aprobar-poa/aprobar-poa.component';
+import { DetallePoaComponent } from './pages/poacc/detalle-poa/detalle-poa/detalle-poa.component';
+import { ReporteavancepoaComponent } from './reporteavancepoa/reporteavancepoa.component';
+import { CrearcompetenciaComponent } from './pages/crear-competencia/crear-competencia.component';
+//import { EvidenciasRechazoComponent } from './evidencias/evidencias.component';
+import {
+  ResumenEvidenciasResponsableModule
+} from "./resumen-evidencias-responsable/resumen-evidencias-responsable.module";
+
+
+
+const routes: Routes = [
 {
   path: 'usuarios',
   component: CrearUsuariosComponent,
@@ -27,83 +26,99 @@ const routes: Routes = [{
 },
 
 {
-
-  path: 'observaciones',
-  component: ObcervacionesComponent,
+  path: 'crearUsu',
+  component: DialogoUsuariosComponent,
   pathMatch: 'full',
-  canActivate: [RoleguardGuard],
-  data: { allowedRoles: ['SUPERADMIN', 'ADMIN'] }
+  canActivate: [SuperGuard]
+},
 
-}
-  ,
+
+
 
 {
-  path: 'subcriterioSuper',
-  component: SubcriteriosComponent,
+  path: 'crearpro',
+  component: CrearComponent,
   pathMatch: 'full',
   canActivate: [SuperGuard]
 },
 {
-  path: 'indicadoreSuper',
-  component: IndicadorComponent,
-  pathMatch: 'full',
-  canActivate: [SuperGuard]
-},
-{
-  path: 'evidenciaSuper',
-  component: EvidenciasComponent,
+  path: 'aprobar-poa',
+  component: AprobarPoaComponent,
   pathMatch: 'full',
   canActivate: [SuperGuard]
 },
 
 {
-
-  path: 'actividad-rechazada',
-  component: EvidenciaAtrasadaComponent,
+  path: 'detalle-poa',
+  component: DetallePoaComponent,
   pathMatch: 'full',
-  //canActivate: [SuperGuard]
-  canActivate: [RoleguardGuard],
-  data: { allowedRoles: ['SUPERADMIN', 'ADMIN'] }
+  canActivate: [SuperGuard]
+},
 
-}
-  ,
 //Compartidas
+
 {
-  path: 'criterio_reporte',
-  component: CriterioReporteComponent,
+  path: 'reportePoa',
+  component: ReporteavancepoaComponent,
   pathMatch: 'full',
-  canActivate: [RoleguardGuard],
-  data: { allowedRoles: ['SUPERADMIN', 'ADMIN', 'AUTORIDAD'] }
+ canActivate: [SuperGuard]
 },
 {
-  path: 'actividad_responsable',
-  component: DashboardComponent,
+  path: 'objetivoods-lista',
+  component: ObjetivoodsListaComponent,
   pathMatch: 'full',
-  canActivate: [RoleguardGuard],
-  data: { allowedRoles: ['SUPERADMIN', 'ADMIN'] }
+  canActivate: [RoleguardGuard], // Asegúrate de que el guard sea el adecuado
+  data: { allowedRoles: ['SUPERADMIN', 'ADMIN'] } // Ajusta los roles permitidos
 },
+
+{
+  path: 'flujo-modelo',
+  loadChildren: () => import("./flujo-modelo/flujo-modelo.module").then(m => m.FlujoModeloModule)
+},
+{
+  path: 'flujo_Componentes',
+  loadChildren: () => import("./flujo-componentes/flujo-componentes.module").then(m => m.FlujoComponentesModule)
+},
+  
   {
-    path: 'objetivoods-lista',
-    component: ObjetivoodsListaComponent,
+    path: 'aprobarEvidencias',
+    loadChildren: () => import("./aprobar-evidencias/aprobar-evidencias.module").then(m => m.AprobarEvidenciasModule)
+  },
+
+  {
+    path: 'crearcompe',
+    component: CrearcompetenciaComponent,
     pathMatch: 'full',
-    canActivate: [RoleguardGuard], // Asegúrate de que el guard sea el adecuado
-    data: { allowedRoles: ['SUPERADMIN', 'ADMIN'] } // Ajusta los roles permitidos
+    canActivate: [SuperGuard]
+  },
+  {
+    path: 'actividades-presupuestos',
+    loadChildren: () => import("./actividades-presupuestos/actividades-presupuestos.module").then(m => m.ActividadesPresupuestosModule)
+  },
+  {
+    path: 'archivos-rechazados',
+    loadChildren: () => import("./archivos-rechazados/evidencias-rechazadas.module").then(m => m.EvidenciasRechazadasModule)
+
   },
 {
-  path: 'modelo',
-  loadChildren: () => import("./modelo/modelo.module").then(m => m.ModeloModule)
+  path: 'ejes',
+  loadChildren: () => import("./ejes/ejes.module").then(m => m.EjesModule)
 },
 {
-  path: 'ponderacion',
-  loadChildren: () => import("./ponderacion/ponderacion.module").then(m => m.PonderacionModule)
+  path: 'resumen-evidencias-responsable',
+  loadChildren: () => import("./resumen-evidencias-responsable/resumen-evidencias-responsable.module").then(m => m.ResumenEvidenciasResponsableModule)
 },
 {
-  path: 'flujo-criterio',
-  loadChildren: () => import("./flujo-criterio/flujo-criterio.module").then(m => m.FlujoCriterioModule)
+  path: 'usuario-actividades',
+  loadChildren: () => import("./usuario-actividades/usuario-actividades.module").then(m => m.UsuarioActividadesModule)
 },
+
+
 {
-  path: 'formula',
-  loadChildren: () => import("./formula/formula.module").then(m => m.FormulaModule)
+  path: 'crearcompe',
+  component: CrearcompetenciaComponent,
+  pathMatch: 'full',
+  canActivate: [SuperGuard]
 },
 ];
 

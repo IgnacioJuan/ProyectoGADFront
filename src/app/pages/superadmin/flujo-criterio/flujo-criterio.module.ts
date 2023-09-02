@@ -13,10 +13,14 @@ import { SharedModule } from 'src/app/shared/shared.module';
 @NgModule({
   declarations: [
     CriteriosComponent,
+    
     IndicadoresEvidenciaComponent,
     CriteriosSubcriterioComponent,
     SubcriteriosIndicadorComponent,
     EvaluacionCuantitativaComponent,
+    
+    
+  
 
   ],
   imports: [

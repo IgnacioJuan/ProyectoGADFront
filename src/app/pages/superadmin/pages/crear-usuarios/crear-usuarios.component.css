@@ -8,6 +8,28 @@ mat-label {
   background-color: #ffffff;
 }
 
+.custom-input {
+  width: 300px;
+  height: 40px;
+  margin-right: 10px;
+}
+
+.custom-button {
+  width: 200px;
+  height: 40px;
+  margin-left: 10px;
+}
+
+.input-container {
+  margin-right: 10px;
+  /* Espacio entre el input y el botón */
+}
+
+.button-container {
+  margin-left: 10px;
+  /* Espacio entre el input y el botón */
+}
+
 .btn-close {
   background-color: #f00;
 }
@@ -46,9 +68,11 @@ mat-label {
 table {
   width: 100%;
 }
+
 .custom-select-panel {
   z-index: 9999;
 }
+
 .dropdown {
   position: relative;
   display: inline-block;
@@ -67,7 +91,7 @@ table {
   position: absolute;
   background-color: #fff;
   min-width: 160px;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   z-index: 1;
 }
 
@@ -90,21 +114,28 @@ table {
 .dropdown:hover .dropdown-content {
   display: block;
 }
+
 .custom-select {
-  z-index: 1000; /* Ajusta el valor del z-index según sea necesario para que aparezca por encima del modal */
+  z-index: 1000;
+  /* Ajusta el valor del z-index según sea necesario para que aparezca por encima del modal */
 }
+
 body {
   font: 1em/1.618 Inter, sans-serif;
 
   display: flex;
   align-items: center;
   justify-content: center;
-  
+
   min-height: 100vh;
   padding: 30px;
-  
+
   color: #224;
   background:
-    url(https://source.unsplash.com/E8Ufcyxz514/2400x1823)
-    center / cover no-repeat fixed;
+    url(https://source.unsplash.com/E8Ufcyxz514/2400x1823) center / cover no-repeat fixed;
+
+}
+
+.custom-color {
+  color: #288637;
 }

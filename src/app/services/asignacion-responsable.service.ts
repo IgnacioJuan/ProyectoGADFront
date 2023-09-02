@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import baserUrl from './helper';
  import { map, Observable } from 'rxjs';
-import { Criterio } from '../models/Criterio';
+//import { Criterio } from '../models/Criterio';
 import { asigna_R } from '../models/Asigna-Responsable';
 import { usuario } from '../models/Usuario';
 import { Usuario2 } from '../models/Usuario2';
@@ -36,10 +36,10 @@ export class AsignacionResponsableService {
 
 
   //LISTAR CRITERIOS
-  public listarCriterios(): Observable<Criterio[]> {
-    return this.httpClient.get(`${baserUrl}/api/criterio/listar`).
-      pipe(map((response) => response as Criterio[]));
-  }
+  // public listarCriterios(): Observable<Criterio[]> {
+  //   return this.httpClient.get(`${baserUrl}/api/criterio/listar`).
+  //     pipe(map((response) => response as Criterio[]));
+  // }
 
   //GUARDAR ASIGNACION
   public createAsigna(asigna: asigna_R): Observable<asigna_R> {
