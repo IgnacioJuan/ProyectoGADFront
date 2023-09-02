@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import baserUrl from './helper';
 import { PoaActividadProjection } from '../interface/PoaActividadProjection';
 import { Poa } from '../models/Poa';
+import { PoasAdminEstadoProjection } from '../interface/PoasAdminEstado';
 
 @Injectable({
   providedIn: 'root'
@@ -44,4 +45,10 @@ export class PoaService {
   listarPoasdelProyecto(id:number, estado:string): Observable<Poa[]> {
     return this.http.get<Poa[]>(`${baserUrl}/api/poa/listardelProyecto/${id}/${estado}`);
   }
+
+  //Listar POAS por Admin-ESTADO 
+  listarPoasAdminEstado(idResponsable:number, estado:string): Observable<PoasAdminEstadoProjection[]> {
+    return this.http.get<PoasAdminEstadoProjection[]>(`${baserUrl}/api/poa/listarPoasAdminEstado/${idResponsable}/${estado}`);
+  }
+
 }

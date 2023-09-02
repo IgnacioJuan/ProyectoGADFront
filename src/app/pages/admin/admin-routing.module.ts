@@ -12,6 +12,7 @@ import { RoleguardGuard } from 'src/app/services/Guards/roleguard.guard';
 import { AsignacionEvidenciaComponent } from './asignacion-evidencia/asignacion-evidencia.component';
 import { AprobarRechazarDetalleAdminComponent } from './aprobar-rechazar-detalle-admin/aprobar-rechazar-detalle-admin.component';
 import { PoaActividadComponent } from './asignacion-actividades/poa-actividad/poa-actividad.component';
+import { ListPoasEnviadosAdminComponent } from './list-poas-enviados-admin/list-poas-enviados-admin.component';
 
 const routes: Routes = [
   {
@@ -74,6 +75,13 @@ const routes: Routes = [
     pathMatch: 'full',
     canActivate: [RoleguardGuard],
     data: { allowedRoles: ['SUPERADMIN', 'ADMIN'] }
+
+  },
+  {
+    path: 'poasEnviadosAdmin',
+    component: ListPoasEnviadosAdminComponent,
+    pathMatch: 'full',
+    canActivate: [AdminGuard]
 
   },
   {
