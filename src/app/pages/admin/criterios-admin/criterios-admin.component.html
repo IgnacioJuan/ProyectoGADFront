@@ -4,18 +4,11 @@
       <h1><strong> LISTADO CRITERIOS</strong></h1>
     </blockquote>
     <div></div>
-
     <div class="card">
       <div class="card-body">
         <div class="form-group">
-          <input
-            type="text"
-            class="form-control"
-            name="filterPost3"
-            placeholder="Buscar..."
-            [(ngModel)]="filterPost"
-            (input)="aplicarFiltro()"
-          />
+          <input type="text" class="form-control" name="filterPost3" placeholder="Buscar..." [(ngModel)]="filterPost"
+            (input)="aplicarFiltro()" />
         </div>
         <br />
         <table mat-table [dataSource]="dataSource">
@@ -41,14 +34,9 @@
           <tr mat-header-row *matHeaderRowDef="columnasUsuario"></tr>
           <tr mat-row *matRowDef="let fila; columns: columnasUsuario"></tr>
         </table>
-        <mat-paginator
-          [pageSizeOptions]="[5, 10, 20]"
-          showFirstLastButtons
-          aria-label="Select page of periodic elements"
-          itemsPerPageLabel="Items por página:"
-          nextPageLabel="Siguiente"
-          previousPageLabel="Anterior"
-        >
+        <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
+          aria-label="Select page of periodic elements" itemsPerPageLabel="Items por página:" nextPageLabel="Siguiente"
+          previousPageLabel="Anterior">
         </mat-paginator>
       </div>
     </div>

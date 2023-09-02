@@ -11,6 +11,7 @@ import { AprobarRechazarAdminComponent } from './aprobar-rechazar-admin/aprobar-
 import { RoleguardGuard } from 'src/app/services/Guards/roleguard.guard';
 import { AsignacionEvidenciaComponent } from './asignacion-evidencia/asignacion-evidencia.component';
 import { AprobarRechazarDetalleAdminComponent } from './aprobar-rechazar-detalle-admin/aprobar-rechazar-detalle-admin.component';
+import { RegistrarPoaComponent } from './poa/registrar-poa/registrar-poa.component';
 
 const routes: Routes = [
   {
@@ -59,6 +60,12 @@ const routes: Routes = [
     canActivate: [RoleguardGuard],
     data: { allowedRoles: ['SUPERADMIN', 'ADMIN'] }
 
+  },
+  {
+    path: 'poa',
+    component: RegistrarPoaComponent,
+    pathMatch: 'full',
+    canActivate: [AdminGuard]
   },
   {
     path: 'asignaEvidencia',

@@ -1,25 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { ListarProyectosComponent } from '../listar-proyectos/listar-proyectos/listar-proyectos.component';
+import { ProjectSelectService } from 'src/app/services/poa/project-select.service';
+import { Convert, ProjectByIDDto } from 'src/app/interface/ProjectByIdDto';
+import { AddActiviesComponent } from '../add-activies/add-activies.component';
 
 
-export interface PeriodicElement {
-  name: string;
-  position: number;
-  weight: number;
-  symbol: string;
-}
 
-const ELEMENT_DATA: PeriodicElement[] = [
-  { position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H' },
-  { position: 2, name: 'Helium', weight: 4.0026, symbol: 'He' },
-  { position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li' },
-  { position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be' },
-  { position: 5, name: 'Boron', weight: 10.811, symbol: 'B' },
-  { position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C' },
-  { position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N' },
-  { position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O' },
-  { position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F' },
-  { position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne' },
-];
 
 
 @Component({
@@ -27,7 +14,57 @@ const ELEMENT_DATA: PeriodicElement[] = [
   templateUrl: './registrar-poa.component.html',
   styleUrls: ['./registrar-poa.component.css']
 })
-export class RegistrarPoaComponent {
+export class RegistrarPoaComponent implements OnInit {
+  currentDate: Date = new Date();
   displayedColumns: string[] = ['name', 'weight', 'symbol', 'eliminar'];
-  dataSource = ELEMENT_DATA;
+  dataSource = [];
+  projectSelect: ProjectByIDDto = {
+    id_proyecto: 0,
+    area: '',
+    cargo: '',
+    nombre: '',
+    codigo: '',
+    nombre_componente: '',
+    nombre_objetivo_ods: '',
+    nombre_objetivo_pnd: '',
+    nombre_objetivo_pdot: '',
+    objetivo_proyecto: '',
+    nombre_indicador: '',
+    nombre_meta_pdot: '',
+    nombre_programa: '',
+    nombre_completo_persona: '',
+    rango_fechas: ''
+  };
+  proyecto = 0;
+  constructor(public dialog: MatDialog, private projectSelectSetvice: ProjectSelectService) { }
+  ngOnInit(): void {
+    this.getProject(0);
+  }
+
+  openDialogProjects(): void {
+    const dialogRef = this.dialog.open(ListarProyectosComponent, {
+      data: {}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed', result);
+      this.getProject(result.id_proyecto);
+    });
+  }
+
+  openDialogActivities(): void {
+    const dialogRef = this.dialog.open(AddActiviesComponent, {
+      data: {}
+    })
+
+  }
+
+  getProject(idProyecto: number) {
+    this.projectSelectSetvice.getProject(idProyecto).subscribe((data: any) => {
+      if (data.length > 0) {
+        this.projectSelect = data[0];
+      }
+      console.log(this.projectSelect);
+    })
+  }
 }
