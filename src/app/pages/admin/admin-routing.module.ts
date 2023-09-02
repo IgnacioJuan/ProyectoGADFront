@@ -62,12 +62,6 @@ const routes: Routes = [
 
   },
   {
-    path: 'poa',
-    component: RegistrarPoaComponent,
-    pathMatch: 'full',
-    canActivate: [AdminGuard]
-  },
-  {
     path: 'asignaEvidencia',
     component: AsignacionEvidenciaComponent,
     pathMatch: 'full',
@@ -81,6 +75,10 @@ const routes: Routes = [
     canActivate: [RoleguardGuard],
     data: { allowedRoles: ['SUPERADMIN', 'ADMIN'] }
 
+  },
+  {
+    path: 'poa',
+    loadChildren: () => import("./poa/register-poa.module").then(m => m.RegisterPoaModule)
   },
 ];
 

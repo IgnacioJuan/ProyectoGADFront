@@ -16,9 +16,6 @@ import { AprobarRechazarDetalleAdminComponent } from './aprobar-rechazar-detalle
 
 
 import { SharedModule } from 'src/app/shared/shared.module';
-import { RegistrarPoaComponent } from './poa/registrar-poa/registrar-poa.component';
-import { ListarProyectosComponent } from './poa/listar-proyectos/listar-proyectos/listar-proyectos.component';
-import { AddActiviesComponent } from './poa/add-activies/add-activies.component';
 
 @NgModule({
   declarations: [
@@ -31,16 +28,13 @@ import { AddActiviesComponent } from './poa/add-activies/add-activies.component'
     AsignacionEvidenciaComponent,
     AprobarRechazarAdminComponent,
     AprobarRechazarDetalleAdminComponent,
-    RegistrarPoaComponent,
-    ListarProyectosComponent,
-    AddActiviesComponent,
 
 
   ],
   imports: [
     CommonModule,
     AdminRoutingModule,
-   
+
     SharedModule
   ]
 })
