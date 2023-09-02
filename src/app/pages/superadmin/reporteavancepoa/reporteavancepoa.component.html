@@ -1,0 +1,14 @@
+<ng-container *ngFor="let item of modeloPoa">
+    <mat-card class="mi-card shorter-card">
+        <mat-card-content>
+            <div class="item">
+                <h3><b>{{ item.nombre }}</b></h3>
+                <br>
+                <b>Fecha Inicio: {{ item.fecha_inicial }}</b> 
+                <br>
+                <b>Fecha Fin: {{ item.fecha_final }}</b> 
+            </div>
+        </mat-card-content>
+    </mat-card>
+    <br>
+</ng-container>

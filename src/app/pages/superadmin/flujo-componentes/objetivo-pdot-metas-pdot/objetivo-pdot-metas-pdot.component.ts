@@ -5,7 +5,6 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
 import { Componentes } from 'src/app/models/Componentes';
-import { Indicador } from 'src/app/models/Indicador';
 import { MetasPDOT } from 'src/app/models/MetasPDOT';
 import { ObjetivoPDOT } from 'src/app/models/ObjetivoPDOT';
 import { MetasPdotService } from 'src/app/services/metas-pdot.service';
@@ -49,7 +48,7 @@ listaMetasPdot: MetasPDOT[] = [];
 
 
 miModal!: ElementRef;
-public indic = new Indicador();
+//public indic = new Indicador();
 public metaPDOT = new MetasPDOT();
 
 //Buscar

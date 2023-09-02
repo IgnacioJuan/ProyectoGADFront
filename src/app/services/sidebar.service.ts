@@ -52,8 +52,9 @@ export class SidebarService {
         { titulo: 'Programas', url: 'sup/crearpro', icono: 'fas fa-list-ul ' },
         { titulo: 'Componentes', url: 'sup/ejes/ejestabla', icono: 'fas fa-list-ul ' },
         { titulo: 'Competencia', url: 'sup/crearcompe', icono: 'fas fa-list-ul ' },
-        { titulo: 'ODS', url: 'sup/objetivoods-lista', icono: 'fas fa-list-ul ' },
-        { titulo: 'Presupuestos', url: 'sup/actividades-presupuestos/tabla-poas', icono: 'fas fa-list-ul ' }
+        { titulo: 'Presupuestos', url: 'sup/actividades-presupuestos/tabla-poas', icono: 'fas fa-list-ul ' },
+        { titulo: 'Evidencias Rechazadas', url: 'sup/archivos-rechazados/Actividades_Evi_Rechazados', icono: 'fas fa-list-ul ' },
+
       ]
     },
     {
@@ -64,14 +65,36 @@ export class SidebarService {
 
       ]
     },
+
     {
-      icono: 'nav-icon fas fa-tasks',
-      titulo: "Evaluar Evidencia",
+      icono: 'nav-icon fas   fa-users',
+      titulo: "POA",
+      submenu: [
+        { titulo: 'Poas Rechazados', url: 'sup/flujo-criterio/listarpoa', icono: 'fas fa-list-ul ' },
+        { titulo: 'Poas Asignados', url: 'sup/flujo-criterio/listarpoausu', icono: 'fas fa-list-ul ' }
+
+
+
+      ] 
+    },
+    {
+      icono: 'nav-icon fas   fa-users',
+      titulo: "Programa",
       submenu: [
         { titulo: 'Aprobar/Rechazar Evidencia', url: 'sup/aprobarEvidencias/listPoaAprobarEvidenciaSuper', icono: 'fas fa-file-contract' }
 
       ]
-    }
+    },
+
+    {
+      icono: 'nav-icon fas   fa-users',
+      titulo: "Competencia COOTAD",
+      submenu: [
+        { titulo: 'Competencia Cootad', url: 'sup/flujo-criterio/crearcompe', icono: 'fas fa-list-ul ' }
+
+      ]
+    },
+
 
   ]
 
@@ -92,6 +115,13 @@ export class SidebarService {
       submenu: [
         { titulo: 'Reporte Criterios', url: 'res/actividadCriterio', icono: 'fas fa-file-contract' }
 
+      ]
+    },
+    {
+      icono: 'nav-icon fas fa-tasks',
+      titulo: "Actividades",
+      submenu: [
+        { titulo: 'designada', url: 'res/activ/actividadesdesig', icono: 'fas fa-file-contract' }
       ]
     }
 

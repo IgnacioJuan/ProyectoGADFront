@@ -4,6 +4,7 @@ import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { Componentes } from 'src/app/models/Componentes';
+//import { Criterio } from 'src/app/models/Criterio';
 import { ComponentesService } from 'src/app/services/componentes.service';
 import { ObjetivoPdotService } from 'src/app/services/objetivo-pdot.service';
 import Swal from 'sweetalert2';
