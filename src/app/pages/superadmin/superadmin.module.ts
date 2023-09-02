@@ -15,16 +15,17 @@ import { EvidenciaAtrasadaComponent } from './pages/evidencia-atrasada/evidencia
 
 import { SharedModule } from 'src/app/shared/shared.module';
 import { ObjetivoodsListaComponent } from './pages/objetivoods-lista/objetivoods-lista.component';
-import { AprobarPoaComponent } from './pages/aprobar-poa/aprobar-poa/aprobar-poa.component';
+import { AprobarPoaComponent } from './pages/aprobar-poa/aprobar-poa.component';
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { DetallePoaComponent } from './pages/poacc/detalle-poa/detalle-poa/detalle-poa.component';
+import { DetallePoaComponent } from './pages/detalle-poa/detalle-poa.component';	
 
 import { FormsModule  } from '@angular/forms';
 import { NgIf } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
-
+import {MatTableModule} from '@angular/material/table';
+import { MatIconModule } from '@angular/material/icon';
 @NgModule({
   declarations: [
     DashboardComponent2,
@@ -51,7 +52,10 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     MatFormFieldModule, 
     MatInputModule, 
     FormsModule, 
-    NgIf
+    NgIf,
+    MatTableModule,
+    MatIconModule
+    
   ]
 })
 export class SuperadminModule { }

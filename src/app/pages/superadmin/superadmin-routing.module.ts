@@ -12,8 +12,8 @@ import { EvidenciaAtrasadaComponent } from './pages/evidencia-atrasada/evidencia
 import { CriterioReporteComponent } from './pages/criterio-reporte/criterio-reporte.component';
 import { DashboardComponent } from '../admin/dashboard/dashboard.component';
 import { ObjetivoodsListaComponent } from './pages/objetivoods-lista/objetivoods-lista.component';
-import { AprobarPoaComponent } from './pages/aprobar-poa/aprobar-poa/aprobar-poa.component';
-import { DetallePoaComponent } from './pages/poacc/detalle-poa/detalle-poa/detalle-poa.component';
+import { AprobarPoaComponent } from './pages/aprobar-poa/aprobar-poa.component';
+import { DetallePoaComponent } from './pages/detalle-poa/detalle-poa.component';
 
 const routes: Routes = [{
   path: 'dashboard',
@@ -71,14 +71,14 @@ const routes: Routes = [{
 }
   ,
 {
-  path: 'aprobar-poa',
+  path: 'lista-aprobar-poa',
   component: AprobarPoaComponent,
   pathMatch: 'full',
   canActivate: [SuperGuard]
 },
 
 {
-  path: 'detalle-poa',
+  path: 'detalle-poa/:id_poa',
   component: DetallePoaComponent,
   pathMatch: 'full',
   canActivate: [SuperGuard]
