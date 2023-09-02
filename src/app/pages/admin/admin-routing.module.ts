@@ -20,12 +20,6 @@ const routes: Routes = [
 
   },
   {
-    path: 'poa',
-    component: RegistrarPoaComponent,
-    pathMatch: 'full',
-    canActivate: [AdminGuard]
-  },
-  {
     path: 'asignaEvidencia',
     component: AsignacionEvidenciaComponent,
     pathMatch: 'full',
@@ -43,6 +37,11 @@ const routes: Routes = [
   {
     path: 'asignacion-actividades',
     loadChildren: () => import("./asignacion-actividades/asignacion-actividades.module").then(m => m.AsignacionActividadesModule)
+    
+  },
+  {
+    path: 'poa',
+    loadChildren: () => import("./poa/register-poa.module").then(m => m.RegisterPoaModule)
   },
 ];
 
