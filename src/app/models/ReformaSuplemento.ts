@@ -9,4 +9,5 @@ export class ReformaSuplemento {
 
     //no borrar es de uso para listar tablas presupuestos
     nombreActividad!: string;
+    nombreProyecto!: string;
 }
