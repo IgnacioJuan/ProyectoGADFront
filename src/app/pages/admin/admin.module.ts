@@ -18,11 +18,15 @@ import { ListPoasEnviadosAdminComponent } from './list-poas-enviados-admin/list-
     AprobarRechazarAdminComponent,
     AprobarRechazarDetalleAdminComponent,
     ListPoasEnviadosAdminComponent,
+
+
+
+
   ],
   imports: [
     CommonModule,
     AdminRoutingModule,
-   
+
     SharedModule
   ]
 })

@@ -8,11 +8,20 @@ export class SidebarService {
   //LISTA DE ITEMS PARA SIDEBAR ADMIN
   menu: any[] = [
     {
+      icono: 'nav-icon fas fa-solid fa-list',
+      titulo: "POA",
+      submenu: [
+        { titulo: 'Creacion', url: 'adm/poa/registrarpoa', icono: 'fas fa-check-square' },
+        
+      ]
+    },
+    {
       icono: 'nav-icon fas fa-users',
       titulo: "Asignación",
       submenu: [
         { titulo: 'POA', url: 'adm/asignacion-actividades/poa-actividad', icono: 'fas fa-check-square' },
-        { titulo: 'Asignar Evidencia', url: 'adm/asignaEvidencia', icono: 'fas fa-check-square' }
+        { titulo: 'Asignar Evidencia', url: 'adm/asignaEvidencia', icono: 'fas fa-check-square' },
+        
       ]
     },
     {
