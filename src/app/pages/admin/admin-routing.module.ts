@@ -6,7 +6,6 @@ import { AprobarRechazarAdminComponent } from './aprobar-rechazar-admin/aprobar-
 import { RoleguardGuard } from 'src/app/services/Guards/roleguard.guard';
 import { AsignacionEvidenciaComponent } from './asignacion-evidencia/asignacion-evidencia.component';
 import { AprobarRechazarDetalleAdminComponent } from './aprobar-rechazar-detalle-admin/aprobar-rechazar-detalle-admin.component';
-import { RegistrarPoaComponent } from './poa/registrar-poa/registrar-poa.component';
 import { PoaActividadComponent } from './asignacion-actividades/poa-actividad/poa-actividad.component';
 
 const routes: Routes = [

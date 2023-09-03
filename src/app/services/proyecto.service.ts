@@ -42,8 +42,8 @@ buscarProyectosPorIds(ids: number[]): Observable<any> {
   getProyectosdelModelo(id_modelo_poa:number): Observable<Proyecto[]> {
     return this.http.get<Proyecto[]>(`${baserUrl}/api/proyecto/listardelModelo/${id_modelo_poa}`);
   }
-  crear(r: Proyecto): Observable<Proyecto> {
-    return this.http.post<Proyecto>(`${baserUrl}/api/proyecto/crear`, r
+  crear(r: Proyecto, codigo_componente: String): Observable<Proyecto> {
+    return this.http.post<Proyecto>(`${baserUrl}/api/proyecto/crear/${codigo_componente}`, r
     );
   }
 
