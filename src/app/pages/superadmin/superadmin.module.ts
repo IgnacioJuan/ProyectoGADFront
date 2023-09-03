@@ -15,10 +15,8 @@ import { EvidenciaAtrasadaComponent } from './pages/evidencia-atrasada/evidencia
 
 import { SharedModule } from 'src/app/shared/shared.module';
 import { ObjetivoodsListaComponent } from './pages/objetivoods-lista/objetivoods-lista.component';
-import { AprobarPoaComponent } from './pages/aprobar-poa/aprobar-poa.component';
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { DetallePoaComponent } from './pages/detalle-poa/detalle-poa.component';	
 
 import { FormsModule  } from '@angular/forms';
 import { NgIf } from '@angular/common';
@@ -38,8 +36,6 @@ import { MatIconModule } from '@angular/material/icon';
     CriterioReporteComponent,
     EvidenciaAtrasadaComponent,
     ObjetivoodsListaComponent,
-    AprobarPoaComponent,
-    DetallePoaComponent,
 
   ],
   imports: [

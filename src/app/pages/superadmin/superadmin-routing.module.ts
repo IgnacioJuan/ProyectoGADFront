@@ -12,8 +12,7 @@ import { EvidenciaAtrasadaComponent } from './pages/evidencia-atrasada/evidencia
 import { CriterioReporteComponent } from './pages/criterio-reporte/criterio-reporte.component';
 import { DashboardComponent } from '../admin/dashboard/dashboard.component';
 import { ObjetivoodsListaComponent } from './pages/objetivoods-lista/objetivoods-lista.component';
-import { AprobarPoaComponent } from './pages/aprobar-poa/aprobar-poa.component';
-import { DetallePoaComponent } from './pages/detalle-poa/detalle-poa.component';
+
 
 const routes: Routes = [{
   path: 'dashboard',
@@ -70,20 +69,6 @@ const routes: Routes = [{
 
 }
   ,
-{
-  path: 'lista-aprobar-poa',
-  component: AprobarPoaComponent,
-  pathMatch: 'full',
-  canActivate: [SuperGuard]
-},
-
-{
-  path: 'detalle-poa/:id_poa',
-  component: DetallePoaComponent,
-  pathMatch: 'full',
-  canActivate: [SuperGuard]
-},
-
 //Compartidas
 {
   path: 'criterio_reporte',
@@ -121,6 +106,10 @@ const routes: Routes = [{
 {
   path: 'formula',
   loadChildren: () => import("./formula/formula.module").then(m => m.FormulaModule)
+},
+{
+  path: 'aprobacion-poa',
+  loadChildren: () => import("./aprobar-poa/aprobar-poa.module").then(m => m.AprobarPoaModule)
 },
 ];
 
