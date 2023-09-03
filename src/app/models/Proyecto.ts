@@ -7,6 +7,7 @@ export class Proyecto {
     meta!: string;
     porcentaje_alcance!: number;
     fecha_inicio!: string;
+    fecha_fin!: string;
     estado!: string;
     visible!: boolean;
     pnd!: { id_objetivo_pnd: number, /* otras propiedades de pnd */ };//ObjetivoPND
