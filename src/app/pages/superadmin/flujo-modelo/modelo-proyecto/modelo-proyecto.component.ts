@@ -6,6 +6,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { ModeloPoa } from 'src/app/models/ModeloPoa';
 import { Proyecto } from 'src/app/models/Proyecto';
+import { IndicadorService } from 'src/app/services/indicador.service';
 import { ProyectoService } from 'src/app/services/proyecto.service';
 import Swal from 'sweetalert2';
 @Component({
@@ -51,22 +52,27 @@ export class ModeloProyectoComponent {
 
   fechaMinima: string = "";
   fechaMax: string = "";
+  selectedCodigo:string="";
   constructor(
-    private proyectoservice: ProyectoService, private paginatorIntl: MatPaginatorIntl,
-    private router: Router, private fb: FormBuilder
+    private proyectoservice: ProyectoService,
+    private indicadorservice: IndicadorService,
+    private paginatorIntl: MatPaginatorIntl,
+    private router: Router,
+    private fb: FormBuilder
   ) {
     this.frmProyecto = fb.group({
       nombre: ['', Validators.required],
-      codigo: ['', [Validators.required]],
+      codigo: [''],
       objetivo: ['', [Validators.required]],
       meta: ['', [Validators.required]],
       porcentaje_alcance: ['', [Validators.required]],
       fecha_inicio: ['', [Validators.required]],
-      pnd: [{ value: '' }, [Validators.required]],
-      ods: [{ value: '' }, [Validators.required]],
-      programa: [{ value: '' }, [Validators.required]],
-      indicador: [{ value: '' }, [Validators.required]],
-      competencia: [{ value: '' }, [Validators.required]],
+      fecha_fin: ['', [Validators.required]],
+      pnd: ['', [Validators.required]],
+      ods: ['', [Validators.required]],
+      programa: ['', [Validators.required]],
+      indicador: ['', [Validators.required]],
+      competencia: ['', [Validators.required]],
 
     });
     this.paginatorIntl.nextPageLabel = this.nextPageLabel;
@@ -97,6 +103,7 @@ export class ModeloProyectoComponent {
     this.subcrite = this.frmProyecto.value;
     let a = this.frmProyecto.value;
     this.subcrite.modelopoa = this.modelopoa;
+    this.subcrite.codigo = this.selectedCodigo;
     this.subcrite = {
       ...this.frmProyecto.value,
       modelopoa: this.modelopoa,
@@ -106,7 +113,7 @@ export class ModeloProyectoComponent {
       indicador: { id_indicador: this.frmProyecto.value.indicador },
       competencia: { id_competencia: this.frmProyecto.value.competencia }
     };
-    this.proyectoservice.crear(this.subcrite)
+    this.proyectoservice.crear(this.subcrite, this.selectedCodigo)
       .subscribe(
         (response: any) => {
           console.log('ModeloPoa creado con éxito:', response);
@@ -170,6 +177,7 @@ export class ModeloProyectoComponent {
       meta: new FormControl(proyecto.meta),
       porcentaje_alcance: new FormControl(proyecto.porcentaje_alcance),
       fecha_inicio: new FormControl(proyecto.fecha_inicio),
+      fecha_fin: new FormControl(proyecto.fecha_inicio),
       pnd: new FormControl(proyecto.pnd?.id_objetivo_pnd),
       ods: new FormControl(proyecto.ods?.id_objetivo_ods),
       programa: new FormControl(proyecto.programa?.id_programa),
@@ -197,6 +205,7 @@ export class ModeloProyectoComponent {
     this.subcrite.meta = this.frmProyecto.value.meta;
     this.subcrite.porcentaje_alcance = this.frmProyecto.value.porcentaje_alcance;
     this.subcrite.fecha_inicio = this.frmProyecto.value.fecha_inicio;
+    this.subcrite.fecha_fin = this.frmProyecto.value.fecha_fin;
 
     this.subcrite = {
       ...this.subcrite,
@@ -207,7 +216,7 @@ export class ModeloProyectoComponent {
       indicador: { id_indicador: this.frmProyecto.value.indicador },
       competencia: { id_competencia: this.frmProyecto.value.competencia }
     };
-    this.subcrite.modelopoa.usuario= null;
+    this.subcrite.modelopoa.usuario = null;
     console.log(this.subcrite)
     this.proyectoservice.actualizar(this.subcrite.id_proyecto, this.subcrite)
       .subscribe((response: any) => {
@@ -251,10 +260,12 @@ export class ModeloProyectoComponent {
     // }
   }
 
-  alimentarOptions():void{
+  alimentarOptions(): void {
     this.proyectoservice.getPNDOptions().subscribe(
       (data: any[]) => {
         this.pndOptions = data;
+        this.filteredPndOptions = this.pndOptions;
+
       },
       (error: any) => {
         console.error('Error al listar los proyectos:', error);
@@ -263,6 +274,7 @@ export class ModeloProyectoComponent {
     this.proyectoservice.getODSOptions().subscribe(
       (data: any[]) => {
         this.odsOptions = data;
+        this.filteredodsOptions = this.odsOptions;
       },
       (error: any) => {
         console.error('Error al listar los proyectos:', error);
@@ -271,14 +283,16 @@ export class ModeloProyectoComponent {
     this.proyectoservice.getProgramaOptions().subscribe(
       (data: any[]) => {
         this.programaOptions = data;
+        this.filteredprogramaOptions = this.programaOptions;
       },
       (error: any) => {
         console.error('Error al listar los proyectos:', error);
       }
     );
-    this.proyectoservice.getIndicadorOptions().subscribe(
+    this.indicadorservice.listarIndicadoresconComponente().subscribe(
       (data: any[]) => {
         this.indicadorOptions = data;
+        this.filteredindicadorOptions = this.indicadorOptions;
       },
       (error: any) => {
         console.error('Error al listar los proyectos:', error);
@@ -287,59 +301,113 @@ export class ModeloProyectoComponent {
     this.proyectoservice.getCompetenciaOptions().subscribe(
       (data: any[]) => {
         this.competenciaOptions = data;
+        this.filteredcompetenciaOptions = this.competenciaOptions;
       },
       (error: any) => {
         console.error('Error al listar los proyectos:', error);
       }
     );
   }
-  selectedPND: number | null = null; // El valor seleccionado se almacenará aquí
-  pndOptions: any[] = [
-  ];
+  filteredPndOptions: any[] = [];
+  selectedPND: number | null = null;
+  pndOptions: any[] = [];
+
+  filteredodsOptions: any[] = [];
+  selectedODS: number | null = null;
+  odsOptions: any[] = [];
+
+
+  filteredprogramaOptions: any[] = [];
+  selectedPrograma: number | null = null;
+  programaOptions: any[] = [];
+
+  filteredindicadorOptions: any[] = [];
+  selectedIndicador: number | null = null;
+  indicadorOptions: any[] = [];
+
+  filteredcompetenciaOptions: any[] = [];
+  selectedCompetencia: number | null = null;
+  competenciaOptions: any[] = [];
+
+  filterPNDOptions(event: any) {
+    const searchTerm = event.target.value.toLowerCase();
+
+    this.filteredPndOptions = this.pndOptions.filter(option =>
+      option.nombre.toLowerCase().includes(searchTerm)
+    );
+  }
   onPNDSelected(event: any): void {
     const selectedId = parseInt(event.target.value, 10); // Convertir el valor a número
     this.selectedPND = selectedId;
   }
+  filterODSOptions(event: any) {
+    const searchTerm = event.target.value.toLowerCase();
 
-  selectedODS: number | null = null; // El valor seleccionado se almacenará aquí
-  odsOptions: any[] = [
-  ];
+    this.filteredodsOptions = this.odsOptions.filter(option =>
+      option.nombre.toLowerCase().includes(searchTerm)
+    );
+  }
   onODSSelected(event: any): void {
     const selectedId = parseInt(event.target.value, 10); // Convertir el valor a número
     this.selectedODS = selectedId;
   }
+  filterProgramaOptions(event: any) {
+    const searchTerm = event.target.value.toLowerCase();
 
-  selectedPrograma: number | null = null; // El valor seleccionado se almacenará aquí
-  programaOptions: any[] = [
-  ];
+    this.filteredprogramaOptions = this.programaOptions.filter(option =>
+      option.nombre.toLowerCase().includes(searchTerm)
+    );
+  }
   onProgramaSelected(event: any): void {
     const selectedId = parseInt(event.target.value, 10); // Convertir el valor a número
     this.selectedPrograma = selectedId;
   }
+  filterIndicadorOptions(event: any) {
+    const searchTerm = event.target.value.toLowerCase();
 
-  selectedIndicador: number | null = null; // El valor seleccionado se almacenará aquí
-  indicadorOptions: any[] = [
-  ];
+    this.filteredindicadorOptions = this.indicadorOptions.filter(option =>
+      option.nombre.toLowerCase().includes(searchTerm)
+    );
+  }
   onIndicadorSelected(event: any): void {
     const selectedId = parseInt(event.target.value, 10); // Convertir el valor a número
     this.selectedIndicador = selectedId;
+    console.log(this.frmProyecto.value.indicador)
   }
+  filterCompenteciaOptions(event: any) {
+    const searchTerm = event.target.value.toLowerCase();
 
-  selectedCompetencia: number | null = null; // El valor seleccionado se almacenará aquí
-  competenciaOptions: any[] = [
-  ];
+    this.filteredcompetenciaOptions = this.competenciaOptions.filter(option =>
+      option.nombre.toLowerCase().includes(searchTerm)
+    );
+  }
   onCompetenciaSelected(event: any): void {
     const selectedId = parseInt(event.target.value, 10); // Convertir el valor a número
     this.selectedCompetencia = selectedId;
   }
 
-  isDisabledFieldsValid(): boolean {
-    const pndValue = this.frmProyecto.get('pnd')?.value;
-    const odsValue = this.frmProyecto.get('ods')?.value;
-    const programaValue = this.frmProyecto.get('programa')?.value;
-    const indicadorValue = this.frmProyecto.get('indicador')?.value;
-    const competenciaValue = this.frmProyecto.get('competencia')?.value;
 
+
+
+  isDisabledFieldsValid(): boolean {
+    const pndValue = this.frmProyecto.value.pnd;
+    const odsValue = this.frmProyecto.value.ods;
+    const programaValue = this.frmProyecto.value.programa;
+    const indicadorValue = this.frmProyecto.value.indicador;
+    const competenciaValue = this.frmProyecto.value.competencia;
+    console.log(this.frmProyecto.value.indicador)
     return pndValue && odsValue && programaValue && indicadorValue && competenciaValue;
+  }
+  sendCodigo(event: any): void {
+    const selectedId = +event.target.value; // Convertir el valor a número
+
+    const selectedOption = this.indicadorOptions.find(option => option.id_indicador === selectedId);
+  
+    if (selectedOption) {
+      //this.selectedCodigo = selectedOption.codigo;
+      this.selectedCodigo = selectedOption.codigo; // Tomar los primeros tres caracteres
+
+      // Aquí puedes hacer lo que necesites con el valor de selectedCodigo
+    }
   }
 }
