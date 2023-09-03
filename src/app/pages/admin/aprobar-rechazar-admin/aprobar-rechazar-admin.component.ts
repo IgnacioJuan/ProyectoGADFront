@@ -7,8 +7,8 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { Evidencia } from 'src/app/models/Evidencia';
 import { EmailServiceService } from 'src/app/services/email-service.service';
-import { Criterio } from 'src/app/models/Criterio';
-import { CriteriosService  } from 'src/app/services/criterios.service';
+//import { Criterio } from 'src/app/models/Criterio';
+//import { CriteriosService  } from 'src/app/services/criterios.service';
 import { EvidenciaService } from 'src/app/services/evidencia.service';
 import { LoginService } from 'src/app/services/login.service';
 import Swal from 'sweetalert2';
@@ -89,7 +89,7 @@ export class AprobarRechazarAdminComponent implements OnInit {
     public login: LoginService,
     private notificationService: NotificacionService,
     private detalleEvaluaService: DetalleEvaluacionService,
-    private criteriosService: CriteriosService
+    //private criteriosService: CriteriosService
   ) {
   }
   ngAfterViewInit() {
@@ -270,7 +270,7 @@ notificaraprobadmin() {
 //
   onSelectionChange(event: MatSelectionListChange) {
     this.usuarioSeleccionado = event.options[0].value;
-    localStorage.setItem('idUsuario', this.usuarioSeleccionado.id.toString());
+    //localStorage.setItem('idUsuario', this.usuarioSeleccionado.id.toString());
     localStorage.setItem(
       'nombres',
       this.usuarioSeleccionado.persona.primer_nombre +
