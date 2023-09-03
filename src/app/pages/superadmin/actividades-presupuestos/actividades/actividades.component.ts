@@ -90,13 +90,13 @@ export class ListaActividadesComponent implements OnInit {
 
 
   dataSource2 = new MatTableDataSource<PresupuestoExterno>();
-  columnasUsuario2: string[] = ['id_presupuesto_externo', 'nombre_institucion', 'valor', 'fecha', 'observacion', 'nombreActividad'];
+  columnasUsuario2: string[] = ['id_presupuesto_externo', 'nombre_institucion', 'valor', 'fecha', 'observacion', 'nombreActividad','nombreProyecto'];
   dataSource3 = new MatTableDataSource<ReformaSuplemento>();
-  columnasUsuario3: string[] = ['id_ref_suplemento', 'valor', 'fecha', 'nombreActividad'];
+  columnasUsuario3: string[] = ['id_ref_suplemento', 'valor', 'fecha', 'nombreActividad','nombreProyecto'];
   dataSource4 = new MatTableDataSource<ReformaTraspasoI>();
-  columnasUsuario4: string[] = ['id_reftras_i', 'valor', 'fecha', 'nombreActividad'];
+  columnasUsuario4: string[] = ['id_reftras_i', 'valor', 'fecha', 'nombreActividad','nombreProyecto'];
   dataSource5 = new MatTableDataSource<ReformaTraspasoD>();
-  columnasUsuario5: string[] = ['id_reftras_d', 'valor', 'fecha', 'nombreActividad'];
+  columnasUsuario5: string[] = ['id_reftras_d', 'valor', 'fecha', 'nombreActividad','nombreProyecto'];
   
   @ViewChild('datosModalRef') datosModalRef: any;
   @ViewChild(MatPaginator, { static: false }) paginator?: MatPaginator;
