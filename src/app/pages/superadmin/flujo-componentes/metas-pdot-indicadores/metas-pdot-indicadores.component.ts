@@ -214,7 +214,7 @@ verMetas() {
 
 
 verObjetivosPDOT() {
-  this.router.navigate(['/sup/flujo_Componentes/objetivoPDOT_metasPDOT'], { state: { data: this.componente } });
+  this.router.navigate(['/sup/flujo_Componentes/componente_objetivoPDOT'], { state: { data: this.componente } });
 }
 verComponentes() {
   this.router.navigate(['/sup/flujo_Componentes/componentesSuper']);
