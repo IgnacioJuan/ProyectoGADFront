@@ -72,9 +72,8 @@ constructor(
 }
 
 ngAfterViewInit() {
-  this.dataSource.paginator = this.paginator || null;
-
-}
+  this.dataSource.paginator = this.paginator || null;}
+  
 ngOnInit() {
   const data = history.state.data;
   this.componente = data;
@@ -87,7 +86,7 @@ ngOnInit() {
 }
 
 
-
+//metodo para guardar
 guardar() {
   this.objePDOT = this.formObjetivoPdot.value;
   this.objePDOT.componente = this.componente;
@@ -112,8 +111,9 @@ guardar() {
         )
       }
     );
-
 }
+
+//metodo para eliminar
 eliminar(objetivoP: any) {
   Swal.fire({
     title: 'Estas seguro de eliminar el registro?',
@@ -132,10 +132,7 @@ eliminar(objetivoP: any) {
   })
 
 }
-
-
-
-
+//metodo para listar
 listar(idComponente: number): void {
   this.objetivoPdotService.listarObjetivosPdotsPorIdComponente(idComponente).subscribe(
     (data: any[]) => {
@@ -148,7 +145,7 @@ listar(idComponente: number): void {
   );
 }
 
-
+//metodo para editar
 editDatos(objetivo: ObjetivoPDOT) {
   this.objePDOT = objetivo;
   this.formObjetivoPdot = new FormGroup({

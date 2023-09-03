@@ -46,7 +46,6 @@ listaMetasPdot: MetasPDOT[] = [];
 
 
 miModal!: ElementRef;
-//public indic = new Indicador();
 public metaPDOT = new MetasPDOT();
 
 //Buscar
@@ -91,12 +90,9 @@ ngOnInit() {
 }
 
 
-
 guardar() {
   this.metaPDOT = this.formMeta.value;
   this.metaPDOT.objetivopdot = this.objPDOT;
-  console.log(this.metaPDOT)
-  
   this.metaPDOTService.crear(this.metaPDOT)
     .subscribe(
       (response: any) => {
@@ -143,8 +139,6 @@ listar(idObjetivo: number): void {
   this.metaPDOTService.listarmetasPdotsPorIdObjetivo(idObjetivo).subscribe(
     (data: any[]) => {
       this.listaMetasPdot = data;
-      console.log(this.listaMetasPdot)
-
       this.dataSource.data = this.listaMetasPdot;
     },
     (error: any) => {
@@ -161,7 +155,6 @@ editDatos(meta: MetasPDOT) {
     descripcion: new FormControl(meta.descripcion),
     meta_final: new FormControl(meta.meta_final),
     linea_base: new FormControl(meta.linea_base),
-
   });
 }
 
@@ -177,7 +170,6 @@ actualizar() {
   this.metaPDOT.linea_base = this.formMeta.value.linea_base;
   this.metaPDOT.objetivopdot = this.objPDOT;
   this.metaPDOT.visible = true;
-
   this.metaPDOTService.actualizar(this.metaPDOT.id_meta_pdot, this.metaPDOT)
     .subscribe((response: any) => {
       this.metaPDOT = new MetasPDOT;
