@@ -4,9 +4,7 @@ import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { Componentes } from 'src/app/models/Componentes';
-//import { Criterio } from 'src/app/models/Criterio';
 import { ObjetivoPDOT } from 'src/app/models/ObjetivoPDOT';
-//import { Subcriterio } from 'src/app/models/Subcriterio';
 import { ObjetivoPdotService } from 'src/app/services/objetivo-pdot.service';
 import Swal from 'sweetalert2';
 
@@ -128,7 +126,6 @@ eliminar(objetivoP: any) {
           (response) => {
             this.listar(this.componente.id_componente)
             Swal.fire('Eliminado!', '', 'success')
-
           }
         );
     }
@@ -151,39 +148,23 @@ listar(idComponente: number): void {
   );
 }
 
-//optimizar
-/*
-listar(): void {
-  this.objetivoPdotService.listar().subscribe(
-    (data: any[]) => {
-      this.objetivoPDOT = data;
-      this.dataSource.data = this.objetivoPDOT;
-    },
-    (error: any) => {
-      console.error('Error al listar los subcriterios:', error);
-    }
-  );
-}*/
 
 editDatos(objetivo: ObjetivoPDOT) {
   this.objePDOT = objetivo;
   this.formObjetivoPdot = new FormGroup({
     nombre: new FormControl(this.objePDOT.nombre),
     descripcion: new FormControl(this.objePDOT.descripcion)
-
-  });
+ });
 }
 
 limpiarFormulario() {
   this.formObjetivoPdot.reset();
-  this.objePDOT = new ObjetivoPDOT;
-}
+  this.objePDOT = new ObjetivoPDOT;}
 
 actualizar() {
   this.objePDOT.nombre = this.formObjetivoPdot.value.nombre;
   this.objePDOT.descripcion = this.formObjetivoPdot.value.descripcion;
   this.objePDOT.componente = this.componente;
-
   this.objetivoPdotService.actualizar(this.objePDOT.id_objetivo_pdot, this.objePDOT)
     .subscribe((response: any) => {
       this.objePDOT = new ObjetivoPDOT;
@@ -206,12 +187,9 @@ buscar() {
   this.filteredComponentes = this.objetivoPDOT.filter((objetivo) =>
     objetivo.nombre.toLowerCase().includes(this.filterPost.toLowerCase())
   );
-
   // Actualiza los datos del dataSource con los resultados filtrados
   this.dataSource.data = this.filteredComponentes;
-
   // Verifica si se encontraron resultados
-  this.resultadosEncontrados = this.filteredComponentes.length > 0;
-}
+  this.resultadosEncontrados = this.filteredComponentes.length > 0;}
 
 }

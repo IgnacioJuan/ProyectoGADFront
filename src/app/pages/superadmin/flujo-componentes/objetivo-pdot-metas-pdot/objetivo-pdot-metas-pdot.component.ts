@@ -39,12 +39,10 @@ rango:any= (page: number, pageSize: number, length: number) => {
 };
 
 
-
 ///////
 objPDOT: ObjetivoPDOT = new ObjetivoPDOT();
- componente: Componentes = new Componentes();
+componente: Componentes = new Componentes();
 listaMetasPdot: MetasPDOT[] = [];
-
 
 
 miModal!: ElementRef;
@@ -84,19 +82,11 @@ constructor(private paginatorIntl: MatPaginatorIntl,
 }
 
 ngAfterViewInit() {
-  this.dataSource.paginator = this.paginator || null;
+  this.dataSource.paginator = this.paginator || null;}
 
-}
 ngOnInit() {
- 
   this.objPDOT = history.state.data;
   this.componente = history.state.componente;
-  if (this.objPDOT == undefined) {
-    this.router.navigate(['user-dashboard']);
-    location.replace('/use/user-dashboard');
-  }
-  console.log("DATAAAAAAAAAAAAAAAAAA")
-  console.log(this.objPDOT)
   this.listar(this.objPDOT.id_objetivo_pdot)
 }
 
@@ -153,7 +143,6 @@ listar(idObjetivo: number): void {
   this.metaPDOTService.listarmetasPdotsPorIdObjetivo(idObjetivo).subscribe(
     (data: any[]) => {
       this.listaMetasPdot = data;
-      console.log("DATAAAAAAAAAAAAAAAAAA")
       console.log(this.listaMetasPdot)
 
       this.dataSource.data = this.listaMetasPdot;
@@ -164,18 +153,6 @@ listar(idObjetivo: number): void {
   );
 }
 
-/*
-listar(): void {
-  this.metaPDOTService.listar().subscribe(
-    (data: any[]) => {
-      this.listaMetasPdot = data;
-      this.dataSource.data=this.listaMetasPdot;
-    },
-    (error: any) => {
-      console.error('Error al listar las metas:', error);
-    }
-  );
-}*/
 
 editDatos(meta: MetasPDOT) {
  this.metaPDOT = meta;
@@ -218,7 +195,7 @@ console.log(this.objPDOT);
  this.router.navigate(['/sup/flujo_Componentes/metasPDOT_Indicadores'], { state: { data: metaPDOT, componente:this.componente, objPDOT:this.objPDOT } });
 }
 verObjetivosDOT() {
-  this.router.navigate(['/sup/flujo_Componentes/componente_objetivoPDOT'], { state: { data: this.objPDOT } });
+  this.router.navigate(['/sup/flujo_Componentes/componente_objetivoPDOT'], { state: { data: this.componente } });
 }
 verComponentes() {
   this.router.navigate(['/sup/flujo_Componentes/componentesSuper']);
@@ -229,12 +206,9 @@ buscar() {
   this.filteredComponentes = this.listaMetasPdot.filter((meta) =>
     meta.nombre.toLowerCase().includes(this.filterPost.toLowerCase())
   );
-
   // Actualiza los datos del dataSource con los resultados filtrados
   this.dataSource.data = this.filteredComponentes;
-
   // Verifica si se encontraron resultados
-  this.resultadosEncontrados = this.filteredComponentes.length > 0;
-}
+  this.resultadosEncontrados = this.filteredComponentes.length > 0;}
 
 }
