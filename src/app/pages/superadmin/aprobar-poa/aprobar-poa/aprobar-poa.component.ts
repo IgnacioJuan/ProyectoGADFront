@@ -44,7 +44,7 @@ export class AprobarPoaComponent {
 
   // Modifica el método redirectToDetails para aceptar el ID del POA
   redirectToDetails(id_Poa: number) {
-    this.router.navigate(['/sup/detalle-poa', id_Poa]);
+    this.router.navigate(['/sup/aprobacion-poa/detalle-poa', id_Poa]);
   }
 
 }
