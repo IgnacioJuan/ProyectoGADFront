@@ -11,13 +11,15 @@ const routes: Routes = [
     pathMatch: 'full',
     canActivate: [SuperGuard]
   },
-  
+
+  // se agrega un path que acepte un parametro
   {
-    path: 'visualizar',
+    path: 'visualizar/:id_usuario',
     component: VisualizarActividadesComponent,
     pathMatch: 'full',
     canActivate: [SuperGuard]
   }
+
 ];
 
 @NgModule({
