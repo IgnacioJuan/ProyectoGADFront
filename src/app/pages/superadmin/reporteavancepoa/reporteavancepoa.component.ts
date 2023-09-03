@@ -1,6 +1,7 @@
 import { Component, OnInit, Pipe, PipeTransform } from '@angular/core';
 import { Route, Router } from '@angular/router';
 import { Poa } from 'src/app/models/Poa';
+import { Proyecto } from 'src/app/models/Proyecto';
 import { PoaService } from 'src/app/services/poa.service';
 import { ProyectoService } from 'src/app/services/proyecto.service';
 
@@ -23,6 +24,7 @@ export class CustomDatePipe implements PipeTransform {
 
 export class ReporteavancepoaComponent implements OnInit {
   modeloPoa: any[] = [];
+  proyecto:any[] = [];
   poa =new Poa();
 
   constructor(
@@ -33,6 +35,7 @@ export class ReporteavancepoaComponent implements OnInit {
 
   ngOnInit(): void {
     this.listarPoa();
+    this.listarProyectos();
   }
   
 
@@ -42,14 +45,17 @@ export class ReporteavancepoaComponent implements OnInit {
       console.log(this.modeloPoa, "listaaa");
     });
   }
-
-  enviarPoa1(poae: Poa): void {
-    localStorage.setItem("id", poae.id_poa.toString());
-    this.poa = poae;
-    this.router.navigate(['sup/reporteEspecificoPoa']);
+  listarProyectos() {
+    this.proyectoService.getProyectos().subscribe(data => {
+      this.proyecto = data;
+      console.log(this.proyecto, "listaaa");
+    });
   }
-  enviarPoa(poae: Poa): void {
-    this.router.navigate(['sup/reporteEspecificoPoa', poae.id_poa]);
+
+
+
+  enviarPoa(pro:Proyecto): void {
+    this.router.navigate(['sup/reporteEspecificoPoa', pro.id_proyecto]);
   }
   
 }

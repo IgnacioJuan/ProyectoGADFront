@@ -8,7 +8,6 @@ import { AsignacionEvidenciaComponent } from './asignacion-evidencia/asignacion-
 import { AprobarRechazarDetalleAdminComponent } from './aprobar-rechazar-detalle-admin/aprobar-rechazar-detalle-admin.component';
 import { RegistrarPoaComponent } from './poa/registrar-poa/registrar-poa.component';
 import { PoaActividadComponent } from './asignacion-actividades/poa-actividad/poa-actividad.component';
-import { RegistrarPoaComponent } from './poa/registrar-poa/registrar-poa.component';
 
 const routes: Routes = [
   
