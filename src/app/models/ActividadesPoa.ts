@@ -12,6 +12,6 @@ export class ActividadesPoa {
     estado!: string
     visible!: boolean;
     responsable!: string;
-    usuario: Usuario2 = new Usuario2();
+    usuario!: Usuario2;
     poa!: Poa;
 }

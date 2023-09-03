@@ -6,6 +6,7 @@ import { Observacion2 } from '../models/Observaciones2';
 import { Actividades } from '../models/actividades';
 import { ActividadesProjection } from '../interface/ActividadesProjection';
 import { ActivAprobadaProjection } from '../interface/ActivAprobadaProjection';
+import { Actividad_arch } from './actividad_arch';
 import { DetalleActividadDTO } from '../models/DetalleActividadDTO';
 import { UsuarioActividadDTO } from '../models/UsuarioActividadDTO';
 
@@ -95,5 +96,7 @@ export class ActividadService {
   obtenerDetalleActividades(idUsuario: number): Observable<DetalleActividadDTO[]> {
     return this.http.get<DetalleActividadDTO[]>(`${baserUrl}/api/actividades/detactividades/${idUsuario}`);
 }
-
+public listaractireponsa(idres: number): Observable<Actividad_arch[]> {
+  return this.http.get<Actividad_arch[]>(`${baserUrl}/api/actividades/actiresponsable/${idres}`);
+}
 }

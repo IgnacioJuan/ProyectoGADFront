@@ -9,23 +9,23 @@
             <div class="card-body">
                 <div class="table-container">
                     <div class="table-row">
-                        <div class="table-cell"><strong>DIRECCION DEPARTAMENTAL: </strong>PLANIFICACION</div>
+                        <div class="table-cell"><strong>DIRECCION DEPARTAMENTAL:
+                            </strong>{{projectSelect.nombre_programa}}
+                        </div>
                         <div class="table-cell"><strong>RESPONSABLE:</strong> NICOLÁS CEVALLOS CABRERA</div>
                     </div>
                     <div class="table-row">
-                        <div class="table-cell"><strong>AREA QUE PRESENTA EL PROYECTO:</strong> JEFATURA DE
-                            PRODUCCION Y
-                            COMERCIALIZACIÓN</div>
-                        <div class="table-cell"><strong>SUPERVISION DEL PROYECTO:</strong> NICOLÁS CEVALLOS
-                            CABRERA
+                        <div class="table-cell"><strong>AREA QUE PRESENTA EL PROYECTO:</strong> {{projectSelect.area}}
                         </div>
+                        <div class="table-cell"><strong>SUPERVISION DEL PROYECTO:</strong>
+                            {{projectSelect.nombre_completo_persona}} </div>
                     </div>
                 </div>
                 <div class="table-container">
                     <div class="table-row">
                         <div class="table-cell colspan-2 centered-cell"><strong>AÑO DE EJECUCIÓN DEL
                                 PROYECTO:</strong>
-                            2004-2018
+                            {{projectSelect.rango_fechas}}
                         </div>
                     </div>
                 </div>
@@ -34,21 +34,25 @@
                 <div class="table-container">
                     <div class="table-row">
                         <div class="table-cell">
-                            <button class="button">Seleccionar Proyecto</button>
+                            <button class="button" (click)="openDialogProjects()">Seleccionar Proyecto</button>
                         </div>
                     </div>
                 </div>
                 <div class="table-container">
                     <div class="table-row">
                         <div class="table-cell"><strong>DENOMINACION DEL PROGRAMA PROYECTO:</strong></div>
-                        <div class="table-cell centered">PROPUESTA DE ESTUDIOS
-                            Y CONSTRUCCION DE RESERVORIOS EN EL CANTON SANTA ISABEL, CON PRIORIDAD, PARROQUIA
-                            SHAGLLI</div>
-                        <div class="table-cell wide-cell centered">AST-001</div>
+                        <div class="table-cell centered">
+                            {{projectSelect.nombre}}
+                        </div>
+                        <div class="table-cell wide-cell centered">
+                            {{projectSelect.codigo}}
+                        </div>
                     </div>
                     <div class="table-row">
                         <div class="table-cell"><strong>DESCRIPCION DEL PROGRAMA PROYECTO:</strong></div>
-                        <div class="table-cell centered">ASENTAMIENTOS HUMANOS</div>
+                        <div class="table-cell centered">
+                            {{projectSelect.nombre_programa}}
+                        </div>
                         <div class="table-cell wide-cell"></div>
                     </div>
                 </div>
@@ -57,51 +61,50 @@
                 <div class="table-container">
                     <div class="table-row">
                         <div class="table-cell"><strong>NOMBRE PROGRAMA/PROYECTO:</strong></div>
-                        <div class="table-cell ">PROPUESTA DE ESTUDIOS
-                            Y CONSTRUCCION DE RESERVORIOS EN EL CANTON SANTA ISABEL, CON PRIORIDAD, PARROQUIA
-                            SHAGLLI</div>
+                        <div class="table-cell ">
+                            {{projectSelect.nombre}}
+                        </div>
                     </div>
                     <div class="table-row">
                         <div class="table-cell"><strong>ODS:</strong></div>
-                        <div class="table-cell ">PROPUESTA DE ESTUDIOS
-                            Y CONSTRUCCION DE RESERVORIOS EN EL CANTON SANTA ISABEL, CON PRIORIDAD, PARROQUIA
-                            SHAGLLI</div>
+                        <div class="table-cell ">
+                            {{projectSelect.nombre_objetivo_ods}}
+                        </div>
                     </div>
                     <div class="table-row">
                         <div class="table-cell"><strong>OBJETIVO PND:</strong></div>
-                        <div class="table-cell ">PROPUESTA DE ESTUDIOS
-                            Y CONSTRUCCION DE RESERVORIOS EN EL CANTON SANTA ISABEL, CON PRIORIDAD, PARROQUIA
-                            SHAGLLI</div>
+                        <div class="table-cell ">
+                            {{projectSelect.nombre_objetivo_pnd}}
+                        </div>
                     </div>
                     <div class="table-row">
                         <div class="table-cell"><strong>OBJETIVO ESTRATEGICO DEL PDOT:</strong></div>
-                        <div class="table-cell ">PROPUESTA DE ESTUDIOS
-                            Y CONSTRUCCION DE RESERVORIOS EN EL CANTON SANTA ISABEL, CON PRIORIDAD, PARROQUIA
-                            SHAGLLI</div>
+                        <div class="table-cell ">
+                            {{projectSelect.nombre_objetivo_pdot}}
+                        </div>
                     </div>
                     <div class="table-row">
                         <div class="table-cell"><strong>OBJETIVO DEL PROGRAMA/PROYECTO:</strong></div>
-                        <div class="table-cell ">PROPUESTA DE ESTUDIOS
-                            Y CONSTRUCCION DE RESERVORIOS EN EL CANTON SANTA ISABEL, CON PRIORIDAD, PARROQUIA
-                            SHAGLLI</div>
+                        <div class="table-cell ">
+                            {{projectSelect.objetivo_proyecto}}
+                        </div>
                     </div>
                     <div class="table-row">
                         <div class="table-cell"><strong>INDICADOR DE LA META:</strong></div>
-                        <div class="table-cell ">PROPUESTA DE ESTUDIOS
-                            Y CONSTRUCCION DE RESERVORIOS EN EL CANTON SANTA ISABEL, CON PRIORIDAD, PARROQUIA
-                            SHAGLLI</div>
+                        <div class="table-cell ">
+                            {{projectSelect.nombre_indicador}}
+                        </div>
                     </div>
                     <div class="table-row">
                         <div class="table-cell"><strong>META DEL PROGRAMA/PROYECTO:</strong></div>
-                        <div class="table-cell ">PROPUESTA DE ESTUDIOS
-                            Y CONSTRUCCION DE RESERVORIOS EN EL CANTON SANTA ISABEL, CON PRIORIDAD, PARROQUIA
-                            SHAGLLI</div>
+                        <div class="table-cell ">
+                            {{projectSelect.nombre_meta_pdot}}
+                        </div>
                     </div>
                     <div class="table-row">
                         <div class="table-cell"><strong>LINEA BASE:</strong></div>
-                        <div class="table-cell ">PROPUESTA DE ESTUDIOS
-                            Y CONSTRUCCION DE RESERVORIOS EN EL CANTON SANTA ISABEL, CON PRIORIDAD, PARROQUIA
-                            SHAGLLI</div>
+                        <div class="table-cell ">
+                        </div>
                     </div>
                 </div>
                 <br />
@@ -142,12 +145,11 @@
                 <div class="table-container">
                     <div class="table-row">
                         <div class="table-cell">
-                            <button class="button">Agregar actividades</button>
+                            <button class="button" (click)="openDialogActivities()">Agregar actividades</button>
                         </div>
                     </div>
                 </div>
                 <div class="table-container">
-
                     <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
 
                         <!--- Note that these columns can be defined in any order.
@@ -189,8 +191,64 @@
                         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
                     </table>
-
-
+                </div>
+                <br />
+                <br />
+                <div class="table-container">
+                    <div class="table-row">
+                        <div class="table-cell"><strong>CUATRIMESTRE 1:</strong></div>
+                        <div class="table-cell ">$ 200</div>
+                        <div class="table-cell"><strong>CUATRIMESTRE 2:</strong></div>
+                        <div class="table-cell ">$ 200</div>
+                        <div class="table-cell"><strong>CUATRIMESTRE 3:</strong></div>
+                        <div class="table-cell ">$ 200</div>
+                    </div>
+                </div>
+                <div class="table-container ">
+                    <div class="table-row">
+                        <div class="table-cell wide-cell"><strong>TOTAL:</strong></div>
+                        <div class="table-cell">$ 600</div>
+                    </div>
+                </div>
+                <br />
+                <br />
+                <div class="table-container">
+                    <div class="table-cell">
+                        <mat-form-field appearance="outline" class="example-full-width">
+                            <mat-label>Recursos propios</mat-label>
+                            <input matInput value="">
+                        </mat-form-field>
+                    </div>
+                    <div class="table-cell">
+                        <mat-form-field appearance="outline" class="example-full-width">
+                            <mat-label>Recursos externos</mat-label>
+                            <input matInput value="">
+                        </mat-form-field>
+                    </div>
+                    <div class="table-cell">
+                        <mat-form-field appearance="outline" class="example-full-width">
+                            <mat-label>Observaciones</mat-label>
+                            <input matInput value="">
+                        </mat-form-field>
+                    </div>
+                </div>
+                <br />
+                <br />
+                <div class="table-container">
+                    <div class="table-row">
+                        <div class="table-cell"><strong>Nombre funcionario:</strong></div>
+                        <div class="table-cell ">
+                            {{projectSelect.nombre_completo_persona}}
+                        </div>
+                        <div class="table-cell"><strong>Cargo:</strong></div>
+                        <div class="table-cell ">
+                            {{projectSelect.cargo}}
+                        </div>
+                        <div class="table-cell"><strong>Fecha de emisión:</strong></div>
+                        <div class="table-cell ">
+                            {{ currentDate | date: 'dd/MM/yyyy' }}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

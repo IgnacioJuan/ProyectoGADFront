@@ -10,6 +10,7 @@ import { ActividadespoaService } from 'src/app/services/actividadespoa.service';
 import { UsuarioService } from 'src/app/services/usuario.service';
 import Swal from 'sweetalert2';
 import { AprobacionActividad } from 'src/app/models/AprobacionActividad';
+import { ListaActividadesUsuario } from 'src/app/interface/ListaActividadesUsuario';
 
 @Component({
   selector: 'app-actividades',
@@ -42,6 +43,7 @@ export class ActividadesComponent implements OnInit {
   //
   poa: Poa = new Poa();
   actividades: any = [];
+  listaUsuariosActividades: ListaActividadesUsuario[] = [];
   miModal!: ElementRef;
   public actividad = new ActividadesPoa();
   public aprobAct = new AprobacionActividad();
@@ -52,10 +54,14 @@ export class ActividadesComponent implements OnInit {
   filterPost: string = "";
   filteredPoas: any[] = [];
   resultadosEncontrados: boolean = true;
+  mostrarTablaResponsables: boolean = false;
 
+  //listarActividades
   dataSource = new MatTableDataSource<ActividadesPoa>();
-  //aqui se cambia
-  columnasUsuario: string[] = ['id_actividad', 'nombre', 'descripcion', 'presupuesto_referencial', 'recursos_propios', 'codificado', 'devengado', 'estado','responsable', 'actions'];
+  columnasUsuario: string[] = ['id_actividad', 'nombre', 'descripcion', 'presupuesto_referencial', 'recursos_propios', 'codificado', 'devengado', 'estado', 'actions'];
+  //listarUsuariosconActividades
+  dataSource2 = new MatTableDataSource<ListaActividadesUsuario>();
+  columnasUsuario2: string[] = ['id_usuario', 'username', 'nombre', 'apellido', 'cargo', 'nombreActividad'];
 
   @ViewChild('datosModalRef') datosModalRef: any;
   @ViewChild(MatPaginator, { static: false }) paginator?: MatPaginator;
@@ -84,6 +90,7 @@ export class ActividadesComponent implements OnInit {
   }
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator || null;
+    this.dataSource2.paginator = this.paginator || null;
 
   }
   ngOnInit(): void {
@@ -91,7 +98,8 @@ export class ActividadesComponent implements OnInit {
     this.cargarUsuarios();
     this.poa = data;
     console.log(this.poa);
-    this.listar(this.poa.id_poa)
+    this.listar(this.poa.id_poa);
+    this.listarUsuarios();
   }
 
   verPoas() {
@@ -316,5 +324,18 @@ export class ActividadesComponent implements OnInit {
     } else {
       this.dataSource.data = this.actividades;
     }
+  }
+
+  // 2DA TABLA
+  listarUsuarios(): void {
+    this.actividadservice.listarUsuariosActividades().subscribe(
+      (data: any[]) => {
+        this.listaUsuariosActividades = data;
+        this.dataSource2.data = this.listaUsuariosActividades;
+      },
+      (error: any) => {
+        console.error('Error al listar poas:', error);
+      }
+    );
   }
 }

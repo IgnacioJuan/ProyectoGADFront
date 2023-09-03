@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
-import { Actividad } from 'src/app/models/Actividad';
+//import { Actividad } from 'src/app/models/Actividad';
 import Swal from 'sweetalert2';
 
 @Component({
