@@ -25,11 +25,6 @@ export class VisualizarActividadesComponent {
   ) { }
 
   ngOnInit() {
-    const data = history.state.data;
-    this.usuarioAct = data;
-    if (this.usuarioAct == undefined) {
-      this.rout.navigate(['listar-actividades']);
-    }
     this.cargarDatos();
   }
 
