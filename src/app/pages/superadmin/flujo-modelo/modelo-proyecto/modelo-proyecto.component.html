@@ -305,6 +305,8 @@
                             <input
                               type="text"
                               class="form-control"
+                              formControlName="pndControl"
+
                               placeholder="Buscar PND..."
                               (input)="filterPNDOptions($event)"
                             />
@@ -346,6 +348,8 @@
                               type="text"
                               class="form-control"
                               placeholder="Buscar ODS..."
+                              formControlName="odsControl"
+
                               (input)="filterODSOptions($event)"
                             />
                             <select
@@ -385,7 +389,9 @@
                             <input
                               type="text"
                               class="form-control"
-                              placeholder="Buscar PND..."
+                              placeholder="Buscar Programa..."
+                              formControlName="programaControl"
+
                               (input)="filterProgramaOptions($event)"
                             />
                             <select
@@ -427,8 +433,9 @@
                             <input
                               type="text"
                               class="form-control"
-                              placeholder="Buscar PND..."
+                              placeholder="Buscar Indicador..."
                               (input)="filterIndicadorOptions($event)"
+                              formControlName="indicadorControl"
 
                             />
                             <select
@@ -472,7 +479,9 @@
                             <input
                               type="text"
                               class="form-control"
-                              placeholder="Buscar PND..."
+                              placeholder="Buscar Compentencia..."
+                              formControlName="CompenteciaControl"
+
                               (input)="filterCompenteciaOptions($event)"
                             />
                             <select

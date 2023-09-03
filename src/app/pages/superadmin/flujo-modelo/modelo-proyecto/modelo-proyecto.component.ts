@@ -73,7 +73,11 @@ export class ModeloProyectoComponent {
       programa: ['', [Validators.required]],
       indicador: ['', [Validators.required]],
       competencia: ['', [Validators.required]],
-
+      programaControl: [''],
+      pndControl: [''] ,
+      odsControl: [''] ,
+      indicadorControl: [''] ,
+      competenciaControl: [''] 
     });
     this.paginatorIntl.nextPageLabel = this.nextPageLabel;
     this.paginatorIntl.lastPageLabel = this.lastPageLabel;
@@ -116,7 +120,7 @@ export class ModeloProyectoComponent {
     this.proyectoservice.crear(this.subcrite, this.selectedCodigo)
       .subscribe(
         (response: any) => {
-          console.log('ModeloPoa creado con éxito:', response);
+          console.log('Proyecto creado con éxito:', response);
           this.guardadoExitoso = true;
           this.listar();
           Swal.fire(
@@ -190,11 +194,12 @@ export class ModeloProyectoComponent {
   limpiarFormulario() {
     this.frmProyecto.reset();
     this.subcrite = new Proyecto;
-    this.selectedPND = null;
-    this.selectedODS = null;
-    this.selectedPrograma = null;
-    this.selectedIndicador = null;
-    this.selectedCompetencia = null;
+    this.frmProyecto.get('programa')?.setValue('');
+    this.frmProyecto.get('indicador')?.setValue('');
+    this.frmProyecto.get('pnd')?.setValue('');
+    this.frmProyecto.get('ods')?.setValue('');
+    this.frmProyecto.get('competencia')?.setValue('');
+
   }
 
   actualizar() {
@@ -404,10 +409,7 @@ export class ModeloProyectoComponent {
     const selectedOption = this.indicadorOptions.find(option => option.id_indicador === selectedId);
   
     if (selectedOption) {
-      //this.selectedCodigo = selectedOption.codigo;
-      this.selectedCodigo = selectedOption.codigo; // Tomar los primeros tres caracteres
-
-      // Aquí puedes hacer lo que necesites con el valor de selectedCodigo
+      this.selectedCodigo = selectedOption.codigo;
     }
   }
 }
