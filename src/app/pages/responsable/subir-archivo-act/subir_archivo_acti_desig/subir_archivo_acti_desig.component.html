@@ -14,7 +14,7 @@
         </div>
 
         <br />
-        <button type="button" class="btn btn-primary" style="background-color: green" data-bs-toggle="modal" data-bs-target="#materiaModal">
+        <button type="button" class="btn btn-primary"  [disabled]="botonDeshabilitado" style="background-color: green" data-bs-toggle="modal" data-bs-target="#materiaModal">
           Subir nuevo archivo
         </button>
         <br />
@@ -105,8 +105,7 @@
                       <div *ngIf="formulario.controls['valor'].invalid && formulario.controls['valor'].touched" class="invalid-feedback">
                         <div *ngIf="formulario.controls['valor'].hasError('required')">El valor es requerido</div>
                       </div>
-                    </div>
-                    
+                    </div>                    
                     <div class="form-group">
                       <label for="descripcion">Descripción:</label>
                       <textarea class="form-control" formControlName="descripcion" id="descripcion" name="descripcion"

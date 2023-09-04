@@ -9,6 +9,7 @@ import { LoginService } from 'src/app/services/login.service';
 import Swal from 'sweetalert2';
 import { Actividad_arch } from 'src/app/services/actividad_arch';
 import { MatPaginator } from '@angular/material/paginator';
+import { PoaService } from 'src/app/services/poa.service';
 @Component({
   selector: 'app-subir_archivo_acti_desig',
   templateUrl: './subir_archivo_acti_desig.component.html',
@@ -35,7 +36,8 @@ public archivon=new Archivo();
     private archivo: ArchivoService,
     public login: LoginService,
     private fb: FormBuilder,
-    private router: Router
+    private router: Router,
+    private poaservis : PoaService
   ) {
     
     this.archivoInput = new ElementRef<HTMLInputElement>(document.createElement('input'));
@@ -67,6 +69,8 @@ public archivon=new Archivo();
 
 
   ngOnInit() {
+
+
     const data = history.state.data;
     this.activ = data;
     if (this.activ == undefined) {
@@ -91,6 +95,8 @@ public archivon=new Archivo();
       }
     )
     this.listar();
+
+    this.verificarFechaLimite();
 
   }
 
@@ -238,8 +244,32 @@ editar(id_archi: any): void {
     });
   }
 
-  // Open the modal programmatically
- // this.modalRef.nativeElement.click();
+  //bloquear boton
+  botonDeshabilitado: boolean | undefined;
+ 
+  verificarFechaLimite() {
+    this.poaservis.poalist().subscribe(data => {
+      const fechaActual = new Date();
+    console.log("datos . "+data)
+      const fechaFin = new Date(data.fecha_fin);
+      console.log("fecha fin >>> "+ data.fecha_fin)
+      if (fechaActual > fechaFin) {
+        this.botonDeshabilitado = true;
+        this.mostrarMensaje('Usted ya no puede subir ni modiicar los archivos debido a una fecha límite superada.');
+        return;
+      }
+    });
+  }
 
+  // Resto del código
+
+  mostrarMensaje(mensaje: string) {
+    Swal.fire({
+      title: 'Advertencia',
+      text: mensaje,
+      icon: 'warning',
+      confirmButtonText: 'Aceptar'
+    });
+  }
 
 }
