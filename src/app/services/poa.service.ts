@@ -21,6 +21,7 @@ export class PoaService {
 
     return this.http.get<PoaActividadProjection>(`${baserUrl}/api/poa/buscar/${id}`);
   }
+  
   public listarPoa(): Observable<PoaActividadProjection[]> {
     return this.http
       .get(`${baserUrl}/api/poa/listar`)
@@ -78,4 +79,10 @@ export class PoaService {
 
   }
 
-}
+
+  
+  poalist(): Observable<Poa> {
+    return this.http.get<any>(`${baserUrl}/api/poa/listar`)
+  }
+
+ }
