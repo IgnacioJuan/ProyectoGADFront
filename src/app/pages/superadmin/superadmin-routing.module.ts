@@ -6,8 +6,6 @@ import { RoleguardGuard } from 'src/app/services/Guards/roleguard.guard';
 import { ObjetivoodsListaComponent } from './pages/objetivoods-lista/objetivoods-lista.component';
 import { DialogoUsuariosComponent } from './pages/dialogo-usuarios/dialogo-usuarios.component';
 import { CrearComponent } from './pages/crear-programa/crear-programa.component';
-import { AprobarPoaComponent } from './pages/aprobar-poa/aprobar-poa/aprobar-poa.component';
-import { DetallePoaComponent } from './pages/poacc/detalle-poa/detalle-poa/detalle-poa.component';
 import { ReporteavancepoaComponent } from './reporteavancepoa/reporteavancepoa.component';
 import { CrearcompetenciaComponent } from './pages/crear-competencia/crear-competencia.component';
 //import { EvidenciasRechazoComponent } from './evidencias/evidencias.component';
@@ -40,22 +38,12 @@ const routes: Routes = [
   path: 'crearpro',
   component: CrearComponent,
   pathMatch: 'full',
-  canActivate: [SuperGuard]
-},
-{
-  path: 'aprobar-poa',
-  component: AprobarPoaComponent,
-  pathMatch: 'full',
-  canActivate: [SuperGuard]
-},
+  //canActivate: [SuperGuard]
+  canActivate: [RoleguardGuard],
+  data: { allowedRoles: ['SUPERADMIN', 'ADMIN'] }
 
-{
-  path: 'detalle-poa',
-  component: DetallePoaComponent,
-  pathMatch: 'full',
-  canActivate: [SuperGuard]
-},
-
+}
+  ,
 //Compartidas
 
 {
@@ -133,6 +121,10 @@ pathMatch: 'full',
   component: CrearcompetenciaComponent,
   pathMatch: 'full',
   canActivate: [SuperGuard]
+},
+{
+  path: 'aprobacion-poa',
+  loadChildren: () => import("./aprobar-poa/aprobar-poa.module").then(m => m.AprobarPoaModule)
 },
 ];
 
