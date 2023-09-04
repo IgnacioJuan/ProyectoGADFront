@@ -1,3 +1,4 @@
+import { FlujoCriterioModule } from './flujo-criterio/flujo-criterio.module';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { SuperGuard } from 'src/app/services/Guards/super.guard';
@@ -75,6 +76,10 @@ pathMatch: 'full',
 {
   path: 'flujo-modelo',
   loadChildren: () => import("./flujo-modelo/flujo-modelo.module").then(m => m.FlujoModeloModule)
+},
+{
+  path: 'flujo-criterio',
+  loadChildren: () => import("./flujo-criterio/flujo-criterio.module").then(m => m.FlujoCriterioModule)
 },
 
 {
