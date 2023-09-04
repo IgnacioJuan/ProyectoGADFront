@@ -1,83 +1,101 @@
 <body>
 <div class="container bg-light border border-start-0 rounded-4">
   <blockquote class="blockquote text-dark" style="margin-top: 5%">
-    <h1><strong> EVIDENCIAS</strong></h1>
+    <h1 class="titulo"><strong>EVIDENCIAS</strong></h1>
   </blockquote>
   <div></div>
 
   <div class="card">
     <div class="card-body">
-      <div class="form-group">
-        <input
-          type="text"
-          class="form-control"
-          name="filterPost3"
-          placeholder="Buscar por nombre ..."
-          [(ngModel)]="filterPost"
-          (input)="buscar()"
-          (ngModelChange)="buscar()"
+      <div class="row justify-content-around">
+        <div class="col-4">
+          <div class="form-group ">
+            <input
+              type="text"
+              class="form-control"
+              name="filterPost3"
+              placeholder="Buscar por nombre ..."
+              [(ngModel)]="filterPost"
+              (input)="buscar()"
+              (ngModelChange)="buscar()"
+            />
+          </div>
+        </div>
+        <div class="col-4">
+          <div class="d-flex align-items-center">
+            <span style="margin-right: 10px;"><i class="fa fa-filter" style="font-size: 30px;"></i></span>
+            <div class="flex-grow-1">
+              <select class="form-select" aria-label="Default select example" [(ngModel)]="estadoSeleccionado" (ngModelChange)="filtrarPorEstado()">
+                <option selected disabled>Filtro: </option>
+                <option value="APROBADO">APROBADO</option>
+                <option value="RECHAZADO">RECHAZADO</option>
+                <option value="PENDIENTE">PENDIENTE</option>
+              </select>
 
-        />
+
+            </div>
+          </div>
+        </div>
       </div>
-      <br />
-      <button
-        type="button"
-        class="btn btn-guardar"
-        data-bs-toggle="modal"
-        data-bs-target="#materiaModal"
-      >
-        FILTRAR SOLO APROBADOS
-      </button>
-      <br />
-      <br />
+
+
       <div
         class="mat-elevation-z8 table-responsive"
         style="margin-bottom: 5%"
       >
         <table mat-table [dataSource]="dataSource">
-          <ng-container matColumnDef="id_componente">
+
+          <ng-container matColumnDef="barrio">
             <th mat-header-cell *matHeaderCellDef>ID</th>
             <td mat-cell *matCellDef="let elemento">
               {{ elemento.id_archivo }}
             </td>
           </ng-container>
-
-          <ng-container matColumnDef="nombre">
+          <ng-container matColumnDef="comunidad">
             <th mat-header-cell *matHeaderCellDef>NOMBRE</th>
             <td mat-cell *matCellDef="let elemento">
               {{ elemento.nombre }}
             </td>
           </ng-container>
-          <ng-container matColumnDef="descripcion">
-            <th mat-header-cell *matHeaderCellDef>DESCRIPCIÓN</th>
+          <ng-container matColumnDef="cobertura">
+            <th mat-header-cell *matHeaderCellDef>DESCRIPCION</th>
             <td mat-cell *matCellDef="let elemento">
               {{ elemento.descripcion }}
             </td>
           </ng-container>
-          <ng-container matColumnDef="fecha">
+          <ng-container matColumnDef="fecha_inicio">
             <th mat-header-cell *matHeaderCellDef>FECHA</th>
             <td mat-cell *matCellDef="let elemento">
-              {{ elemento.fecha }}
+              {{ elemento.fecha | date:'dd/MM/yyyy'  }}
             </td>
           </ng-container>
 
-          <ng-container matColumnDef="Aprobacion">
-            <th mat-header-cell *matHeaderCellDef>APROBACIÓN</th>
+          <ng-container matColumnDef="estado">
+            <th mat-header-cell *matHeaderCellDef>ESTADO</th>
+            <td mat-cell *matCellDef="let elemento" [ngStyle]="getEstadoCellStyle(elemento.estado)" >
+              {{ elemento.estado }}
+            </td>
+          </ng-container>
+
+
+          <ng-container matColumnDef="observaciones">
+            <th mat-header-cell *matHeaderCellDef>APROBACION</th>
             <td mat-cell *matCellDef="let elemento">
               <button
                 class="btn btn-primary"
                 role="button"
+                data-bs-toggle="modal"
+                data-bs-target="#materiaModalObservaciones"
                 (click)="verDetalles(elemento)"
               >
                 <div class="d-flex">
-                      <span class="badge">{{
-                        elemento.cantidadObjetivoPDOT}}</span>
-                  <i class="fa fa-folder-open"></i>
+                          <span class="badge">{{
+                            elemento.cantidadObjetivoPDOT}}</span>
+                  <i class="fa fa-question-circle"></i>
                 </div>
               </button>
             </td>
           </ng-container>
-
 
 
           <tr mat-header-row *matHeaderRowDef="columnasUsuario"></tr>
@@ -96,148 +114,91 @@
           No se encontraron resultados.
         </div>
 
+        <div *ngIf="!resultadosEncontradosporEstado" class="alert alert-warning">
+          No se encontraron Evidencias para el estado "{{ estadoSeleccionado }}".
+        </div>
+
+
       </div>
 
 
 
-      <div
-        class="modal fade"
-        id="materiaModal"
-        tabindex="-1"
-        aria-labelledby="exampleModalLabel"
-        aria-hidden="true"
-        (hidden.bs.modal)="nohacernada()"
-      >
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header" style="background-color: #077b15" >
-              <h3 class="modal-title"    style="font-family: Arial, sans-serif; color: white">
-                <i class="fa fa-info-circle" ></i> OBJETIVO ODS
-              </h3>
-              <button
-                type="button"
-                class="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              ></button>
-            </div>
-            <div class="modal-body">
-              <form
-                [formGroup]="formComponentes"
-                (ngSubmit)="nohacernada()"
-                id="formulario"
-              >
-                <div>
+
+
+    </div>
+  </div>
 
 
 
 
 
+  <div
+    class="modal fade"
+    id="materiaModalObservaciones"
+    tabindex="-1"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
 
+  >
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header" style="background-color: #077b15" >
+          <h3 class="modal-title"    style="font-family: Arial, sans-serif; color: white">
+            <i class="fa fa-info-circle" ></i> APROBACIÓNES
+          </h3>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
 
-                  <label for="nombre">Nombre:</label>
-                  <input
-                    class="form-control"
-                    formControlName="nombre"
-                    type="text"
-                    id="nombre"
-                    name="nombre"
-                    style="margin-bottom: 10px"
-                  />
-                  <div
-                    class="alert alert-danger"
-                    *ngIf="
-                        formComponentes.controls['nombre'].invalid &&
-                        formComponentes.controls['nombre'].touched
-                        "
-                  >
-                    <div
-                      *ngIf="
-                          formComponentes.controls['nombre'].hasError('required')
-                          "
-                    >
-                      Debe ingresar un nombre
-                    </div>
-                  </div>
+          <div class="card">
+            <div class="card-body" style="height: 100%;">
+              <div class="mat-elevation-z8 table-responsive"  style="margin-bottom: 5%"  >
+                <table mat-table [dataSource]="dataSource3">
+                  <ng-container matColumnDef="observacion">
+                    <th mat-header-cell *matHeaderCellDef>OBSERVACIÓN</th>
+                    <td mat-cell *matCellDef="let elemento">
+                      {{ elemento.observacion }}
+                    </td>
+                  </ng-container>
+                  <tr mat-header-row *matHeaderRowDef="columnasObservaciones"></tr>
+                  <tr mat-row *matRowDef="let fila; columns: columnasObservaciones"></tr>
+                </table>
 
-
-
-
-
-                  <label for="descripcion">Descripción:</label>
-                  <textarea
-                    class="form-control"
-                    formControlName="descripcion"
-                    id="descripcion"
-                    name="descripcion"
-                    style="margin-bottom: 10px"
-                  ></textarea>
-                  <div
-                    class="alert alert-danger"
-                    *ngIf="
-                        formComponentes.controls['descripcion'].invalid &&
-                        formComponentes.controls['descripcion'].touched
-                        "
-                  >
-                    <div
-                      *ngIf="
-                          formComponentes.controls['descripcion'].hasError(
-                              'required'
-                            )
-                          "
-                    >
-                      La descripcion no puede estar vacia
-                    </div>
-                    <div
-                      *ngIf="
-                          formComponentes.controls['descripcion'].hasError(
-                              'maxlength'
-                            )
-                          "
-                    >
-                      Excedio el numero de caracteres permitido
-                    </div>
-                  </div>
+                <div *ngIf="!resultadosEncontradosporObservaciones" class="alert alert-warning">
+                  No se encontraron observaciones.
                 </div>
-              </form>
-              <div class="modal-footer">
-                <button
-                  type="button"
-                  form="formulario"
-                  class="btn btn-warning"
-                  data-bs-dismiss="modal"
-                >
-                  Cancelar
-                </button>
-                <button
-                  type="submit"
-                  class="btn btn-primary"
-                  form="formulario"
-                  *ngIf="!componentes.id_archivo"
-                  data-dismiss="modal"
-                  data-bs-dismiss="modal"
-                  [disabled]="!formComponentes.valid"
-                >
-                  Agregar
-                </button>
-                <button
-                  class="btn btn-primary"
-                  *ngIf="componentes.id_archivo"
-                  data-dismiss="modal"
-                  data-bs-dismiss="modal"
-                  (click)="nohacernada()"
-                  [disabled]="!formComponentes.valid"
-                >
-                  Actualizar
-                </button>
               </div>
+
             </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              class="btn btn-primary"
+              data-dismiss="modal"
+              data-bs-dismiss="modal">
+              OK
+            </button>
           </div>
         </div>
       </div>
     </div>
   </div>
+
+
+
+
+
+
+
+
+
+
+
+
 </div>
 </body>
-
-
