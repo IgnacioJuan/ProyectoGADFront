@@ -10,6 +10,7 @@ export class Archivo {
   descripcion: string = "";
   fecha:Date | undefined;
   valor :number=0;
+  estado: string = "";
 
  actividad:Actividad_arch|null=null;
 
