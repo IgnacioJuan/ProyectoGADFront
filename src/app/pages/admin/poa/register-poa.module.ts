@@ -6,6 +6,7 @@ import { RegistrarPoaComponent } from './registrar-poa/registrar-poa.component';
 import { ListarProyectosComponent } from './listar-proyectos/listar-proyectos/listar-proyectos.component';
 import { AddActiviesComponent } from './add-activies/add-activies.component';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { CurrencyInputDirective } from './currency-input.directive';
 
 
 @NgModule({
@@ -13,6 +14,7 @@ import { SharedModule } from 'src/app/shared/shared.module';
     RegistrarPoaComponent,
     ListarProyectosComponent,
     AddActiviesComponent,
+    CurrencyInputDirective,
   ],
   imports: [
     CommonModule,
