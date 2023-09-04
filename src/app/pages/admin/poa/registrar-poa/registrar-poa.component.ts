@@ -367,9 +367,11 @@ export class RegistrarPoaComponent implements OnInit {
       this.poaInsertService.crear(this.solicitudPoa).subscribe((data: any) => {
         if (data) {
           this.poaInsertService.solicitarAprobacion(data.id_poa, this.id_super_admin, this.proyecto).subscribe((aprobPoa: any) => {
+            console.log("aprobacion poa", aprobPoa);
             if (aprobPoa) {
-              console.log(aprobPoa);
+
               this.dataSource.forEach(element => {
+                console.log(element);
                 this.poaInsertService.crearActividad(element.nombre, element.observacion, element.recursos_propios, element.presupuesto_referencial).subscribe((actividad: any) => {
                   if (actividad) {
                     this.poaInsertService.solicitarAprobacionActividad(this.id_super_admin, actividad.id_actividad, data.id_poa).subscribe((aprobActividad: any) => {
@@ -400,6 +402,7 @@ export class RegistrarPoaComponent implements OnInit {
                         this.poaInsertService.crearPeriodo(element.valor_cuatro, actividad.id_actividad, 4).subscribe((periodo: any) => {
                           if (periodo) {
                             console.log(periodo);
+                            //recargar la pagina forzadamente
                           }
                         });
                       }
@@ -416,11 +419,11 @@ export class RegistrarPoaComponent implements OnInit {
             showConfirmButton: false,
             timer: 1500
           });
-          this.enviar_solictud = true;
-          this.solicitudPoa = new SolicitudPoa();
-          this.dataSource = [];
-          this.refrescar();
-          this.getProject(0);
+          // this.enviar_solictud = true;
+          // this.solicitudPoa = new SolicitudPoa();
+          // this.dataSource = [];
+          // this.refrescar();
+          // this.getProject(0);
         } else {
           Swal.fire({
             icon: 'error',
