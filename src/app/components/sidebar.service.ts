@@ -20,7 +20,6 @@ export class SidebarService {
       titulo: "Asignación",
       submenu: [
         { titulo: 'POA', url: 'adm/asignacion-actividades/poa-actividad', icono: 'fas fa-check-square' },
-        { titulo: 'Asignar Evidencia', url: 'adm/asignaEvidencia', icono: 'fas fa-check-square' },
         
       ]
     },
@@ -29,16 +28,6 @@ export class SidebarService {
       titulo: "Observación",
       submenu: [
         { titulo: ' Agregar observación ', url: 'sup/observaciones', icono: 'fas fa-cubes' }
-      ]
-    },
-    {
-      icono: 'nav-icon fas fa-solid fa-list',
-      titulo: "Criterio",
-      submenu: [
-        { titulo: 'Lista de Criterios', url: 'adm/criterios', icono: 'fas fa-cubes' },
-        { titulo: 'Lista de Subcriterios', url: 'adm/subcriterios', icono: 'fas fa-cubes' },
-        { titulo: 'Lista de Indicadores', url: 'adm/indicadores', icono: 'fas fa-cubes' },
-        { titulo: 'Reporte de Criterios', url: 'sup/criterio_reporte', icono: 'fas fa-cubes' }
       ]
     },
     {
@@ -95,15 +84,6 @@ export class SidebarService {
       ]
     },
 
-    {
-      icono: 'nav-icon fas   fa-users',
-      titulo: "Competencia COOTAD",
-      submenu: [
-        { titulo: 'Competencia Cootad', url: 'sup/flujo-criterio/crearcompe', icono: 'fas fa-list-ul ' }
-
-      ]
-    },
-
 
   ]
 
@@ -111,26 +91,10 @@ export class SidebarService {
   //LISTA DE ITEMS PARA SIDEBAR RESPONSABLE
   menu3: any[] = [
     {
-      icono: 'nav-icon fas fa-file-alt',
-      titulo: "Evidencias",
-      submenu: [
-        { titulo: 'Evidencias asignadas', url: 'res/eviTareaAsina', icono: 'fas fa-file-contract' }
-
-      ]
-    },
-    {
-      icono: 'nav-icon fas fa-tasks',
-      titulo: "Criterios",
-      submenu: [
-        { titulo: 'Reporte Criterios', url: 'res/actividadCriterio', icono: 'fas fa-file-contract' }
-
-      ]
-    },
-    {
       icono: 'nav-icon fas fa-tasks',
       titulo: "Actividades",
       submenu: [
-        { titulo: 'designada', url: 'res/activ/actividadesdesig', icono: 'fas fa-file-contract' }
+        { titulo: 'Mis Actividades', url: 'res/activ/actividadesdesig', icono: 'fas fa-file-contract' }
       ]
     }
 
