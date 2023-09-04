@@ -16,7 +16,7 @@ import { MatPaginator } from '@angular/material/paginator';
 })
 export class Subir_archivo_acti_desigComponent implements OnInit {
 
-  displayedColumns: string[] = ['Id', 'Archivo','Descripcion', 'Fecha','Valor', 'Borrar'];
+  displayedColumns: string[] = ['Id', 'Archivo','Descripcion', 'Fecha','Valor','Estado', 'Accion'];
   fileInfos: Observable<any> | undefined;
   isLoggedIn = false;
   user: any = null;

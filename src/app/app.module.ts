@@ -10,7 +10,8 @@ import { authInterceptorProviders } from './services/auth/auth.interceptor';
 import { SiderbarComponent } from './components/siderbar/siderbar.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { SharedModule } from './shared/shared.module';
-import {FormsModule} from "@angular/forms";
+import { FormsModule } from "@angular/forms";
+import { CustomDatePipe } from './pages/superadmin/reporteavancepoa/reporteavancepoa.component';
 
 @NgModule({
   declarations: [
@@ -23,8 +24,10 @@ import {FormsModule} from "@angular/forms";
     BrowserModule,
     CommonModule,
     AppRoutingModule,
+    //Poner en shared
     BrowserAnimationsModule,
     FormsModule,
+    //
     SharedModule
   ],
 

@@ -4,7 +4,6 @@ import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { Componentes } from 'src/app/models/Componentes';
-//import { Criterio } from 'src/app/models/Criterio';
 import { ComponentesService } from 'src/app/services/componentes.service';
 import { ObjetivoPdotService } from 'src/app/services/objetivo-pdot.service';
 import Swal from 'sweetalert2';
@@ -138,16 +137,7 @@ export class ComponentesComponent  implements OnInit {
       }
     );
   }
-  /*listarObjetivos(idComponente: number): void {
-    this.objetivoPDOTService.listarObjetivosPdotsPorIdComponente(idComponente).subscribe(
-      (data: any) => {
-        this.numeroObjetivos = data.length; // Asigna el número de registros obtenidos
-      },
-      (error: any) => {
-        console.error('Error al listar los objetivos:', error);
-      }
-    );
-  }*/
+
   editDatos(componente: Componentes) {
    this.componentes = componente;
     this.formComponentes = new FormGroup({
@@ -186,10 +176,8 @@ export class ComponentesComponent  implements OnInit {
     this.filteredComponentes = this.listaComponentes.filter((componente) =>
       componente.nombre.toLowerCase().includes(this.filterPost.toLowerCase())
     );
-  
     // Actualiza los datos del dataSource con los resultados filtrados
     this.dataSource.data = this.filteredComponentes;
-  
     // Verifica si se encontraron resultados
     this.resultadosEncontrados = this.filteredComponentes.length > 0;
   }

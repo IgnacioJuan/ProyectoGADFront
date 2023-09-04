@@ -4,6 +4,10 @@
     margin-top: 10px;
 }
 
+@font-face {
+    font-family: myFirstFont;
+}
+
 .input-group .form-control {
     height: auto;
     border-radius: 20px;
@@ -78,6 +82,9 @@ body {
         url(https://source.unsplash.com/E8Ufcyxz514/2400x1823) center / cover no-repeat fixed;
 }
 
+.btn-guardar {
+    background-color: #D4BC37;
+}
 
 
 .table-container {
@@ -190,4 +197,29 @@ table {
     color: #fff;
     border: none;
     cursor: pointer;
+}
+
+/* Estilo para los contenedores de los campos de entrada valor_ */
+.valor-container {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+#formulario {
+    display: flex;
+    flex-wrap: wrap;
+    /* Permitirá que los elementos se envuelvan a la siguiente línea */
+    max-width: 1000px;
+    /* Ajusta el ancho máximo según tus preferencias */
+    margin: 0 auto;
+    /* Centra el formulario en la página */
+}
+
+/* Estilo para cada grupo de etiqueta y campo de entrada */
+.form-group {
+    flex-basis: calc(50% - 10px);
+    /* Divide en dos columnas, con un pequeño margen entre ellas */
+    margin: 5px;
+    /* Espacio entre elementos */
 }

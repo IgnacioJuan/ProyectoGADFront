@@ -10,17 +10,16 @@
             <mat-card class="example-card mx-2 my-2" *ngFor="let card of cardsToShow">
                 <div class="card-content-wrapper"> <!-- Envoltorio para el contenido de la tarjeta -->
                     <mat-card-header>
-                        <mat-card-subtitle>{{ card.subtitle }}</mat-card-subtitle>
-                        <mat-card-title>{{ card.title }}</mat-card-title>
+                        <mat-card-subtitle>{{ card.responsable }}</mat-card-subtitle>
+                        <mat-card-title>{{ card.nombre_proyecto }}</mat-card-title>
                     </mat-card-header>
                     <mat-card-content>
-                        <p>{{ card.content }}</p>
+                        <p>{{ card.objetivo_proyecto }}</p>
                     </mat-card-content>
                 </div>
                 <mat-divider></mat-divider>
                 <mat-card-actions class="card-actions"> <!-- Clase adicional para acciones de la tarjeta -->
-                    <button mat-button>LIKE</button>
-                    <button mat-button>SHARE</button>
+                    <button mat-button (click)="redirectToDetails(card.id_poa)">ABRIR</button>
                 </mat-card-actions>
                 <mat-card-footer>
                     <!-- <mat-progress-bar mode="indeterminate"></mat-progress-bar> -->
@@ -33,8 +32,6 @@
             <mat-paginator [length]="totalCards" [pageSize]="pageSize" [pageSizeOptions]="[3]" showFirstLastButtons
                 (page)="onPageChange($event)">
             </mat-paginator>
-
         </div>
-
     </div>
 </body>

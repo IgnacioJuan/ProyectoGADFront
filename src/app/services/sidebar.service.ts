@@ -41,6 +41,13 @@ export class SidebarService {
         { titulo: 'Reporte de Criterios', url: 'sup/criterio_reporte', icono: 'fas fa-cubes' }
       ]
     },
+    {
+      icono: 'nav-icon fas fa-file-signature',
+      titulo: "Poas Enviados",
+      submenu: [
+        { titulo: 'Listado de Poas', url: 'adm/poasEnviadosAdmin', icono: 'fas fa-cubes' },
+      ]
+    },
   ]
 
   //LISTA DE ITEMS PARA SIDEBAR SUPERADMIN
@@ -63,8 +70,8 @@ export class SidebarService {
       icono: 'nav-icon fas   fa-users',
       titulo: "Usuarios",
       submenu: [
-        { titulo: 'Lista de Usuarios', url: 'sup/usuarios', icono: 'fas fa-list-ul ' }
-
+        { titulo: 'Lista de Usuarios', url: 'sup/usuarios', icono: 'fas fa-list-ul ' },
+        { titulo: 'Lista de Actividades', url: 'sup/usuario-actividades/listar-actividades', icono: 'fas fa-list-ul ' }
       ]
     },
 
