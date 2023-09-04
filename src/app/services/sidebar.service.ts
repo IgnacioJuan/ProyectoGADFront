@@ -70,8 +70,8 @@ export class SidebarService {
       icono: 'nav-icon fas   fa-users',
       titulo: "Usuarios",
       submenu: [
-        { titulo: 'Lista de Usuarios', url: 'sup/usuarios', icono: 'fas fa-list-ul ' }
-
+        { titulo: 'Lista de Usuarios', url: 'sup/usuarios', icono: 'fas fa-list-ul ' },
+        { titulo: 'Lista de Actividades', url: 'sup/usuario-actividades/listar-actividades', icono: 'fas fa-list-ul ' }
       ]
     },
 

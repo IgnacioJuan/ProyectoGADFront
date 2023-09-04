@@ -7,36 +7,35 @@
         <div class="card">
             <div class="card-body">
                 <div class="form-group">
-                    <input type="text" class="form-control" name="filterPost3" placeholder="Buscar..." />
+                    <input type="text" class="form-control" name="filterPost3" placeholder="Buscar..."
+                        [(ngModel)]="filterPost" (input)="aplicarFiltro()" />
                 </div>
-                <br />
-                <br />
                 <div class="mat-elevation-z8 table-responsive" style="margin-bottom: 5%">
                     <table mat-table [dataSource]="dataSource">
 
                         <!-- Nombre Column -->
                         <ng-container matColumnDef="nombre_responsable">
-                            <th mat-header-cell *matHeaderCellDef>Responsable</th>
+                            <th mat-header-cell *matHeaderCellDef>RESPONSABLE</th>
                             <td mat-cell *matCellDef="let element">{{ element.nombre_responsable }}</td>
                         </ng-container>
 
                         <!-- Cargo Column -->
                         <ng-container matColumnDef="cargo_responsable">
-                            <th mat-header-cell *matHeaderCellDef>Cargo</th>
+                            <th mat-header-cell *matHeaderCellDef>CARGO</th>
                             <td mat-cell *matCellDef="let element">{{ element.cargo_responsable }}</td>
                         </ng-container>
 
                         <!-- Numero Column -->
                         <ng-container matColumnDef="numero_de_actividades">
-                            <th mat-header-cell *matHeaderCellDef>N° Actividades</th>
+                            <th mat-header-cell *matHeaderCellDef>N° ACTIVIDADES</th>
                             <td mat-cell *matCellDef="let element">{{ element.numero_de_actividades }}</td>
                         </ng-container>
 
                         <!-- Actividades Column -->
                         <ng-container matColumnDef="actividades">
-                            <th mat-header-cell *matHeaderCellDef>Ver Actividades</th>
+                            <th mat-header-cell *matHeaderCellDef>VER ACTIVIDADES</th>
                             <td mat-cell *matCellDef="let element">{{ element.actividades }}
-                                <button class="btn btn-primary" role="button" (click)="verDetalles()">
+                                <button class="btn btn-primary" role="button" (click)="redirectToDetails(element.id_usuario)">
                                     <div class="d-flex">
                                         <i class="fa fa-folder-open"></i>
                                     </div>
