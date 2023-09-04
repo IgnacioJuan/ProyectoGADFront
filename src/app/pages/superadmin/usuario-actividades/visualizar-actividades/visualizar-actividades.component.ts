@@ -28,6 +28,14 @@ export class VisualizarActividadesComponent {
     this.cargarDatos();
   }
 
+  /*  ngOnInit() {
+    const navigation = this.rout.getCurrentNavigation();
+    if (navigation && navigation.extras && navigation.extras.state) {
+      this.usuarioAct.nombre_responsable = navigation.extras.state['nombre_responsable'];
+    }
+    this.cargarDatos();
+  }*/
+
   cargarDatos() {
     const idParam = this.router.snapshot.paramMap.get('id_usuario');
     if (idParam) {

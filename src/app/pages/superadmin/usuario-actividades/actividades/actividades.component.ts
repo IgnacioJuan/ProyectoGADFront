@@ -39,9 +39,16 @@ export class ActividadesComponent implements OnInit {
 
   // acceder a la data de las actividades de los usuarios 
   redirectToDetails(idAct: number) {
-    console.log(idAct); 
+    console.log(idAct);
     this.router.navigate(['/sup/usuario-actividades/visualizar', idAct]);
   }
+  /*
+    redirectToDetails(element: UsuarioActividadDTO) {
+    this.router.navigate(['/sup/usuario-actividades/visualizar', element.id_usuario], {
+      state: { nombre_responsable: element.nombre_responsable }
+    });
+  }
+*/
 
   aplicarFiltro() {
     if (this.filterPost) {
