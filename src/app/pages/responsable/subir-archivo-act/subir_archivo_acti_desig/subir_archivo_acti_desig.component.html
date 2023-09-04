@@ -82,15 +82,16 @@
             <div class="modal-content">
               <div class="modal-header bg-blue">
                 <h3 class="modal-title">
-                  <i class="fas fa-clipboard"></i> Actividades
+                  <i class="fas fa-clipboard"></i>ARCHIVOS
                 </h3>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
                 <form [formGroup]="formulario" (ngSubmit)="onUpload()" id="formulario">
-                  <div class="form-group">
+                  <!-- Add the "disabled" attribute based on the isEditing property -->
+                  <div class="form-group" *ngIf="!isEditing ">
                     <label for="archivo">Archivo:</label>
-                    <input id="archivo" type="file" (change)="onFileChange($event)" />
+                    <input #archivoInput id="archivo" type="file" (change)="onFileChange($event)" [disabled]="isEditing" />
                   </div>
                   <div class="form-group">
                     <label for="valor">Valor:</label>
@@ -111,16 +112,19 @@
                         caracteres</div>
                     </div>
                   </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-primary" [disabled]="!formulario.valid || !filearchivo">Subir
-                      archivo</button>
-                      <button class="btn btn-primary" *ngIf="archivon.id_archivo" data-dismiss="modal"
-                      data-bs-dismiss="modal" (click)="editar(archivon.id_archivo)">
-                      Actualizar
-                    </button>
-                      </div>
                 </form>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Cancelar</button>
+                  <button type="submit" class="btn btn-primary" form="formulario" *ngIf="!archivon.id_archivo"
+                    [disabled]="!formulario.valid || !filearchivo">Subir
+                    archivo
+                  </button>
+                  <button class="btn btn-primary" *ngIf="archivon.id_archivo" data-dismiss="modal"
+                    [disabled]="!formulario.valid " data-bs-dismiss="modal" (click)="editar(archivon.id_archivo)">
+                    Actualizar
+                  </button>
+                </div>
+
               </div>
             </div>
           </div>

@@ -7,6 +7,7 @@ import { environment } from 'src/environments/environment';
  import baserUrl from './helper';
 import { Archivo } from '../models/Archivo';
 import { ArchivoProjection } from '../interface/ArchivoProjection';
+import { Archivos } from '../models/Archivos';
 
 @Injectable({
   providedIn: 'root'
@@ -82,17 +83,15 @@ eliminar(archi:any): Observable<any> {
 
 editArchivo(
   archivoId: number,
-  file: File,
   descripcion: string,
   valor: number,
   idActividad: number
 ): Observable<any> {
   const formData: FormData = new FormData();
-  formData.append('file', file);
   formData.append('descripcion', descripcion);
   formData.append('valor', valor.toString());
   formData.append('id_evidencia', idActividad.toString());
-  const url = `${baserUrl}/upload/${archivoId}`;
+  const url = `${baserUrl}/archivo/editar/${archivoId}`;
   const headers = new HttpHeaders();
 
   return this.http
@@ -103,6 +102,18 @@ editArchivo(
 private handleError(error: any): Observable<never> {
   console.error('An error occurred:', error);
   return throwError('Something went wrong; please try again later.');
+//Nuevos servicios
+
+}
+  // Método para listar los archivos por actividad
+
+  listarArchivosPorActividad(idActividad: number): Observable<Archivos[]> {
+    return this.http.get<Archivos[]>(`${baserUrl}/archivo/buscararchivo/`+idActividad);
+  }
+//Metodo para editar el estado 
+
+actualizar(id: any, archi: any): Observable<any> {
+  return this.http.put(`${baserUrl}/archivo/actualizar/${id}`, archi);
 }
 
 }

@@ -1,0 +1,45 @@
+/* app-dialog.component.css */
+.dialog-content {
+    padding: 24px;
+}
+
+/* app-dialog.component.css */
+.dialog-title {
+    background-color: #1976d2;
+    /* Color de fondo azul */
+    color: white;
+    /* Texto en color blanco para mayor contraste */
+    padding: 16px;
+    /* Espaciado interno para el contenido del título */
+    margin: 0;
+    /* Elimina el margen predeterminado */
+    width: 100%;
+    /* Ocupa todo el ancho disponible */
+}
+
+.form-field {
+    margin-bottom: 16px;
+    margin-left: 16px;
+    width: 100%;
+}
+
+/* app-dialog.component.css */
+.mat-focused .mat-form-field-underline {
+    /* Cambia el color de resaltado cuando el formulario está enfocado */
+    border-color: #007bff;
+    /* Cambia el color a azul (#007bff) o al color deseado */
+}
+
+
+.dialog-actions {
+    justify-content: flex-end;
+}
+
+.cancel-button {
+    margin-right: 8px;
+}
+
+.save-button {
+    background-color: #1976d2;
+    color: white;
+}

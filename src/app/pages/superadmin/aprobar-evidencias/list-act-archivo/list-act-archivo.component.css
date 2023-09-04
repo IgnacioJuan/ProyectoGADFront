@@ -1,0 +1,56 @@
+
+#calc{
+    font-family:myFirstFont;
+    font-size: 250%;
+    text-align: right;
+    background-color: inherit;
+    border: none;
+    padding-left:20px;
+    padding-right:20px;
+    padding-bottom: 10px;
+  }  body {
+    font: 1em/1.618 Inter, sans-serif;
+  
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    min-height: 100vh;
+    padding: 30px;
+    
+    color: #224;
+    background:
+      url(https://source.unsplash.com/E8Ufcyxz514/2400x1823)
+      center / cover no-repeat fixed;
+  }
+  
+  .titulo {
+    color: green;
+  }
+/* Estilo para el botón con el pulgar arriba (verde) */
+.thumb-up {
+  background-color: green;
+  color: white;
+}
+
+/* Estilo para el botón con el pulgar abajo (rojo) */
+.thumb-down {
+  background-color: red;
+  color: white;
+}
+
+
+/* Establece un margen derecho a los elementos para crear separación horizontal */
+ .thumb-up, .thumb-down {
+  margin-right: 10px; /* Puedes ajustar el valor según tu preferencia */
+}
+
+/* Asegura que los elementos estén alineados horizontalmente */
+.mat-form-field, .thumb-up, .thumb-down {
+  vertical-align: top; /* Alinea los elementos en la parte superior */
+  display: inline-block; /* Coloca los elementos en línea horizontal */
+}
+
+.mat-form-field{
+  margin-left: 10px;
+}

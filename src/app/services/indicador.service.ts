@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Indicadores } from '../models/Indicadores';
 import baserUrl from './helper';
+import { IndicadorconComponenteProjection } from '../interface/IndicadorconComponenteProjection';
 
 @Injectable({
   providedIn: 'root'
@@ -29,5 +30,9 @@ export class IndicadorService {
     // Método para listar los indicadores  por ID de metasPDOT
     listarmetasPdotsPorIdObjetivo(idMeta: number): Observable<Indicadores[]> {
       return this.http.get<Indicadores[]>(`${baserUrl}/api/Indicador/listaIndicadores/`+idMeta);
+    }
+
+    listarIndicadoresconComponente(): Observable<IndicadorconComponenteProjection[]> {
+      return this.http.get<IndicadorconComponenteProjection[]>(`${baserUrl}/api/Indicador/listaIndicadoresconComponente`);
     }
 }
