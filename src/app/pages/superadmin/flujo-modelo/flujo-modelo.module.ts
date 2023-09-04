@@ -8,6 +8,8 @@ import { ProyectoPoaComponent } from './proyecto-poa/proyecto-poa.component';
 import { PoaActividadComponent } from './poa-actividad/poa-actividad.component';
 import { ActividadEvidenciaComponent } from './actividad-evidencia/actividad-evidencia.component';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { ListarpoaComponent } from '../flujo-criterio/listarpoa/listarpoa.component';
+import { ListarporUsuarioComponent } from '../flujo-criterio/listarpoaporusuario/listarpoaporusuario.component';
 
 
 @NgModule({
@@ -16,7 +18,7 @@ import { SharedModule } from 'src/app/shared/shared.module';
     ModeloProyectoComponent,
     ProyectoPoaComponent,
     PoaActividadComponent,
-    ActividadEvidenciaComponent
+    ActividadEvidenciaComponent,
   ],
   imports: [
     CommonModule,

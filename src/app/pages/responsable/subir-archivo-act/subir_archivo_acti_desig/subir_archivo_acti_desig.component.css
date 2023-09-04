@@ -1,0 +1,17 @@
+body {
+  
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    color: green;
+  }
+  
+/* Styles for the header */
+.header-title {
+    font-size: 30px;
+    font-weight: bold;
+    color:rgb(9, 70, 9); /* You can choose your preferred color */
+    text-align: left;
+  }
+  

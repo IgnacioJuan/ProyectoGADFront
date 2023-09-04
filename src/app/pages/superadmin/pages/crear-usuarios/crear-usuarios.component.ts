@@ -64,7 +64,7 @@ export class CrearUsuariosComponent implements OnInit {
     { rolId: 1, rolNombre: 'ADMIN' },
     { rolId: 2, rolNombre: 'SUPERADMIN' },
     { rolId: 3, rolNombre: 'RESPONSABLE' },
-    { rolId: 4, rolNombre: 'AUTORIDAD' },
+    //{ rolId: 4, rolNombre: 'AUTORIDAD' },
   ];
   public usuario = {
     username: '',
@@ -73,7 +73,7 @@ export class CrearUsuariosComponent implements OnInit {
   public rol = 0;
   formulario: FormGroup;
   dataSource2 = new MatTableDataSource<Usuario2>();
-  columnasUsuario: string[] = ['id', 'nombre', 'usuario', 'rol', 'actions'];
+  columnasUsuario: string[] = ['nombre', 'usuario', 'rol', 'actions'];
   @ViewChild(MatPaginator, { static: false }) paginator?: MatPaginator;
   @ViewChild('modal') modal: any;
   constructor(
@@ -499,7 +499,7 @@ export class CrearUsuariosComponent implements OnInit {
       usuariosdit.usuario.persona.segundo_nombre = this.usuariosEdit.usuario.persona.segundo_nombre
     }
 
-    if (usuariosdit.usuario.persona.segundo_apellido == "") { 
+    if (usuariosdit.usuario.persona.segundo_apellido == "") {
       usuariosdit.usuario.persona.segundo_apellido = this.usuariosEdit.usuario.persona.segundo_apellido
     }
 
@@ -514,6 +514,11 @@ export class CrearUsuariosComponent implements OnInit {
     if (usuariosdit.usuario.persona.celular == "") {
       usuariosdit.usuario.persona.celular = this.usuariosEdit.usuario.persona.celular
     }
+
+    if (usuariosdit.usuario.persona.cargo == "") {
+      usuariosdit.usuario.persona.cargo = this.usuariosEdit.usuario.persona.cargo
+    }
+
 
     usuariosdit.usuarioRolId = this.usuariosEdit.usuarioRolId;
     console.log(usuariosdit);
@@ -534,7 +539,7 @@ export class CrearUsuariosComponent implements OnInit {
               'success'
             );
             this.Listado();
-            
+
             this.usuariosEdit = new UsuarioRol();
             this.usuariosEditGuar = new UsuarioRol();
           });
@@ -542,7 +547,7 @@ export class CrearUsuariosComponent implements OnInit {
         Swal.fire('Se ha cancelado la operación', '', 'info')
       }
     })
-
-
   }
+
+  
 }

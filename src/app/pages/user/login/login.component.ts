@@ -72,7 +72,7 @@ export class LoginComponent implements OnInit {
               //user dashboard
               //window.location.href = '/use/user-dashboard';
               this.router.navigate(['dashboard']);
-              location.replace('/sup/dashboard');
+              location.replace('/use/user-dashboard');
               this.loginService.loginStatusSubjec.next(true);
             }
             else if (this.loginService.getUserRole() == 'AUTORIDAD') {

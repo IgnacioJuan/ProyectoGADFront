@@ -1,0 +1,23 @@
+.mi-card {
+    max-width: 200px; /* Ajusta el ancho máximo según tu preferencia */
+    /* Otros estilos si los tienes */
+}
+
+.shorter-card {
+    max-width: 300px; /* Ajusta el ancho máximo para hacerlo más corto horizontalmente */
+    /* Otros estilos específicos para este caso si los tienes */
+}
+.mi-card {
+    max-width: 50%;
+    margin: 10px;
+}
+
+#my-button {
+    background-color: #006d18;
+    color: white;
+    margin: 10px;
+}
+
+.mi-card {
+    border: 3px solid #006d18;
+}
