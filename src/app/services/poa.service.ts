@@ -4,8 +4,11 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import baserUrl from './helper';
 import { PoaActividadProjection } from '../interface/PoaActividadProjection';
 import { Poa } from '../models/Poa';
+import { PoasAdminEstadoProjection } from '../interface/PoasAdminEstado';
+
 import { PoaNoAprobadoProjection } from '../interface/PoaNoAprobadoProjection';
 import { PoaporUsuarioProjection } from '../interface/PoaporUsuarioProjection';
+
 
 @Injectable({
   providedIn: 'root'
@@ -48,6 +51,11 @@ export class PoaService {
   }
 
 
+  //Listar POAS por Admin-ESTADO 
+  listarPoasAdminEstado(idResponsable:number, estado:string): Observable<PoasAdminEstadoProjection[]> {
+    return this.http.get<PoasAdminEstadoProjection[]>(`${baserUrl}/api/poa/listarPoasAdminEstado/${idResponsable}/${estado}`);
+  }
+  
   getNoAprobados(): Observable<PoaNoAprobadoProjection[]> {
     return this.http.get<PoaNoAprobadoProjection[]>(`${baserUrl}/api/poa/noaprobados`);
   }
@@ -55,6 +63,7 @@ export class PoaService {
 
   getporUsuario(): Observable<PoaporUsuarioProjection[]> {
     return this.http.get<PoaporUsuarioProjection[]>(`${baserUrl}/api/poa/listarporusuario`);
+
   }
 
 }
