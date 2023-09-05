@@ -16,6 +16,10 @@ const routes: Routes = [
     pathMatch: 'full',
     canActivate: [NormalGuard]
   },
+  {
+    path: 'resumen-presupuestos',
+    loadChildren: () => import("./resumen-presupuestos/resumen-presupuestos.module").then(m => m.ResumenPresupuestosModule)
+  }
 
  
 ];

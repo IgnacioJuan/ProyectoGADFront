@@ -94,7 +94,8 @@ export class SidebarService {
       icono: 'nav-icon fas fa-tasks',
       titulo: "Actividades",
       submenu: [
-        { titulo: 'Mis Actividades', url: 'res/activ/actividadesdesig', icono: 'fas fa-file-contract' }
+        { titulo: 'Mis Actividades', url: 'res/activ/actividadesdesig', icono: 'fas fa-file-contract' },
+        { titulo: 'Resumen Presupuestos', url: 'res/resumen-presupuestos/lista-actividades', icono: 'fas fa-list-ul ' },
       ]
     }
 
