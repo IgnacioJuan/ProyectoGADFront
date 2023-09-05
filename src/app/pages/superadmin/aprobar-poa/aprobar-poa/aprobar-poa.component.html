@@ -14,21 +14,12 @@
                         <mat-card-title>{{ card.nombre_proyecto }}</mat-card-title>
                     </mat-card-header>
                     <mat-card-content>
-                        <mat-divider></mat-divider>
-                        <br />                    
-                        <mat-card-subtitle>Objetivo del Proyecto: </mat-card-subtitle>
-                        <p>{{ card.objetivo_proyecto }}</p> 
-                        <mat-card-subtitle>Meta del Proyecto:  </mat-card-subtitle>
-                        <p>{{ card.meta_proyecto }}</p>
-                        <mat-card-subtitle>Localización </mat-card-subtitle>
-                        <p>{{ card.localizacion }}</p>
-                        <mat-card-subtitle>Fecha Fin Del Proyecto: </mat-card-subtitle>
-                        <p>{{ transformDate(card.fecha_fin) }}</p>                        
+                        <p>{{ card.objetivo_proyecto }}</p>
                     </mat-card-content>
                 </div>
                 <mat-divider></mat-divider>
                 <mat-card-actions class="card-actions"> <!-- Clase adicional para acciones de la tarjeta -->
-                    <button mat-button (click)="redirectToDetails(card.id_poa)">Ver más detalles</button>
+                    <button mat-button (click)="redirectToDetails(card.id_poa)">ABRIR</button>
                 </mat-card-actions>
                 <mat-card-footer>
                     <!-- <mat-progress-bar mode="indeterminate"></mat-progress-bar> -->
