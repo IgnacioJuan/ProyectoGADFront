@@ -1,3 +1,29 @@
+#calc {
+    font-family: myFirstFont;
+    font-size: 250%;
+    text-align: right;
+    background-color: inherit;
+    border: none;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 10px;
+}
+
+body {
+    font: 1em/1.618 Inter, sans-serif;
+  
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  
+    min-height: 100vh;
+    padding: 30px;
+  
+    color: #224;
+    background:
+      url(https://source.unsplash.com/E8Ufcyxz514/2400x1823) center / cover no-repeat fixed;
+  
+  }
 /* Estilo para el contenedor de tarjetas */
 
 .cards-container {
@@ -17,16 +43,34 @@
     overflow: auto;
     display: flex;
     flex-direction: column; /* Establece la dirección principal como columna */
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2); /* Sombra suave */
+    transition: box-shadow 0.3s ease;
 }
-
+.example-card:hover {
+    box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.25); /* Sombra más intensa al pasar el cursor */
+}
 .card-content-wrapper {
     flex: 1; /* Permite que el contenido crezca y ocupe todo el espacio disponible */
     overflow: auto; /* Si el contenido es demasiado, mostrará barras de desplazamiento */
 }
 
 .card-actions {
-    margin-top: auto; /* Empuja las acciones hacia la parte inferior */
+   
+    margin-top: 3px;
+    margin-bottom: 3px;
+    justify-content: flex-end;
 }
+
+button[mat-button] {
+    
+    transition: box-shadow 0.3s ease;
+    padding: 10px 20px; /* Ajuste de padding para que el botón tenga un mejor aspecto con las esquinas redondeadas */
+}
+
+button[mat-button]:hover {
+    box-shadow: 5px 5px 7px rgba(0, 0, 0, 0.4);
+}
+
 
 /* Estilos para alinear los textareas e inputs */
 .example-container {
@@ -50,28 +94,3 @@
 }
 
 
-#calc {
-    font-family: myFirstFont;
-    font-size: 250%;
-    text-align: right;
-    background-color: inherit;
-    border: none;
-    padding-left: 20px;
-    padding-right: 20px;
-    padding-bottom: 10px;
-}
-
-body {
-    font: 1em/1.618 Inter, sans-serif;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    min-height: 100vh;
-    padding: 30px;
-
-    color: #224;
-    background:
-        url(https://source.unsplash.com/E8Ufcyxz514/2400x1823) center / cover no-repeat fixed;
-}
