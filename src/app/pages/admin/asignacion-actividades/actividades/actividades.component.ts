@@ -120,7 +120,7 @@ export class ActividadesComponent implements OnInit {
   guardar() {
     this.actividad = this.frmActividad.value;
     this.actividad.poa = this.poa;
-    this.actividad.estado = 'pendiente';
+    this.actividad.estado = 'PENDIENTE';
     this.actividadservice.crear(this.actividad)
       .subscribe(
         (response) => {
@@ -150,7 +150,7 @@ export class ActividadesComponent implements OnInit {
   }
 
   crearAprobacion(actividad: any) {
-    this.aprobAct.estado = 'pendiente';
+    this.aprobAct.estado = 'PENDIENTE';
     this.aprobAct.observacion = '';
     this.aprobAct.actividad = actividad;
     this.aprobAct.poa = this.poa;
@@ -245,7 +245,7 @@ export class ActividadesComponent implements OnInit {
     this.actividad.recursos_propios = this.frmActividad.value.recursos_propios;
     this.actividad.codificado = this.frmActividad.value.codificado;
     this.actividad.devengado = this.frmActividad.value.devengado;
-    this.actividad.estado = 'pendiente';
+    this.actividad.estado = 'PENDIENTE';
     this.actividadservice.actualizar(this.actividad.id_actividad, this.actividad)
       .subscribe(response => {
         this.actividad = new ActividadesPoa();
@@ -263,7 +263,7 @@ export class ActividadesComponent implements OnInit {
     this.actividad.recursos_propios = this.frmActividad.value.recursos_propios;
     this.actividad.codificado = this.frmActividad.value.codificado;
     this.actividad.devengado = this.frmActividad.value.devengado;
-    this.actividad.estado = 'pendiente';
+    this.actividad.estado = 'PENDIENTE';
     this.actividad.usuario = usuarioAsignado; // Restaurar el usuario asignado
     this.actividadservice.actualizar(this.actividad.id_actividad, this.actividad)
       .subscribe(response => {
