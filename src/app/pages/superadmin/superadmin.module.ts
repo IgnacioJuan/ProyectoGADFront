@@ -19,6 +19,8 @@ import {MatTableModule} from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { DialogoUsuariosComponent } from './pages/dialogo-usuarios/dialogo-usuarios.component';
 import { CrearComponent } from './pages/crear-programa/crear-programa.component';
+import { CustomDatePipe, ReporteavancepoaComponent } from './reporteavancepoa/reporteavancepoa.component';
+import { ReporteEspecificoPoaComponent } from './reporte-especifico-poa/reporte-especifico-poa.component';
 import { CrearcompetenciaComponent } from './pages/crear-competencia/crear-competencia.component';
 import { ListarpoaComponent } from './flujo-criterio/listarpoa/listarpoa.component';
 import { ListarporUsuarioComponent } from './flujo-criterio/listarpoaporusuario/listarpoaporusuario.component';
@@ -32,9 +34,11 @@ import { ListarporUsuarioComponent } from './flujo-criterio/listarpoaporusuario/
     ListarpoaComponent,  
     DialogoUsuariosComponent,
     CrearComponent,
-    
+    ReporteavancepoaComponent,
+    ReporteEspecificoPoaComponent,
     CrearcompetenciaComponent,
-  
+   
+    CustomDatePipe,
     ListarpoaComponent  ,
     ListarporUsuarioComponent,
 
