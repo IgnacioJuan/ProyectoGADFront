@@ -42,6 +42,13 @@ export class SidebarService {
   //LISTA DE ITEMS PARA SIDEBAR SUPERADMIN
   menu2: any[] = [
     {
+      icono: 'nav-icon fas   fa-users',
+      titulo: "Usuarios",
+      submenu: [
+        { titulo: 'Lista de Usuarios', url: 'sup/usuarios', icono: 'fas fa-list-ul ' },
+      ]
+    },
+    {
       icono: 'nav-icon fas fa-solid fa-list',
       titulo: "Configurar Modelo",
       submenu: [
@@ -50,22 +57,14 @@ export class SidebarService {
         { titulo: 'Programas', url: 'sup/crearpro', icono: 'fas fa-list-ul ' },
         { titulo: 'Componentes', url: 'sup/ejes/ejestabla', icono: 'fas fa-list-ul ' },
         { titulo: 'Competencia', url: 'sup/crearcompe', icono: 'fas fa-list-ul ' },
-        { titulo: 'Presupuestos', url: 'sup/actividades-presupuestos/tabla-poas', icono: 'fas fa-list-ul ' },
-        { titulo: 'Evidencias Rechazadas', url: 'sup/archivos-rechazados/Actividades_Evi_Rechazados', icono: 'fas fa-list-ul ' },
+        { titulo: 'ODS', url: 'sup/objetivoods-lista', icono: 'fas fa-list-ul ' },
+
 
       ]
     },
+    
     {
-      icono: 'nav-icon fas   fa-users',
-      titulo: "Usuarios",
-      submenu: [
-        { titulo: 'Lista de Usuarios', url: 'sup/usuarios', icono: 'fas fa-list-ul ' },
-        { titulo: 'Lista de Actividades', url: 'sup/usuario-actividades/listar-actividades', icono: 'fas fa-list-ul ' }
-      ]
-    },
-
-    {
-      icono: 'nav-icon fas   fa-users',
+      icono: 'nav-icon fas fa-tasks',
       titulo: "POA",
       submenu: [
         { titulo: 'Poas Rechazados', url: 'sup/flujo-criterio/listarpoa', icono: 'fas fa-list-ul ' },
@@ -76,13 +75,21 @@ export class SidebarService {
       ] 
     },
     {
-      icono: 'nav-icon fas   fa-users',
-      titulo: "Programa",
+      icono: 'nav-icon fas fa-solid fa-list',
+      titulo: "Actividades",
       submenu: [
+        { titulo: 'Presupuestos', url: 'sup/actividades-presupuestos/tabla-poas', icono: 'fas fa-list-ul ' },
+        { titulo: 'Evidencias Rechazadas', url: 'sup/archivos-rechazados/Actividades_Evi_Rechazados', icono: 'fas fa-list-ul ' },
+        { titulo: 'Lista de Actividades', url: 'sup/usuario-actividades/listar-actividades', icono: 'fas fa-list-ul ' },
         { titulo: 'Aprobar/Rechazar Evidencia', url: 'sup/aprobarEvidencias/listPoaAprobarEvidenciaSuper', icono: 'fas fa-file-contract' }
 
       ]
     },
+
+
+
+    
+
 
 
   ]
