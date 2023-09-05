@@ -61,12 +61,12 @@
               <ng-container matColumnDef="Accion">
                 <mat-header-cell *matHeaderCellDef>Accion</mat-header-cell>
                 <mat-cell *matCellDef="let file">
-                  <button type="button" class="btn btn-primary" style="margin-right: 5%;background-color: green"
+                  <button type="button"  [disabled]="botonDeshabilitado" class="btn btn-primary" style="margin-right: 5%;background-color: green"
                     data-bs-toggle="modal" data-bs-target="#materiaModal" (click)="editDatos(file)"
                     *ngIf="file.estado !== 'APROBADO'">
                     <i class="fas fa-edit"></i>
                   </button>
-                  <button class="btn btn-danger" style="background-color: yellowgreen; margin-right: 5%" role="button"
+                  <button class="btn btn-danger" [disabled]="botonDeshabilitado" style="background-color: yellowgreen; margin-right: 5%" role="button"
                     (click)="elim(file.nombre, file)" *ngIf="file.estado !== 'APROBADO'">
                     <i class="fa fa-trash"></i>
                   </button>
