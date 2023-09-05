@@ -248,18 +248,30 @@ editar(id_archi: any): void {
   botonDeshabilitado: boolean | undefined;
  
   verificarFechaLimite() {
-    this.poaservis.poalist().subscribe(data => {
-      const fechaActual = new Date();
-    console.log("datos . "+data)
-      const fechaFin = new Date(data.fecha_fin);
-      console.log("fecha fin >>> "+ data.fecha_fin)
-      if (fechaActual > fechaFin) {
-        this.botonDeshabilitado = true;
-        this.mostrarMensaje('Usted ya no puede subir ni modiicar los archivos debido a una fecha límite superada.');
-        return;
+    this.poaservis.getPoas().subscribe(
+      (data) => {
+        if (data && data.length > 0) {
+          const fechaActual = new Date();
+          const fechaFin = new Date(data[0].fecha_fin); // Supongo que estás interesado en la fecha_fin del primer elemento
+          console.log("fecha ini >>> " + fechaActual);
+          console.log("fecha fin >>> " + data[0].fecha_fin);
+          console.log("fecha fin 2 >>> " + fechaFin);
+  
+          if (fechaActual > fechaFin) {
+            this.botonDeshabilitado = true;
+            this.mostrarMensaje('Usted ya no puede subir archivos a esta actividad debido a una fecha límite superada.');
+          }
+        } else {
+          console.error('La lista de POAs está vacía o data es undefined.');
+        }
+      },
+      (error) => {
+        console.error('Error al obtener los datos del POA:', error);
+        // Puedes manejar el error aquí, mostrar un mensaje de error, etc.
       }
-    });
+    );
   }
+  
 
   // Resto del código
 
