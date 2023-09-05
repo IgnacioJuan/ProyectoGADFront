@@ -354,85 +354,186 @@ export class RegistrarPoaComponent implements OnInit {
   solicitudPoa: SolicitudPoa = new SolicitudPoa();
   solicitudPoaActividad: SolicitudPoaActividad = new SolicitudPoaActividad();
   //obten el id del usaurio logueado del storage session
-  solicitud() {
-    this.validaciones();
-    if (this.enviar_solictud) {
-      this.solicitudPoa.id_proyecto = this.proyecto;
-      this.solicitudPoa.meta_planificada = this.metaPlanificada;
-      this.solicitudPoa.coberura = this.cobertura;
-      this.solicitudPoa.barrio = this.barrio;
-      this.solicitudPoa.comunidad = this.comunidad;
-      this.solicitudPoa.localizacion = this.localizacion;
-      this.solicitudPoa.tipo_periodo = this.selectedPeriod;
-      this.poaInsertService.crear(this.solicitudPoa).subscribe((data: any) => {
-        if (data) {
-          this.poaInsertService.solicitarAprobacion(data.id_poa, this.id_super_admin, this.proyecto).subscribe((aprobPoa: any) => {
-            console.log("aprobacion poa", aprobPoa);
-            if (aprobPoa) {
+  async solicitud() {
+    if (this.projectSelect.id_proyecto == 0) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Debe seleccionar un proyecto',
+      });
 
-              this.dataSource.forEach(element => {
-                console.log(element);
-                this.poaInsertService.crearActividad(element.nombre, element.observacion, element.recursos_propios, element.presupuesto_referencial).subscribe((actividad: any) => {
-                  if (actividad) {
-                    this.poaInsertService.solicitarAprobacionActividad(this.id_super_admin, actividad.id_actividad, data.id_poa).subscribe((aprobActividad: any) => {
-                      if (aprobActividad) {
-                        console.log(aprobActividad);
-                        if (element.recursos_externos > 0) {
-                          this.poaInsertService.crearPresupuestoExterno(element.recursos_externos, actividad.id_actividad, element.institucion_beneficiaria, "").subscribe((presupuestoExterno: any) => {
-                            if (presupuestoExterno) {
-                              console.log(presupuestoExterno);
+    } else {
+      if (this.dataSource.length == 0) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Debe ingresar al menos una actividad',
+        });
+      } else {
+        this.solicitudPoa.id_proyecto = this.proyecto;
+        this.solicitudPoa.meta_planificada = this.metaPlanificada;
+        this.solicitudPoa.coberura = this.cobertura;
+        this.solicitudPoa.barrio = this.barrio;
+        this.solicitudPoa.comunidad = this.comunidad;
+        this.solicitudPoa.localizacion = this.localizacion;
+        this.solicitudPoa.tipo_periodo = this.selectedPeriod;
+        this.poaInsertService.crear(this.solicitudPoa).subscribe((data: any) => {
+          if (data) {
+            this.poaInsertService.solicitarAprobacion(data.id_poa, this.id_super_admin, this.proyecto).subscribe((aprobPoa: any) => {
+              console.log("aprobacion poa", aprobPoa);
+              if (aprobPoa) {
+
+                this.dataSource.forEach(element => {
+                  console.log(element);
+                  this.poaInsertService.crearActividad(element.nombre, element.observacion, element.recursos_propios, element.presupuesto_referencial).subscribe((actividad: any) => {
+                    if (actividad) {
+                      this.poaInsertService.solicitarAprobacionActividad(this.id_super_admin, actividad.id_actividad, data.id_poa).subscribe((aprobActividad: any) => {
+                        if (aprobActividad) {
+                          console.log(aprobActividad);
+                          if (element.recursos_externos > 0) {
+                            this.poaInsertService.crearPresupuestoExterno(element.recursos_externos, actividad.id_actividad, element.institucion_beneficiaria, "").subscribe((presupuestoExterno: any) => {
+                              if (presupuestoExterno) {
+                                console.log(presupuestoExterno);
+                              }
+                            });
+                          }
+                          this.poaInsertService.crearPeriodo(element.valor_uno, actividad.id_actividad, 1).subscribe((periodo: any) => {
+                            if (periodo) {
+                              console.log(periodo);
+                            }
+                          });
+                          this.poaInsertService.crearPeriodo(element.valor_dos, actividad.id_actividad, 2).subscribe((periodo: any) => {
+                            if (periodo) {
+                              console.log(periodo);
+                            }
+                          });
+                          this.poaInsertService.crearPeriodo(element.valor_tres, actividad.id_actividad, 3).subscribe((periodo: any) => {
+                            if (periodo) {
+                              console.log(periodo);
+                            }
+                          });
+                          this.poaInsertService.crearPeriodo(element.valor_cuatro, actividad.id_actividad, 4).subscribe((periodo: any) => {
+                            if (periodo) {
+                              console.log(periodo);
+                              //recargar la pagina forzadamente
                             }
                           });
                         }
-                        this.poaInsertService.crearPeriodo(element.valor_uno, actividad.id_actividad, 1).subscribe((periodo: any) => {
-                          if (periodo) {
-                            console.log(periodo);
-                          }
-                        });
-                        this.poaInsertService.crearPeriodo(element.valor_dos, actividad.id_actividad, 2).subscribe((periodo: any) => {
-                          if (periodo) {
-                            console.log(periodo);
-                          }
-                        });
-                        this.poaInsertService.crearPeriodo(element.valor_tres, actividad.id_actividad, 3).subscribe((periodo: any) => {
-                          if (periodo) {
-                            console.log(periodo);
-                          }
-                        });
-                        this.poaInsertService.crearPeriodo(element.valor_cuatro, actividad.id_actividad, 4).subscribe((periodo: any) => {
-                          if (periodo) {
-                            console.log(periodo);
-                            //recargar la pagina forzadamente
-                          }
-                        });
-                      }
-                    });
-                  }
+                      });
+                    }
+                  });
                 });
-              });
-            }
-          });
+              }
+            });
 
-          Swal.fire({
-            icon: 'success',
-            title: 'Solicitud enviada correctamente',
-            showConfirmButton: false,
-            timer: 1500
-          });
-          // this.enviar_solictud = true;
-          // this.solicitudPoa = new SolicitudPoa();
-          // this.dataSource = [];
-          // this.refrescar();
-          // this.getProject(0);
-        } else {
-          Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: 'Error al enviar la solicitud',
-          });
-        }
-      });
+            Swal.fire({
+              icon: 'success',
+              title: 'Solicitud enviada correctamente',
+              showConfirmButton: false,
+              timer: 1500
+            });
+            //tiempo de espera para recargar la pagina
+
+            setTimeout(function () {
+              window.location.reload();
+            }, 500);
+            // this.enviar_solictud = true;
+            // this.solicitudPoa = new SolicitudPoa();
+            // this.dataSource = [];
+            // this.refrescar();
+            // this.getProject(0);
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: 'Error al enviar la solicitud',
+            });
+          }
+        });
+      }
     }
+    // if (this.enviar_solictud)  {
+    //   this.solicitudPoa.id_proyecto = this.proyecto;
+    //   this.solicitudPoa.meta_planificada = this.metaPlanificada;
+    //   this.solicitudPoa.coberura = this.cobertura;
+    //   this.solicitudPoa.barrio = this.barrio;
+    //   this.solicitudPoa.comunidad = this.comunidad;
+    //   this.solicitudPoa.localizacion = this.localizacion;
+    //   this.solicitudPoa.tipo_periodo = this.selectedPeriod;
+    //   this.poaInsertService.crear(this.solicitudPoa).subscribe((data: any) => {
+    //     if (data) {
+    //       this.poaInsertService.solicitarAprobacion(data.id_poa, this.id_super_admin, this.proyecto).subscribe((aprobPoa: any) => {
+    //         console.log("aprobacion poa", aprobPoa);
+    //         if (aprobPoa) {
+
+    //           this.dataSource.forEach(element => {
+    //             console.log(element);
+    //             this.poaInsertService.crearActividad(element.nombre, element.observacion, element.recursos_propios, element.presupuesto_referencial).subscribe((actividad: any) => {
+    //               if (actividad) {
+    //                 this.poaInsertService.solicitarAprobacionActividad(this.id_super_admin, actividad.id_actividad, data.id_poa).subscribe((aprobActividad: any) => {
+    //                   if (aprobActividad) {
+    //                     console.log(aprobActividad);
+    //                     if (element.recursos_externos > 0) {
+    //                       this.poaInsertService.crearPresupuestoExterno(element.recursos_externos, actividad.id_actividad, element.institucion_beneficiaria, "").subscribe((presupuestoExterno: any) => {
+    //                         if (presupuestoExterno) {
+    //                           console.log(presupuestoExterno);
+    //                         }
+    //                       });
+    //                     }
+    //                     this.poaInsertService.crearPeriodo(element.valor_uno, actividad.id_actividad, 1).subscribe((periodo: any) => {
+    //                       if (periodo) {
+    //                         console.log(periodo);
+    //                       }
+    //                     });
+    //                     this.poaInsertService.crearPeriodo(element.valor_dos, actividad.id_actividad, 2).subscribe((periodo: any) => {
+    //                       if (periodo) {
+    //                         console.log(periodo);
+    //                       }
+    //                     });
+    //                     this.poaInsertService.crearPeriodo(element.valor_tres, actividad.id_actividad, 3).subscribe((periodo: any) => {
+    //                       if (periodo) {
+    //                         console.log(periodo);
+    //                       }
+    //                     });
+    //                     this.poaInsertService.crearPeriodo(element.valor_cuatro, actividad.id_actividad, 4).subscribe((periodo: any) => {
+    //                       if (periodo) {
+    //                         console.log(periodo);
+    //                         //recargar la pagina forzadamente
+    //                       }
+    //                     });
+    //                   }
+    //                 });
+    //               }
+    //             });
+    //           });
+    //         }
+    //       });
+
+    //       Swal.fire({
+    //         icon: 'success',
+    //         title: 'Solicitud enviada correctamente',
+    //         showConfirmButton: false,
+    //         timer: 1500
+    //       });
+    //       //tiempo de espera para recargar la pagina
+
+    //       setTimeout(function () {
+    //         window.location.reload();
+    //       }, 500);
+    //       // this.enviar_solictud = true;
+    //       // this.solicitudPoa = new SolicitudPoa();
+    //       // this.dataSource = [];
+    //       // this.refrescar();
+    //       // this.getProject(0);
+    //     } else {
+    //       Swal.fire({
+    //         icon: 'error',
+    //         title: 'Oops...',
+    //         text: 'Error al enviar la solicitud',
+    //       });
+    //     }
+    //   });
+    // }
   }
 
   validaciones() {
@@ -444,16 +545,19 @@ export class RegistrarPoaComponent implements OnInit {
         text: 'Debe seleccionar un proyecto',
       });
       this.enviar_solictud = false;
+      if (this.dataSource.length == 0) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Debe ingresar al menos una actividad',
+        });
+        this.enviar_solictud = false;
+      } else {
+        this.enviar_solictud = true;
+      }
     }
     //comprobar que dataSource no sea null
-    if (this.dataSource.length == 0) {
-      Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: 'Debe ingresar al menos una actividad',
-      });
-      this.enviar_solictud = false;
-    }
+
     // //comprobar que cobertura, barrio, comunidad, localizacion y metaPlanificada no sean null o undefined o ""
     // if (this.cobertura == null || this.cobertura == undefined || this.cobertura == "") {
     //   Swal.fire({
