@@ -9,6 +9,7 @@ import { LoginService } from 'src/app/services/login.service';
 import Swal from 'sweetalert2';
 import { Actividad_arch } from 'src/app/services/actividad_arch';
 import { MatPaginator } from '@angular/material/paginator';
+import { PoaService } from 'src/app/services/poa.service';
 @Component({
   selector: 'app-subir_archivo_acti_desig',
   templateUrl: './subir_archivo_acti_desig.component.html',
@@ -16,7 +17,7 @@ import { MatPaginator } from '@angular/material/paginator';
 })
 export class Subir_archivo_acti_desigComponent implements OnInit {
 
-  displayedColumns: string[] = ['Id', 'Archivo','Descripcion', 'Fecha','Valor', 'Borrar'];
+  displayedColumns: string[] = ['Id', 'Archivo','Descripcion', 'Fecha','Valor','Estado', 'Accion'];
   fileInfos: Observable<any> | undefined;
   isLoggedIn = false;
   user: any = null;
@@ -35,7 +36,8 @@ public archivon=new Archivo();
     private archivo: ArchivoService,
     public login: LoginService,
     private fb: FormBuilder,
-    private router: Router
+    private router: Router,
+    private poaservis : PoaService
   ) {
     
     this.archivoInput = new ElementRef<HTMLInputElement>(document.createElement('input'));
@@ -67,6 +69,8 @@ public archivon=new Archivo();
 
 
   ngOnInit() {
+
+
     const data = history.state.data;
     this.activ = data;
     if (this.activ == undefined) {
@@ -91,6 +95,8 @@ public archivon=new Archivo();
       }
     )
     this.listar();
+
+    this.verificarFechaLimite();
 
   }
 
@@ -238,8 +244,44 @@ editar(id_archi: any): void {
     });
   }
 
-  // Open the modal programmatically
- // this.modalRef.nativeElement.click();
+  //bloquear boton
+  botonDeshabilitado: boolean | undefined;
+ 
+  verificarFechaLimite() {
+    this.poaservis.getPoas().subscribe(
+      (data) => {
+        if (data && data.length > 0) {
+          const fechaActual = new Date();
+          const fechaFin = new Date(data[0].fecha_fin); // Supongo que estás interesado en la fecha_fin del primer elemento
+          console.log("fecha ini >>> " + fechaActual);
+          console.log("fecha fin >>> " + data[0].fecha_fin);
+          console.log("fecha fin 2 >>> " + fechaFin);
+  
+          if (fechaActual > fechaFin) {
+            this.botonDeshabilitado = true;
+            this.mostrarMensaje('Usted ya no puede subir archivos a esta actividad debido a una fecha límite superada.');
+          }
+        } else {
+          console.error('La lista de POAs está vacía o data es undefined.');
+        }
+      },
+      (error) => {
+        console.error('Error al obtener los datos del POA:', error);
+        // Puedes manejar el error aquí, mostrar un mensaje de error, etc.
+      }
+    );
+  }
+  
 
+  // Resto del código
+
+  mostrarMensaje(mensaje: string) {
+    Swal.fire({
+      title: 'Advertencia',
+      text: mensaje,
+      icon: 'warning',
+      confirmButtonText: 'Aceptar'
+    });
+  }
 
 }

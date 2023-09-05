@@ -6,6 +6,7 @@
 
 export interface ProjectByIDDto {
     id_proyecto?: number;
+    id_super_admin?: number;
     area?: string;
     cargo?: string;
     nombre?: string;

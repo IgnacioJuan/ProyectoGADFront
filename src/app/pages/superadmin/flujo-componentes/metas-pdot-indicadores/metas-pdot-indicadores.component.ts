@@ -47,9 +47,7 @@ public metaPDOT: MetasPDOT = new MetasPDOT();
 
 listadoIndicadores: Indicadores[] = [];
 public indicad = new Indicadores();
-
 miModal!: ElementRef;
-
 selectedTipo: string="";
 
 //Buscar
@@ -59,7 +57,6 @@ resultadosEncontrados: boolean = true;
 
 
 dataSource = new MatTableDataSource<Indicadores>();
-
 columnasUsuario: string[] = ['id_indicador', 'nombre', 'descripcion','tipo_evaluacion',  'actions'];
 
 @ViewChild('datosModalRef') datosModalRef: any;
@@ -85,9 +82,7 @@ constructor(private indicadorservice: IndicadorService,private paginatorIntl: Ma
 }
 
 ngAfterViewInit() {
-  this.dataSource.paginator = this.paginator || null;
-
-}
+  this.dataSource.paginator = this.paginator || null;}
 
 
 ngOnInit() {
@@ -124,9 +119,8 @@ guardar() {
           'warning'
         )
       }
-    );
+    );}
 
-}
 eliminar(indicador: any) {
   Swal.fire({
     title: 'Estas seguro de eliminar el registro?',
@@ -134,25 +128,17 @@ eliminar(indicador: any) {
     confirmButtonText: 'Cacelar',
     denyButtonText: `Eliminar`,
   }).then((result) => {
-    /* Read more about isConfirmed, isDenied below */
     if (!result.isConfirmed) {
       this.indicadorService.eliminar(indicador.id_indicador, indicador).subscribe(
         (response: any) => {
           this.listar(this.metaPDOT.id_meta_pdot)
-          Swal.fire('Eliminado!', '', 'success')
-        }
-      );
-    }
-  })
+          Swal.fire('Eliminado!', '', 'success')  } ); }})
 }
 
 listar(idMeta: number): void {
   this.indicadorService.listarmetasPdotsPorIdObjetivo(idMeta).subscribe(
     (data: any[]) => {
       this.listadoIndicadores= data;
-      console.log("DATAAAAAAAAAAAAAAAAAA")
-      console.log(this.listadoIndicadores)
-
       this.dataSource.data = this.listadoIndicadores;
     },
     (error: any) => {
@@ -162,21 +148,7 @@ listar(idMeta: number): void {
 }
 
 
-/*
-listar(): void {
-  this.indicadorService.listar().subscribe(
-    (data: any[]) => {
-      this.listadoIndicadores = data;
-      this.dataSource.data=this.listadoIndicadores;
-    },
-    (error: any) => {
-      console.error('Error al listar los indicadores:', error);
-    }
-  );
-}*/
-
 editDatos(indicador: Indicadores) {
-
   this.indicad = indicador;
   console.log(this.indicad)
   this.formIndicador = new FormGroup({
@@ -196,9 +168,7 @@ actualizar() {
   this.indicad.descripcion = this.formIndicador.value.descripcion;
   this.indicad.tipo_evaluacion = this.formIndicador.value.tipo_evaluacion;
   this.indicad.visible = true
-
   this.indicad.metapdot = this.metaPDOT;
-
   this.indicadorservice.actualizar(this.indicad.id_indicador, this.indicad)
     .subscribe((response: any) => {
       this.indicad = new Indicadores();
@@ -209,13 +179,9 @@ actualizar() {
 }
 
 verMetas() {
-  this.router.navigate(['/sup/flujo_Componentes/objetivoPDOT_metasPDOT'], { state: { data: this.objPDOT, componente: this.componente }});
-}
-
-
+  this.router.navigate(['/sup/flujo_Componentes/objetivoPDOT_metasPDOT'], { state: { data: this.objPDOT, componente: this.componente }});}
 verObjetivosPDOT() {
-  this.router.navigate(['/sup/flujo_Componentes/objetivoPDOT_metasPDOT'], { state: { data: this.componente } });
-}
+  this.router.navigate(['/sup/flujo_Componentes/componente_objetivoPDOT'], { state: { data: this.componente } });}
 verComponentes() {
   this.router.navigate(['/sup/flujo_Componentes/componentesSuper']);
 }
@@ -225,11 +191,8 @@ buscar() {
   this.filteredComponentes = this.listadoIndicadores.filter((indicador) =>
     indicador.nombre.toLowerCase().includes(this.filterPost.toLowerCase())
   );
-
   // Actualiza los datos del dataSource con los resultados filtrados
   this.dataSource.data = this.filteredComponentes;
-
   // Verifica si se encontraron resultados
-  this.resultadosEncontrados = this.filteredComponentes.length > 0;
-}
+  this.resultadosEncontrados = this.filteredComponentes.length > 0;}
 }

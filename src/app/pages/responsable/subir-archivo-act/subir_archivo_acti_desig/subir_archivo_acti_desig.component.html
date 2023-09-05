@@ -1,134 +1,143 @@
-<div class="container bg-light border border-start-0 rounded-4">
-  <blockquote class="blockquote text-dark" style="margin-top: 5%">
-    <h1><strong> LISTA DE ARCHIVOS</strong></h1>
-  </blockquote>
-  <div></div>
-  <div class="card">
-    <div class="card-body">
-      <div role="search" id="buscar">
-        <input type="text" class="form-control" name="filterPost3" placeholder="Buscar..." [(ngModel)]="filterPost"
-          (input)="aplicarFiltro()" />
+<body>
+  <div class="container bg-light border border-start-0 rounded-4">
+    <blockquote style="margin-top: 5%">
+
+      <div class="header-container">
+        <h1 class="header-title">LISTA DE ARCHIVOS</h1>
       </div>
-
-      <br />
-      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#materiaModal">
-        Subir nuevo archivo
-      </button>
-      <br />
-      <br />
-      <div class="table-responsive">
-        <div class="mat-elevation-z8">
-          <mat-table [dataSource]="dataSource | buscar : filterPost " class="mat-elevation-z8">
-            <ng-container matColumnDef="Id">
-              <mat-header-cell *matHeaderCellDef>Id</mat-header-cell>
-              <mat-cell *matCellDef="let file">{{ file.id_archivo }}</mat-cell>
-            </ng-container>
-
-            <ng-container matColumnDef="Archivo">
-              <mat-header-cell *matHeaderCellDef>Archivo</mat-header-cell>
-              <mat-cell *matCellDef="let file">
-                <a [href]="file.enlace">{{ file.nombre }}</a>
-              </mat-cell>
-            </ng-container>
-            <ng-container matColumnDef="Descripcion">
-              <mat-header-cell *matHeaderCellDef>Descripcion</mat-header-cell>
-              <mat-cell *matCellDef="let file">
-                {{ file.descripcion }}
-              </mat-cell>
-            </ng-container>
-
-            <ng-container matColumnDef="Fecha">
-              <mat-header-cell *matHeaderCellDef>Fecha</mat-header-cell>
-              <mat-cell *matCellDef="let file">
-                {{ file.fecha | date:'yyyy-MM-dd' }}
-              </mat-cell>
-            </ng-container>
-            <ng-container matColumnDef="Valor">
-              <mat-header-cell *matHeaderCellDef>Valor</mat-header-cell>
-              <mat-cell *matCellDef="let file">
-                {{ file.valor }}
-              </mat-cell>
-            </ng-container>
-
-            <ng-container matColumnDef="Borrar">
-              <mat-header-cell *matHeaderCellDef>Borrar</mat-header-cell>
-              <mat-cell *matCellDef="let file">
-                <button type="button" class="btn btn-primary" style="margin-right: 5%" data-bs-toggle="modal"
-                  data-bs-target="#materiaModal" (click)="editDatos(file)">
-                  <i class="fas fa-edit"></i>
-                </button>
-                <button class="btn btn-danger" style="background-color: red; margin-right: 5%" role="button"
-                  (click)="elim(file.nombre,file)">
-                  <i class="fa fa-trash"></i>
-                </button>
-
-
-              </mat-cell>
-            </ng-container>
-
-            <!-- Fila de encabezado -->
-            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-
-            <!-- Filas de datos -->
-            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-          </mat-table>
-          <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
-
-
+    </blockquote>
+    <div class="card">
+      <div class="card-body">
+        <div role="search" id="buscar">
+          <input type="text" class="form-control" name="filterPost3" placeholder="Buscar..." [(ngModel)]="filterPost"
+            (input)="aplicarFiltro()" />
         </div>
-        <div id="materiaModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-          aria-hidden="true" (hidden.bs.modal)="limpiarFormulario()">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header bg-blue">
-                <h3 class="modal-title">
-                  <i class="fas fa-clipboard"></i>ARCHIVOS
-                </h3>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
-              <div class="modal-body">
-                <form [formGroup]="formulario" (ngSubmit)="onUpload()" id="formulario">
-                  <!-- Add the "disabled" attribute based on the isEditing property -->
-                  <div class="form-group" *ngIf="!isEditing ">
-                    <label for="archivo">Archivo:</label>
-                    <input #archivoInput id="archivo" type="file" (change)="onFileChange($event)" [disabled]="isEditing" />
-                  </div>
-                  <div class="form-group">
-                    <label for="valor">Valor:</label>
-                    <input id="valor" type="number" formControlName="valor" [(ngModel)]="valor" />
-                    <div *ngIf="formulario.controls['valor'].invalid && formulario.controls['valor'].touched">
-                      <div *ngIf="formulario.controls['valor'].hasError('required')">El valor es requerido</div>
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <label for="descripcion">Descripción:</label>
-                    <textarea class="form-control" formControlName="descripcion" id="descripcion" name="descripcion"
-                      style="margin-bottom: 10px" [(ngModel)]="descripcion"></textarea>
-                    <div
-                      *ngIf="formulario.controls['descripcion'].invalid && formulario.controls['descripcion'].touched">
-                      <div *ngIf="formulario.controls['descripcion'].hasError('required')">La descripción es requerida
-                      </div>
-                      <div *ngIf="formulario.controls['descripcion'].hasError('maxlength')">Excedió el límite de
-                        caracteres</div>
-                    </div>
-                  </div>
-                </form>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Cancelar</button>
-                  <button type="submit" class="btn btn-primary" form="formulario" *ngIf="!archivon.id_archivo"
-                    [disabled]="!formulario.valid || !filearchivo">Subir
-                    archivo
-                  </button>
-                  <button class="btn btn-primary" *ngIf="archivon.id_archivo" data-dismiss="modal"
-                    [disabled]="!formulario.valid " data-bs-dismiss="modal" (click)="editar(archivon.id_archivo)">
-                    Actualizar
-                  </button>
-                </div>
 
+        <br />
+        <button type="button" class="btn btn-primary"  [disabled]="botonDeshabilitado" style="background-color: green" data-bs-toggle="modal" data-bs-target="#materiaModal">
+          Subir nuevo archivo
+        </button>
+        <br />
+        <br />
+        <div class="table-responsive">
+          <div class="mat-elevation-z8 " style="margin-bottom: 5%">
+            <mat-table [dataSource]="dataSource | buscar : filterPost " class="mat-elevation-z8">
+              <ng-container matColumnDef="Id">
+                <mat-header-cell *matHeaderCellDef>Id</mat-header-cell>
+                <mat-cell *matCellDef="let file">{{ file.id_archivo }}</mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="Archivo">
+                <mat-header-cell *matHeaderCellDef>Archivo</mat-header-cell>
+                <mat-cell *matCellDef="let file">
+                  <a [href]="file.enlace">{{ file.nombre }}</a>
+                </mat-cell>
+              </ng-container>
+              <ng-container matColumnDef="Descripcion">
+                <mat-header-cell *matHeaderCellDef>Descripcion</mat-header-cell>
+                <mat-cell *matCellDef="let file">
+                  {{ file.descripcion }}
+                </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="Fecha">
+                <mat-header-cell *matHeaderCellDef>Fecha</mat-header-cell>
+                <mat-cell *matCellDef="let file">
+                  {{ file.fecha | date:'yyyy-MM-dd' }}
+                </mat-cell>
+              </ng-container>
+              <ng-container matColumnDef="Valor">
+                <mat-header-cell *matHeaderCellDef>Valor</mat-header-cell>
+                <mat-cell *matCellDef="let file">
+                  {{ file.valor }}
+                </mat-cell>
+              </ng-container>
+              <ng-container matColumnDef="Estado">
+                <mat-header-cell *matHeaderCellDef>Estado</mat-header-cell>
+                <mat-cell *matCellDef="let file">
+                  {{ file.estado }}
+                </mat-cell>
+              </ng-container>
+              <ng-container matColumnDef="Accion">
+                <mat-header-cell *matHeaderCellDef>Accion</mat-header-cell>
+                <mat-cell *matCellDef="let file">
+                  <button type="button"  [disabled]="botonDeshabilitado" class="btn btn-primary" style="margin-right: 5%;background-color: green"
+                    data-bs-toggle="modal" data-bs-target="#materiaModal" (click)="editDatos(file)"
+                    *ngIf="file.estado !== 'APROBADO'">
+                    <i class="fas fa-edit"></i>
+                  </button>
+                  <button class="btn btn-danger" [disabled]="botonDeshabilitado" style="background-color: yellowgreen; margin-right: 5%" role="button"
+                    (click)="elim(file.nombre, file)" *ngIf="file.estado !== 'APROBADO'">
+                    <i class="fa fa-trash"></i>
+                  </button>
+                </mat-cell>
+              </ng-container> <!-- Fila de encabezado -->
+              <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+
+              <!-- Filas de datos -->
+              <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+            </mat-table>
+            <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+
+
+          </div>
+          <div id="materiaModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true" (hidden.bs.modal)="limpiarFormulario()">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header" style="background-color: darkgreen; color: white;">
+                  <h3 class="modal-title">
+                    <i class="fas fa-clipboard"></i>ARCHIVOS
+                  </h3>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <form [formGroup]="formulario" (ngSubmit)="onUpload()" id="formulario">
+                    <!-- Add the "disabled" attribute based on the isEditing property -->
+                    <div class="form-group" *ngIf="!isEditing">
+                      <label for="archivo">Archivo:</label>
+                      <input #archivoInput id="archivo" type="file" (change)="onFileChange($event)" [disabled]="isEditing" class="form-control" />
+                    </div>
+                    
+                    <div class="form-group">
+                      <label for="valor">Valor:</label>
+                      <input id="valor" type="number" formControlName="valor" [(ngModel)]="valor" class="form-control" />
+                      <div *ngIf="formulario.controls['valor'].invalid && formulario.controls['valor'].touched" class="invalid-feedback">
+                        <div *ngIf="formulario.controls['valor'].hasError('required')">El valor es requerido</div>
+                      </div>
+                    </div>                    
+                    <div class="form-group">
+                      <label for="descripcion">Descripción:</label>
+                      <textarea class="form-control" formControlName="descripcion" id="descripcion" name="descripcion"
+                        style="margin-bottom: 10px" [(ngModel)]="descripcion"></textarea>
+                      <div
+                        *ngIf="formulario.controls['descripcion'].invalid && formulario.controls['descripcion'].touched">
+                        <div *ngIf="formulario.controls['descripcion'].hasError('required')">La descripción es requerida
+                        </div>
+                        <div *ngIf="formulario.controls['descripcion'].hasError('maxlength')">Excedió el límite de
+                          caracteres</div>
+                      </div>
+                    </div>
+                  </form>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary" form="formulario" *ngIf="!archivon.id_archivo"
+                      [disabled]="!formulario.valid || !filearchivo"  style="background-color: green"
+                      >Subir
+                      archivo
+                    </button>
+                    <button class="btn btn-primary" *ngIf="archivon.id_archivo" data-dismiss="modal"
+                      [disabled]="!formulario.valid " style="background-color: green"
+                      data-bs-dismiss="modal" (click)="editar(archivon.id_archivo)">
+                      Actualizar
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
-
       </div>
     </div>
+  </div>
+</body>

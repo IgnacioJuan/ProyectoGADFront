@@ -1,3 +1,4 @@
+import { FlujoCriterioModule } from './flujo-criterio/flujo-criterio.module';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { SuperGuard } from 'src/app/services/Guards/super.guard';
@@ -12,6 +13,7 @@ import { CrearcompetenciaComponent } from './pages/crear-competencia/crear-compe
 import {
   ResumenEvidenciasResponsableModule
 } from "./resumen-evidencias-responsable/resumen-evidencias-responsable.module";
+import { ReporteEspecificoPoaComponent } from './reporte-especifico-poa/reporte-especifico-poa.component';
 
 
 
@@ -52,6 +54,18 @@ const routes: Routes = [
  canActivate: [SuperGuard]
 },
 {
+  path: 'reporteEspecificoPoa',
+  component: ReporteEspecificoPoaComponent,
+  pathMatch: 'full',
+ canActivate: [SuperGuard]
+},
+{ path: 'reporteEspecificoPoa/:id', 
+component: ReporteEspecificoPoaComponent ,
+pathMatch: 'full',
+ canActivate: [SuperGuard]
+},
+
+{
   path: 'objetivoods-lista',
   component: ObjetivoodsListaComponent,
   pathMatch: 'full',
@@ -63,6 +77,11 @@ const routes: Routes = [
   path: 'flujo-modelo',
   loadChildren: () => import("./flujo-modelo/flujo-modelo.module").then(m => m.FlujoModeloModule)
 },
+{
+  path: 'flujo-criterio',
+  loadChildren: () => import("./flujo-criterio/flujo-criterio.module").then(m => m.FlujoCriterioModule)
+},
+
 {
   path: 'flujo_Componentes',
   loadChildren: () => import("./flujo-componentes/flujo-componentes.module").then(m => m.FlujoComponentesModule)

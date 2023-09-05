@@ -1,1 +1,37 @@
-<p>reporte-especifico-poa works!</p>
+<table class="table rounded-table">
+    <thead>
+      <tr >
+        <th scope="col">id</th>
+        <th scope="col">nombre</th>
+       
+      </tr>
+    </thead>
+    <tbody >
+     
+      <tr  *ngFor="let column of result">
+        <th scope="row">{{column.id_poa}}</th>
+        <td colspan="2">{{column.meta_alcanzar}}</td>
+   
+      </tr>
+    </tbody>
+  </table>
+
+
+<br>
+<!--el estilo es para alinear las graficas en la misma direccion-->
+<div style="display: flex; justify-content: space-between;">
+  <!-- <div>
+    <h1 style="text-align: center;">Grafica de pastel por Indicadores</h1>
+    <div style="width: 500px; height: 500px;">
+      <canvas id="pastel"></canvas>
+    </div>
+  </div> -->
+  
+  <div>
+    <h1 style="text-align: center;">Grafica de Barras Por avance Poa</h1>
+    <div style="width: 500px; height: 500px;"class="chart-container">
+      <canvas id="MyChart"></canvas>
+    </div>
+  </div>
+</div>
+
