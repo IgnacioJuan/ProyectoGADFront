@@ -43,12 +43,7 @@
                 {{ elemento.fecha_inicio }}
               </td>
             </ng-container>
-            <ng-container matColumnDef="fecha_fin">
-              <th mat-header-cell *matHeaderCellDef>FECHA FIN</th>
-              <td mat-cell *matCellDef="let elemento">
-                {{ elemento.fecha_fin }}
-              </td>
-            </ng-container>
+
             <ng-container matColumnDef="localizacion">
               <th mat-header-cell *matHeaderCellDef>LOCALIZACION</th>
               <td mat-cell *matCellDef="let elemento">
@@ -68,13 +63,14 @@
               </td>
             </ng-container>
             
+            
             <ng-container matColumnDef="estado">
               <th mat-header-cell *matHeaderCellDef>ESTADO</th>
-              <td mat-cell *matCellDef="let elemento">
+              <td mat-cell *matCellDef="let elemento" [ngStyle]="getColor(elemento.estado)">
                 {{ elemento.estado }}
               </td>
             </ng-container>
-
+            
             <ng-container matColumnDef="observacion">
               <th mat-header-cell *matHeaderCellDef>OBSERVACION</th>
               <td mat-cell *matCellDef="let elemento">
