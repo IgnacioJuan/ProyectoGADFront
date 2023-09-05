@@ -24,13 +24,6 @@ export class SidebarService {
       ]
     },
     {
-      icono: 'nav-icon fas fa-eye',
-      titulo: "Observación",
-      submenu: [
-        { titulo: ' Agregar observación ', url: 'sup/observaciones', icono: 'fas fa-cubes' }
-      ]
-    },
-    {
       icono: 'nav-icon fas fa-file-signature',
       titulo: "Poas Enviados",
       submenu: [
@@ -63,12 +56,14 @@ export class SidebarService {
       ]
     },
     
+ 
     {
       icono: 'nav-icon fas fa-tasks',
       titulo: "POA",
       submenu: [
         { titulo: 'Poas Rechazados', url: 'sup/flujo-criterio/listarpoa', icono: 'fas fa-list-ul ' },
-        { titulo: 'Poas Asignados', url: 'sup/flujo-criterio/listarpoausu', icono: 'fas fa-list-ul ' }
+        { titulo: 'Poas Asignados', url: 'sup/flujo-criterio/listarpoausu', icono: 'fas fa-list-ul ' },
+        { titulo: 'Reporte de POA', url: 'sup/reportePoa', icono: 'fas fa-list-ul ' }
 
 
 
@@ -86,7 +81,14 @@ export class SidebarService {
       ]
     },
 
+    {
+      icono: 'nav-icon fas fa-solid fa-list',
+      titulo: "Reportes",
+      submenu: [
+        { titulo: 'Reporte Poa', url: 'sup/reportePoa', icono: 'fas fa-list-ul ' },
 
+      ]
+    },
 
     
 
