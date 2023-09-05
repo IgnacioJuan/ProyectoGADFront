@@ -59,6 +59,7 @@ export class SidebarService {
 
       ]
     },
+ 
     {
       icono: 'nav-icon fas   fa-users',
       titulo: "Usuarios",
@@ -73,7 +74,8 @@ export class SidebarService {
       titulo: "POA",
       submenu: [
         { titulo: 'Poas Rechazados', url: 'sup/flujo-criterio/listarpoa', icono: 'fas fa-list-ul ' },
-        { titulo: 'Poas Asignados', url: 'sup/flujo-criterio/listarpoausu', icono: 'fas fa-list-ul ' }
+        { titulo: 'Poas Asignados', url: 'sup/flujo-criterio/listarpoausu', icono: 'fas fa-list-ul ' },
+        { titulo: 'Reporte de POA', url: 'sup/reportePoa', icono: 'fas fa-list-ul ' }
 
 
 
