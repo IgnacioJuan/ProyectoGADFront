@@ -21,7 +21,7 @@ export class DetallePoaComponent implements OnInit {
   @ViewChild('miModal') miModal: ElementRef | undefined;
   poa: AprobPoa | null = null;
   usuarios: UsuarioAprobPOA[] | null = null;
-  estadoAprobacion: 'Aprobado' | 'Rechazado' | 'En espera' = 'En espera';
+  estadoAprobacion: 'APROBADO' | 'RECHAZADO' | 'PENDIENTE' = 'PENDIENTE';
   selectedUserId: number | null = null;
   observacionControl = new FormControl('');
   listaDetalleActividades: ActividadesPoaDTO[] = [];
@@ -83,7 +83,7 @@ export class DetallePoaComponent implements OnInit {
     'estado',
     'responsable',
   ];
-  handleAprobacion(estado: 'Aprobado' | 'Rechazado') {
+  handleAprobacion(estado: 'APROBADO' | 'RECHAZADO') {
     this.estadoAprobacion = estado;
   }
 
@@ -158,13 +158,13 @@ export class DetallePoaComponent implements OnInit {
   toggleBtnSuccess() {
     this.isBtnSuccessActive = true;
     this.isBtnDangerActive = false;
-    this.estadoAprobacion = 'Aprobado';
+    this.estadoAprobacion = 'APROBADO';
   }
 
   toggleBtnDanger() {
     this.isBtnSuccessActive = false;
     this.isBtnDangerActive = true;
-    this.estadoAprobacion = 'Rechazado';
+    this.estadoAprobacion = 'RECHAZADO';
   }
   showSuccessAlert() {
     Swal.fire({
