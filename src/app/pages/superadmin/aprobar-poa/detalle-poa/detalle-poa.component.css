@@ -16,12 +16,19 @@
     overflow: auto;
     display: flex;
     flex-direction: column; /* Establece la dirección principal como columna */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+}
+
+.example-card:hover {
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
 
 .card-content-wrapper {
     flex: 1; /* Permite que el contenido crezca y ocupe todo el espacio disponible */
     overflow: auto; /* Si el contenido es demasiado, mostrará barras de desplazamiento */
 }
+
 
 .card-actions {
     margin-top: auto; /* Empuja las acciones hacia la parte inferior */
@@ -123,25 +130,44 @@ td[mat-cell*="actividades"] {
 
 body {
     font: 1em/1.618 Inter, sans-serif;
-
+  
     display: flex;
     align-items: center;
     justify-content: center;
-
+  
     min-height: 100vh;
     padding: 30px;
-
+  
     color: #224;
     background:
-        url(https://source.unsplash.com/E8Ufcyxz514/2400x1823) center / cover no-repeat fixed;
-}
-
-.btnEva{
+      url(https://source.unsplash.com/E8Ufcyxz514/2400x1823) center / cover no-repeat fixed;
+  
+  }
+  .btnEva {
     position: relative;
     left: 93%;
     margin-top: 5px;
     margin-bottom: 5px;
 }
+
+/* Estilos para pantallas pequeñas (por ejemplo, móviles) */
+@media (max-width: 576px) {
+    .btnEva {
+        left: 80%;  /* Ajusta este valor según lo que necesites para móviles */
+        margin-top: 3px;
+        margin-bottom: 3px;
+    }
+}
+
+/* Estilos para pantallas medianas (por ejemplo, tablets) */
+@media (min-width: 577px) and (max-width: 768px) {
+    .btnEva {
+        left: 88%;  /* Ajusta este valor según lo que necesites para tablets */
+        margin-top: 4px;
+        margin-bottom: 4px;
+    }
+}
+
 .btn.active.btn-success {
     background-color: #28a745;
     border-color: #28a745;
@@ -150,4 +176,14 @@ body {
 .btn.active.btn-danger {
     background-color: #dc3545;
     border-color: #dc3545;
+}
+/* Estilo por defecto (apagado) */
+.btn-success, .btn-danger {
+    opacity: 0.5; /* Hace que el botón parezca "apagado" */
+    transition: opacity 0.3s; /* Transición suave al cambiar la opacidad */
+}
+
+/* Estilo cuando el botón está "encendido" */
+.btn-on {
+    opacity: 1; /* Opacidad completa */
 }
