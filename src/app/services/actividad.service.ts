@@ -95,8 +95,9 @@ export class ActividadService {
   // servicio para mostrar los datos de las actividades de un usuario
   obtenerDetalleActividades(idUsuario: number): Observable<DetalleActividadDTO[]> {
     return this.http.get<DetalleActividadDTO[]>(`${baserUrl}/api/actividades/detactividades/${idUsuario}`);
-}
-public listaractireponsa(idres: number): Observable<Actividad_arch[]> {
-  return this.http.get<Actividad_arch[]>(`${baserUrl}/api/actividades/actiresponsable/${idres}`);
-}
+  }
+
+  public listaractireponsa(idres: number): Observable<Actividad_arch[]> {
+    return this.http.get<Actividad_arch[]>(`${baserUrl}/api/actividades/actiresponsable/${idres}`);
+  }
 }
