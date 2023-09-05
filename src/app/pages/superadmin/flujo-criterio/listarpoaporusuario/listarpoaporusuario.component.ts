@@ -102,10 +102,10 @@ export class ListarporUsuarioComponent implements OnInit {
   } 
   
   getColor(estado: string): any {
-    const estadoLower = estado.toLowerCase(); // Convertir el estado a minúsculas
+    const estadoUpper = estado.toUpperCase(); // Convertir el estado a mayúsculas
     let backgroundColor = 'white'; // Color de fondo predeterminado
   
-    switch (estadoLower) {
+    switch (estadoUpper) {
       case 'APROBADO':
         backgroundColor = 'green';
         break;
@@ -121,6 +121,7 @@ export class ListarporUsuarioComponent implements OnInit {
   
     return { 'background-color': backgroundColor };
   }
+  
   
   
 

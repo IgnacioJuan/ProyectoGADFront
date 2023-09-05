@@ -46,7 +46,7 @@ export class ListarpoaComponent implements OnInit {
 
   filterPost = '';
   dataSource = new MatTableDataSource<PoaNoAprobadoProjection>();
-  columnasUsuario: string[] = ['id_poa', 'nombre','fecha_inicio', 'localizacion','barrio','comunidad', 'estado','observacion'];
+  columnasUsuario: string[] = [ 'nombre', 'localizacion','barrio','comunidad', 'estado','observacion'];
 
 
 

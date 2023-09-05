@@ -8,7 +8,7 @@ import { environment } from 'src/environments/environment';
 import { Archivo } from '../models/Archivo';
 import { ArchivoProjection } from '../interface/ArchivoProjection';
 
-@Injectable({
+@Injectable({ 
   providedIn: 'root'
 })
 export class ArchivoService {
