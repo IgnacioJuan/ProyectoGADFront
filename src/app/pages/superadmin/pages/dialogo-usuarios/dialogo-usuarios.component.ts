@@ -43,6 +43,8 @@ export class DialogoUsuariosComponent implements OnInit {
       segundo_apellido: ['', [Validators.required, validarNombreApellido]],
       celular: ['', [Validators.required, validarCelular]],
       correo: ['', [Validators.required, Validators.email]],
+      cargo: ['', [Validators.required, validarNombreApellido]],
+      direccion: ['', [Validators.required]],
       visible: [true]
     });
 
@@ -107,7 +109,18 @@ export class DialogoUsuariosComponent implements OnInit {
       segundo_apellido: '',
       celular: '',
       correo: '',
+      cargo: '',
+      direccion: '',
       visible: true
+    });
+  }
+
+
+  resetForm2() {
+    this.secondFormGroup.reset({
+      username: '',
+      password: '',
+      rol: ''
     });
   }
 
