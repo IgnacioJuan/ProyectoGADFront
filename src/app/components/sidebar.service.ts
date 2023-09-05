@@ -24,13 +24,6 @@ export class SidebarService {
       ]
     },
     {
-      icono: 'nav-icon fas fa-eye',
-      titulo: "Observación",
-      submenu: [
-        { titulo: ' Agregar observación ', url: 'sup/observaciones', icono: 'fas fa-cubes' }
-      ]
-    },
-    {
       icono: 'nav-icon fas fa-file-signature',
       titulo: "Poas Enviados",
       submenu: [
@@ -88,7 +81,14 @@ export class SidebarService {
       ]
     },
 
+    {
+      icono: 'nav-icon fas fa-solid fa-list',
+      titulo: "Reportes",
+      submenu: [
+        { titulo: 'Reporte Poa', url: 'sup/reportePoa', icono: 'fas fa-list-ul ' },
 
+      ]
+    },
 
     
 
