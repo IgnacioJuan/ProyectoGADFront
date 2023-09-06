@@ -1,4 +1,3 @@
-
 export class Modelo {
     id_modelo!: number;
     nombre!: string;

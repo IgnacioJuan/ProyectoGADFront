@@ -5,7 +5,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { LoginService } from 'src/app/services/login.service';
 import { Router } from '@angular/router';
-import { ModeloService } from 'src/app/services/modelo.service';
+//import { ModeloService } from 'src/app/services/modelo.service';
 import { Archivo } from 'src/app/models/Archivo';
 
 
@@ -33,7 +33,7 @@ export class Actividades_desigComponent implements OnInit {
   
   constructor(
     private login: LoginService,
-    private modeloService: ModeloService,
+    //private modeloService: ModeloService,
     private router: Router,
     private serviactiv : ActividadService
  

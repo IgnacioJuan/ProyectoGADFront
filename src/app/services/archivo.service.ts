@@ -7,8 +7,9 @@ import { environment } from 'src/environments/environment';
  import baserUrl from './helper';
 import { Archivo } from '../models/Archivo';
 import { ArchivoProjection } from '../interface/ArchivoProjection';
+import { Archivos } from '../models/Archivos';
 
-@Injectable({
+@Injectable({ 
   providedIn: 'root'
 })
 export class ArchivoService {
@@ -21,29 +22,29 @@ export class ArchivoService {
     formData.append('descripcion', descripcion);
     formData.append('valor', valor.toString());
     formData.append('id_evidencia', id_evidencia.toString());
- 
+
     const req = new HttpRequest('POST', `${this.baserrl}/archivo/upload`, formData, {
       reportProgress: true,
      responseType: 'json'
     });
- 
+
     return this.http.request(req);
   }
- 
+
    cargar(file: File, descripcion: string,  id_evidencia: number): Observable<HttpEvent<any>> {
      const formData: FormData = new FormData();
      formData.append('file', file);
      formData.append('descripcion', descripcion);
      formData.append('id_evidencia', id_evidencia.toString());
-  
+
      const req = new HttpRequest('POST', `${this.baserrl}/archivo/upload`, formData, {
        reportProgress: true,
       responseType: 'json'
      });
-  
+
      return this.http.request(req);
    }
-  
+
 cargarArchivo(file: File, descripcion: string): Observable<any> {
   const formData = new FormData();
   formData.append('file', file);
@@ -101,6 +102,24 @@ editArchivo(
 private handleError(error: any): Observable<never> {
   console.error('An error occurred:', error);
   return throwError('Something went wrong; please try again later.');
+//Nuevos servicios
+
 }
+  // Método para listar los archivos por actividad
+
+  listarArchivosPorActividad(idActividad: number): Observable<Archivos[]> {
+    return this.http.get<Archivos[]>(`${baserUrl}/archivo/buscararchivo/`+idActividad);
+  }
+//Metodo para editar el estado
+
+actualizar(id: any, archi: any): Observable<any> {
+  return this.http.put(`${baserUrl}/archivo/actualizar/${id}`, archi);
+}
+
+  listarArchivosPorEstadoYFechaDesc(estado: string): Observable<Archivo[]> {
+    return this.http.get<Archivo[]>(`${baserUrl}/archivo/listarPorEstadoYFechaDesc?estado=${estado}`);
+  }
+
+
 
 }

@@ -132,7 +132,7 @@
           aria-hidden="true"
           (hidden.bs.modal)="limpiarFormulario()"
         >
-          <div class="modal-dialog">
+          <div class="modal-dialog modal-xl">
             <div class="modal-content">
               <div class="modal-header bg-green">
                 <h3 class="modal-title">
@@ -178,41 +178,6 @@
                             "
                           >
                             Debe ingresar un nombre
-                          </div>
-                        </div>
-
-                        <label for="codigo">Codigo:</label>
-                        <textarea
-                          class="form-control"
-                          formControlName="codigo"
-                          id="codigo"
-                          name="codigo"
-                          style="margin-bottom: 10px"
-                        ></textarea>
-                        <div
-                          class="alert alert-danger"
-                          *ngIf="
-                            frmProyecto.controls['codigo'].invalid &&
-                            frmProyecto.controls['codigo'].touched
-                          "
-                        >
-                          <div
-                            *ngIf="
-                              frmProyecto.controls['codigo'].hasError(
-                                'required'
-                              )
-                            "
-                          >
-                            El codigo no puede estar vacia
-                          </div>
-                          <div
-                            *ngIf="
-                              frmProyecto.controls['codigo'].hasError(
-                                'maxlength'
-                              )
-                            "
-                          >
-                            Excedio el numero de caracteres permitido
                           </div>
                         </div>
 
@@ -267,48 +232,100 @@
                             Debe ingresar una meta
                           </div>
                         </div>
-
-                        <label for="porcentaje_alcance">Porcentaje:</label>
-                        <input
-                          class="form-control"
-                          formControlName="porcentaje_alcance"
-                          type="number"
-                          id="porcentaje_alcance"
-                          name="porcentaje_alcance"
-                          style="margin-bottom: 10px"
-                        />
-                        <div
-                          class="alert alert-danger"
-                          *ngIf="
-                            frmProyecto.controls['porcentaje_alcance']
-                              .invalid &&
-                            frmProyecto.controls['porcentaje_alcance'].touched
-                          "
-                        >
-                          <div
-                            *ngIf="
-                              frmProyecto.controls[
-                                'porcentaje_alcance'
-                              ].hasError('required')
-                            "
-                          >
-                            Debe ingresar un porcentaje
+                        <div class="d-flex">
+                          <div class="form-group" style="width: 50%">
+                            <label for="porcentaje_alcance">Porcentaje:</label>
+                            <input
+                              class="form-control"
+                              formControlName="porcentaje_alcance"
+                              type="number"
+                              id="porcentaje_alcance"
+                              name="porcentaje_alcance"
+                              style="margin-bottom: 10px"
+                            />
+                            <div
+                              class="alert alert-danger"
+                              *ngIf="
+                                frmProyecto.controls['porcentaje_alcance']
+                                  .invalid &&
+                                frmProyecto.controls['porcentaje_alcance']
+                                  .touched
+                              "
+                            >
+                              <div
+                                *ngIf="
+                                  frmProyecto.controls[
+                                    'porcentaje_alcance'
+                                  ].hasError('required')
+                                "
+                              >
+                                Debe ingresar un porcentaje
+                              </div>
+                            </div>
+                          </div>
+                          <div class="form-group" style="width: 50%">
+                            <label for="area">Area:</label>
+                            <input
+                              class="form-control"
+                              formControlName="area"
+                              type="text"
+                              id="area"
+                              name="area"
+                              style="margin-bottom: 10px"
+                            />
+                            <div
+                              class="alert alert-danger"
+                              *ngIf="
+                                frmProyecto.controls['area']
+                                  .invalid &&
+                                frmProyecto.controls['area']
+                                  .touched
+                              "
+                            >
+                              <div
+                                *ngIf="
+                                  frmProyecto.controls[
+                                    'area'
+                                  ].hasError('required')
+                                "
+                              >
+                                Debe ingresar un area
+                              </div>
+                            </div>
                           </div>
                         </div>
-
-                        <div class="form-group">
-                          <label for="fecha_inicio">Fecha de inicio:</label>
-                          <div class="input-group">
-                            <input
-                              type="date"
-                              id="fecha_inicio"
-                              name="fecha_inicio"
-                              formControlName="fecha_inicio"
-                              class="form-control"
-                              [min]="fechaMinima"
-                              [max]="fechaMax"
-                              (change)="validarFechas()"
-                            />
+                        <div class="d-flex">
+                          <div class="form-group" style="width: 50%">
+                            <label for="fecha_inicio">Fecha de inicio:</label>
+                            <div class="input-group">
+                              <input
+                                type="date"
+                                id="fecha_inicio"
+                                name="fecha_inicio"
+                                formControlName="fecha_inicio"
+                                class="form-control"
+                                [min]="fechaMinima"
+                                [max]="fechaMax"
+                                (change)="validarFechas()"
+                              />
+                            </div>
+                          </div>
+                          <div class="form-group" style="width: 50%">
+                            <label for="fecha_fin"
+                              >Fecha de finalizacion:</label
+                            >
+                            <div class="input-group">
+                              <input
+                                type="date"
+                                id="fecha_fin"
+                                name="fecha_fin"
+                                formControlName="fecha_fin"
+                                class="form-control"
+                                [min]="fechaMinima"
+                                [max]="fechaMax"
+                                (change)="validarFechas()"
+                              />
+                            </div>
                           </div>
                         </div>
                       </mat-tab>
@@ -317,18 +334,20 @@
                       <mat-tab label="Configurar Parametros">
                         <div class="form-group">
                           <label for="pnd">PND:</label>
-                          <div class="d-flex">
-                            
-                            <select
+                          <div class="">
+                            <input
+                              type="text"
                               class="form-control"
-                              (change)="onPNDSelected($event)"
-                              formControlName="pnd"
-                            >
+                              formControlName="pndControl"
+                              placeholder="Buscar PND..."
+                              (input)="filterPNDOptions($event)"
+                            />
+                            <select class="form-control" formControlName="pnd">
                               <option value="" disabled selected>
                                 Seleccione una opción
                               </option>
                               <option
-                                *ngFor="let option of pndOptions"
+                                *ngFor="let option of filteredPndOptions"
                                 [value]="option.id_objetivo_pnd"
                               >
                                 {{ option.nombre }}
@@ -353,19 +372,20 @@
                         </div>
                         <div class="form-group">
                           <label for="ods">ODS:</label>
-                          <div class="d-flex">
-                            
-                            <select
+                          <div class="">
+                            <input
+                              type="text"
                               class="form-control"
-                              (change)="onODSSelected($event)"
-                              formControlName="ods"
-
-                            >
+                              placeholder="Buscar ODS..."
+                              formControlName="odsControl"
+                              (input)="filterODSOptions($event)"
+                            />
+                            <select class="form-control" formControlName="ods">
                               <option value="" disabled selected>
                                 Seleccione una opción
                               </option>
                               <option
-                                *ngFor="let option of odsOptions"
+                                *ngFor="let option of filteredodsOptions"
                                 [value]="option.id_objetivo_ods"
                               >
                                 {{ option.nombre }}
@@ -390,17 +410,23 @@
                         </div>
                         <div class="form-group">
                           <label for="programa">Programa:</label>
-                          <div class="d-flex">
+                          <div class="">
+                            <input
+                              type="text"
+                              class="form-control"
+                              placeholder="Buscar Programa..."
+                              formControlName="programaControl"
+                              (input)="filterProgramaOptions($event)"
+                            />
                             <select
                               class="form-control"
-                              (change)="onProgramaSelected($event)"
                               formControlName="programa"
                             >
                               <option value="" disabled selected>
                                 Seleccione una opción
                               </option>
                               <option
-                                *ngFor="let option of programaOptions"
+                                *ngFor="let option of filteredprogramaOptions"
                                 [value]="option.id_programa"
                               >
                                 {{ option.nombre }}
@@ -427,21 +453,27 @@
                         </div>
                         <div class="form-group">
                           <label for="indicador">Indicador:</label>
-                          <div class="d-flex">
-                           
+                          <div class="">
+                            <input
+                              type="text"
+                              class="form-control"
+                              placeholder="Buscar Indicador..."
+                              (input)="filterIndicadorOptions($event)"
+                              formControlName="indicadorControl"
+                            />
                             <select
                               class="form-control"
-                              (change)="onIndicadorSelected($event)"
                               formControlName="indicador"
+                              (change)="sendCodigo($event)"
                             >
                               <option value="" disabled selected>
                                 Seleccione una opción
                               </option>
                               <option
-                                *ngFor="let option of indicadorOptions"
+                                *ngFor="let option of filteredindicadorOptions"
                                 [value]="option.id_indicador"
                               >
-                                {{ option.nombre }}
+                                {{ option.codigo }} - {{ option.nombre }}
                               </option>
                             </select>
                           </div>
@@ -465,18 +497,25 @@
                         </div>
                         <div class="form-group">
                           <label for="competencia">Competencia:</label>
-                          <div class="d-flex">
-                            
+                          <div class="">
+                            <input
+                              type="text"
+                              class="form-control"
+                              placeholder="Buscar Compentencia..."
+                              formControlName="CompenteciaControl"
+                              (input)="filterCompenteciaOptions($event)"
+                            />
                             <select
                               class="form-control"
-                              (change)="onCompetenciaSelected($event)"
                               formControlName="competencia"
                             >
                               <option value="" disabled selected>
                                 Seleccione una opción
                               </option>
                               <option
-                                *ngFor="let option of competenciaOptions"
+                                *ngFor="
+                                  let option of filteredcompetenciaOptions
+                                "
                                 [value]="option.id_competencia"
                               >
                                 {{ option.nombre }}
@@ -521,7 +560,7 @@
                     *ngIf="!subcrite.id_proyecto"
                     data-dismiss="modal"
                     data-bs-dismiss="modal"
-                    [disabled]="!frmProyecto.valid || !isDisabledFieldsValid()"
+                    [disabled]="!frmProyecto.valid"
                   >
                     Agregar
                   </button>
