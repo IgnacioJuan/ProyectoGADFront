@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { ResumenPresupuestosRoutingModule } from './resumen-presupuestos-routing.module';
 import { ListaActividadesComponent } from './lista-actividades/lista-actividades.component';
 import { MovimientosPresupuestosComponent } from './movimientos-presupuestos/movimientos-presupuestos.component';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 
 @NgModule({
@@ -13,7 +13,8 @@ import { MovimientosPresupuestosComponent } from './movimientos-presupuestos/mov
   ],
   imports: [
     CommonModule,
-    ResumenPresupuestosRoutingModule
+    ResumenPresupuestosRoutingModule,
+    SharedModule
   ]
 })
 export class ResumenPresupuestosModule { }

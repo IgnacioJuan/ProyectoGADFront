@@ -41,4 +41,8 @@ export class ActividadespoaService {
   listarUsuariosActividades(): Observable<ListaActividadesUsuario[]> {
     return this.http.get<ListaActividadesUsuario[]>(`${baserUrl}/api/actividades/listarUsuariosAsignadosAActividades`);
   }
+
+  listarActividadesPorIdResponsable(responsableId: number): Observable<ActividadesPoa[]>{
+    return this.http.get<ActividadesPoa[]>(`${baserUrl}/api/actividades/listarActividadesPorIdResponsable/${responsableId}`);
+  }
 }
