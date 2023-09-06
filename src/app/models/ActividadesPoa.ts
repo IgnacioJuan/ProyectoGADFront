@@ -11,7 +11,7 @@ export class ActividadesPoa {
     recursos_propios!: number;
     estado!: string
     visible!: boolean;
-    responsable!: string;
+    //responsable!: string;
     usuario!: Usuario2;
     poa!: Poa;
 }
