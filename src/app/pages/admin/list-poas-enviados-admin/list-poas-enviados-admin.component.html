@@ -44,17 +44,16 @@
                 style="margin-bottom: 5%"
               >
                 <table mat-table [dataSource]="dataSource">
-                 
+                  <ng-container matColumnDef="nombre">
+                    <th mat-header-cell *matHeaderCellDef>PROYECTO</th>
+                    <td mat-cell *matCellDef="let elemento">
+                      {{ elemento.nombre }}
+                    </td>
+                  </ng-container>
                   <ng-container matColumnDef="barrio">
                     <th mat-header-cell *matHeaderCellDef>BARRIO</th>
                     <td mat-cell *matCellDef="let elemento">
                       {{ elemento.barrio }}
-                    </td>
-                  </ng-container>
-                  <ng-container matColumnDef="comunidad">
-                    <th mat-header-cell *matHeaderCellDef>COMUNIDAD</th>
-                    <td mat-cell *matCellDef="let elemento">
-                      {{ elemento.comunidad }}
                     </td>
                   </ng-container>
                   <ng-container matColumnDef="cobertura">
@@ -63,6 +62,13 @@
                       {{ elemento.cobertura }}
                     </td>
                   </ng-container>
+                  <ng-container matColumnDef="comunidad">
+                    <th mat-header-cell *matHeaderCellDef>COMUNIDAD</th>
+                    <td mat-cell *matCellDef="let elemento">
+                      {{ elemento.comunidad }}
+                    </td>
+                  </ng-container>
+              
                   <ng-container matColumnDef="fecha_inicio">
                     <th mat-header-cell *matHeaderCellDef>INICIO</th>
                     <td mat-cell *matCellDef="let elemento">
@@ -87,12 +93,7 @@
                       {{ elemento.localizacion }}
                     </td>
                   </ng-container>
-                  <ng-container matColumnDef="tipo_periodo">
-                    <th mat-header-cell *matHeaderCellDef>TIPO DE PERÍODO</th>
-                    <td mat-cell *matCellDef="let elemento">
-                      {{ elemento.tipo_periodo }}
-                    </td>
-                  </ng-container>
+
                   <ng-container matColumnDef="observaciones">
                     <th mat-header-cell *matHeaderCellDef>OBSERVACIONES</th>
                     <td mat-cell *matCellDef="let elemento">
@@ -174,15 +175,30 @@
             <div class="card-body" style="height: 100%;">
               <div class="mat-elevation-z8 table-responsive"  style="margin-bottom: 5%"  >
                 <table mat-table [dataSource]="dataSource3">
-                    <ng-container matColumnDef="observacion">
+                  <ng-container matColumnDef="observacion">
                     <th mat-header-cell *matHeaderCellDef>OBSERVACIÓN</th>
                     <td mat-cell *matCellDef="let elemento">
-                      {{ elemento.observacion }}
+                      {{ elemento.observacion ? elemento.observacion : 'NINGUNA' }}
+                    </td>
+                  </ng-container>
+                  
+  
+                  <ng-container matColumnDef="estado">
+                    <th mat-header-cell *matHeaderCellDef>ESTADO</th>
+                    <td mat-cell *matCellDef="let elemento" [ngStyle]="getEstadoCellStyle(elemento.estado)">
+                      {{ elemento.estado }}
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="nombre_completo">
+                    <th mat-header-cell *matHeaderCellDef>EVALUADO POR</th>
+                    <td mat-cell *matCellDef="let elemento">
+                      {{ elemento.primer_nombre }} {{ elemento.primer_apellido }}
                     </td>
                   </ng-container>
                   <tr mat-header-row *matHeaderRowDef="columnasObservaciones"></tr>
                   <tr mat-row *matRowDef="let fila; columns: columnasObservaciones"></tr>
                 </table>
+                
                 
                 <div *ngIf="!resultadosEncontradosporObservaciones" class="alert alert-warning">
                   No se encontraron observaciones.
