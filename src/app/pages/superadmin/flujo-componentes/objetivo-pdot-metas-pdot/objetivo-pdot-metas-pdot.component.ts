@@ -5,12 +5,8 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
 import { Componentes } from 'src/app/models/Componentes';
-import { Criterio } from 'src/app/models/Criterio';
-import { Indicador } from 'src/app/models/Indicador';
 import { MetasPDOT } from 'src/app/models/MetasPDOT';
 import { ObjetivoPDOT } from 'src/app/models/ObjetivoPDOT';
-import { Subcriterio } from 'src/app/models/Subcriterio';
-import { IndicadoresService } from 'src/app/services/indicadores.service';
 import { MetasPdotService } from 'src/app/services/metas-pdot.service';
 import Swal from 'sweetalert2';
 
@@ -23,7 +19,7 @@ export class ObjetivoPdotMetasPdotComponent implements OnInit  {
 formMeta: FormGroup;
 guardadoExitoso: boolean = false;
 //tabla
-itemsPerPageLabel = 'Indicadores por página';
+itemsPerPageLabel = 'Metas PDOT por página';
 nextPageLabel = 'Siguiente';
 lastPageLabel = 'Última';
 firstPageLabel='Primera';
@@ -43,16 +39,13 @@ rango:any= (page: number, pageSize: number, length: number) => {
 };
 
 
-
 ///////
 objPDOT: ObjetivoPDOT = new ObjetivoPDOT();
- componente: Componentes = new Componentes();
+componente: Componentes = new Componentes();
 listaMetasPdot: MetasPDOT[] = [];
 
 
-
 miModal!: ElementRef;
-public indic = new Indicador();
 public metaPDOT = new MetasPDOT();
 
 //Buscar
@@ -62,7 +55,7 @@ resultadosEncontrados: boolean = true;
 
 dataSource = new MatTableDataSource<MetasPDOT>();
 
-columnasUsuario: string[] = ['id_meta_pdot', 'nombre', 'descripcion','porcentaje_meta', 'cantidadIndicadores', 'actions'];
+columnasUsuario: string[] = ['id_meta_pdot', 'nombre', 'descripcion','meta_final', 'linea_base', 'cantidadIndicadores', 'actions'];
 
 @ViewChild('datosModalRef') datosModalRef: any;
 @ViewChild(MatPaginator, { static: false }) paginator?: MatPaginator;
@@ -75,7 +68,9 @@ constructor(private paginatorIntl: MatPaginatorIntl,
   this.formMeta = fb.group({
     nombre: ['', Validators.required],
     descripcion: ['', [Validators.required]],
-    porcentaje_meta: ['', Validators.required],
+    meta_final: ['', Validators.required],
+    linea_base: ['', Validators.required],
+
   });
   this.paginatorIntl.nextPageLabel = this.nextPageLabel;
   this.paginatorIntl.lastPageLabel = this.lastPageLabel;
@@ -86,29 +81,18 @@ constructor(private paginatorIntl: MatPaginatorIntl,
 }
 
 ngAfterViewInit() {
-  this.dataSource.paginator = this.paginator || null;
+  this.dataSource.paginator = this.paginator || null;}
 
-}
 ngOnInit() {
- 
   this.objPDOT = history.state.data;
   this.componente = history.state.componente;
-  if (this.objPDOT == undefined) {
-    this.router.navigate(['user-dashboard']);
-    location.replace('/use/user-dashboard');
-  }
-  console.log("DATAAAAAAAAAAAAAAAAAA")
-  console.log(this.objPDOT)
   this.listar(this.objPDOT.id_objetivo_pdot)
 }
-
 
 
 guardar() {
   this.metaPDOT = this.formMeta.value;
   this.metaPDOT.objetivopdot = this.objPDOT;
-  console.log(this.metaPDOT)
-  
   this.metaPDOTService.crear(this.metaPDOT)
     .subscribe(
       (response: any) => {
@@ -155,9 +139,6 @@ listar(idObjetivo: number): void {
   this.metaPDOTService.listarmetasPdotsPorIdObjetivo(idObjetivo).subscribe(
     (data: any[]) => {
       this.listaMetasPdot = data;
-      console.log("DATAAAAAAAAAAAAAAAAAA")
-      console.log(this.listaMetasPdot)
-
       this.dataSource.data = this.listaMetasPdot;
     },
     (error: any) => {
@@ -166,25 +147,14 @@ listar(idObjetivo: number): void {
   );
 }
 
-/*
-listar(): void {
-  this.metaPDOTService.listar().subscribe(
-    (data: any[]) => {
-      this.listaMetasPdot = data;
-      this.dataSource.data=this.listaMetasPdot;
-    },
-    (error: any) => {
-      console.error('Error al listar las metas:', error);
-    }
-  );
-}*/
 
 editDatos(meta: MetasPDOT) {
  this.metaPDOT = meta;
   this.formMeta = new FormGroup({
     nombre: new FormControl(meta.nombre),
     descripcion: new FormControl(meta.descripcion),
-    porcentaje_meta: new FormControl(meta.porcentaje_meta),
+    meta_final: new FormControl(meta.meta_final),
+    linea_base: new FormControl(meta.linea_base),
   });
 }
 
@@ -196,7 +166,10 @@ limpiarFormulario() {
 actualizar() {
   this.metaPDOT.nombre = this.formMeta.value.nombre;
   this.metaPDOT.descripcion = this.formMeta.value.descripcion;
-  this.metaPDOT.porcentaje_meta = this.formMeta.value.porcentaje_meta;
+  this.metaPDOT.meta_final = this.formMeta.value.meta_final;
+  this.metaPDOT.linea_base = this.formMeta.value.linea_base;
+  this.metaPDOT.objetivopdot = this.objPDOT;
+  this.metaPDOT.visible = true;
   this.metaPDOTService.actualizar(this.metaPDOT.id_meta_pdot, this.metaPDOT)
     .subscribe((response: any) => {
       this.metaPDOT = new MetasPDOT;
@@ -214,7 +187,7 @@ console.log(this.objPDOT);
  this.router.navigate(['/sup/flujo_Componentes/metasPDOT_Indicadores'], { state: { data: metaPDOT, componente:this.componente, objPDOT:this.objPDOT } });
 }
 verObjetivosDOT() {
-  this.router.navigate(['/sup/flujo_Componentes/componente_objetivoPDOT'], { state: { data: this.objPDOT } });
+  this.router.navigate(['/sup/flujo_Componentes/componente_objetivoPDOT'], { state: { data: this.componente } });
 }
 verComponentes() {
   this.router.navigate(['/sup/flujo_Componentes/componentesSuper']);
@@ -225,12 +198,9 @@ buscar() {
   this.filteredComponentes = this.listaMetasPdot.filter((meta) =>
     meta.nombre.toLowerCase().includes(this.filterPost.toLowerCase())
   );
-
   // Actualiza los datos del dataSource con los resultados filtrados
   this.dataSource.data = this.filteredComponentes;
-
   // Verifica si se encontraron resultados
-  this.resultadosEncontrados = this.filteredComponentes.length > 0;
-}
+  this.resultadosEncontrados = this.filteredComponentes.length > 0;}
 
 }

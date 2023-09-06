@@ -16,7 +16,7 @@ import { PresupuestoExternoService } from 'src/app/services/presupuestoexterno.s
 import { ReformaSuplementoService } from 'src/app/services/reformasuplemento.service';
 import { ReformaTraspasoIService } from 'src/app/services/reformatraspaso-i.service';
 import { ReformaTraspasoDService } from 'src/app/services/reformatraspaso-d.service';
-import { DatePipe } from '@angular/common';
+import { MatSelectChange } from '@angular/material/select';
 
 @Component({
   selector: 'app-actividades',
@@ -32,10 +32,18 @@ export class ListaActividadesComponent implements OnInit {
   guardadoExitoso2: boolean = false;
   guardadoExitoso3: boolean = false;
   guardadoExitoso4: boolean = false;
+  mostrarTabla1: boolean = false;
+  mostrarTabla2: boolean = false;
+  mostrarTabla3: boolean = false;
+  mostrarTabla4: boolean = false;
   
 
   //tabla
   itemsPerPageLabel = 'Actividades por página';
+  itemsPerPageLabel2 = 'Presupuesto Externo por página';
+  itemsPerPageLabel3 = 'R.Suplemento por página';
+  itemsPerPageLabel4 = 'R.T.Incremento por página';
+  itemsPerPageLabel5 = 'R.T.Decremento por página';
   nextPageLabel = 'Siguiente';
   lastPageLabel = 'Última';
   firstPageLabel = 'Primera';
@@ -58,10 +66,18 @@ export class ListaActividadesComponent implements OnInit {
   actividades: any = [];
   miModal!: ElementRef;
   public actividad = new ActividadesPoa();
+
   public presupuestoexterno = new PresupuestoExterno();
+  listaPEActividades: PresupuestoExterno[] = [];
+
   public reformasuplemento = new ReformaSuplemento();
+  listaRSActividades: ReformaSuplemento[] = [];
+
   public rtincremento = new ReformaTraspasoI();
+  listaRTIActividades: ReformaTraspasoI[] = [];
+
   public rtdecremento = new ReformaTraspasoD();
+  listaRTDActividades: ReformaTraspasoD[] = [];
 
   poaId!: number;
 
@@ -70,9 +86,18 @@ export class ListaActividadesComponent implements OnInit {
   resultadosEncontrados: boolean = true;
 
   dataSource = new MatTableDataSource<ActividadesPoa>();
-  //aqui se cambia
   columnasUsuario: string[] = ['id_actividad', 'nombre', 'descripcion', 'presupuesto_referencial', 'recursos_propios', 'codificado', 'devengado', 'estado', 'actions'];
 
+
+  dataSource2 = new MatTableDataSource<PresupuestoExterno>();
+  columnasUsuario2: string[] = ['id_presupuesto_externo', 'nombre_institucion', 'valor', 'fecha', 'observacion', 'nombreActividad','nombreProyecto'];
+  dataSource3 = new MatTableDataSource<ReformaSuplemento>();
+  columnasUsuario3: string[] = ['id_ref_suplemento', 'valor', 'fecha', 'nombreActividad','nombreProyecto'];
+  dataSource4 = new MatTableDataSource<ReformaTraspasoI>();
+  columnasUsuario4: string[] = ['id_reftras_i', 'valor', 'fecha', 'nombreActividad','nombreProyecto'];
+  dataSource5 = new MatTableDataSource<ReformaTraspasoD>();
+  columnasUsuario5: string[] = ['id_reftras_d', 'valor', 'fecha', 'nombreActividad','nombreProyecto'];
+  
   @ViewChild('datosModalRef') datosModalRef: any;
   @ViewChild(MatPaginator, { static: false }) paginator?: MatPaginator;
 
@@ -116,7 +141,16 @@ export class ListaActividadesComponent implements OnInit {
     const data = history.state.data;
     this.poa = data;
     console.log(this.poa);
-    this.listar(this.poa.id_poa)
+    this.listar(this.poa.id_poa);
+    this.listarPE();
+    this.listarRS();
+    this.listarRTI();
+    this.listarRTD();
+  }
+
+  opcionSeleccionada: string = 'visualizarAsignaciones'; 
+  seleccionarOpcion(event: MatSelectChange) {
+    this.opcionSeleccionada = event.value;
   }
 
   // VALIDACIONES
@@ -312,5 +346,52 @@ export class ListaActividadesComponent implements OnInit {
     } else {
       this.dataSource.data = this.actividades;
     }
+  }
+
+
+  //LISTAR TABLAS DE PRESUPUESTOS
+  listarPE(): void {
+    this.pexternoservice.listarPEActividades().subscribe(
+      (data: any[]) => {
+        this.listaPEActividades = data;
+        this.dataSource2.data = this.listaPEActividades;
+      },
+      (error: any) => {
+        console.error('Error al listar presupuesto externos:', error);
+      }
+    );
+  }
+  listarRS(): void {
+    this.rsuplementoservice.listarRSActividades().subscribe(
+      (data: any[]) => {
+        this.listaRSActividades = data;
+        this.dataSource3.data = this.listaRSActividades;
+      },
+      (error: any) => {
+        console.error('Error al listar reformas suplementos:', error);
+      }
+    );
+  }
+  listarRTI(): void {
+    this.rtincrementoservice.listarRTIActividades().subscribe(
+      (data: any[]) => {
+        this.listaRTIActividades = data;
+        this.dataSource4.data = this.listaRTIActividades;
+      },
+      (error: any) => {
+        console.error('Error al listar reformas traspasos incrementos:', error);
+      }
+    );
+  }
+  listarRTD(): void {
+    this.rtdecrementoservice.listarRTDActividades().subscribe(
+      (data: any[]) => {
+        this.listaRTDActividades = data;
+        this.dataSource5.data = this.listaRTDActividades;
+      },
+      (error: any) => {
+        console.error('Error al listar reformas traspasos decrementos:', error);
+      }
+    );
   }
 }

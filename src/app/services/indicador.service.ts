@@ -1,8 +1,9 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Indicadores } from '../models/Indicadores';
 import baserUrl from './helper';
+import { IndicadorconComponenteProjection } from '../interface/IndicadorconComponenteProjection';
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +14,26 @@ export class IndicadorService {
   listar(): Observable<Indicadores[]> {
     return this.http.get<Indicadores[]>(`${baserUrl}/api/Indicador/listar`);
   }
+    // Método para listar los indicadores  por ID de metasPDOT
+    listarIndiById(id: number): Observable<Indicadores[]> {
+      return this.http.get<Indicadores[]>(`${baserUrl}/api/Indicador/buscar/${id}`);
+    }
+
+    //para listar indicadores por proyecto
+    listarIndicadoresPorProyectos(ids: number[]): Observable<Indicadores[]> {
+      // Convierte la lista de IDs en una cadena separada por comas
+      const idsString = ids.join(',');
+    
+      // Configura los parámetros de la solicitud
+      const params = new HttpParams().set('idsProyectos', idsString);
+    
+      // Realiza la solicitud HTTP GET con los parámetros
+      return this.http.get<Indicadores[]>(`${baserUrl}/api/Indicador/porproyectos`, { params });
+    }
+  
+    
+    
+    
   crear(r: Indicadores): Observable<Indicadores> {
     return this.http.post<Indicadores>(`${baserUrl}/api/Indicador/crear`, r
     );
@@ -29,5 +50,9 @@ export class IndicadorService {
     // Método para listar los indicadores  por ID de metasPDOT
     listarmetasPdotsPorIdObjetivo(idMeta: number): Observable<Indicadores[]> {
       return this.http.get<Indicadores[]>(`${baserUrl}/api/Indicador/listaIndicadores/`+idMeta);
+    }
+
+    listarIndicadoresconComponente(): Observable<IndicadorconComponenteProjection[]> {
+      return this.http.get<IndicadorconComponenteProjection[]>(`${baserUrl}/api/Indicador/listaIndicadoresconComponente`);
     }
 }

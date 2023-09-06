@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { SuperGuard } from 'src/app/services/Guards/super.guard';
 import { PoaActividadComponent } from './poa-actividad/poa-actividad.component';
 import { AdminGuard } from 'src/app/services/Guards/admin.guard';
 import { ActividadesComponent } from './actividades/actividades.component';
@@ -17,7 +16,7 @@ const routes: Routes = [
     component: ActividadesComponent,
     pathMatch: 'full',
     canActivate: [AdminGuard]
-  }
+  },
 ];
 
 @NgModule({

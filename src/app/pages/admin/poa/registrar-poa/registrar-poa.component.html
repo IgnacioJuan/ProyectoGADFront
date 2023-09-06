@@ -9,23 +9,23 @@
             <div class="card-body">
                 <div class="table-container">
                     <div class="table-row">
-                        <div class="table-cell"><strong>DIRECCION DEPARTAMENTAL: </strong>PLANIFICACION</div>
+                        <div class="table-cell"><strong>DIRECCION DEPARTAMENTAL:
+                            </strong>{{projectSelect.nombre_programa}}
+                        </div>
                         <div class="table-cell"><strong>RESPONSABLE:</strong> NICOLÁS CEVALLOS CABRERA</div>
                     </div>
                     <div class="table-row">
-                        <div class="table-cell"><strong>AREA QUE PRESENTA EL PROYECTO:</strong> JEFATURA DE
-                            PRODUCCION Y
-                            COMERCIALIZACIÓN</div>
-                        <div class="table-cell"><strong>SUPERVISION DEL PROYECTO:</strong> NICOLÁS CEVALLOS
-                            CABRERA
+                        <div class="table-cell"><strong>AREA QUE PRESENTA EL PROYECTO:</strong> {{projectSelect.area}}
                         </div>
+                        <div class="table-cell"><strong>SUPERVISION DEL PROYECTO:</strong>
+                            {{projectSelect.nombre_completo_persona}} </div>
                     </div>
                 </div>
                 <div class="table-container">
                     <div class="table-row">
                         <div class="table-cell colspan-2 centered-cell"><strong>AÑO DE EJECUCIÓN DEL
                                 PROYECTO:</strong>
-                            2004-2018
+                            {{projectSelect.rango_fechas}}
                         </div>
                     </div>
                 </div>
@@ -33,22 +33,34 @@
                 <br />
                 <div class="table-container">
                     <div class="table-row">
-                        <div class="table-cell">
-                            <button class="button">Seleccionar Proyecto</button>
+                        <div class="table-cell" style="display: flex; flex-direction: column; gap: 8px;">
+                            <button class="button" (click)="openDialogProjects()">Seleccionar Proyecto</button>
+                            <mat-form-field>
+                                <mat-label>Tipo de seguimiento</mat-label>
+                                <mat-select [(value)]="selectedPeriod">
+                                    <mat-option></mat-option>
+                                    <mat-option [value]="option.value" *ngFor="let option of periodo">{{
+                                        option.value}}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
                         </div>
                     </div>
                 </div>
                 <div class="table-container">
                     <div class="table-row">
                         <div class="table-cell"><strong>DENOMINACION DEL PROGRAMA PROYECTO:</strong></div>
-                        <div class="table-cell centered">PROPUESTA DE ESTUDIOS
-                            Y CONSTRUCCION DE RESERVORIOS EN EL CANTON SANTA ISABEL, CON PRIORIDAD, PARROQUIA
-                            SHAGLLI</div>
-                        <div class="table-cell wide-cell centered">AST-001</div>
+                        <div class="table-cell centered">
+                            {{projectSelect.nombre}}
+                        </div>
+                        <div class="table-cell wide-cell centered">
+                            {{projectSelect.codigo}}
+                        </div>
                     </div>
                     <div class="table-row">
                         <div class="table-cell"><strong>DESCRIPCION DEL PROGRAMA PROYECTO:</strong></div>
-                        <div class="table-cell centered">ASENTAMIENTOS HUMANOS</div>
+                        <div class="table-cell centered">
+                            {{projectSelect.nombre_programa}}
+                        </div>
                         <div class="table-cell wide-cell"></div>
                     </div>
                 </div>
@@ -57,51 +69,57 @@
                 <div class="table-container">
                     <div class="table-row">
                         <div class="table-cell"><strong>NOMBRE PROGRAMA/PROYECTO:</strong></div>
-                        <div class="table-cell ">PROPUESTA DE ESTUDIOS
-                            Y CONSTRUCCION DE RESERVORIOS EN EL CANTON SANTA ISABEL, CON PRIORIDAD, PARROQUIA
-                            SHAGLLI</div>
+                        <div class="table-cell ">
+                            {{projectSelect.nombre}}
+                        </div>
                     </div>
                     <div class="table-row">
                         <div class="table-cell"><strong>ODS:</strong></div>
-                        <div class="table-cell ">PROPUESTA DE ESTUDIOS
-                            Y CONSTRUCCION DE RESERVORIOS EN EL CANTON SANTA ISABEL, CON PRIORIDAD, PARROQUIA
-                            SHAGLLI</div>
+                        <div class="table-cell ">
+                            {{projectSelect.nombre_objetivo_ods}}
+                        </div>
                     </div>
                     <div class="table-row">
                         <div class="table-cell"><strong>OBJETIVO PND:</strong></div>
-                        <div class="table-cell ">PROPUESTA DE ESTUDIOS
-                            Y CONSTRUCCION DE RESERVORIOS EN EL CANTON SANTA ISABEL, CON PRIORIDAD, PARROQUIA
-                            SHAGLLI</div>
+                        <div class="table-cell ">
+                            {{projectSelect.nombre_objetivo_pnd}}
+                        </div>
                     </div>
                     <div class="table-row">
                         <div class="table-cell"><strong>OBJETIVO ESTRATEGICO DEL PDOT:</strong></div>
-                        <div class="table-cell ">PROPUESTA DE ESTUDIOS
-                            Y CONSTRUCCION DE RESERVORIOS EN EL CANTON SANTA ISABEL, CON PRIORIDAD, PARROQUIA
-                            SHAGLLI</div>
+                        <div class="table-cell ">
+                            {{projectSelect.nombre_objetivo_pdot}}
+                        </div>
                     </div>
                     <div class="table-row">
                         <div class="table-cell"><strong>OBJETIVO DEL PROGRAMA/PROYECTO:</strong></div>
-                        <div class="table-cell ">PROPUESTA DE ESTUDIOS
-                            Y CONSTRUCCION DE RESERVORIOS EN EL CANTON SANTA ISABEL, CON PRIORIDAD, PARROQUIA
-                            SHAGLLI</div>
+                        <div class="table-cell ">
+                            {{projectSelect.objetivo_proyecto}}
+                        </div>
                     </div>
                     <div class="table-row">
                         <div class="table-cell"><strong>INDICADOR DE LA META:</strong></div>
-                        <div class="table-cell ">PROPUESTA DE ESTUDIOS
-                            Y CONSTRUCCION DE RESERVORIOS EN EL CANTON SANTA ISABEL, CON PRIORIDAD, PARROQUIA
-                            SHAGLLI</div>
+                        <div class="table-cell ">
+                            {{projectSelect.nombre_indicador}}
+                        </div>
                     </div>
                     <div class="table-row">
                         <div class="table-cell"><strong>META DEL PROGRAMA/PROYECTO:</strong></div>
-                        <div class="table-cell ">PROPUESTA DE ESTUDIOS
-                            Y CONSTRUCCION DE RESERVORIOS EN EL CANTON SANTA ISABEL, CON PRIORIDAD, PARROQUIA
-                            SHAGLLI</div>
+                        <div class="table-cell ">
+                            {{projectSelect.nombre_meta_pdot}}
+                        </div>
+                    </div>
+                    <div class="table-row">
+                        <div class="table-cell"><strong>META PLANIFICADA:</strong></div>
+                        <div class="table-cell ">
+                            <input class="form-control" type="text" id="meta" name="meta"
+                                style="width: 100%; margin-bottom: 10px" appCurrencyInput />
+                        </div>
                     </div>
                     <div class="table-row">
                         <div class="table-cell"><strong>LINEA BASE:</strong></div>
-                        <div class="table-cell ">PROPUESTA DE ESTUDIOS
-                            Y CONSTRUCCION DE RESERVORIOS EN EL CANTON SANTA ISABEL, CON PRIORIDAD, PARROQUIA
-                            SHAGLLI</div>
+                        <div class="table-cell ">
+                        </div>
                     </div>
                 </div>
                 <br />
@@ -142,12 +160,12 @@
                 <div class="table-container">
                     <div class="table-row">
                         <div class="table-cell">
-                            <button class="button">Agregar actividades</button>
+                            <button class="button" data-bs-toggle="modal" data-bs-target="#materiaModal">Agregar
+                                actividades</button>
                         </div>
                     </div>
                 </div>
                 <div class="table-container">
-
                     <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
 
                         <!--- Note that these columns can be defined in any order.
@@ -156,30 +174,31 @@
                         <!-- Position Column -->
 
                         <!-- Name Column -->
-                        <ng-container matColumnDef="name">
+                        <ng-container matColumnDef="nombre">
                             <th mat-header-cell *matHeaderCellDef class="centered"> Actividades </th>
-                            <td mat-cell *matCellDef="let element" class="wide-content-cell"> {{element.name}} </td>
+                            <td mat-cell *matCellDef="let element" class="wide-content-cell"> {{element.nombre}} </td>
                         </ng-container>
 
                         <!-- Weight Column -->
-                        <ng-container matColumnDef="weight">
+                        <ng-container matColumnDef="presupuesto_referencial">
                             <th mat-header-cell *matHeaderCellDef class="centered"> Presupuesto Referencial </th>
                             <td mat-cell *matCellDef="let element" class="text-align-left wide-rest-cell">
-                                {{element.weight}} </td>
+                                {{element.presupuesto_referencial}} </td>
                         </ng-container>
 
                         <!-- Symbol Column -->
-                        <ng-container matColumnDef="symbol">
+                        <ng-container matColumnDef="inversion">
                             <th mat-header-cell *matHeaderCellDef class="centered"> Ejecucion e Inversion </th>
-                            <td mat-cell *matCellDef="let element" class="  centered">
-                                <button class="button ">Ver</button>
+                            <td mat-cell *matCellDef="let element; let i=index" class="  centered">
+                                <button class="button " data-bs-toggle="modal" data-bs-target="#materiaModal"
+                                    (click)="editarInformacion(i)">Ver</button>
                             </td>
                         </ng-container>
 
                         <ng-container matColumnDef="eliminar">
                             <th mat-header-cell *matHeaderCellDef class="centered"> Eliminar </th>
-                            <td mat-cell *matCellDef="let element" class="  centered">
-                                <button mat-mini-fab class="btn-eliminar">
+                            <td mat-cell *matCellDef="let element; let i=index" class="  centered">
+                                <button mat-mini-fab class="btn-eliminar" (click)="eliminar(i)">
                                     <mat-icon>delete</mat-icon>
                                 </button>
 
@@ -189,10 +208,154 @@
                         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
                     </table>
+                </div>
+                <br />
+                <br />
+                <div class="table-container">
+                    <div class="table-row">
+                        <div class="table-cell"><strong>{{selectedPeriod}} 1:</strong></div>
+                        <div class="table-cell ">${{valueUno}}</div>
+                        <div class="table-cell"><strong>{{selectedPeriod}} 2:</strong></div>
+                        <div class="table-cell ">${{valueDos}}</div>
+                        <div class="table-cell"><strong>{{selectedPeriod}} 3:</strong></div>
+                        <div class="table-cell ">${{valueTres}}</div>
+                        <div class="table-cell" *ngIf="selectedPeriod === 'TRIMESTRE'"><strong>{{selectedPeriod}}
+                                4:</strong></div>
+                        <div class="table-cell " *ngIf="selectedPeriod === 'TRIMESTRE'">${{valueCuatro}}</div>
+                    </div>
+                </div>
+                <div class="table-container ">
+                    <div class="table-row">
+                        <div class="table-cell wide-cell"><strong>TOTAL:</strong></div>
+                        <div class="table-cell">$ {{totalActividades}}</div>
+                    </div>
+                </div>
+                <br />
+                <br />
+                <div class="table-container">
+                    <div class="table-row">
+                        <div class="table-cell"><strong>Recursos Propios:</strong></div>
+                        <div class="table-cell ">${{recursosPropios}}</div>
+                        <div class="table-cell"><strong>Recursos Externos:</strong></div>
+                        <div class="table-cell ">${{recursosExternos}}</div>
+                    </div>
+                </div>
+                <br />
+                <br />
+                <div class="table-container">
+                    <div class="table-row">
+                        <div class="table-cell"><strong>Nombre funcionario:</strong></div>
+                        <div class="table-cell ">
+                            {{projectSelect.nombre_completo_persona}}
+                        </div>
+                        <div class="table-cell"><strong>Cargo:</strong></div>
+                        <div class="table-cell ">
+                            {{projectSelect.cargo}}
+                        </div>
+                        <div class="table-cell"><strong>Fecha de emisión:</strong></div>
+                        <div class="table-cell ">
+                            {{ currentDate | date: 'dd/MM/yyyy' }}
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <br />
+                <!-- boton para enviar solicitud -->
+                <button class="button" (click)="solicitud()">Enviar Solicitud</button>
+            </div>
+        </div>
+    </div>
 
+    <!-- modal para cualquier dilaogo -->
+    <div class="modal fade" id="materiaModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
+        (hidden.bs.modal)="limpiarFormulario()">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: #077b15">
+                    <h3 class="modal-title" style="font-family: Arial, sans-serif; color: white">
+                        <i class="fa fa-info-circle"></i> AGREGAR ACTIVIDADES
+                    </h3>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formulario" [formGroup]="formComponentes" (ngSubmit)="guardar()">
+                        <div class="form-group">
+                            <label for="nombre">Nombre de la actividad:</label>
+                            <input class="form-control" formControlName="nombre" type="text" id="nombre" name="nombre"
+                                style="margin-bottom: 10px" />
+                            <div class="alert alert-danger"
+                                *ngIf="formComponentes.controls['nombre'].invalid && formComponentes.controls['nombre'].touched">
+                                <div *ngIf="formComponentes.controls['nombre'].hasError('required')">
+                                    Debe ingresar un nombre a la actividad
+                                </div>
+                            </div>
+                        </div>
 
+                        <div class="form-group">
+                            <label for="observacion">Observacion:</label>
+                            <input class="form-control" formControlName="observacion" type="text" id="observacion"
+                                name="observacion" style="margin-bottom: 10px" />
+                        </div>
+
+                        <!-- Generar ahora para ingresar valores monetarios-->
+                        <div class="form-group">
+                            <label for="recursos_propios">Recursos Propios:</label>
+                            <input class="form-control" formControlName="recursos_propios" type="text"
+                                id="recursos_propios" name="recursos_propios" style="margin-bottom: 10px"
+                                appCurrencyInput autocomplete="off" />
+                        </div>
+                        <!-- now ctreate for input Presupesto externo -->
+                        <div class="form-group">
+                            <label for="recursos_externos">Recursos Externos:</label>
+                            <input class="form-control" formControlName="recursos_externos" type="text"
+                                id="recursos_externos" name="recursos_externos" style="margin-bottom: 10px"
+                                appCurrencyInput autocomplete="off" />
+                        </div>
+                        <!-- now create for input Institucion_beneficiaria -->
+                        <div class="form-group">
+                            <label for="institucion_beneficiaria">Institucion Beneficiaria:</label>
+                            <input class="form-control" formControlName="institucion_beneficiaria" type="text"
+                                id="institucion_beneficiaria" name="institucion_beneficiaria"
+                                style="margin-bottom: 10px" />
+                        </div>
+                        <div class="form-group">
+                            <label for="valor_uno">{{selectedPeriod}} 1</label>
+                            <input class="form-control" formControlName="valor_uno" type="text" id="valor_uno"
+                                name="valor_uno" style="margin-bottom: 10px" appCurrencyInput />
+                        </div>
+                        <div class="form-group">
+                            <label for="valor_dos">{{selectedPeriod}} 2</label>
+                            <input class="form-control" formControlName="valor_dos" type="text" id="valor_dos"
+                                name="valor_dos" style="margin-bottom: 10px" appCurrencyInput />
+                        </div>
+                        <div class="form-group">
+                            <label for="valor_tres">{{selectedPeriod}} 3</label>
+                            <input class="form-control" formControlName="valor_tres" type="text" id="valor_tres"
+                                name="valor_tres" style="margin-bottom: 10px" appCurrencyInput />
+                        </div>
+                        <div class="form-group" *ngIf="selectedPeriod === 'TRIMESTRE'">
+                            <label for="valor_cuatro">{{selectedPeriod}} 4</label>
+                            <input class="form-control" formControlName="valor_cuatro" type="text" id="valor_cuatro"
+                                name="valor_cuatro" style="margin-bottom: 10px" appCurrencyInput />
+                        </div>
+                    </form>
+                    <div class="modal-footer">
+                        <button type="button" form="formulario" class="btn btn-warning" data-bs-dismiss="modal">
+                            Cancelar
+                        </button>
+                        <button type="submit" class="btn btn-primary" form="formulario" *ngIf="!componentes.nombre"
+                            data-dismiss="modal" data-bs-dismiss="modal" [disabled]="!formComponentes.valid">
+                            Agregar
+                        </button>
+                        <button class="btn btn-primary" *ngIf="componentes.nombre" data-dismiss="modal"
+                            data-bs-dismiss="modal" (click)="actualizar(i)" [disabled]="!formComponentes.valid">
+                            Actualizar
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+    <!-- button con la opcion enviar solicitus -->
+
 </body>
