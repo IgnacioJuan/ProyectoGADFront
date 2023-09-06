@@ -9,7 +9,7 @@ import { Archivo } from '../models/Archivo';
 import { ArchivoProjection } from '../interface/ArchivoProjection';
 import { Archivos } from '../models/Archivos';
 
-@Injectable({
+@Injectable({ 
   providedIn: 'root'
 })
 export class ArchivoService {

@@ -6,6 +6,8 @@ import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 import { PoaService } from 'src/app/services/poa.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { PoaporUsuarioProjection } from 'src/app/interface/PoaporUsuarioProjection';
+import { NgStyle } from '@angular/common';
+
 
 @Component({
   selector: 'app-listarpoaporusuario',
@@ -97,7 +99,33 @@ export class ListarporUsuarioComponent implements OnInit {
     } else {
       this.dataSource.data = this.competencias;;
     }
-  }  
+  } 
+  
+  getColor(estado: string): any {
+    const estadoUpper = estado.toUpperCase(); // Convertir el estado a mayúsculas
+    let backgroundColor = 'white'; // Color de fondo predeterminado
+  
+    switch (estadoUpper) {
+      case 'APROBADO':
+        backgroundColor = 'green';
+        break;
+      case 'RECHAZADO':
+        backgroundColor = 'yellow';
+        break;
+      case 'PENDIENTE':
+        backgroundColor = 'red';
+        break;
+      default:
+        break;
+    }
+  
+    return { 'background-color': backgroundColor };
+  }
+  
+  
+  
 
 }
+
+
 
