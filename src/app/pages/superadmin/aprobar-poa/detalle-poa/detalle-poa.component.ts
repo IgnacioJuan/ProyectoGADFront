@@ -62,13 +62,16 @@ export class DetallePoaComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    //Parametro enviado desde el componente aprobar poa
     const idParam = this.route.snapshot.paramMap.get('id_poa');
-    this.cargaDatosPoa(idParam);
+    //Cargar los datos del poa por el id
+    this.cargarData(idParam);
+
     this.usuarioService.getUsuariosAprobPOA().subscribe((data) => {
       this.usuarios = data;
       this.usuarios.map((data) => (this.idUsuario = data.id_persona));
     });
-    this.handleActividadesPoa(idParam);
+  
   }
 
   // Nuevas propiedades para la nueva tabla
@@ -83,18 +86,10 @@ export class DetallePoaComponent implements OnInit {
     'estado',
     'responsable',
   ];
-  handleAprobacion(estado: 'APROBADO' | 'RECHAZADO') {
-    this.estadoAprobacion = estado;
-  }
 
-  handleActividadesPoa(idParam: any) {
-    this.actService
-      .obtenerDetalleActividadesAprob(idParam)
-      .subscribe((data) => {
-        console.log(data);
-        this.listaDetalleActividades = data;
-        this.dataSource.data = this.listaDetalleActividades;
-      });
+  cargarData(idPoa: any){
+    this.cargaDatosPoa(idPoa);
+    this.cargarActividadesPoa(idPoa);
   }
 
   cargaDatosPoa(idParam: any) {
@@ -134,6 +129,20 @@ export class DetallePoaComponent implements OnInit {
     }
   }
 
+  cargarActividadesPoa(idParam: any) {
+    this.actService
+      .obtenerDetalleActividadesAprob(idParam)
+      .subscribe((data) => {
+        console.log(data);
+        this.listaDetalleActividades = data;
+        this.dataSource.data = this.listaDetalleActividades;
+      });
+  }
+
+  handleAprobacion(estado: 'APROBADO' | 'RECHAZADO') {
+    this.estadoAprobacion = estado;
+  }
+
   actualizarAprobacion() {
     console.log('Actualizando aprobación...');
     if (this.poa) {
@@ -155,6 +164,7 @@ export class DetallePoaComponent implements OnInit {
     const selectElement = event.target as HTMLSelectElement;
     this.selectedUserId = Number(selectElement.value);
   }
+
   toggleBtnSuccess() {
     this.isBtnSuccessActive = true;
     this.isBtnDangerActive = false;
@@ -166,6 +176,7 @@ export class DetallePoaComponent implements OnInit {
     this.isBtnDangerActive = true;
     this.estadoAprobacion = 'RECHAZADO';
   }
+
   showSuccessAlert() {
     Swal.fire({
       icon: 'success',
