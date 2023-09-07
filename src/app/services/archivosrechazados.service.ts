@@ -10,31 +10,26 @@ import baserUrl from './helper';
 })
 export class ArchivosrechazadosService {
 
-  baserrl = environment.baserUrl;
+  baserrl= environment.baserUrl;
 
   constructor(private http: HttpClient) { }
+ 
 
+//Listar archivos rechazados por actividad
+public getArchivosRechazados(idActi: number): Observable<ArchivosRechazados[]> {
+  return this.http.get<ArchivosRechazados[]>(`${baserUrl}/archivo/listarrechazados/${idActi}`);
+}
 
-  //Listar archivos rechazados por actividad
-  public getArchivosRechazados(idActi: number): Observable<ArchivosRechazados[]> {
-    return this.http.get<ArchivosRechazados[]>(`${baserUrl}/archivo/listarrechazados/${idActi}`);
-  }
-
-  //extraer el enlace de un archivo
-  getArchivoEnlace(idArchi: number): Observable<ArchivosRechazados> {
-    return this.http.get<ArchivosRechazados>(`${baserUrl}/archivo/listararchivoenlace/${idArchi}`);
-  }
-
-  listar() {
+  listar(){
     return this.http.get(`${this.baserrl}/archivo/listar`);
   }
 
-  borrar(filename: string) {
+  borrar(filename:string){
     return this.http.get(`${this.baserrl}/archivo/borrar/${filename}`);
-  }
+}
 
-  eliminar(archi: any): Observable<any> {
-    return this.http.put(`${baserUrl}/archivo/eliminarlogic/${archi.id_archivo}`, archi);
-  }
+eliminar(archi:any): Observable<any> {
+  return this.http.put(`${baserUrl}/archivo/eliminarlogic/${archi.id_archivo}`,archi);
+}
 
 }

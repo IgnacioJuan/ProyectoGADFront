@@ -50,15 +50,13 @@
                 {{ elemento.barrio }}
               </td>
             </ng-container>
-
-            
+                        
             <ng-container matColumnDef="estado">
               <th mat-header-cell *matHeaderCellDef>ESTADO</th>
-              <td mat-cell *matCellDef="let elemento" [ngStyle]="getColor(elemento.estado)">
+              <td mat-cell *matCellDef="let elemento">
                 {{ elemento.estado }}
               </td>
             </ng-container>
-            
 
             <tr mat-header-row *matHeaderRowDef="columnasUsuario"></tr>
             <tr mat-row *matRowDef="let fila; columns: columnasUsuario"></tr>

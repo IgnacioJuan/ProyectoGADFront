@@ -26,43 +26,4 @@
       url(https://source.unsplash.com/E8Ufcyxz514/2400x1823)
       center / cover no-repeat fixed;
   }
-  .header-title {
-    font-size: 30px;
-    font-weight: bold;
-    color:green; /* You can choose your preferred color */
-    text-align: left;
-  }
-  .cards-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: stretch; /* Asegura que todas las tarjetas tengan la misma altura */
-    margin-top: 2rem;
-    margin-bottom: 2rem;
-}
-
-.example-card {
-    width: 300px; /* Ancho fijo */
-    height: 400px; /* Altura fija */
-    overflow: auto; /* Si el contenido es demasiado, mostrará barras de desplazamiento */
-    flex: 1; /* Permite que las tarjetas crezcan para ocupar el espacio disponible */
-    margin: 0 1rem;
-    overflow: auto;
-    display: flex;
-    flex-direction: column; /* Establece la dirección principal como columna */
-    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2); /* Sombra suave */
-    transition: box-shadow 0.3s ease;
-}
-.example-card:hover {
-    box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.25); /* Sombra más intensa al pasar el cursor */
-}
-.card-content-wrapper {
-    flex: 1; /* Permite que el contenido crezca y ocupe todo el espacio disponible */
-    overflow: auto; /* Si el contenido es demasiado, mostrará barras de desplazamiento */
-}
-
-.card-actions {
-   
-    margin-top: 3px;
-    margin-bottom: 3px;
-    justify-content: flex-end;
-}
+  

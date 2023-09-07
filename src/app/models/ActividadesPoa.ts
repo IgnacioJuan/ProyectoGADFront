@@ -11,13 +11,7 @@ export class ActividadesPoa {
     recursos_propios!: number;
     estado!: string
     visible!: boolean;
-
-    //OTROS
-    //responsable!: string;
+    responsable!: string;
     usuario!: Usuario2;
     poa!: Poa;
-    totalpresupuestoEterno!: number;
-    totalreformaSuplemento!: number;
-    totalreformaTIncremento!: number;
-    totalreformaTDecremento!: number;
 }

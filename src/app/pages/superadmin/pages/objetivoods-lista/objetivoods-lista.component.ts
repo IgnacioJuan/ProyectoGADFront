@@ -53,7 +53,7 @@ export class ObjetivoodsListaComponent implements OnInit {
 //aqui esta llenandose el array de componentes
   dataSource = new MatTableDataSource<Objetivoods>();
 
-  columnasUsuario: string[] = ['id_componente', 'nombre', 'descripcion', 'actions'];
+  columnasUsuario: string[] = ['id_componente', 'nombre', 'descripcion', 'cantidadObjetivoPDOT', 'actions'];
 
   @ViewChild('datosModalRef') datosModalRef: any;
   @ViewChild(MatPaginator, { static: false }) paginator?: MatPaginator;

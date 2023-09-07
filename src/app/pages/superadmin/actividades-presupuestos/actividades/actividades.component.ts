@@ -86,7 +86,7 @@ export class ListaActividadesComponent implements OnInit {
   resultadosEncontrados: boolean = true;
 
   dataSource = new MatTableDataSource<ActividadesPoa>();
-  columnasUsuario: string[] = ['id_actividad', 'nombre', 'descripcion', 'presupuesto_referencial', 'recursos_propios', 'codificado', 'devengado','totalpresupuestoEterno','totalreformaSuplemento','totalreformaTIncremento','totalreformaTDecremento', 'actions'];
+  columnasUsuario: string[] = ['id_actividad', 'nombre', 'descripcion', 'presupuesto_referencial', 'recursos_propios', 'codificado', 'devengado', 'estado', 'actions'];
 
 
   dataSource2 = new MatTableDataSource<PresupuestoExterno>();
@@ -195,7 +195,7 @@ export class ListaActividadesComponent implements OnInit {
 
   listar(poaId: number): void {
     this.dataSource.data = [];
-    this.actividadservice.getActividadesPoa2(poaId).subscribe(
+    this.actividadservice.getActividadesPoa(poaId).subscribe(
       (data: any[]) => {
         this.actividades = data;
         this.dataSource.data = this.actividades;
@@ -222,7 +222,6 @@ export class ListaActividadesComponent implements OnInit {
           console.log('Presupuesto Externo creado con éxito: ', response);
           this.guardadoExitoso1 = true;
           this.listar(this.poa.id_poa);
-          this.listarPE();
           Swal.fire(
             'Exitoso',
             'Se ha completado el registro con exito',
@@ -250,7 +249,6 @@ export class ListaActividadesComponent implements OnInit {
           console.log('Reforma Suplemento agregada con éxito: ', response);
           this.guardadoExitoso2 = true;
           this.listar(this.poa.id_poa);
-          this.listarRS();
           Swal.fire(
             'Exitoso',
             'Se ha completado el registro con exito',
@@ -278,7 +276,6 @@ export class ListaActividadesComponent implements OnInit {
           console.log('Reforma Traspaso Incremento agregada con éxito: ', response);
           this.guardadoExitoso3 = true;
           this.listar(this.poa.id_poa);
-          this.listarRTI();
           Swal.fire(
             'Exitoso',
             'Se ha completado el registro con exito',
@@ -307,7 +304,6 @@ export class ListaActividadesComponent implements OnInit {
           console.log('Reforma Traspaso Decremento agregada con éxito: ', response);
           this.guardadoExitoso4 = true;
           this.listar(this.poa.id_poa);
-          this.listarRTD();
           Swal.fire(
             'Exitoso',
             'Se ha completado el registro con exito',

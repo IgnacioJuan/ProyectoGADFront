@@ -11,6 +11,6 @@ export class DetalleActividadDTO {
     recursos_propios!: number;
     estado!: string
     visible!: boolean;
-    nombre_responsable!: string;
+    responsable!: string;
 
 }

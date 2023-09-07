@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+
 import { DetallePoaComponent } from './detalle-poa.component';
 
 describe('DetallePoaComponent', () => {

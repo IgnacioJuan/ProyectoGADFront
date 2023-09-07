@@ -25,7 +25,6 @@ export class ModeloComponent {
   lastPageLabel = 'Última';
   firstPageLabel='Primera';
   previousPageLabel='Anterior';
-  
   rango:any= (page: number, pageSize: number, length: number) => {
     if (length == 0 || pageSize == 0) {
       return `0 de ${length}`;
@@ -42,11 +41,7 @@ export class ModeloComponent {
   //
   public crite = new ModeloPoa();
   modeloPoas: ModeloPoa[] = [];
-  modeloPoastot: ModeloPoa[] = [];
-
-  totalCards = this.modeloPoastot.length;
-  pageSize = 1;
-  pageIndex = 0;
+  
 
   filterPost = '';
   dataSource = new MatTableDataSource<ModeloPoa>();
@@ -84,16 +79,7 @@ export class ModeloComponent {
     this.user = this.login.getUser();
     this.listar();
   }
-  onPageChange(event: any) {
-    this.pageIndex = event.pageIndex;
-    this.pageSize = event.pageSize;
-    this.updateCardsToShow();
-  }
-  updateCardsToShow() {
-    const start = this.pageIndex * this.pageSize;
-    const end = start + this.pageSize;
-    this.modeloPoas = this.modeloPoastot.slice(start, end);
-  }
+  
   validarFechas(): void {
     const fechaInicio = this.frmModeloPoa.get('fecha_inicial')?.value as string;
     const fechaFin = this.frmModeloPoa.get('fecha_final')?.value as string;
@@ -163,11 +149,7 @@ export class ModeloComponent {
   listar(): void {
     this.modeloPoaservice.getModeloPoas().subscribe(
       (data: any[]) => {
-       // this.modeloPoas = data;
-        this.modeloPoastot = data;
-        this.totalCards = this.modeloPoastot.length;
-        this.updateCardsToShow();
-
+        this.modeloPoas = data;
         this.dataSource.data = this.modeloPoas;
       },
       (error: any) => {

@@ -4,7 +4,6 @@ import { Component, OnInit } from '@angular/core';
 import { Notificacion } from 'src/app/models/Notificacion';
 import { MatDialog } from '@angular/material/dialog';
 import { DatePipe } from '@angular/common';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
@@ -21,7 +20,7 @@ export class NavbarComponent implements OnInit {
   noti = new Notificacion();
   notificaciones: Notificacion[] = [];
 
-  constructor(public login: LoginService, private notificationService: NotificacionService, private dialog: MatDialog, private rout: Router) {
+  constructor(public login: LoginService, private notificationService: NotificacionService, private dialog: MatDialog) {
     this.rol = this.login.getUserRole();
   }
 
@@ -71,7 +70,7 @@ export class NavbarComponent implements OnInit {
       );
     }
   }
-
+  
 
   public logout() {
     this.login.logout();
@@ -105,10 +104,6 @@ export class NavbarComponent implements OnInit {
 
   toggleNotifications() {
     this.showNotificationsModal = !this.showNotificationsModal;
-  }
-
-  verPerfil() {
-    this.rout.navigate(['/use/userprofile']);
   }
 
 }

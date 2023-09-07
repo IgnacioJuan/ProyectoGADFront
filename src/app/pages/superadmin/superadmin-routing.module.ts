@@ -91,11 +91,7 @@ pathMatch: 'full',
     path: 'aprobarEvidencias',
     loadChildren: () => import("./aprobar-evidencias/aprobar-evidencias.module").then(m => m.AprobarEvidenciasModule)
   },
-  
-  {
-    path: 'aprobar-actividades',
-    loadChildren: () => import("./aprobar-actividades/aprobar-actividades.module").then(m => m.AprobarActividadesModule)
-  },
+
   {
     path: 'crearcompe',
     component: CrearcompetenciaComponent,

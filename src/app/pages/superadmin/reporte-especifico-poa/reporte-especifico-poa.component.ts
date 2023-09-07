@@ -36,6 +36,7 @@ export class ReporteEspecificoPoaComponent implements OnInit {
   result :any;
   indiPro:any;
   metaindi:any;
+  prome:any;
   poa: Poa[] = [];
 
 
@@ -77,7 +78,7 @@ export class ReporteEspecificoPoaComponent implements OnInit {
   
     dataSource = new MatTableDataSource<Poa>();
   
-    columnasUsuario: string[] = ['id_poa', 'barrio', 'cobertura', 'comunidad', 'estado','localizacion','meta_alcanzar'];
+    columnasUsuario: string[] = ['id_poa', 'barrio', 'cobertura', 'comunidad', 'estado','localizacion','valorTotal','meta_alcanzar'];
   
     @ViewChild('datosModalRef') datosModalRef: any;
     @ViewChild(MatPaginator, { static: false }) paginator?: MatPaginator;
@@ -95,6 +96,7 @@ export class ReporteEspecificoPoaComponent implements OnInit {
   ) {
     this.formPoas= fb.group({
       id_poa: ['', Validators.required],
+      valorTotal:['', Validators.required],
       barrio: ['', Validators.required],
       cobertura: ['', Validators.required],
       comunidad: ['', [Validators.required]],
@@ -122,6 +124,8 @@ export class ReporteEspecificoPoaComponent implements OnInit {
       this.id_proyec= params.get('id');
       console.log('ID de POA seleccionado:', this.id_proyec);
       this.listarAprovacionPoa();
+      this.indiacdorPorProyecto();
+      
     });
   }
 
@@ -130,7 +134,7 @@ export class ReporteEspecificoPoaComponent implements OnInit {
     this.aproPoaService.getAprobacionPoa().subscribe(data => {
       this.aprovacionPoa = data;
       console.log(this.aprovacionPoa, "lista aprobación poa");
-      this.buscarProyectosRelacionados();
+      this.buscarPoasRelacionados();
     });
   }
 
@@ -151,9 +155,7 @@ export class ReporteEspecificoPoaComponent implements OnInit {
     });
   }
 
-  promedioProyect(){
-    
-  }
+
 
 indiacdorPorProyecto() {
   const idsProyectos: number[] = this.proyect.map((proyecto: any) => proyecto.id_proyecto);
@@ -163,14 +165,14 @@ indiacdorPorProyecto() {
       this.indiPro = data;
       
       // Obtener las metas asociadas a los indicadores
-      const metasDeIndicadores :any = this.indiPro.map((indicador: any) => indicador.metapdot);
+      var metasPDOT:any = this.indiPro.map((indicador: any) => indicador.metapdot);
      
       
       console.log('Indicadores por proyectos:', this.indiPro);
-      console.log('Metas asociadas a los indicadores:', metasDeIndicadores);
+      console.log('Metas asociadas a los indicadores:', metasPDOT);
       
 
-     // this.createChart();
+     
       
     }, error => {
       console.error('Error al obtener los indicadores por proyectos:', error);
@@ -179,7 +181,7 @@ indiacdorPorProyecto() {
 
   
 
-  buscarProyectosRelacionados(): void {
+  buscarPoasRelacionados(): void {
     // Filtra la lista de aprobaciónPoa para encontrar los elementos que coinciden con el ID del POA
     const poaId = parseInt(this.id_proyec); // Convierte el ID de POA a número si es necesario
     const poasRelacionados:any = this.aprovacionPoa
@@ -191,12 +193,15 @@ indiacdorPorProyecto() {
       this.poaService.buscarPoasPorIds(poasRelacionados).subscribe(
         (data: any[]) => {
           this.result = data;
-          this.dataSource.data = this.result;
+          //this.dataSource.data = this.result;
 
-          this.createChart()
+          
           console.log('Poas relacionados:', this.result);
           this.indiacdorPorProyecto();
-          this.buscar();
+          this.promedioPoa(poasRelacionados);
+         // this.buscar();
+          this.createChart();
+          
 ;
         },
         error => {
@@ -206,6 +211,25 @@ indiacdorPorProyecto() {
     } else {
       console.error('No se encontraron elementos de AprobaciónPoa para el ID de POA:', poaId);
     }
+  }
+  promedioPoa(poasRelacionados: any[]): void { // Añade el parámetro poasRelacionados
+    this.poaService.listarPoasPromedio().subscribe(
+      (data) => {
+        this.poa = data;
+  
+        // Filtra los elementos que tienen un ID de POA presente en la lista poasRelacionados
+        this.poa = this.poa.filter((item) => poasRelacionados.includes(item.id_poa));
+       this.dataSource.data = this.poa;
+       this.prome=this.poa;
+       
+        this.createChart();
+  
+        console.log('Datos de la vista:', this.prome);
+      },
+      (error) => {
+        console.error('Error al obtener datos:', error);
+      }
+    );
   }
 
     
@@ -257,11 +281,15 @@ console.log(`La cantidad de indicadores en la meta con ID ${metaId} es: ${cantid
   
   
     // }
+
+    
+ 
   
     //Grafica de barras
     createChart() {
-      const labels = this.result.map((apro: any) => apro.id_poa);
-      const promedioProyecto = this.result.map((apro: any) => apro.meta_alcanzar);
+      const labels = this.prome.map((apro: any) => apro.id_poa);
+      const promedioProyecto = this.prome.map((apro: any) => parseFloat(apro.valorTotal.toFixed(2)));
+
     
       const filteredLabels = labels.filter((label: any, index: any) => labels.indexOf(label) === index).slice(0, 15);
     
@@ -330,18 +358,18 @@ console.log(`La cantidad de indicadores en la meta con ID ${metaId} es: ${cantid
    
     
   
-    buscar() {
-      // Filtra los componentes basados en el filtro
-      this.filteredComponentes = this.result.filter((poa:any) =>
-       poa.id_poa.toLowerCase().includes(this.filterPost.toLowerCase())
-      );
+    // buscar() {
+    //   // Filtra los componentes basados en el filtro
+    //   this.filteredComponentes = this.result.filter((poa:any) =>
+    //    poa.id_poa.toLowerCase().includes(this.filterPost.toLowerCase())
+    //   );
     
-      // Actualiza los datos del dataSource con los resultados filtrados
-      this.dataSource.data = this.filteredComponentes;
+    //   // Actualiza los datos del dataSource con los resultados filtrados
+    //   this.dataSource.data = this.filteredComponentes;
     
-      // Verifica si se encontraron resultados
-      this.resultadosEncontrados = this.filteredComponentes.length > 0;
-    }
+    //   // Verifica si se encontraron resultados
+    //   this.resultadosEncontrados = this.filteredComponentes.length > 0;
+    // }
     regresarAProyectos(){
   
         this.router.navigate(['sup/reportePoa']);

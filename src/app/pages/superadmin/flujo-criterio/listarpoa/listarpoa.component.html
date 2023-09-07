@@ -25,15 +25,31 @@
           style="margin-bottom: 5%"
         >
           <table mat-table [dataSource]="dataSource">
-           
+            <ng-container matColumnDef="id_poa">
+              <th mat-header-cell *matHeaderCellDef>ID</th>
+              <td mat-cell *matCellDef="let elemento">
+                {{ elemento.id_poa }}
+              </td>
+            </ng-container>
             <ng-container matColumnDef="nombre">
               <th mat-header-cell *matHeaderCellDef>NOMBRE PROYECTO</th>
               <td mat-cell *matCellDef="let elemento">
                 {{ elemento.nombre }}
               </td>
             </ng-container>
-                        
-            <ng-container matColumnDef="localizacion"> 
+            <ng-container matColumnDef="fecha_inicio">
+              <th mat-header-cell *matHeaderCellDef>FECHA INICIO</th>
+              <td mat-cell *matCellDef="let elemento">
+                {{ elemento.fecha_inicio }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="fecha_fin">
+              <th mat-header-cell *matHeaderCellDef>FECHA FIN</th>
+              <td mat-cell *matCellDef="let elemento">
+                {{ elemento.fecha_fin }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="localizacion">
               <th mat-header-cell *matHeaderCellDef>LOCALIZACION</th>
               <td mat-cell *matCellDef="let elemento">
                 {{ elemento.localizacion }}
@@ -52,18 +68,17 @@
               </td>
             </ng-container>
             
-            
             <ng-container matColumnDef="estado">
               <th mat-header-cell *matHeaderCellDef>ESTADO</th>
-              <td mat-cell *matCellDef="let elemento" [ngStyle]="getColor(elemento.estado)">
+              <td mat-cell *matCellDef="let elemento">
                 {{ elemento.estado }}
               </td>
             </ng-container>
-            
+
             <ng-container matColumnDef="observacion">
               <th mat-header-cell *matHeaderCellDef>OBSERVACION</th>
               <td mat-cell *matCellDef="let elemento">
-                {{ elemento.observacion }} 
+                {{ elemento.observacion }}
               </td>
             </ng-container>
             <tr mat-header-row *matHeaderRowDef="columnasUsuario"></tr>

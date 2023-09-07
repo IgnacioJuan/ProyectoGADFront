@@ -1,14 +1,7 @@
 <body>
   <div class="container bg-light border border-start-0 rounded-4">
-    <blockquote
-      class="blockquote text-dark"
-      style="
-        margin-top: 5%;
-        background-color: #ffffff;
-        border-left: 10px solid green;
-      "
-    >
-      <h1 class="header-title" style="text-transform: uppercase">
+    <blockquote class="blockquote text-dark" style="margin-top: 5%">
+      <h1 style="text-transform: uppercase">
         <strong
           ><a style="cursor: pointer" (click)="verModeloPoas()"
             >LISTADO MODELOS
@@ -36,7 +29,6 @@
           class="btn btn-primary"
           data-bs-toggle="modal"
           data-bs-target="#materiaModal"
-          style="background-color: green"
         >
           CREAR NUEVO PROYECTO
         </button>
@@ -85,7 +77,6 @@
                   class="btn btn-primary"
                   role="button"
                   (click)="verDetalles(elemento)"
-                  style="background-color: green"
                 >
                   <div class="d-flex">
                     <i class="fa fa-folder-open"></i>
@@ -103,14 +94,14 @@
                   (click)="eliminar(element)"
                   style="margin-right: 5%"
                 >
-                  <i class="fas fa-trash"></i>
+                  <i class="fas fa-user-times"></i>
                 </button>
                 <button
                   type="button"
                   class="btn btn-primary"
                   data-bs-toggle="modal"
                   data-bs-target="#materiaModal"
-                  style="margin-right: 5%; background-color: green"
+                  style="margin-right: 5%"
                   (click)="editDatos(element)"
                 >
                   <i class="fas fa-edit"></i>
@@ -190,6 +181,7 @@
                           </div>
                         </div>
 
+                        
                         <label for="objetivo">Objetivo:</label>
                         <input
                           class="form-control"
@@ -241,64 +233,32 @@
                             Debe ingresar una meta
                           </div>
                         </div>
-                        <div class="d-flex">
-                          <div class="form-group" style="width: 50%">
-                            <label for="porcentaje_alcance">Porcentaje:</label>
-                            <input
-                              class="form-control"
-                              formControlName="porcentaje_alcance"
-                              type="number"
-                              id="porcentaje_alcance"
-                              name="porcentaje_alcance"
-                              style="margin-bottom: 10px"
-                            />
-                            <div
-                              class="alert alert-danger"
-                              *ngIf="
-                                frmProyecto.controls['porcentaje_alcance']
-                                  .invalid &&
-                                frmProyecto.controls['porcentaje_alcance']
-                                  .touched
-                              "
-                            >
-                              <div
-                                *ngIf="
-                                  frmProyecto.controls[
-                                    'porcentaje_alcance'
-                                  ].hasError('required')
-                                "
-                              >
-                                Debe ingresar un porcentaje
-                              </div>
-                            </div>
-                          </div>
-                          <div class="form-group" style="width: 50%">
-                            <label for="area">Area:</label>
-                            <input
-                              class="form-control"
-                              formControlName="area"
-                              type="text"
-                              id="area"
-                              name="area"
-                              style="margin-bottom: 10px"
-                            />
-                            <div
-                              class="alert alert-danger"
-                              *ngIf="
-                                frmProyecto.controls['area'].invalid &&
-                                frmProyecto.controls['area'].touched
-                              "
-                            >
-                              <div
-                                *ngIf="
-                                  frmProyecto.controls['area'].hasError(
-                                    'required'
-                                  )
-                                "
-                              >
-                                Debe ingresar un area
-                              </div>
-                            </div>
+
+                        <label for="porcentaje_alcance">Porcentaje:</label>
+                        <input
+                          class="form-control"
+                          formControlName="porcentaje_alcance"
+                          type="number"
+                          id="porcentaje_alcance"
+                          name="porcentaje_alcance"
+                          style="margin-bottom: 10px"
+                        />
+                        <div
+                          class="alert alert-danger"
+                          *ngIf="
+                            frmProyecto.controls['porcentaje_alcance']
+                              .invalid &&
+                            frmProyecto.controls['porcentaje_alcance'].touched
+                          "
+                        >
+                          <div
+                            *ngIf="
+                              frmProyecto.controls[
+                                'porcentaje_alcance'
+                              ].hasError('required')
+                            "
+                          >
+                            Debe ingresar un porcentaje
                           </div>
                         </div>
                         <div class="d-flex">
@@ -346,10 +306,14 @@
                               type="text"
                               class="form-control"
                               formControlName="pndControl"
+
                               placeholder="Buscar PND..."
                               (input)="filterPNDOptions($event)"
                             />
-                            <select class="form-control" formControlName="pnd">
+                            <select
+                              class="form-control"
+                              formControlName="pnd"
+                            >
                               <option value="" disabled selected>
                                 Seleccione una opción
                               </option>
@@ -385,9 +349,13 @@
                               class="form-control"
                               placeholder="Buscar ODS..."
                               formControlName="odsControl"
+
                               (input)="filterODSOptions($event)"
                             />
-                            <select class="form-control" formControlName="ods">
+                            <select
+                              class="form-control"
+                              formControlName="ods"
+                            >
                               <option value="" disabled selected>
                                 Seleccione una opción
                               </option>
@@ -423,6 +391,7 @@
                               class="form-control"
                               placeholder="Buscar Programa..."
                               formControlName="programaControl"
+
                               (input)="filterProgramaOptions($event)"
                             />
                             <select
@@ -467,11 +436,13 @@
                               placeholder="Buscar Indicador..."
                               (input)="filterIndicadorOptions($event)"
                               formControlName="indicadorControl"
+
                             />
                             <select
                               class="form-control"
                               formControlName="indicador"
                               (change)="sendCodigo($event)"
+
                             >
                               <option value="" disabled selected>
                                 Seleccione una opción
@@ -480,7 +451,7 @@
                                 *ngFor="let option of filteredindicadorOptions"
                                 [value]="option.id_indicador"
                               >
-                                {{ option.codigo }} - {{ option.nombre }}
+                               {{option.codigo}} - {{ option.nombre }}
                               </option>
                             </select>
                           </div>
@@ -510,6 +481,7 @@
                               class="form-control"
                               placeholder="Buscar Compentencia..."
                               formControlName="CompenteciaControl"
+
                               (input)="filterCompenteciaOptions($event)"
                             />
                             <select
@@ -520,9 +492,7 @@
                                 Seleccione una opción
                               </option>
                               <option
-                                *ngFor="
-                                  let option of filteredcompetenciaOptions
-                                "
+                                *ngFor="let option of filteredcompetenciaOptions"
                                 [value]="option.id_competencia"
                               >
                                 {{ option.nombre }}
@@ -563,7 +533,6 @@
                   <button
                     type="submit"
                     class="btn btn-primary"
-                    style="background-color: green"
                     form="formulario"
                     *ngIf="!subcrite.id_proyecto"
                     data-dismiss="modal"
@@ -574,7 +543,6 @@
                   </button>
                   <button
                     class="btn btn-primary"
-                    style="background-color: green"
                     *ngIf="subcrite.id_proyecto"
                     data-dismiss="modal"
                     data-bs-dismiss="modal"
