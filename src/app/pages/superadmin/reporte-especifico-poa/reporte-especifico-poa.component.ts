@@ -199,7 +199,7 @@ indiacdorPorProyecto() {
           console.log('Poas relacionados:', this.result);
           this.indiacdorPorProyecto();
           this.promedioPoa(poasRelacionados);
-          this.buscar();
+         // this.buscar();
           this.createChart();
           
 ;
@@ -358,18 +358,18 @@ console.log(`La cantidad de indicadores en la meta con ID ${metaId} es: ${cantid
    
     
   
-    buscar() {
-      // Filtra los componentes basados en el filtro
-      this.filteredComponentes = this.result.filter((poa:any) =>
-       poa.id_poa.toLowerCase().includes(this.filterPost.toLowerCase())
-      );
+    // buscar() {
+    //   // Filtra los componentes basados en el filtro
+    //   this.filteredComponentes = this.result.filter((poa:any) =>
+    //    poa.id_poa.toLowerCase().includes(this.filterPost.toLowerCase())
+    //   );
     
-      // Actualiza los datos del dataSource con los resultados filtrados
-      this.dataSource.data = this.filteredComponentes;
+    //   // Actualiza los datos del dataSource con los resultados filtrados
+    //   this.dataSource.data = this.filteredComponentes;
     
-      // Verifica si se encontraron resultados
-      this.resultadosEncontrados = this.filteredComponentes.length > 0;
-    }
+    //   // Verifica si se encontraron resultados
+    //   this.resultadosEncontrados = this.filteredComponentes.length > 0;
+    // }
     regresarAProyectos(){
   
         this.router.navigate(['sup/reportePoa']);
