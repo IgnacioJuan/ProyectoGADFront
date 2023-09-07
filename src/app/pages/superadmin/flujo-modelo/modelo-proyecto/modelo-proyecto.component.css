@@ -17,3 +17,9 @@ body {
   margin-left: 2%;
   margin-right: 2%;
 }
+.header-title {
+  font-size: 30px;
+  font-weight: bold;
+  color:green; /* You can choose your preferred color */
+  text-align: left;
+}

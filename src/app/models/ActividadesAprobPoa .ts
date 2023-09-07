@@ -1,9 +1,9 @@
+import { Poa } from "./Poa";
+import { Usuario2 } from "./Usuario2";
 
-// modeleo de datos para la tabla de actividades por usuarios
-export class DetalleActividadDTO {
-
+export class ActividadesPoaDTO {
     id_actividad!: number;
-    nombre_actividad!: string;
+    nombre!: string;
     descripcion!: string;
     presupuesto_referencial!: number;
     codificado!: number;
@@ -11,6 +11,5 @@ export class DetalleActividadDTO {
     recursos_propios!: number;
     estado!: string
     visible!: boolean;
-    nombre_responsable!: string;
-
+    responsable!: string;
 }

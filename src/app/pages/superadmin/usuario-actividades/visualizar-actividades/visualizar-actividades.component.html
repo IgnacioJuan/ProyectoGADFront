@@ -1,11 +1,14 @@
 <body>
     <div class="container bg-light border border-start-0 rounded-4">
-        <blockquote class="blockquote text-dark" style="margin-top: 5%">
+        <blockquote class="blockquote text-dark"
+            style="margin-top: 5%; background-color: #ffffff; border-left: 10px solid green;">
             <h1 style="text-transform: uppercase">
-                <strong><a style="cursor: pointer" (click)="verActividades()">LISTADO ACTIVIDADES
+                <strong><a style="cursor: pointer; color: rgba(0, 128, 0, 0.822);"
+                        (click)="verActividades()">ACTIVIDADES ASIGNADAS >
                     </a>
-                    >
-                    <a>{{ usuarioAct.nombre_responsable }} </a></strong>
+
+                    <a style="cursor: pointer; color: green; ">{{ nombre_responsable }} </a>
+                </strong>
             </h1>
         </blockquote>
         <div class="card">
