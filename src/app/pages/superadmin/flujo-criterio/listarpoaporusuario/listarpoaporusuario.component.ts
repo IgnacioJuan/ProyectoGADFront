@@ -110,10 +110,10 @@ export class ListarporUsuarioComponent implements OnInit {
         backgroundColor = 'green';
         break;
       case 'RECHAZADO':
-        backgroundColor = 'yellow';
+        backgroundColor = 'red';
         break;
       case 'PENDIENTE':
-        backgroundColor = 'red';
+        backgroundColor = 'yellow';
         break;
       default:
         break;
