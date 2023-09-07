@@ -63,8 +63,8 @@ export class ListPoaActividadComponent  implements OnInit {
  columnasUsuario: string[] = ['id_poa', 'barrio', 'cobertura','fecha_inicio','fecha_fin','usuario', 'evidencias'];
 
  listar(): void {
-  this.poaService.getPoas().subscribe(
-    (data: any[]) => {
+  this.poaService.PoasConActividadesPendientes().subscribe(
+    (data: any) => {
       this.listaPoas = data;
       console.log("Dataa")
       console.log(this.listaPoas)
