@@ -1,7 +1,7 @@
 import { Poa } from "./Poa";
 import { Usuario2 } from "./Usuario2";
 
-export class ActividadesPoa {
+export class ActividadesPoaDTO {
     id_actividad!: number;
     nombre!: string;
     descripcion!: string;
@@ -11,13 +11,5 @@ export class ActividadesPoa {
     recursos_propios!: number;
     estado!: string
     visible!: boolean;
-
-    //OTROS
-    //responsable!: string;
-    usuario!: Usuario2;
-    poa!: Poa;
-    totalpresupuestoEterno!: number;
-    totalreformaSuplemento!: number;
-    totalreformaTIncremento!: number;
-    totalreformaTDecremento!: number;
+    responsable!: string;
 }

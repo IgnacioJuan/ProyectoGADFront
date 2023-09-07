@@ -9,6 +9,7 @@ import { ActivAprobadaProjection } from '../interface/ActivAprobadaProjection';
 import { Actividad_arch } from './actividad_arch';
 import { DetalleActividadDTO } from '../models/DetalleActividadDTO';
 import { UsuarioActividadDTO } from '../models/UsuarioActividadDTO';
+import { ActividadesPoaDTO } from '../models/ActividadesAprobPoa ';
 
 @Injectable({
   providedIn: 'root'
@@ -91,13 +92,19 @@ export class ActividadService {
   obtenerUsuariosConActividades(): Observable<UsuarioActividadDTO[]> {
     return this.http.get<UsuarioActividadDTO[]>(`${baserUrl}/api/actividades/usuactividades`);
   }
+  
 
   // servicio para mostrar los datos de las actividades de un usuario
   obtenerDetalleActividades(idUsuario: number): Observable<DetalleActividadDTO[]> {
     return this.http.get<DetalleActividadDTO[]>(`${baserUrl}/api/actividades/detactividades/${idUsuario}`);
-  }
+}
 
-  public listaractireponsa(idres: number): Observable<Actividad_arch[]> {
-    return this.http.get<Actividad_arch[]>(`${baserUrl}/api/actividades/actiresponsable/${idres}`);
-  }
+ // servicio para obtener solo las actividades del poa
+ obtenerDetalleActividadesAprob(id_poa: number): Observable<ActividadesPoaDTO[]> {
+  return this.http.get<ActividadesPoaDTO[]>(`${baserUrl}/api/actividades/detactividadesaprobpoa/${id_poa}`);
+}
+
+ public listaractireponsa(idres: number): Observable<Actividad_arch[]> {
+  return this.http.get<Actividad_arch[]>(`${baserUrl}/api/actividades/actiresponsable/${idres}`);
+}
 }

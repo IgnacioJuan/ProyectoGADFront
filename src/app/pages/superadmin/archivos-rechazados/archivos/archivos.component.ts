@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { ActividadArchivosRechazados } from 'src/app/models/Actividad-ArchiRechazados';
 import { ArchivosRechazados } from 'src/app/models/ArchivosRechazados';
 import { ArchivosrechazadosService } from 'src/app/services/archivosrechazados.service';
+import { DatePipe } from '@angular/common';
 
 
 @Component({
@@ -42,7 +43,7 @@ export class ArchivosRechazadosComponent implements OnInit {
   filterPost = '';
   dataSource = new MatTableDataSource<ArchivosRechazados>();
 
-  columnasUsuario: string[] = ['id', 'nombre', 'descripcion', 'fecha', 'acciones'];
+  columnasUsuario: string[] = ['id', 'nombre', 'descripcion', 'enlace', 'fecha'];
 
   @ViewChild('datosModalRef') datosModalRef: any;
   @ViewChild(MatPaginator, { static: false }) paginator?: MatPaginator;
@@ -80,6 +81,36 @@ export class ArchivosRechazadosComponent implements OnInit {
     this.router.navigate(['/sup/archivos-rechazados/Actividades_Evi_Rechazados']);
   }
 
+  abrirEnlaceArchivo() {
+    console.log(this.EnlaceArchivo)
+    const enlace = '0'; // Reemplaza con tu enlace deseado
+    window.open(enlace, '_blank');
+  }
+
+  //listar enlace archivo
+  EnlaceArchivo(idArchivo: number): void {
+    this.archivosrechazadosservice.getArchivoEnlace(idArchivo).subscribe(
+      (data: any) => {
+        if (data && data.enlace) {
+          const enlace = data.enlace;
+          console.log('Enlace:', enlace);
+          window.open(enlace, '_blank');
+        } else {
+          console.error('No se encontró un enlace válido con el ID especificado.');
+        }
+      },
+      (error: any) => {
+        console.error('Error al obtener el enlace', error);
+      }
+    );
+  }
+
+
+
+  abrirEnlaceArchivo2() {
+    const enlace = 'https://feda.org/feda2k16/wp-content/uploads/Leyes2018.pdf'; // Reemplaza con tu enlace deseado
+    window.open(enlace, '_blank');
+  }
 
   //listar archivos por id de actividad
   listararchi(idActividad: number): void {
@@ -93,6 +124,7 @@ export class ArchivosRechazadosComponent implements OnInit {
       }
     );
   }
+
   aplicarFiltro() {
     if (this.filterPost) {
       const lowerCaseFilter = this.filterPost.toLowerCase();
@@ -103,8 +135,5 @@ export class ArchivosRechazadosComponent implements OnInit {
       this.dataSource.data = this.archivos;;
     }
   }
-
-
-
 
 }

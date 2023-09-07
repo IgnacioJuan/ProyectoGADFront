@@ -11,7 +11,7 @@ export class Archivo {
   estado:string="";
   fecha:Date | undefined;
   valor :number=0;
-
+  
  actividad:Actividad_arch|null=null;
 
   visible: string = "";
