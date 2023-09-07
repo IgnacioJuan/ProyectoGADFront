@@ -14,3 +14,6 @@ interface persona{
   primer_apellido:string;
   correo:string;
 }
+
+export type UsuarioAprobPOA = Pick<usuario, 'id'> & Pick<persona, 'id_persona' | 'primer_nombre' | 'primer_apellido'>;
+

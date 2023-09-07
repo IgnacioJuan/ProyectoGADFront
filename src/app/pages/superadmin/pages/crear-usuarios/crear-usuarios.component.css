@@ -132,10 +132,34 @@ body {
 
   color: #224;
   background:
-    url(https://source.unsplash.com/E8Ufcyxz514/2400x1823) center / cover no-repeat fixed;
-
+    url(https://images.unsplash.com/photo-1617957796155-72d8717ac882?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Zm9uZG9zJTIwdmVyZGVzfGVufDB8fDB8fHww&w=1000&q=80) center / cover no-repeat fixed;
 }
 
 .custom-color {
-  color: #288637;
+  color: #000;
+}
+
+/*Css para el divider del editor */
+
+.divider-with-text {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.divider-with-text span {
+  background-color: #ffffff5e;
+  /* El color de fondo del contenedor, para que el texto se superponga al divider */
+  padding: 0 10px;
+  /* Espacio a los lados del texto */
+  z-index: 1;
+  /* Asegurarse de que el texto esté por encima del divider */
+  color: #afaeae;
+}
+
+mat-divider {
+  flex-grow: 1;
+  /* Asegurarse de que el divider ocupe todo el espacio restante a ambos lados del texto */
+  margin: 0 10px;
+  /* Espacio a los lados del divider */
 }

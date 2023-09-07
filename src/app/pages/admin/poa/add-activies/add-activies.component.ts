@@ -9,8 +9,12 @@ import { RegistrarPoaComponent } from '../registrar-poa/registrar-poa.component'
 })
 export class AddActiviesComponent implements OnInit {
 
-  constructor(public dialogRef: MatDialogRef<RegistrarPoaComponent>) { }
+  constructor(public dialogRef: MatDialogRef<RegistrarPoaComponent>) {
+
+  }
 
   ngOnInit(): void {
   }
+
+
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { map, Observable, catchError, of } from 'rxjs';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import baserUrl from './helper';
 import { PoaActividadProjection } from '../interface/PoaActividadProjection';
 import { Poa } from '../models/Poa';
@@ -8,6 +8,7 @@ import { PoasAdminEstadoProjection } from '../interface/PoasAdminEstado';
 
 import { PoaNoAprobadoProjection } from '../interface/PoaNoAprobadoProjection';
 import { PoaporUsuarioProjection } from '../interface/PoaporUsuarioProjection';
+import { PoasConActividadesPendientesProjection } from '../interface/PoasConActividadesPendientesProjection';
 
 
 @Injectable({
@@ -21,11 +22,35 @@ export class PoaService {
 
     return this.http.get<PoaActividadProjection>(`${baserUrl}/api/poa/buscar/${id}`);
   }
+  
   public listarPoa(): Observable<PoaActividadProjection[]> {
     return this.http
       .get(`${baserUrl}/api/poa/listar`)
       .pipe(map((response) => response as PoaActividadProjection[]));
   }
+
+  buscarPoasPorIds(ids: number[]): Observable<any> {
+    // Convierte la lista de IDs en una cadena separada por comas
+    const idsString = ids.join(',');
+  
+    // Configura los parámetros de la solicitud
+    const params = new HttpParams().set('ids', idsString);
+  
+    // Realiza la solicitud HTTP GET con los parámetros
+    return this.http.get(`${baserUrl}/api/poa/buscarPorIds`, { params });
+  }
+  buscarPoasPromedio(ids: number[]): Observable<any> {
+    // Convierte la lista de IDs en una cadena separada por comas
+    const idsString = ids.join(',');
+  
+    // Configura los parámetros de la solicitud
+    const params = new HttpParams().set('ids', idsString);
+  
+    // Realiza la solicitud HTTP GET con los parámetros
+    return this.http.get(`${baserUrl}/api/poa/listar-promedio`, { params });
+  }
+  
+  
   getPoas(): Observable<PoaActividadProjection[]> {
     return this.http.get<PoaActividadProjection[]>(`${baserUrl}/api/poa/listar`);
   }
@@ -66,4 +91,17 @@ export class PoaService {
 
   }
 
-}
+
+  
+  poalist(): Observable<Poa> {
+    return this.http.get<any>(`${baserUrl}/api/poa/listar`)
+  }
+
+  listarPoasPromedio(): Observable<any[]> {
+    return this.http.get<any[]>(`${baserUrl}/api/poa/listar-promedio`);
+  }
+  PoasConActividadesPendientes(): Observable<PoasConActividadesPendientesProjection> {
+    return this.http.get<any>(`${baserUrl}/api/poa/PoasConActividadesP`)
+  }
+
+ }

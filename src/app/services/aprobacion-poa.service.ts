@@ -2,7 +2,9 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AprobacionPoa } from '../models/AprobacionPoa';
+import { Proyecto } from '../models/Proyecto';
 import baserUrl from './helper';
+import { AprovacionPoa } from '../models/aprovacion-poa';
 
 @Injectable({
   providedIn: 'root'
@@ -33,4 +35,9 @@ export class AprobacionPoaService {
   }
 
  
+
+  getAprobacionPoa(): Observable<AprovacionPoa[]> {
+    return this.http.get<AprovacionPoa[]>(`${baserUrl}/api/aprobacionpoa/listar`);
+  }
+
 }

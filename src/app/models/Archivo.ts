@@ -8,10 +8,10 @@ export class Archivo {
   enlace: string = "";
   nombre: string = "";
   descripcion: string = "";
+  estado:string="";
   fecha:Date | undefined;
   valor :number=0;
-  estado: string = "";
-
+  
  actividad:Actividad_arch|null=null;
 
   visible: string = "";

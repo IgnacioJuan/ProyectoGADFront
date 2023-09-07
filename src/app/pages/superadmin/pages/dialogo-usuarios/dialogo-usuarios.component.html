@@ -1,5 +1,6 @@
-<blockquote class="blockquote text-dark" style="margin-top: 1%">
-    <h1><strong>Nuevo Usuario</strong></h1>
+<blockquote class="blockquote text-dark"
+    style="margin-top: 5%; background-color: #ffffff; border-left: 10px solid green;">
+    <h1 style="cursor: pointer; color: green; "><strong>Nuevo Usuario</strong></h1>
 </blockquote>
 <mat-dialog-content>
     <mat-stepper [linear]="isLinear" #stepper>
@@ -12,6 +13,14 @@
                         <input matInput placeholder="" formControlName="cedula" />
                         <mat-error *ngIf="firstFormGroup.get('cedula')?.hasError('cedulaInvalida')">
                             La cédula es inválida.
+                        </mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-label>Cargo</mat-label>
+                        <input matInput placeholder="" formControlName="cargo" />
+                        <mat-error *ngIf="firstFormGroup.get('cargo')?.hasError('cargoInvalido')">
+                            El cargo es inválido.
                         </mat-error>
                     </mat-form-field>
 
@@ -100,17 +109,17 @@
                             <mat-option [value]="1">ADMIN</mat-option>
                             <mat-option [value]="2">SUPERADMIN</mat-option>
                             <mat-option [value]="3">RESPONSABLE</mat-option>
-                            <mat-option [value]="4">AUTORIDAD</mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>
                 <div class="button-container">
-                    <button mat-raised-button class="rounded-button"
-                        (click)="stepper.previous()"><mat-icon class="custom-colorRegresar">arrow_back</mat-icon> Regresar</button>
-                    <button mat-raised-button class="rounded-button" (click)="resetForm()"><mat-icon class="custom-colorBorrar">delete</mat-icon>
+                    <button mat-raised-button class="rounded-button" (click)="stepper.previous()"><mat-icon
+                            class="custom-colorRegresar">arrow_back</mat-icon> Regresar</button>
+                    <button mat-raised-button class="rounded-button" (click)="resetForm2()"><mat-icon
+                            class="custom-colorBorrar">delete</mat-icon>
                         Borrar</button>
-                    <button mat-raised-button class="rounded-button"
-                        (click)="guardarUsuario()"><mat-icon class="custom-colorGuardar">save</mat-icon> Guardar</button>
+                    <button mat-raised-button class="rounded-button" (click)="guardarUsuario()"><mat-icon
+                            class="custom-colorGuardar">save</mat-icon> Guardar</button>
                     <button mat-raised-button class="rounded-button custom-red-button" (click)="cerrarDialogo()">
                         <mat-icon>cancel</mat-icon> Cancelar
                     </button>
