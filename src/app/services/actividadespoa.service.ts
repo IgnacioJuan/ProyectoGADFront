@@ -27,6 +27,10 @@ export class ActividadespoaService {
   }
 
   getActividadesPoa(poaId: number): Observable<ActividadesPoa[]> {
+    return this.http.get<ActividadesPoa[]>(`${baserUrl}/api/actividades/listarActividadesPoa/${poaId}`);
+  }
+
+  getActividadesPoa2(poaId: number): Observable<ActividadesPoa[]> {
     return this.http.get<ActividadesPoa[]>(`${baserUrl}/api/actividades/listarActividadesConTotalPresupuestos/${poaId}`);
   }
 

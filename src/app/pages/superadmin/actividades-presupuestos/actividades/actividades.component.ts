@@ -195,7 +195,7 @@ export class ListaActividadesComponent implements OnInit {
 
   listar(poaId: number): void {
     this.dataSource.data = [];
-    this.actividadservice.getActividadesPoa(poaId).subscribe(
+    this.actividadservice.getActividadesPoa2(poaId).subscribe(
       (data: any[]) => {
         this.actividades = data;
         this.dataSource.data = this.actividades;
