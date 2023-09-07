@@ -38,6 +38,17 @@ export class PoaService {
     // Realiza la solicitud HTTP GET con los parámetros
     return this.http.get(`${baserUrl}/api/poa/buscarPorIds`, { params });
   }
+  buscarPoasPromedio(ids: number[]): Observable<any> {
+    // Convierte la lista de IDs en una cadena separada por comas
+    const idsString = ids.join(',');
+  
+    // Configura los parámetros de la solicitud
+    const params = new HttpParams().set('ids', idsString);
+  
+    // Realiza la solicitud HTTP GET con los parámetros
+    return this.http.get(`${baserUrl}/api/poa/listar-promedio`, { params });
+  }
+  
   
   getPoas(): Observable<PoaActividadProjection[]> {
     return this.http.get<PoaActividadProjection[]>(`${baserUrl}/api/poa/listar`);
@@ -83,6 +94,10 @@ export class PoaService {
   
   poalist(): Observable<Poa> {
     return this.http.get<any>(`${baserUrl}/api/poa/listar`)
+  }
+
+  listarPoasPromedio(): Observable<any[]> {
+    return this.http.get<any[]>(`${baserUrl}/api/poa/listar-promedio`);
   }
 
  }
