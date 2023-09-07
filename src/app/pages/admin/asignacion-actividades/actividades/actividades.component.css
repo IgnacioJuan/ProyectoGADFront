@@ -26,3 +26,31 @@
   .titulo {
     color: green !important;
   }
+  .header-title {
+    font-size: 30px;
+    font-weight: bold;
+    color:rgb(9, 70, 9); /* You can choose your preferred color */
+    text-align: left;
+  }
+  .align-right-dollar {
+    text-align: right; /* Alinear a la derecha */
+  }
+  
+  .align-right-dollar::before {
+    content: "$"; /* Agregar el símbolo de dólar antes del contenido */
+    margin-right: 5px; /* Espacio entre el símbolo de dólar y el número */
+  }
+
+  #asignarResponsableModal .modal-dialog {
+    max-width: 40%; /* Ajusta el porcentaje según tus necesidades */
+    width: auto; /* Para permitir un ancho máximo */
+  }
+  .acciones-header {
+    min-width: 100px; /* Ajusta el ancho según tus necesidades */
+  }
+  
+  /* Estilo para las celdas de datos */
+  .acciones-cell {
+    min-width: 100px; /* Ajusta el ancho según tus necesidades */
+    /* Añade cualquier otro estilo adicional si es necesario */
+  }

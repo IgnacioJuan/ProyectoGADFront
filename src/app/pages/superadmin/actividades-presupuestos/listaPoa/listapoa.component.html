@@ -1,7 +1,7 @@
 <body>
   <div class="container bg-light border border-start-0 rounded-4">
-    <blockquote style="margin-top: 5%">
-      <h1 class="titulo" style="text-transform: uppercase"><strong> LISTADO POAS</strong></h1>
+    <blockquote style="margin-top: 5%; background-color: #ffffff; border-left: 10px solid green;">
+      <h1 class="header-title" style="text-transform: uppercase"><strong> LISTADO POAS</strong></h1>
     </blockquote>
     <div></div>
 
@@ -33,13 +33,13 @@
             <ng-container matColumnDef="fecha_inicio">
               <th mat-header-cell *matHeaderCellDef>FECHA INICIO</th>
               <td mat-cell *matCellDef="let elemento">
-                {{ elemento.fecha_inicio }}
+                {{ elemento.fecha_inicio | date:'yyyy-MM-dd'}}
               </td>
             </ng-container>
             <ng-container matColumnDef="fecha_fin">
               <th mat-header-cell *matHeaderCellDef>FECHA FIN</th>
               <td mat-cell *matCellDef="let elemento">
-                {{ elemento.fecha_fin }}
+                {{ elemento.fecha_fin | date:'yyyy-MM-dd'}}
               </td>
             </ng-container>
             <ng-container matColumnDef="localizacion">
@@ -68,7 +68,7 @@
             </ng-container>
               <ng-container matColumnDef="linea_base">
                 <th mat-header-cell *matHeaderCellDef>LINEA BASE</th>
-                <td mat-cell *matCellDef="let elemento">
+                <td mat-cell *matCellDef="let elemento" class="align-right-dollar">
                   {{ elemento.linea_base }}
                 </td>
             </ng-container>
