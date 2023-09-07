@@ -1,6 +1,6 @@
 <body>
   <div class="container bg-light border border-start-0 rounded-4">
-    <blockquote style="margin-top: 5%">
+    <blockquote style="margin-top: 5%; background-color: #ffffff; border-left: 10px solid green;">
 
       <div class="header-container">
         <h1 class="header-title">LISTA DE ARCHIVOS</h1>
@@ -14,7 +14,7 @@
         </div>
 
         <br />
-        <button type="button" class="btn btn-primary" style="background-color: green" data-bs-toggle="modal" data-bs-target="#materiaModal">
+        <button type="button" class="btn btn-primary"  [disabled]="botonDeshabilitado" style="background-color: green" data-bs-toggle="modal" data-bs-target="#materiaModal">
           Subir nuevo archivo
         </button>
         <br />
@@ -61,12 +61,12 @@
               <ng-container matColumnDef="Accion">
                 <mat-header-cell *matHeaderCellDef>Accion</mat-header-cell>
                 <mat-cell *matCellDef="let file">
-                  <button type="button" class="btn btn-primary" style="margin-right: 5%;background-color: green"
+                  <button type="button"  [disabled]="botonDeshabilitado" class="btn btn-primary" style="margin-right: 5%;background-color: green"
                     data-bs-toggle="modal" data-bs-target="#materiaModal" (click)="editDatos(file)"
                     *ngIf="file.estado !== 'APROBADO'">
                     <i class="fas fa-edit"></i>
                   </button>
-                  <button class="btn btn-danger" style="background-color: yellowgreen; margin-right: 5%" role="button"
+                  <button class="btn btn-danger" [disabled]="botonDeshabilitado" style="background-color: yellowgreen; margin-right: 5%" role="button"
                     (click)="elim(file.nombre, file)" *ngIf="file.estado !== 'APROBADO'">
                     <i class="fa fa-trash"></i>
                   </button>
@@ -105,8 +105,7 @@
                       <div *ngIf="formulario.controls['valor'].invalid && formulario.controls['valor'].touched" class="invalid-feedback">
                         <div *ngIf="formulario.controls['valor'].hasError('required')">El valor es requerido</div>
                       </div>
-                    </div>
-                    
+                    </div>                    
                     <div class="form-group">
                       <label for="descripcion">Descripción:</label>
                       <textarea class="form-control" formControlName="descripcion" id="descripcion" name="descripcion"

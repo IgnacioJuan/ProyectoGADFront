@@ -38,27 +38,19 @@
                 {{ elemento.descripcion }}
               </td>
             </ng-container>
+            <ng-container matColumnDef="enlace">
+              <th mat-header-cell *matHeaderCellDef>ENLACE</th>
+              <td mat-cell *matCellDef="let elemento">
+                <a [href]="elemento.enlace" target="_blank">{{ elemento.enlace }}</a>
+              </td>
+            </ng-container>
+            
             <ng-container matColumnDef="fecha">
               <th mat-header-cell *matHeaderCellDef>FECHA</th>
               <td mat-cell *matCellDef="let elemento">
-                {{ elemento.fecha }}
+                {{ elemento.fecha | date:'yyyy/MM/dd' }}
               </td>
             </ng-container>
-
-            <ng-container matColumnDef="acciones">
-              <th mat-header-cell *matHeaderCellDef>ACCIONES</th>
-              <td mat-cell *matCellDef="let elemento">
-                <button class="btn btn-primary" role="button">
-                  <div class="d-flex align-items-center">
-                    <i class="far fa-eye" style="margin-right: 5px; font-size: 24px; color: #ffffff;"></i> <!-- Ícono de ojo más claro -->
-                    <span class="badge"></span>
-                  </div>
-                </button>
-                
-
-              </td>
-            </ng-container>
-
             <tr mat-header-row *matHeaderRowDef="columnasUsuario"></tr>
             <tr mat-row *matRowDef="let fila; columns: columnasUsuario"></tr>
           </table>

@@ -10,6 +10,13 @@ import {ObjetivoodsService} from "../../../../services/objetivoods.service";
 import Swal from "sweetalert2";
 import {ArchivoService} from "../../../../services/archivo.service";
 import {Archivo} from "../../../../models/Archivo";
+import {Poa} from "../../../../models/Poa";
+import {AprobacionPoa} from "../../../../models/AprobacionPoa";
+import {PoaService} from "../../../../services/poa.service";
+import {LoginService} from "../../../../services/login.service";
+import {AprobacionPoaService} from "../../../../services/aprobacion-poa.service";
+import {AprobacionEvidencia} from "../../../../models/AprobacionEvidencia";
+import {AprobacionEvidenciaService} from "../../../../services/aprobacion-evidencia.service";
 
 @Component({
   selector: 'app-evidencias',
@@ -17,16 +24,22 @@ import {Archivo} from "../../../../models/Archivo";
   styleUrls: ['./evidencias.component.css']
 })
 export class EvidenciasComponent implements OnInit {
-  formComponentes: FormGroup;
-  guardadoExitoso: boolean = false;
-  miModal!: ElementRef;
+  //Listar Poas
+  listaPoas: Archivo[] = [];
+  listaAprobacionPoa: AprobacionEvidencia[] = [];
+
+  //Usuario logueado
+  user: any = null;
   //tabla
-  itemsPerPageLabel = 'Componentes por página';
+  itemsPerPageLabel = 'Poas por página';
   nextPageLabel = 'Siguiente';
   lastPageLabel = 'Última';
-  firstPageLabel='Primera';
-  previousPageLabel='Anterior';
-  rango:any= (page: number, pageSize: number, length: number) => {
+  firstPageLabel = 'Primera';
+  previousPageLabel = 'Anterior';
+  //Filtro
+  estadoSeleccionado: string = 'PENDIENTE';
+  public poaSelected = new Poa();
+  rango: any = (page: number, pageSize: number, length: number) => {
     if (length == 0 || pageSize == 0) {
       return `0 de ${length}`;
     }
@@ -39,173 +52,116 @@ export class EvidenciasComponent implements OnInit {
         : startIndex + pageSize;
     return `${startIndex + 1} - ${endIndex} de ${length}`;
   };
-  //
-  public componentes = new Archivo();
-  listaComponentes: Archivo[] = [];
-  numeroObjetivos:number=0;
 
+  //Columnas Tabla
+  columnasObservaciones: string[] = ['observacion'];
+  columnasUsuario: string[] = [
+    'barrio',
+    'comunidad',
+    'cobertura',
+    'fecha_inicio',
+    'estado',
 
-  //Buscar
-  filterPost: string = "";
-  filteredComponentes: any[] = [];
-  resultadosEncontrados: boolean = true;
-//aqui esta llenandose el array de componentes
+    'observaciones',
+  ];
   dataSource = new MatTableDataSource<Archivo>();
-
-  columnasUsuario: string[] = ['id_componente', 'nombre', 'descripcion','fecha', 'Aprobacion'];
+  dataSource3 = new MatTableDataSource<AprobacionEvidencia>();
 
   @ViewChild('datosModalRef') datosModalRef: any;
   @ViewChild(MatPaginator, { static: false }) paginator?: MatPaginator;
 
   constructor(
     private paginatorIntl: MatPaginatorIntl,
-    private router: Router, private fb: FormBuilder,
-    private componentesService: ComponentesService,
-    private objetivoodsServicio: ObjetivoodsService,
-    private archivoServicio: ArchivoService,
-  ) {
-    this.formComponentes = fb.group({
 
-      nombre: ['', Validators.required],
-      descripcion: ['', [Validators.required]]
-    });
+    private archivoServicio: ArchivoService,
+    private AprobacionEvienciaServicio: AprobacionEvidenciaService
+  ) {
     this.paginatorIntl.nextPageLabel = this.nextPageLabel;
     this.paginatorIntl.lastPageLabel = this.lastPageLabel;
-    this.paginatorIntl.firstPageLabel=this.firstPageLabel;
-    this.paginatorIntl.previousPageLabel=this.previousPageLabel;
+    this.paginatorIntl.firstPageLabel = this.firstPageLabel;
+    this.paginatorIntl.previousPageLabel = this.previousPageLabel;
     this.paginatorIntl.itemsPerPageLabel = this.itemsPerPageLabel;
-    this.paginatorIntl.getRangeLabel=this.rango;
+    this.paginatorIntl.getRangeLabel = this.rango;
   }
+
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator || null;
-
   }
   ngOnInit(): void {
-    this.listar();
+    //Capturar usuario logueado
+
+    console.log(this.estadoSeleccionado);
+    this.listarPoas(this.estadoSeleccionado);
   }
 
+  //Buscar
+  filterPost: string = '';
+  filteredComponentes: any[] = [];
+  resultadosEncontrados: boolean = true;
+  resultadosEncontradosporEstado: boolean = true;
+  resultadosEncontradosporObservaciones: boolean = true;
 
-  //guardar() {
-    //this.componentes = this.formComponentes.value;
-    //this.objetivoodsServicio.crearobjetivoods(this.componentes)
-      //.subscribe(
-        //(response) => {
-          //console.log('Componente creado con éxito:', response);
-          //this.guardadoExitoso = true;
-          //this.listar();
-          //Swal.fire(
-           // 'Exitoso',
-            //'Se ha completado el registro con exito',
-            //'success'
-          //)
-        //},
-        //(error) => {
-         // console.error('Error al crear el Componente:', error);
-          //Swal.fire(
-           // 'Error',
-            //'Ha ocurrido un error',
-            //'warning'
-          //)
-        //}
-      //);
-  //}
-
-nohacernada(){
-
-}
-
-/*
-  eliminar(componente: any) {
-    Swal.fire({
-      title: 'Estas seguro de eliminar el registro?',
-      showDenyButton: true,
-      confirmButtonText: 'Cacelar',
-      denyButtonText: `Eliminar`,
-    }).then((result) => {
-      if (!result.isConfirmed) {
-        this.objetivoodsServicio.eliminarobjetivoods(componente).subscribe(
-          (response) => {
-            this.listar()
-            Swal.fire('Eliminado!', '', 'success')
-          }
-        );
-      }
-    })
-
-  }
-*/
-
-
-  listar(): void {
-    this.archivoServicio.get().subscribe(
+  //Metodo para listar
+  listarPoas( estado: string): void {
+    this.archivoServicio.listarArchivosPorEstadoYFechaDesc(estado).subscribe(
       (data: any[]) => {
-        this.listaComponentes = data;
-        this.dataSource.data = this.listaComponentes;
+        this.listaPoas = data;
+        console.log('Dataa');
+        console.log(this.listaPoas);
+        this.dataSource.data = this.listaPoas;
+        this.resultadosEncontradosporEstado = this.listaPoas.length > 0; // Actualiza la variable según si se encontraron resultados
       },
       (error: any) => {
-        console.error('Error al listar los objetosods:', error);
+        console.error('Error al listar las evidencias:', error);
+        this.resultadosEncontradosporEstado = false; // Si ocurre un error, no se encontraron resultados
       }
     );
   }
-  /*listarObjetivos(idComponente: number): void {
-    this.objetivoPDOTService.listarObjetivosPdotsPorIdComponente(idComponente).subscribe(
-      (data: any) => {
-        this.numeroObjetivos = data.length; // Asigna el número de registros obtenidos
-      },
-      (error: any) => {
-        console.error('Error al listar los objetivos:', error);
-      }
-    );
-  }*/
 
-
-  /*
-  editDatos(componente: Objetivoods) {
-    this.componentes = componente;
-    this.formComponentes = new FormGroup({
-
-      nombre: new FormControl(componente.nombre),
-      descripcion: new FormControl(componente.descripcion)
-
-    });
-  }
-
-  limpiarFormulario() {
-    this.formComponentes.reset();
-    this.componentes = new Objetivoods();
-  }
-
-  actualizar() {
-
-    this.componentes.nombre = this.formComponentes.value.nombre;
-    this.componentes.descripcion = this.formComponentes.value.descripcion;
-    this.componentesService.actualizar(this.componentes.id_objetivo_ods, this.componentes)
-      .subscribe(response => {
-        this.componentes = new Objetivoods();
-        this.listar();
-        Swal.fire('Operacion exitosa!', 'El registro se actualizo con exito', 'success')
-      });
-  }
-*/
-
-
-  verDetalles(componente: any) {
-    this.router.navigate(['/sup/flujo_Componentes/componente_objetivoPDOT'], { state: { data: componente } });
-  }
-
-
-
+  //Metodo para buscar
   buscar() {
     // Filtra los componentes basados en el filtro
-    this.filteredComponentes = this.listaComponentes.filter((componente) =>
+    this.filteredComponentes = this.listaPoas.filter((componente) =>
       componente.nombre.toLowerCase().includes(this.filterPost.toLowerCase())
     );
-
     // Actualiza los datos del dataSource con los resultados filtrados
     this.dataSource.data = this.filteredComponentes;
-
     // Verifica si se encontraron resultados
     this.resultadosEncontrados = this.filteredComponentes.length > 0;
+  }
+
+  filtrarPorEstado(): void {
+    this.listarPoas(this.estadoSeleccionado);
+  }
+
+  //Cambiar colores de la tabkla
+  getEstadoCellStyle(estado: string): any {
+    switch (estado) {
+      case 'PENDIENTE':
+        return { background: 'rgb(235, 253, 133)' };
+      case 'APROBADO':
+        return { background: 'rgb(168, 216, 159)' };
+      case 'RECHAZADO':
+        return { background: 'rgb(231, 87, 87)' };
+      default:
+        return {};
+    }
+  }
+
+  //Ver observaciones
+  verDetalles(evidencia: any) {
+    this.AprobacionEvienciaServicio.listaraporbacionEviPorArchivo(evidencia.id_archivo).subscribe(
+      (data: any[]) => {
+        this.listaAprobacionPoa = data;
+        this.dataSource3.data = this.listaAprobacionPoa;
+        this.resultadosEncontradosporObservaciones =
+          this.listaAprobacionPoa.length > 0; // Actualiza la variable según si se encontraron resultados
+      },
+      (error: any) => {
+        console.error('Error al listar las observaciones:', error);
+        this.resultadosEncontradosporObservaciones = false; // Si ocurre un error, no se encontraron resultados
+      }
+    );
   }
 }
 

@@ -1,5 +1,5 @@
-import { ActivatedRoute } from '@angular/router';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { PoaService } from 'src/app/services/poa.service';
 import { ProyectoService } from 'src/app/services/proyecto.service';
 import { Proyecto } from 'src/app/models/Proyecto';
@@ -9,6 +9,14 @@ import { Chart } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { IndicadorService } from 'src/app/services/indicador.service';
 import { Indicadores } from 'src/app/models/Indicadores';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
+import { Componentes } from 'src/app/models/Componentes';
+import { ComponentesService } from 'src/app/services/componentes.service';
+import { ObjetivoPdotService } from 'src/app/services/objetivo-pdot.service';
+import Swal from 'sweetalert2';
+import { Poa } from 'src/app/models/Poa';
 
 
 @Component({
@@ -24,21 +32,89 @@ export class ReporteEspecificoPoaComponent implements OnInit {
   proyectoDelPoa: Proyecto | null = null;
   aprovacionPoa: AprovacionPoa[] = [];
   indi: Indicadores[] = [];
+  proyect: Proyecto [] = [];
   result :any;
   indiPro:any;
   metaindi:any;
+  poa: Poa[] = [];
+
+
+   
+
+    /////////////Para la tabla html  //////////////
+    formPoas: FormGroup;
+    guardadoExitoso: boolean = false;
+    miPoa!: ElementRef;
+    //tabla
+    itemsPerPageLabel = 'Componentes por página';
+    nextPageLabel = 'Siguiente';
+    lastPageLabel = 'Última';
+    firstPageLabel='Primera';
+    previousPageLabel='Anterior';
+    rango:any= (page: number, pageSize: number, length: number) => {
+      if (length == 0 || pageSize == 0) {
+        return `0 de ${length}`;
+      }
+    
+      length = Math.max(length, 0);
+      const startIndex = page * pageSize;
+      const endIndex =
+        startIndex < length
+          ? Math.min(startIndex + pageSize, length)
+          : startIndex + pageSize;
+      return `${startIndex + 1} - ${endIndex} de ${length}`;
+    };
+    //
+    public componentes = new Componentes();
+    listaComponentes: Componentes[] = [];
+    numeroObjetivos:number=0;
+  
+  
+    //Buscar
+    filterPost: string = "";
+    filteredComponentes: any[] = [];
+    resultadosEncontrados: boolean = true;
+  
+    dataSource = new MatTableDataSource<Poa>();
+  
+    columnasUsuario: string[] = ['id_poa', 'barrio', 'cobertura', 'comunidad', 'estado','localizacion','meta_alcanzar'];
+  
+    @ViewChild('datosModalRef') datosModalRef: any;
+    @ViewChild(MatPaginator, { static: false }) paginator?: MatPaginator;
+  
 
   constructor(
     private route: ActivatedRoute,
     private proyectoService: ProyectoService,
     private poaService: PoaService,
     private aproPoaService: AprobacionPoaService,
-    private indicadoresService:IndicadorService
-  ) {}
+    private indicadoresService:IndicadorService,
+    private paginatorIntl: MatPaginatorIntl,
+    private fb: FormBuilder,
+    private router:Router
+  ) {
+    this.formPoas= fb.group({
+      id_poa: ['', Validators.required],
+      barrio: ['', Validators.required],
+      cobertura: ['', Validators.required],
+      comunidad: ['', [Validators.required]],
+      estado: ['', [Validators.required]],
+      localizacion: ['', [Validators.required]],
+      meta_alcanzar: ['', [Validators.required]]
+    
+    });
+    this.paginatorIntl.nextPageLabel = this.nextPageLabel;
+    this.paginatorIntl.lastPageLabel = this.lastPageLabel;
+    this.paginatorIntl.firstPageLabel=this.firstPageLabel;
+    this.paginatorIntl.previousPageLabel=this.previousPageLabel;
+    this.paginatorIntl.itemsPerPageLabel = this.itemsPerPageLabel;
+    this.paginatorIntl.getRangeLabel=this.rango;
+  }
 
   ngOnInit(): void {
     this.recibePoa();
     //this.listindicadores();
+    this.listarProyectos();
   }
 
   recibePoa() {
@@ -66,9 +142,21 @@ export class ReporteEspecificoPoaComponent implements OnInit {
     });
 
   };
+  listarProyectos() {
+    this.proyectoService.getProyectos().subscribe(data => {
+      this.proyect = data;
+      console.log(this.proyect, "listaaa Proyectos");
+     
+      this.indiacdorPorProyecto();
+    });
+  }
+
+  promedioProyect(){
+    
+  }
 
 indiacdorPorProyecto() {
-  const idsProyectos: number[] = this.result.map((proyecto: any) => proyecto.id_proyecto);
+  const idsProyectos: number[] = this.proyect.map((proyecto: any) => proyecto.id_proyecto);
 //listar los indicdores que pertenecen al proyecto del poa selecionado
   this.indicadoresService.listarIndicadoresPorProyectos(idsProyectos)
     .subscribe(data => {
@@ -80,6 +168,8 @@ indiacdorPorProyecto() {
       
       console.log('Indicadores por proyectos:', this.indiPro);
       console.log('Metas asociadas a los indicadores:', metasDeIndicadores);
+      
+
      // this.createChart();
       
     }, error => {
@@ -99,13 +189,15 @@ indiacdorPorProyecto() {
     if (poasRelacionados.length > 0) {
       // Utiliza los IDs de proyecto para obtener los proyectos relacionados
       this.poaService.buscarPoasPorIds(poasRelacionados).subscribe(
-        proyectos => {
-          // Ahora, tienes la lista de proyectos relacionados con el POA seleccionado
-          this.result=proyectos;
+        (data: any[]) => {
+          this.result = data;
+          this.dataSource.data = this.result;
+
+          this.createChart()
           console.log('Poas relacionados:', this.result);
           this.indiacdorPorProyecto();
-
-          this.createChart();
+          this.buscar();
+;
         },
         error => {
           console.error('Error al obtener los poas', error);
@@ -179,34 +271,27 @@ console.log(`La cantidad de indicadores en la meta con ID ${metaId} es: ${cantid
           labels: filteredLabels,
           datasets: [
             {
-              label: "Promedio mayor a 75",
+              label: "Promedio mayor a 85 ",
               data: filteredLabels.map((label: string, index: number) => {
                 const promedio = promedioProyecto[index];
-                return promedio > 75 ? promedio : null;
+                return promedio > 84 ? promedio : null;
               }),
               backgroundColor: 'green'
             },
             {
-              label: "Promedio mayor a 50 y menor igual a 75",
+              label: "Promedio mayor igual a 70 y menor igual a 84.9",
               data: filteredLabels.map((label: string, index: number) => {
                 const promedio = promedioProyecto[index];
-                return promedio <= 75 && promedio > 50 ? promedio : null;
+                return promedio <= 84.9 && promedio > 69 ? promedio : null;
               }),
               backgroundColor: 'Yellow'
             },
+          
             {
-              label: "Promedio mayor a 25 menor a 50 ",
+              label: "Promedio menor igual a 69.9%",
               data: filteredLabels.map((label: string, index: number) => {
                 const promedio = promedioProyecto[index];
-                return promedio > 25 && promedio <= 50 ? promedio : null;
-              }),
-              backgroundColor: 'orange'
-            },
-            {
-              label: "Promedio menor a 25%",
-              data: filteredLabels.map((label: string, index: number) => {
-                const promedio = promedioProyecto[index];
-                return promedio < 25 ? promedio : null;
+                return promedio <= 69.9? promedio : null;
               }),
               backgroundColor: 'red'
             }
@@ -231,7 +316,38 @@ console.log(`La cantidad de indicadores en la meta con ID ${metaId} es: ${cantid
       });
     }
     
+   
     
+    ngAfterViewInit() {
+      this.dataSource.paginator = this.paginator || null;
+  
+    }
+   
+
+  
+ 
+  
+   
+    
+  
+    buscar() {
+      // Filtra los componentes basados en el filtro
+      this.filteredComponentes = this.result.filter((poa:any) =>
+       poa.id_poa.toLowerCase().includes(this.filterPost.toLowerCase())
+      );
+    
+      // Actualiza los datos del dataSource con los resultados filtrados
+      this.dataSource.data = this.filteredComponentes;
+    
+      // Verifica si se encontraron resultados
+      this.resultadosEncontrados = this.filteredComponentes.length > 0;
+    }
+    regresarAProyectos(){
+  
+        this.router.navigate(['sup/reportePoa']);
+     
+
+    }
     
 
   

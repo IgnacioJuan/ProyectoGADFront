@@ -47,6 +47,8 @@ import { ListarporUsuarioComponent } from './flujo-criterio/listarpoaporusuario/
     CommonModule,
     SuperadminRoutingModule,
     SharedModule,
+    
+
     MatCardModule,
     MatProgressBarModule,
     MatFormFieldModule, 
