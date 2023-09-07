@@ -78,7 +78,7 @@ export class ReporteEspecificoPoaComponent implements OnInit {
   
     dataSource = new MatTableDataSource<Poa>();
   
-    columnasUsuario: string[] = ['id_poa', 'barrio', 'cobertura', 'comunidad', 'estado','localizacion','meta_alcanzar'];
+    columnasUsuario: string[] = ['id_poa', 'barrio', 'cobertura', 'comunidad', 'estado','localizacion','valorTotal','meta_alcanzar'];
   
     @ViewChild('datosModalRef') datosModalRef: any;
     @ViewChild(MatPaginator, { static: false }) paginator?: MatPaginator;
@@ -96,7 +96,7 @@ export class ReporteEspecificoPoaComponent implements OnInit {
   ) {
     this.formPoas= fb.group({
       id_poa: ['', Validators.required],
-      //valor_total_vista:['', Validators.required],
+      valorTotal:['', Validators.required],
       barrio: ['', Validators.required],
       cobertura: ['', Validators.required],
       comunidad: ['', [Validators.required]],
