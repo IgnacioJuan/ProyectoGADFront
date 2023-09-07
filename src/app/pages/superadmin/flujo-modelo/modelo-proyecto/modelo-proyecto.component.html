@@ -1,7 +1,14 @@
 <body>
   <div class="container bg-light border border-start-0 rounded-4">
-    <blockquote class="blockquote text-dark" style="margin-top: 5%">
-      <h1 style="text-transform: uppercase">
+    <blockquote
+      class="blockquote text-dark"
+      style="
+        margin-top: 5%;
+        background-color: #ffffff;
+        border-left: 10px solid green;
+      "
+    >
+      <h1 class="header-title" style="text-transform: uppercase">
         <strong
           ><a style="cursor: pointer" (click)="verModeloPoas()"
             >LISTADO MODELOS
@@ -29,6 +36,7 @@
           class="btn btn-primary"
           data-bs-toggle="modal"
           data-bs-target="#materiaModal"
+          style="background-color: green"
         >
           CREAR NUEVO PROYECTO
         </button>
@@ -77,6 +85,7 @@
                   class="btn btn-primary"
                   role="button"
                   (click)="verDetalles(elemento)"
+                  style="background-color: green"
                 >
                   <div class="d-flex">
                     <i class="fa fa-folder-open"></i>
@@ -94,14 +103,14 @@
                   (click)="eliminar(element)"
                   style="margin-right: 5%"
                 >
-                  <i class="fas fa-user-times"></i>
+                  <i class="fas fa-trash"></i>
                 </button>
                 <button
                   type="button"
                   class="btn btn-primary"
                   data-bs-toggle="modal"
                   data-bs-target="#materiaModal"
-                  style="margin-right: 5%"
+                  style="margin-right: 5%; background-color: green"
                   (click)="editDatos(element)"
                 >
                   <i class="fas fa-edit"></i>
@@ -276,17 +285,15 @@
                             <div
                               class="alert alert-danger"
                               *ngIf="
-                                frmProyecto.controls['area']
-                                  .invalid &&
-                                frmProyecto.controls['area']
-                                  .touched
+                                frmProyecto.controls['area'].invalid &&
+                                frmProyecto.controls['area'].touched
                               "
                             >
                               <div
                                 *ngIf="
-                                  frmProyecto.controls[
-                                    'area'
-                                  ].hasError('required')
+                                  frmProyecto.controls['area'].hasError(
+                                    'required'
+                                  )
                                 "
                               >
                                 Debe ingresar un area
@@ -556,6 +563,7 @@
                   <button
                     type="submit"
                     class="btn btn-primary"
+                    style="background-color: green"
                     form="formulario"
                     *ngIf="!subcrite.id_proyecto"
                     data-dismiss="modal"
@@ -566,6 +574,7 @@
                   </button>
                   <button
                     class="btn btn-primary"
+                    style="background-color: green"
                     *ngIf="subcrite.id_proyecto"
                     data-dismiss="modal"
                     data-bs-dismiss="modal"

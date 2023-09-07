@@ -80,7 +80,14 @@ export class SidebarService {
 
       ]
     },
+    {
+      icono: 'nav-icon fas fa-solid fa-list',
+      titulo: "Evaluación",
+      submenu: [
+        { titulo: 'Actividades', url: 'sup/aprobar-actividades/poa-actividad', icono: 'fas fa-list-ul ' },
 
+      ]
+    },
     {
       icono: 'nav-icon fas fa-solid fa-list',
       titulo: "Reportes",
