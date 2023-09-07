@@ -39,6 +39,7 @@ export class ListActArchivoComponent implements OnInit {
   filteredComponentes: any[] = [];
   resultadosEncontrados: boolean = true;
   isLoggedIn = false;
+  fechaActual: Date;
 
   constructor(
     private paginatorIntl: MatPaginatorIntl,
@@ -55,6 +56,7 @@ export class ListActArchivoComponent implements OnInit {
     this.paginatorIntl.previousPageLabel = this.previousPageLabel;
     this.paginatorIntl.itemsPerPageLabel = this.itemsPerPageLabel;
     this.paginatorIntl.getRangeLabel = this.rango;
+    this.fechaActual = new Date();
   }
 
 
@@ -101,7 +103,7 @@ export class ListActArchivoComponent implements OnInit {
   };
 
   columnasArchivos: string[] = ['nombre', 'descripcion', 'estado', 'enlace', 'fecha', 'evaluar', 'verDetalles'];
-  columnasObservaciones: string[] = ['observacion', 'estado', 'nombre_completo'];
+  columnasObservaciones: string[] = ['observacion', 'estado', 'nombre_completo', 'fecha_aprobacion'];
 
 
   seleccionar(archi: Archivos) {
@@ -158,6 +160,8 @@ export class ListActArchivoComponent implements OnInit {
     this.aprobarEvi.evidencia = this.archivoSeleted
     this.aprobarEvi.visible = true;
     this.aprobarEvi.usuario = this.user.id;
+    this.aprobarEvi.fecha_aprobacion = this.fechaActual;
+
     this.archivoSeleted.estado = this.estado;
     // Guardamos la aprobación y actualizamos el estado del archivo en paralelo
     forkJoin([

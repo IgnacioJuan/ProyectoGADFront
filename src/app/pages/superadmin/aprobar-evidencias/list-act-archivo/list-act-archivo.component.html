@@ -275,6 +275,13 @@
                         {{ elemento.primer_nombre }} {{ elemento.primer_apellido }}
                       </td>
                     </ng-container>
+                    
+                    <ng-container matColumnDef="fecha_aprobacion">
+                      <th mat-header-cell *matHeaderCellDef>FECHA DE EVALUACIÓN</th>
+                      <td mat-cell *matCellDef="let elemento" >
+                        {{ elemento.fecha_aprobacion  | date:'dd/MM/yyyy'}}
+                      </td>
+                    </ng-container>
                     <tr mat-header-row *matHeaderRowDef="columnasObservaciones"></tr>
                     <tr mat-row *matRowDef="let fila; columns: columnasObservaciones"></tr>
                   </table>

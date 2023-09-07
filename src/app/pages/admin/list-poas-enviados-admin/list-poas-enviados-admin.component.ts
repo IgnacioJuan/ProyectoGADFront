@@ -45,7 +45,7 @@ export class ListPoasEnviadosAdminComponent implements OnInit {
   };
 
   //Columnas Tabla
-  columnasObservaciones: string[] = ['observacion', 'estado', 'nombre_completo'];
+  columnasObservaciones: string[] = ['observacion', 'estado', 'nombre_completo', 'fecha_aprobacion'];
   columnasUsuario: string[] = [
     'nombre',
     'barrio',
