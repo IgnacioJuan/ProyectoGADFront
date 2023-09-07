@@ -69,7 +69,7 @@
         <span class="fas fa-bars" style="color: black"></span>
       </button>
       <ul class="dropdown-menu dropdown-menu-end">
-        <li><a class="dropdown-item" href="/userprofile">Perfil</a></li>
+        <li><a class="dropdown-item" (click)="verPerfil()">Perfil</a></li>
         <li>
           <a class="dropdown-item" *ngIf="isLoggedIn" (click)="logout()"
             >Cerrar sesión</a
