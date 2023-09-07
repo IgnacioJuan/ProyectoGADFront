@@ -1,4 +1,14 @@
-body {
+
+  #calc{
+    font-family:myFirstFont;
+    font-size: 250%;
+    text-align: right;
+    background-color: inherit;
+    border: none;
+    padding-left:20px;
+    padding-right:20px;
+    padding-bottom: 10px;
+  }  body {
     font: 1em/1.618 Inter, sans-serif;
   
     display: flex;
@@ -13,13 +23,8 @@ body {
       url(https://source.unsplash.com/E8Ufcyxz514/2400x1823)
       center / cover no-repeat fixed;
   }
-.input{
-  margin-left: 2%;
-  margin-right: 2%;
-}
-.header-title {
-  font-size: 30px;
-  font-weight: bold;
-  color:green; /* You can choose your preferred color */
-  text-align: left;
-}
+  
+  
+  .titulo {
+    color: green;
+  }

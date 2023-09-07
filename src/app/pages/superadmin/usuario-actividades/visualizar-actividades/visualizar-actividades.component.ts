@@ -12,7 +12,8 @@ import { UsuarioActividadDTO } from 'src/app/models/UsuarioActividadDTO';
 export class VisualizarActividadesComponent {
 
   listaDetalleActividades: DetalleActividadDTO[] = [];
-  usuarioAct: UsuarioActividadDTO = new UsuarioActividadDTO();
+  nombre_responsable: string = '';
+
   filterPost = '';
   actividades: any[] = [];
   // Nuevas propiedades para la nueva tabla
@@ -43,7 +44,11 @@ export class VisualizarActividadesComponent {
       this.actService.obtenerDetalleActividades(id_usuario).subscribe(data => {
         this.listaDetalleActividades = data;
         this.dataSource.data = this.listaDetalleActividades;
+        if (this.listaDetalleActividades.length > 0) {
+          this.nombre_responsable = this.listaDetalleActividades[0].nombre_responsable;
+        }
       });
+
     }
 
   }
