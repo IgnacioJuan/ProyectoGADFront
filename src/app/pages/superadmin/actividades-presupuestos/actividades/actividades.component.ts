@@ -86,7 +86,7 @@ export class ListaActividadesComponent implements OnInit {
   resultadosEncontrados: boolean = true;
 
   dataSource = new MatTableDataSource<ActividadesPoa>();
-  columnasUsuario: string[] = ['id_actividad', 'nombre', 'descripcion', 'presupuesto_referencial', 'recursos_propios', 'codificado', 'devengado', 'estado', 'actions'];
+  columnasUsuario: string[] = ['id_actividad', 'nombre', 'descripcion', 'presupuesto_referencial', 'recursos_propios', 'codificado', 'devengado','totalpresupuestoEterno','totalreformaSuplemento','totalreformaTIncremento','totalreformaTDecremento', 'actions'];
 
 
   dataSource2 = new MatTableDataSource<PresupuestoExterno>();
