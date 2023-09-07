@@ -24,13 +24,6 @@ export class SidebarService {
       ]
     },
     {
-      icono: 'nav-icon fas fa-eye',
-      titulo: "Observación",
-      submenu: [
-        { titulo: ' Agregar observación ', url: 'sup/observaciones', icono: 'fas fa-cubes' }
-      ]
-    },
-    {
       icono: 'nav-icon fas fa-file-signature',
       titulo: "Poas Enviados",
       submenu: [
@@ -42,49 +35,70 @@ export class SidebarService {
   //LISTA DE ITEMS PARA SIDEBAR SUPERADMIN
   menu2: any[] = [
     {
+      icono: 'nav-icon fas   fa-users',
+      titulo: "Usuarios",
+      submenu: [
+        { titulo: 'Lista de Usuarios', url: 'sup/usuarios', icono: 'fas fa-list-ul ' },
+      ]
+    },
+    {
       icono: 'nav-icon fas fa-solid fa-list',
       titulo: "Configurar Modelo",
       submenu: [
         { titulo: 'Modelo', url: 'sup/flujo-modelo/modelo', icono: 'fas fa-list-ul ' },
         { titulo: 'Indicador', url: 'sup/flujo_Componentes/componentesSuper', icono: 'fas fa-list-ul ' },
         { titulo: 'Programas', url: 'sup/crearpro', icono: 'fas fa-list-ul ' },
-        { titulo: 'Componentes', url: 'sup/ejes/ejestabla', icono: 'fas fa-list-ul ' },
+        { titulo: 'Objetivos PND', url: 'sup/ejes/ejestabla', icono: 'fas fa-list-ul ' },
         { titulo: 'Competencia', url: 'sup/crearcompe', icono: 'fas fa-list-ul ' },
-        { titulo: 'Presupuestos', url: 'sup/actividades-presupuestos/tabla-poas', icono: 'fas fa-list-ul ' },
-        { titulo: 'Evidencias Rechazadas', url: 'sup/archivos-rechazados/Actividades_Evi_Rechazados', icono: 'fas fa-list-ul ' },
+        { titulo: 'ODS', url: 'sup/objetivoods-lista', icono: 'fas fa-list-ul ' },
+
 
       ]
     },
+    
  
     {
-      icono: 'nav-icon fas   fa-users',
-      titulo: "Usuarios",
-      submenu: [
-        { titulo: 'Lista de Usuarios', url: 'sup/usuarios', icono: 'fas fa-list-ul ' },
-        { titulo: 'Lista de Actividades', url: 'sup/usuario-actividades/listar-actividades', icono: 'fas fa-list-ul ' }
-      ]
-    },
-
-    {
-      icono: 'nav-icon fas   fa-users',
+      icono: 'nav-icon fas fa-tasks',
       titulo: "POA",
       submenu: [
         { titulo: 'Poas Rechazados', url: 'sup/flujo-criterio/listarpoa', icono: 'fas fa-list-ul ' },
         { titulo: 'Poas Asignados', url: 'sup/flujo-criterio/listarpoausu', icono: 'fas fa-list-ul ' },
-        { titulo: 'Reporte de POA', url: 'sup/reportePoa', icono: 'fas fa-list-ul ' }
-
+        { titulo: 'Reporte de POA', url: 'sup/reportePoa', icono: 'fas fa-list-ul ' },
+        { titulo: 'Aprobación de POAS', url: 'sup/aprobacion-poa/lista-aprobar-poa', icono: 'fas fa-list-ul ' }
 
 
       ] 
     },
     {
-      icono: 'nav-icon fas   fa-users',
-      titulo: "Programa",
+      icono: 'nav-icon fas fa-solid fa-list',
+      titulo: "Actividades",
       submenu: [
+        { titulo: 'Presupuestos', url: 'sup/actividades-presupuestos/tabla-poas', icono: 'fas fa-list-ul ' },
+        { titulo: 'Evidencias Rechazadas', url: 'sup/archivos-rechazados/Actividades_Evi_Rechazados', icono: 'fas fa-list-ul ' },
+        { titulo: 'Lista de Actividades', url: 'sup/usuario-actividades/listar-actividades', icono: 'fas fa-list-ul ' },
         { titulo: 'Aprobar/Rechazar Evidencia', url: 'sup/aprobarEvidencias/listPoaAprobarEvidenciaSuper', icono: 'fas fa-file-contract' }
 
       ]
     },
+    {
+      icono: 'nav-icon fas fa-solid fa-list',
+      titulo: "Evaluación",
+      submenu: [
+        { titulo: 'Actividades', url: 'sup/aprobar-actividades/poa-actividad', icono: 'fas fa-list-ul ' },
+
+      ]
+    },
+    {
+      icono: 'nav-icon fas fa-solid fa-list',
+      titulo: "Reportes",
+      submenu: [
+        { titulo: 'Reporte Poa', url: 'sup/reportes/reportePoa', icono: 'fas fa-list-ul ' },
+
+      ]
+    },
+
+    
+
 
 
   ]

@@ -6,6 +6,7 @@ export class Proyecto {
     objetivo!: string;
     meta!: string;
     porcentaje_alcance!: number;
+    area!: number;
     fecha_inicio!: string;
     fecha_fin!: string;
     estado!: string;

@@ -1,4 +1,5 @@
-#calc{
+
+  #calc{
     font-family:myFirstFont;
     font-size: 250%;
     text-align: right;
@@ -17,27 +18,13 @@
     min-height: 100vh;
     padding: 30px;
     
-    color: green;
+    color: #224;
     background:
       url(https://source.unsplash.com/E8Ufcyxz514/2400x1823)
       center / cover no-repeat fixed;
   }
   
+  
   .titulo {
-    color: green !important;
+    color: green;
   }
-  .header-title {
-    font-size: 30px;
-    font-weight: bold;
-    color:rgb(9, 70, 9); /* You can choose your preferred color */
-    text-align: left;
-  }
-  .align-right-dollar {
-    text-align: right; /* Alinear a la derecha */
-  }
-  
-  .align-right-dollar::before {
-    content: "$"; /* Agregar el símbolo de dólar antes del contenido */
-    margin-right: 5px; /* Espacio entre el símbolo de dólar y el número */
-  }
-  

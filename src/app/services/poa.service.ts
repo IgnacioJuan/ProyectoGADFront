@@ -8,6 +8,7 @@ import { PoasAdminEstadoProjection } from '../interface/PoasAdminEstado';
 
 import { PoaNoAprobadoProjection } from '../interface/PoaNoAprobadoProjection';
 import { PoaporUsuarioProjection } from '../interface/PoaporUsuarioProjection';
+import { PoasConActividadesPendientesProjection } from '../interface/PoasConActividadesPendientesProjection';
 
 
 @Injectable({
@@ -98,6 +99,9 @@ export class PoaService {
 
   listarPoasPromedio(): Observable<any[]> {
     return this.http.get<any[]>(`${baserUrl}/api/poa/listar-promedio`);
+  }
+  PoasConActividadesPendientes(): Observable<PoasConActividadesPendientesProjection> {
+    return this.http.get<any>(`${baserUrl}/api/poa/PoasConActividadesP`)
   }
 
  }

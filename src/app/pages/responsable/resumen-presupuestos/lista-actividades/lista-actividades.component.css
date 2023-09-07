@@ -1,0 +1,42 @@
+#calc {
+    font-family: myFirstFont;
+    font-size: 250%;
+    text-align: right;
+    background-color: inherit;
+    border: none;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 10px;
+  }
+  
+  body {
+    font: 1em/1.618 Inter, sans-serif;
+  
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  
+    min-height: 100vh;
+    padding: 30px;
+  
+    color: green;
+    background:
+      url(https://4.bp.blogspot.com/-8PTwrvmNixg/VHyHEPihSaI/AAAAAAAAAQk/VoUn7UzeIXY/s1600/received_m_mid_1396320661091_ed0c7a21685199ba23_5.jpg
+  ) center / cover no-repeat fixed;
+  }
+  
+  .icon-inverted {
+    transform: scaleY(-1);
+  }
+  
+  .titulo {
+    color: green !important;
+  }
+  
+  .custom-select {
+    width: 400px; /* Ancho deseado */
+    font-size: 14px; /* Tamaño de fuente deseado */
+  }
+  .mat-option:first-child {
+    color: rgba(212, 188, 55, 0.5); /* Color de fuente opaco deseado */
+  }
