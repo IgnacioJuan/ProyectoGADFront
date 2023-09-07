@@ -55,3 +55,12 @@ body {
   content: "$"; /* Agregar el símbolo de dólar antes del contenido */
   margin-right: 5px; /* Espacio entre el símbolo de dólar y el número */
 }
+.acciones-header {
+  min-width: 200px; /* Ajusta el ancho según tus necesidades */
+}
+
+/* Estilo para las celdas de datos */
+.acciones-cell {
+  min-width: 200px; /* Ajusta el ancho según tus necesidades */
+  /* Añade cualquier otro estilo adicional si es necesario */
+}
