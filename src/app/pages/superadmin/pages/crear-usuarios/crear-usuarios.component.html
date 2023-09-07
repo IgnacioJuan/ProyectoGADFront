@@ -15,9 +15,8 @@
               [(ngModel)]="filterPost" (input)="aplicarFiltro()" />
           </div>
           <div class="button-container">
-            <button mat-raised-button class="rounded-button" (click)="openDialog()"
-              style="background-color: rgba(0, 128, 0, 0.822);">
-              <i class="material-icons">person_add </i>
+            <button class="btn btn-primary" role="button" (click)="openDialog()" style="background-color: green">
+              <i class="fa fa-user-plus"></i>
             </button>
           </div>
         </div>
@@ -54,16 +53,13 @@
             <ng-container matColumnDef="actions">
               <th mat-header-cell *matHeaderCellDef>ACCIONES</th>
               <td mat-cell *matCellDef="let element">
-                <button mat-raised-button class="rounded-button"
-                  style="background-color: rgba(7, 165, 7, 0.849); margin-right: 5%"
-                  (click)="eliminar(element.usuario)">
-                  <i class="material-icons">delete</i>
+                <button class="btn btn-danger" style="background-color: red; margin-right: 10px;" (click)="eliminar(element.usuario)">
+                  <i class="fas fa-trash"></i>
                 </button>
 
-                <button mat-raised-button class="rounded-button"
-                  style="background-color: rgb(211, 192, 20); margin-right: 5%" data-bs-toggle="modal"
-                  data-bs-target="#exampleModal3" (click)="EditarUsuari(element)">
-                  <i class="material-icons">edit</i>
+                <button type="button" class="btn btn-primary" style="background-color: green; margin-right: 5%"
+                  data-bs-toggle="modal" data-bs-target="#exampleModal3" (click)="EditarUsuari(element)">
+                  <i class="fas fa-edit"></i>
                 </button>
 
               </td>
