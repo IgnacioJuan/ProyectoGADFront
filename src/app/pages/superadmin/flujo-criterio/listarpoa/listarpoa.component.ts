@@ -46,7 +46,7 @@ export class ListarpoaComponent implements OnInit {
 
   filterPost = '';
   dataSource = new MatTableDataSource<PoaNoAprobadoProjection>();
-  columnasUsuario: string[] = [ 'nombre', 'localizacion','barrio','comunidad', 'estado','observacion'];
+  columnasUsuario: string[] = ['id_poa', 'nombre','fecha_inicio','fecha_fin', 'localizacion','barrio','comunidad', 'estado','observacion'];
 
 
 
@@ -99,17 +99,7 @@ export class ListarpoaComponent implements OnInit {
     } else {
       this.dataSource.data = this.competencias;;
     }
-  } 
-  
-  
-
-  getColor(estado: string): any {
-    const estadoLower = estado.toLowerCase(); // Convertir el estado a minúsculas
-    let backgroundColor = estadoLower !== 'APROBADO' ? 'red' : 'white'; // Color de fondo rojo si no es "aprobado"
-  
-    return { 'background-color': backgroundColor };
-  }
-  
+  }  
 
 }
 

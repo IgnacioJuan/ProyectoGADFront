@@ -52,7 +52,7 @@ export class ModeloProyectoComponent {
 
   fechaMinima: string = "";
   fechaMax: string = "";
-  selectedCodigo: string = "";
+  selectedCodigo:string="";
   constructor(
     private proyectoservice: ProyectoService,
     private indicadorservice: IndicadorService,
@@ -66,7 +66,6 @@ export class ModeloProyectoComponent {
       objetivo: ['', [Validators.required]],
       meta: ['', [Validators.required]],
       porcentaje_alcance: ['', [Validators.required]],
-      area: ['', [Validators.required]],
       fecha_inicio: ['', [Validators.required]],
       fecha_fin: ['', [Validators.required]],
       pnd: ['', [Validators.required]],
@@ -75,10 +74,10 @@ export class ModeloProyectoComponent {
       indicador: ['', [Validators.required]],
       competencia: ['', [Validators.required]],
       programaControl: [''],
-      pndControl: [''],
-      odsControl: [''],
-      indicadorControl: [''],
-      competenciaControl: ['']
+      pndControl: [''] ,
+      odsControl: [''] ,
+      indicadorControl: [''] ,
+      competenciaControl: [''] 
     });
     this.paginatorIntl.nextPageLabel = this.nextPageLabel;
     this.paginatorIntl.lastPageLabel = this.lastPageLabel;
@@ -181,8 +180,6 @@ export class ModeloProyectoComponent {
       objetivo: new FormControl(proyecto.objetivo),
       meta: new FormControl(proyecto.meta),
       porcentaje_alcance: new FormControl(proyecto.porcentaje_alcance),
-      area: new FormControl(proyecto.area),
-
       fecha_inicio: new FormControl(proyecto.fecha_inicio),
       fecha_fin: new FormControl(proyecto.fecha_inicio),
       pnd: new FormControl(proyecto.pnd?.id_objetivo_pnd),
@@ -212,8 +209,6 @@ export class ModeloProyectoComponent {
     this.subcrite.objetivo = this.frmProyecto.value.objetivo;
     this.subcrite.meta = this.frmProyecto.value.meta;
     this.subcrite.porcentaje_alcance = this.frmProyecto.value.porcentaje_alcance;
-        this.subcrite.area = this.frmProyecto.value.area;
-
     this.subcrite.fecha_inicio = this.frmProyecto.value.fecha_inicio;
     this.subcrite.fecha_fin = this.frmProyecto.value.fecha_fin;
 
@@ -412,7 +407,7 @@ export class ModeloProyectoComponent {
     const selectedId = +event.target.value; // Convertir el valor a número
 
     const selectedOption = this.indicadorOptions.find(option => option.id_indicador === selectedId);
-
+  
     if (selectedOption) {
       this.selectedCodigo = selectedOption.codigo;
     }

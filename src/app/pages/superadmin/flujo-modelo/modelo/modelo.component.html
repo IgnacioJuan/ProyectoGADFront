@@ -1,268 +1,268 @@
 <body>
   <div class="container bg-light border border-start-0 rounded-4">
-    <blockquote
-      class="blockquote text-dark"
-      style="
-        margin-top: 5%;
-        background-color: #ffffff;
-        border-left: 10px solid green;
-      "
-    >
-      <h1 class="header-title"><strong>MODELOS</strong></h1>
+    <blockquote class="blockquote text-dark" style="margin-top: 5%">
+      <h1><strong>MODELOS</strong></h1>
     </blockquote>
 
     <div class="card">
-      <div class="card-body">
-
-        <button
-          type="button"
-          class="btn btn-primary"
-          data-bs-toggle="modal"
-          data-bs-target="#materiaModal"
-          style="background-color: green"
-        >
-          CREAR NUEVO MODELO
-        </button>
-
-        <div class="d-flex justify-content-center align-items-center flex-wrap">
-          <!-- Tarjetas Dinámicas -->
-          <mat-card
-            class="example-card mx-2 my-2"
-            *ngFor="let card of modeloPoas"
+        <div class="card-body">
+          <div class="form-group">
+            <input
+              type="text"
+              class="form-control"
+              name="filterPost3"
+              placeholder="Buscar..."
+              [(ngModel)]="filterPost"
+              (input)="aplicarFiltro()"
+            />
+          </div>
+          <br />
+          <button
+            type="button"
+            class="btn btn-primary"
+            data-bs-toggle="modal"
+            data-bs-target="#materiaModal"
           >
-            <div class="card-content-wrapper">
-              <!-- Envoltorio para el contenido de la tarjeta -->
-              <mat-card-header>
-                <mat-card-subtitle>Nombre del Modelo</mat-card-subtitle>
-                <mat-card-title>{{ card.nombre }}</mat-card-title>
-              </mat-card-header>
-              <mat-card-content>
-                <mat-divider></mat-divider>
-                <br />
-                <mat-card-subtitle>Descripcion: </mat-card-subtitle>
-                <p>{{ card.descripcion  }}</p>
-                <mat-card-subtitle>Fecha de Incio: </mat-card-subtitle>
-                <p>{{ card.fecha_inicial | date : "dd/MM/yyyy" }}</p>
-                <mat-card-subtitle>Fecha de Finalización: </mat-card-subtitle>
-                <p>{{ card.fecha_final | date : "dd/MM/yyyy" }}</p>
-                <mat-card-subtitle>Usuario Creador: </mat-card-subtitle>
-                <p>{{ card.usuario?.username }}</p>
-              </mat-card-content>
-            </div>
-            <mat-divider></mat-divider>
-            <mat-card-actions class="card-actions">
-              <div class="btn-group" role="group" aria-label="Basic example">
-                <button
-                  class="btn btn-primary"
-                  role="button"
-                  (click)="verDetalles(card)"
-                  style="background-color: green"
-                >
-                  <div class="d-flex">
-                    <i class="fa fa-folder-open"></i>
-                  </div>
-                </button>
-                <button
-                  class="btn btn-danger"
-                  style="background-color: red"
-                  (click)="eliminar(card)"
-                  style=""
-                >
-                  <i class="fas fa-trash"></i>
-                </button>
-                <button
-                  type="button"
-                  class="btn btn-primary"
-                  data-bs-toggle="modal"
-                  data-bs-target="#materiaModal"
-                  style="background-color: green"
-                  (click)="editDatos(card)"
-                >
-                  <i class="fas fa-edit"></i>
-                </button>
-              </div>
-            </mat-card-actions>
-            <mat-card-footer>
-              <!-- <mat-progress-bar mode="indeterminate"></mat-progress-bar> -->
-            </mat-card-footer>
-          </mat-card>
-        </div>
-
-        <!-- Paginación -->
-        <div class="d-flex justify-content-center my-4">
-          <mat-paginator
-            [length]="totalCards"
-            [pageSize]="pageSize"
-            [pageSizeOptions]="[1]"
-            showFirstLastButtons
-            (page)="onPageChange($event)"
+            CREAR NUEVO MODELO
+          </button>
+          <br />
+          <br />
+          <div
+            class="mat-elevation-z8 table-responsive"
+            style="margin-bottom: 5%"
           >
-          </mat-paginator>
-        </div>
-        <div
-          class="modal fade"
-          id="materiaModal"
-          tabindex="-1"
-          aria-labelledby="exampleModalLabel"
-          aria-hidden="true"
-          (hidden.bs.modal)="limpiarFormulario()"
-        >
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header bg-green">
-                <h3 class="modal-title">
-                  <i class="fa fa-info-circle"></i> Modelo
-                </h3>
-                <button
-                  type="button"
-                  class="btn-close"
-                  data-bs-dismiss="modal"
-                  aria-label="Close"
-                ></button>
-              </div>
-              <div class="modal-body">
-                <form
-                  [formGroup]="frmModeloPoa"
-                  (ngSubmit)="guardar()"
-                  id="formulario"
-                >
-                  <div>
-                    <label for="nombre">Nombre:</label>
-                    <input
-                      class="form-control"
-                      formControlName="nombre"
-                      type="text"
-                      id="nombre"
-                      name="nombre"
-                      style="margin-bottom: 10px"
-                    />
-                    <div
-                      class="alert alert-danger"
-                      *ngIf="
-                        frmModeloPoa.controls['nombre'].invalid &&
-                        frmModeloPoa.controls['nombre'].touched
-                      "
-                    >
-                      <div
-                        *ngIf="
-                          frmModeloPoa.controls['nombre'].hasError('required')
-                        "
-                      >
-                        Debe ingresar un nombre
-                      </div>
+            <table mat-table [dataSource]="dataSource">
+              <ng-container matColumnDef="id_modelo_poa">
+                <th mat-header-cell *matHeaderCellDef>ID</th>
+                <td mat-cell *matCellDef="let elemento">
+                  {{ elemento.id_modelo_poa }}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="nombre">
+                <th mat-header-cell *matHeaderCellDef>NOMBRE</th>
+                <td mat-cell *matCellDef="let elemento">
+                  {{ elemento.nombre }}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="descripcion">
+                <th mat-header-cell *matHeaderCellDef>DESCRIPCIÓN</th>
+                <td mat-cell *matCellDef="let elemento">
+                  {{ elemento.descripcion }}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="fecha_inicial">
+                <th mat-header-cell *matHeaderCellDef>INICIO</th>
+                <td mat-cell *matCellDef="let elemento">
+                  {{ elemento.fecha_inicial | date : "dd/MM/yyyy"  }}
+                </td>
+              </ng-container>
+              
+              <ng-container matColumnDef="fecha_final">
+                <th mat-header-cell *matHeaderCellDef>FIN</th>
+                <td mat-cell *matCellDef="let elemento">
+                  {{ elemento.fecha_final | date : "dd/MM/yyyy"  }}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="usuario">
+                <th mat-header-cell *matHeaderCellDef>USUARIO</th>
+                <td mat-cell *matCellDef="let elemento">
+                  {{ elemento.usuario?.username }}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="proyecto">
+                <th mat-header-cell *matHeaderCellDef>PROYECTOS</th>
+                <td mat-cell *matCellDef="let elemento">
+                  <button
+                    class="btn btn-primary"
+                    role="button"
+                    (click)="verDetalles(elemento)"
+                  >
+                    <div class="d-flex">
+                      <i class="fa fa-folder-open"></i>
                     </div>
-                    <label for="descripcion">Descripción:</label>
-                    <textarea
-                      class="form-control"
-                      formControlName="descripcion"
-                      id="descripcion"
-                      name="descripcion"
-                      style="margin-bottom: 10px"
-                    ></textarea>
-                    <div
-                      class="alert alert-danger"
-                      *ngIf="
-                        frmModeloPoa.controls['descripcion'].invalid &&
-                        frmModeloPoa.controls['descripcion'].touched
-                      "
-                    >
-                      <div
-                        *ngIf="
-                          frmModeloPoa.controls['descripcion'].hasError(
-                            'required'
-                          )
-                        "
-                      >
-                        La descripcion no puede estar vacia
-                      </div>
-                      <div
-                        *ngIf="
-                          frmModeloPoa.controls['descripcion'].hasError(
-                            'maxlength'
-                          )
-                        "
-                      >
-                        Excedio el numero de caracteres permitido
-                      </div>
-                    </div>
-                    <div class="form-group">
-                      <label for="fecha_inicial">Fecha de inicio:</label>
-                      <div class="input-group">
-                        <input
-                          type="date"
-                          id="fecha_inicial"
-                          name="fecha_inicial"
-                          formControlName="fecha_inicial"
-                          class="form-control"
-                          [min]="fechaMinima"
-                          [max]="fechaMax"
-                          (change)="validarFechas()"
-                        />
-                      </div>
-                    </div>
-
-                    <div class="form-group">
-                      <label for="fecha_final">Fecha de finalizar:</label>
-                      <div class="input-group">
-                        <input
-                          type="date"
-                          id="fecha_final"
-                          name="fecha_final"
-                          formControlName="fecha_final"
-                          class="form-control"
-                          [min]="fechaMinima"
-                          [max]="fechaMax"
-                          (change)="validarFechas()"
-                        />
-                      </div>
-                      <div
-                        class="alert alert-danger"
-                        *ngIf="frmModeloPoa.hasError('fechasInvalidas')"
-                      >
-                        La fecha de finalización debe ser posterior a la fecha
-                        de inicio.
-                      </div>
-                    </div>
-                  </div>
-                </form>
-                <div class="modal-footer">
+                  </button>
+                </td>
+              </ng-container>
+  
+              <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef>ACCIONES</th>
+                <td mat-cell *matCellDef="let element">
+                  <button
+                    class="btn btn-danger"
+                    style="background-color: red"
+                    (click)="eliminar(element)"
+                    style="margin-right: 5%"
+                  >
+                    <i class="fas fa-user-times"></i>
+                  </button>
                   <button
                     type="button"
-                    form="formulario"
-                    class="btn btn-warning"
-                    data-bs-dismiss="modal"
-                  >
-                    Cancelar
-                  </button>
-                  <button
-                    type="submit"
                     class="btn btn-primary"
-                    style="background-color: green"
-                    form="formulario"
-                    *ngIf="!crite.id_modelo_poa"
-                    data-dismiss="modal"
-                    data-bs-dismiss="modal"
-                    [disabled]="!frmModeloPoa.valid"
+                    data-bs-toggle="modal"
+                    data-bs-target="#materiaModal"
+                    style="margin-right: 5%"
+                    (click)="editDatos(element)"
                   >
-                    Agregar
+                    <i class="fas fa-edit"></i>
                   </button>
+                </td>
+              </ng-container>
+  
+              <tr mat-header-row *matHeaderRowDef="columnasUsuario"></tr>
+              <tr mat-row *matRowDef="let fila; columns: columnasUsuario"></tr>
+            </table>
+            <mat-paginator
+              [pageSizeOptions]="[5, 10, 20]"
+              showFirstLastButtons
+              aria-label="Select page of periodic elements"
+              itemsPerPageLabel="Items por página:"
+              nextPageLabel="Siguiente"
+              previousPageLabel="Anterior"
+            >
+            </mat-paginator>
+          </div>
+          <div
+            class="modal fade"
+            id="materiaModal"
+            tabindex="-1"
+            aria-labelledby="exampleModalLabel"
+            aria-hidden="true"
+            (hidden.bs.modal)="limpiarFormulario()"
+          >
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header bg-green">
+                  <h3 class="modal-title">
+                    <i class="fa fa-info-circle"></i> Modelo
+                  </h3>
                   <button
-                    class="btn btn-primary"
-                    style="background-color: green"
-                    *ngIf="crite.id_modelo_poa"
-                    data-dismiss="modal"
+                    type="button"
+                    class="btn-close"
                     data-bs-dismiss="modal"
-                    (click)="actualizar()"
-                    [disabled]="!frmModeloPoa.valid"
+                    aria-label="Close"
+                  ></button>
+                </div>
+                <div class="modal-body">
+                  <form
+                    [formGroup]="frmModeloPoa"
+                    (ngSubmit)="guardar()"
+                    id="formulario"
                   >
-                    Actualizar
-                  </button>
+                    <div>
+                      <label for="nombre">Nombre:</label>
+                      <input
+                        class="form-control"
+                        formControlName="nombre"
+                        type="text"
+                        id="nombre"
+                        name="nombre"
+                        style="margin-bottom: 10px"
+                      />
+                      <div
+                        class="alert alert-danger"
+                        *ngIf="
+                          frmModeloPoa.controls['nombre'].invalid &&
+                          frmModeloPoa.controls['nombre'].touched
+                        "
+                      >
+                        <div
+                          *ngIf="
+                            frmModeloPoa.controls['nombre'].hasError('required')
+                          "
+                        >
+                          Debe ingresar un nombre
+                        </div>
+                      </div>
+                      <label for="descripcion">Descripción:</label>
+                      <textarea
+                        class="form-control"
+                        formControlName="descripcion"
+                        id="descripcion"
+                        name="descripcion"
+                        style="margin-bottom: 10px"
+                      ></textarea>
+                      <div
+                        class="alert alert-danger"
+                        *ngIf="
+                          frmModeloPoa.controls['descripcion'].invalid &&
+                          frmModeloPoa.controls['descripcion'].touched
+                        "
+                      >
+                        <div
+                          *ngIf="
+                            frmModeloPoa.controls['descripcion'].hasError(
+                              'required'
+                            )
+                          "
+                        >
+                          La descripcion no puede estar vacia
+                        </div>
+                        <div
+                          *ngIf="
+                            frmModeloPoa.controls['descripcion'].hasError(
+                              'maxlength'
+                            )
+                          "
+                        >
+                          Excedio el numero de caracteres permitido
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label for="fecha_inicial">Fecha de inicio:</label>
+                        <div class="input-group">
+                          <input type="date" id="fecha_inicial" name="fecha_inicial" formControlName="fecha_inicial"
+                            class="form-control"  [min]="fechaMinima" [max]="fechaMax" (change)="validarFechas()" />
+                        </div>
+                      </div>
+    
+                      <div class="form-group">
+                        <label for="fecha_final">Fecha de finalizar:</label>
+                        <div class="input-group">
+                          <input type="date" id="fecha_final" name="fecha_final" formControlName="fecha_final"
+                            class="form-control" [min]="fechaMinima" [max]="fechaMax" (change)="validarFechas()" />
+                        </div>
+                        <div class="alert alert-danger" *ngIf="frmModeloPoa.hasError('fechasInvalidas')">
+                          La fecha de finalización debe ser posterior a la fecha de inicio.
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                  <div class="modal-footer">
+                    <button
+                      type="button"
+                      form="formulario"
+                      class="btn btn-warning"
+                      data-bs-dismiss="modal"
+                    >
+                      Cancelar
+                    </button>
+                    <button
+                      type="submit"
+                      class="btn btn-primary"
+                      form="formulario"
+                      *ngIf="!crite.id_modelo_poa"
+                      data-dismiss="modal"
+                      data-bs-dismiss="modal"
+                      [disabled]="!frmModeloPoa.valid"
+                    >
+                      Agregar
+                    </button>
+                    <button
+                      class="btn btn-primary"
+                      *ngIf="crite.id_modelo_poa"
+                      data-dismiss="modal"
+                      data-bs-dismiss="modal"
+                      (click)="actualizar()"
+                      [disabled]="!frmModeloPoa.valid"
+                    >
+                      Actualizar
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
   </div>
 </body>

@@ -30,10 +30,6 @@ export class ActividadespoaService {
     return this.http.get<ActividadesPoa[]>(`${baserUrl}/api/actividades/listarActividadesPoa/${poaId}`);
   }
 
-  getActividadesPoa2(poaId: number): Observable<ActividadesPoa[]> {
-    return this.http.get<ActividadesPoa[]>(`${baserUrl}/api/actividades/listarActividadesConTotalPresupuestos/${poaId}`);
-  }
-
   getActividadPorId(id: number): Observable<ActividadesPoa> {
     return this.http.get<ActividadesPoa>(`${baserUrl}/api/actividades/buscar/${id}`);
   }
@@ -44,9 +40,5 @@ export class ActividadespoaService {
 
   listarUsuariosActividades(): Observable<ListaActividadesUsuario[]> {
     return this.http.get<ListaActividadesUsuario[]>(`${baserUrl}/api/actividades/listarUsuariosAsignadosAActividades`);
-  }
-
-  listarActividadesPorIdResponsable(responsableId: number): Observable<ActividadesPoa[]>{
-    return this.http.get<ActividadesPoa[]>(`${baserUrl}/api/actividades/listarActividadesPorIdResponsable/${responsableId}`);
   }
 }

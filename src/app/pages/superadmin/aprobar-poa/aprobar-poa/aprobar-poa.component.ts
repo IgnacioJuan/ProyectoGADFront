@@ -1,19 +1,20 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { PoacService } from 'src/app/services/poac.service';
-import { AprobPoa } from 'src/app/models/AprobPoa';
-import { DatePipe } from '@angular/common';
+import { AprobPoa } from 'src/app/models/AprobPoa'; // Asegúrate de importar AprobPoa
 
 @Component({
   selector: 'app-aprobar-poa',
   templateUrl: './aprobar-poa.component.html',
-  styleUrls: ['./aprobar-poa.component.css'],
+  styleUrls: ['./aprobar-poa.component.css']
 })
 export class AprobarPoaComponent {
   responsable = 'NICOLÁS CEVALLOS CABRERA';
   longText = 'Algunos Detalles del POA.';
 
-  allCards: AprobPoa[] = [];
+  allCards: AprobPoa[] = [
+
+  ];
 
   cardsToShow: AprobPoa[] = [];
 
@@ -21,20 +22,12 @@ export class AprobarPoaComponent {
   pageSize = 3;
   pageIndex = 0;
 
-  constructor(
-    private router: Router,
-    private poacService: PoacService,
-    private datePipe: DatePipe
-  ) {
-    this.poacService.getPoaAprob().subscribe((data) => {
+  constructor(private router: Router, private poacService: PoacService) {
+    this.poacService.getPoaAprob().subscribe(data => {
       this.allCards = data;
       this.totalCards = this.allCards.length;
       this.updateCardsToShow();
     });
-  }
-
-  transformDate(date: Date): string {
-    return this.datePipe.transform(date, 'dd/MM/yyyy') || '';
   }
 
   onPageChange(event: any) {
@@ -53,4 +46,5 @@ export class AprobarPoaComponent {
   redirectToDetails(id_Poa: number) {
     this.router.navigate(['/sup/aprobacion-poa/detalle-poa', id_Poa]);
   }
+
 }

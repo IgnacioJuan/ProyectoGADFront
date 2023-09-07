@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
@@ -11,9 +11,6 @@ import { UsuarioService } from 'src/app/services/usuario.service';
 import Swal from 'sweetalert2';
 import { AprobacionActividad } from 'src/app/models/AprobacionActividad';
 import { ListaActividadesUsuario } from 'src/app/interface/ListaActividadesUsuario';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap'; 
-import { MatDialog } from '@angular/material/dialog';
-import { UsuariorolService } from 'src/app/services/usuariorol.service';
 
 @Component({
   selector: 'app-actividades',
@@ -55,11 +52,9 @@ export class ActividadesComponent implements OnInit {
   poaId!: number;
 
   filterPost: string = "";
-  filtroUsuarios: string = '';
-  //filteredPoas: any[] = [];
+  filteredPoas: any[] = [];
   resultadosEncontrados: boolean = true;
   mostrarTablaResponsables: boolean = false;
-  usuariosFiltrados: Usuario2[] = []; // Lista de usuarios filtrados
 
   //listarActividades
   dataSource = new MatTableDataSource<ActividadesPoa>();
@@ -68,25 +63,20 @@ export class ActividadesComponent implements OnInit {
   dataSource2 = new MatTableDataSource<ListaActividadesUsuario>();
   columnasUsuario2: string[] = ['id_usuario', 'username', 'nombre', 'apellido', 'cargo', 'nombreActividad'];
 
-  dataSource3 = new MatTableDataSource<Usuario2>();
-  columnasUsuario3: string[] = ['id','nombre', 'apellido','usuario','actions'];
-
   @ViewChild('datosModalRef') datosModalRef: any;
   @ViewChild(MatPaginator, { static: false }) paginator?: MatPaginator;
 
   constructor(
-    private cdRef: ChangeDetectorRef, private modalService: NgbModal, public dialog: MatDialog,
     private actividadservice: ActividadespoaService, private paginatorIntl: MatPaginatorIntl,
-    private router: Router, private fb: FormBuilder, private userService: UsuarioService,
-    private usuariorolservice: UsuariorolService
+    private router: Router, private fb: FormBuilder, private userService: UsuarioService
   ) {
     this.frmActividad = fb.group({
       nombre: ['', Validators.required],
       descripcion: ['', Validators.required],
-      presupuesto_referencial: [0, Validators.min(0)],
-      recursos_propios: [0, Validators.min(0)],
-      codificado: [0, Validators.min(0)],
-      devengado: [0, Validators.min(0)]
+      presupuesto_referencial: ['', Validators.required],
+      recursos_propios: ['', Validators.required],
+      codificado: ['', Validators.required],
+      devengado: ['', Validators.required]
     });
     this.frmActResp = fb.group({
       usuario: ['', Validators.required]
@@ -110,37 +100,12 @@ export class ActividadesComponent implements OnInit {
     console.log(this.poa);
     this.listar(this.poa.id_poa);
     this.listarUsuarios();
-    this.Listado();
   }
 
   verPoas() {
     this.router.navigate(['/adm/asignacion-actividades/poa-actividad']);
   }
 
-  listaUsuarios: any[] = [];
-  Listado() {
-    this.usuariorolservice.getusuarios().subscribe(
-      (listaAsig: any[]) => {
-        this.listaUsuarios = listaAsig;
-        this.dataSource3.data = this.listaUsuarios;
-        console.log(listaAsig)
-      }
-    );
-  }
-
-  listar(poaId: number): void {
-    this.dataSource.data = [];
-    this.actividadservice.getActividadesPoa(poaId).subscribe(
-      (data: any[]) => {
-        this.actividades = data;
-        this.dataSource.data = this.actividades;
-      },
-      (error: any) => {
-        console.error('Error al listar las actividades:', error);
-      }
-    );
-  }
-  
   cargarUsuarios() {
     this.userService.getUsuariosList().subscribe(
       (data: Usuario2[]) => {
@@ -155,7 +120,7 @@ export class ActividadesComponent implements OnInit {
   guardar() {
     this.actividad = this.frmActividad.value;
     this.actividad.poa = this.poa;
-    this.actividad.estado = 'PENDIENTE';
+    this.actividad.estado = 'pendiente';
     this.actividadservice.crear(this.actividad)
       .subscribe(
         (response) => {
@@ -166,7 +131,7 @@ export class ActividadesComponent implements OnInit {
           const idPoa = this.poa.id_poa;
           this.crearAprobacion(response);
           console.log(idActividadCreada + ' ' + idPoa);
-          this.listar(this.poa.id_poa);
+          this.listar(idPoa);
           Swal.fire(
             'Exitoso',
             'Se ha completado el registro con exito',
@@ -185,7 +150,7 @@ export class ActividadesComponent implements OnInit {
   }
 
   crearAprobacion(actividad: any) {
-    this.aprobAct.estado = 'PENDIENTE';
+    this.aprobAct.estado = 'pendiente';
     this.aprobAct.observacion = '';
     this.aprobAct.actividad = actividad;
     this.aprobAct.poa = this.poa;
@@ -199,36 +164,13 @@ export class ActividadesComponent implements OnInit {
     );
   }
 
-  //PROCESO DE ASIGNACION DE RESPONSABLE A LA ACTIVIDAD
   idActividadSeleccionada!: number;
-  abrirModalAsignarResponsable2(idActividad: number) {
-    this.idActividadSeleccionada = idActividad;
-  }  
 
-  abrirModalAsignarResponsable(idActividad: number, usuarioAsignado: any) {
-    console.log('Valor de usuarioAsignado:', usuarioAsignado);
-    if (usuarioAsignado !== undefined && usuarioAsignado !== null) {
-      Swal.fire({
-        title: 'Confirmación',
-        text: 'La Actividad ya tiene un usuario designado. ¿Desea cambiar el usuario?',
-        icon: 'question',
-        showCancelButton: true,
-        confirmButtonText: 'Sí',
-        cancelButtonText: 'No'
-      }).then((result) => {
-        if (result.isConfirmed) {
-          this.idActividadSeleccionada = idActividad;
-          //this.modalService.open('asignarResponsableModal');
-        }
-      });
-    } else {
-      this.idActividadSeleccionada = idActividad;
-      //this.modalService.open('asignarResponsableModal');
-    }
+  abrirModalAsignarResponsable(idActividad: number) {
+    this.idActividadSeleccionada = idActividad;
   }
-  
-  //METODO QUE FUNCIONA CON UN FORM CON UN SELECT DE USUARIOS
-  /*guardarResponsable() {
+
+  guardarResponsable() {
     if (this.frmActResp.valid) {
       const selectedUsuario = this.frmActResp.get('usuario')?.value;
   
@@ -268,48 +210,20 @@ export class ActividadesComponent implements OnInit {
           }
         );
     }
-  }*/  
-
-
-  //METODO QUE FUNCIONA CON LA SELECCION EN LA TABLA DE USUARIOS
-
-  guardarResponsable2(usuarioSeleccionado: any) {
-    this.actividadservice.getActividadPorId(this.idActividadSeleccionada)
-      .subscribe(
-        (actividadToUpdate: ActividadesPoa) => {
-          actividadToUpdate.usuario = usuarioSeleccionado;
+  }  
   
-          this.actividadservice.actualizar(this.idActividadSeleccionada, actividadToUpdate)
-            .subscribe(
-              () => {
-                this.listar(this.poa.id_poa);
-                Swal.fire(
-                  'Exitoso',
-                  'Se ha asignado el responsable con éxito',
-                  'success'
-                );
-              },
-              (error) => {
-                console.error('Error al actualizar el responsable:', error);
-                Swal.fire(
-                  'Error',
-                  'Ha ocurrido un error',
-                  'warning'
-                );
-              }
-            );
-        },
-        (error: any) => {
-          console.error('Error al obtener la actividad:', error);
-          Swal.fire(
-            'Error',
-            'Ha ocurrido un error',
-            'warning'
-          );
-        }
-      );
+  listar(poaId: number): void {
+    this.dataSource.data = [];
+    this.actividadservice.getActividadesPoa(poaId).subscribe(
+      (data: any[]) => {
+        this.actividades = data;
+        this.dataSource.data = this.actividades;
+      },
+      (error: any) => {
+        console.error('Error al listar las actividades:', error);
+      }
+    );
   }
-  
 
   editDatos(activ: ActividadesPoa) {
     this.actividad = activ;
@@ -322,19 +236,48 @@ export class ActividadesComponent implements OnInit {
       devengado: new FormControl(this.actividad.devengado)
     });
   }
-  actualizar() {
 
+  //PRUEBAS ACTUALIZAR
+  actualizar1() {
     this.actividad.nombre = this.frmActividad.value.nombre;
     this.actividad.descripcion = this.frmActividad.value.descripcion;
     this.actividad.presupuesto_referencial = this.frmActividad.value.presupuesto_referencial;
+    this.actividad.recursos_propios = this.frmActividad.value.recursos_propios;
     this.actividad.codificado = this.frmActividad.value.codificado;
     this.actividad.devengado = this.frmActividad.value.devengado;
+    this.actividad.estado = 'pendiente';
+    this.actividadservice.actualizar(this.actividad.id_actividad, this.actividad)
+      .subscribe(response => {
+        this.actividad = new ActividadesPoa();
+        this.listar(this.poa.id_poa);
+        Swal.fire('Operacion exitosa!', 'El registro se actualizo con exito', 'success')
+      });
+  }
+  
+  actualizar2() {
+    const usuarioAsignado = this.actividad.usuario; // Guardar el usuario antes de actualizar
+    console.log("ID USUARIO : "+usuarioAsignado)
+    this.actividad.nombre = this.frmActividad.value.nombre;
+    this.actividad.descripcion = this.frmActividad.value.descripcion;
+    this.actividad.presupuesto_referencial = this.frmActividad.value.presupuesto_referencial;
     this.actividad.recursos_propios = this.frmActividad.value.recursos_propios;
-    this.actividad.estado = 'PENDIENTE';
-    /*const usuarioAsignado = this.actividad.usuario;
+    this.actividad.codificado = this.frmActividad.value.codificado;
+    this.actividad.devengado = this.frmActividad.value.devengado;
+    this.actividad.estado = 'pendiente';
+    this.actividad.usuario = usuarioAsignado; // Restaurar el usuario asignado
+    this.actividadservice.actualizar(this.actividad.id_actividad, this.actividad)
+      .subscribe(response => {
+        this.actividad = new ActividadesPoa();
+        this.listar(this.poa.id_poa);
+        Swal.fire('Operacion exitosa!', 'El registro se actualizo con exito', 'success')
+      });
+  }
+
+  actualizar() {
+    const usuarioAsignado = this.actividad.usuario;
     const datosActualizados = { ...this.frmActividad.value };
     delete datosActualizados.usuario; // Elimina el campo usuario del objeto actualizado
-    this.actividad = { ...this.actividad, ...datosActualizados, usuario: usuarioAsignado };*/
+    this.actividad = { ...this.actividad, ...datosActualizados, usuario: usuarioAsignado };
     this.actividadservice.actualizar(this.actividad.id_actividad, this.actividad)
       .subscribe(response => {
         this.actividad = new ActividadesPoa();
@@ -380,17 +323,6 @@ export class ActividadesComponent implements OnInit {
       });
     } else {
       this.dataSource.data = this.actividades;
-    }
-  }
-
-  filtrarUsers(){
-    if(this.filtroUsuarios){
-      const filtro = this.filtroUsuarios.toLowerCase(); 
-      this.dataSource3.data = this.dataSource3.data.filter((item: any)=>{
-        return JSON.stringify(item).toLowerCase().includes(filtro);
-      });
-    }else{
-      this.dataSource3.data = this.listaUsuarios;
     }
   }
 
