@@ -161,21 +161,6 @@
                       matInput
                       disabled
                       [value]="user.persona.primer_nombre +'  ' + user.persona.primer_apellido  "
-<<<<<<< HEAD
-                      
-                    />
-                  </mat-form-field>
-                  <div class="container text-center">                  
-                    <div class="row">
-                      <div class="col-8">  
-                        <mat-form-field  appearance="outline" class="full-width">
-                          <mat-label [ngStyle]="{ 'color': isAprobado ? 'rgb(0, 128, 0)' : isRechazado ? 'rgb(255, 0, 0)' : '' }">Estado</mat-label>
-                          <input  matInput name="estado" [(ngModel)]="estado" 
-                           style="font-weight:bold;">
-                        </mat-form-field>
-                        
-                        
-=======
                     />
                   </mat-form-field>
 
@@ -185,11 +170,10 @@
                     <div class="row">
                       <div class="col-8">  
                         <mat-form-field appearance="outline" class="full-width">
-                        <mat-label>Estado</mat-label>
+                        <mat-label [ngStyle]="{ 'color': isAprobado ? 'rgb(0, 128, 0)' : isRechazado ? 'rgb(255, 0, 0)' : '' }">Estado</mat-label>
                         <input matInput name="estado" [(ngModel)]="estado">
                       </mat-form-field>
-                      
->>>>>>> parent of 675eeba (gmail)
+                     
                      </div>
                       <div class="col-4"> 
                       <button mat-fab class="thumb-up" (click)="Aprobar()" >
