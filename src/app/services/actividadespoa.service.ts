@@ -5,6 +5,7 @@ import { HttpHeaders, HttpClient } from '@angular/common/http';
 import baserUrl from './helper';
 import { ActividadesPoa } from '../models/ActividadesPoa';
 import { ListaActividadesUsuario } from '../interface/ListaActividadesUsuario';
+import { ActividadesPendientesPorPoaProjection } from '../interface/ActividadesPendientesPorPoaProjection';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +19,7 @@ export class ActividadespoaService {
     return this.http.post<any>(`${baserUrl}/api/actividades/crear`, r
     );
   }
-  crearRelacionAprobacion(r:any): Observable<any> {
+  crearRelacionAprobacion(r: any): Observable<any> {
     return this.http.post(`${baserUrl}/api/aprobacionactividad/crear`, r);
   }
 
@@ -50,7 +51,12 @@ export class ActividadespoaService {
     return this.http.get<ListaActividadesUsuario[]>(`${baserUrl}/api/actividades/listarUsuariosActividadID/${actividadId}`);
   }
 
-  listarActividadesPorIdResponsable(responsableId: number): Observable<ActividadesPoa[]>{
+  listarActividadesPorIdResponsable(responsableId: number): Observable<ActividadesPoa[]> {
     return this.http.get<ActividadesPoa[]>(`${baserUrl}/api/actividades/listarActividadesPorIdResponsable/${responsableId}`);
+  }
+
+
+  public ActividadesPendientesPorPoa(id_Poa: any): Observable<any[]> {
+    return this.http.get<any[]>(`${baserUrl}/api/actividades/ActividadesPendientesPorPoa/${id_Poa}`);
   }
 }
