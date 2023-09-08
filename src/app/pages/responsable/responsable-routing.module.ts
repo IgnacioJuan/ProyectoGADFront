@@ -19,9 +19,13 @@ const routes: Routes = [
   {
     path: 'resumen-presupuestos',
     loadChildren: () => import("./resumen-presupuestos/resumen-presupuestos.module").then(m => m.ResumenPresupuestosModule)
+  },
+
+  {
+    path: 'solicitar-presupuestos',
+    loadChildren: () => import("./solicitar-presupuesto/solicitar-presupuesto.module").then(m => m.SolicitarPresupuestoModule)
   }
 
- 
 ];
 
 @NgModule({
