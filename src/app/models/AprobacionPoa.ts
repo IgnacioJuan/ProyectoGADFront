@@ -10,4 +10,5 @@ export class AprobacionPoa {
   poa: Poa | null = null;
   proyecto: Proyecto | null = null;
   usuario: Usuario2 | null = null;
+  fecha_aprobacion!: Date;
 }

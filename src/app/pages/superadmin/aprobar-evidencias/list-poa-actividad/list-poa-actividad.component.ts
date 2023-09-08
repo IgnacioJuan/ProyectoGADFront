@@ -60,7 +60,7 @@ export class ListPoaActividadComponent  implements OnInit {
    return `${startIndex + 1} - ${endIndex} de ${length}`;
  };
 //Columnas Tabla
- columnasUsuario: string[] = ['id_poa', 'barrio', 'cobertura','fecha_inicio','fecha_fin','usuario', 'evidencias'];
+ columnasUsuario: string[] = ['barrio', 'cobertura','fecha_inicio','fecha_fin','usuario', 'evidencias'];
 
  listar(): void {
   this.poaService.getPoas().subscribe(

@@ -1,0 +1,370 @@
+<body>
+  <div class="container bg-light border border-start-0 rounded-4">
+    <blockquote class="blockquote text-dark"  style="margin-top: 5%; background-color: #ffffff; border-left: 10px solid green;">
+      <h1 class="titulo"><strong> CREAR NUEVA SOLICITUD</strong></h1>
+    </blockquote>
+    <div></div>
+
+    <div class="card">
+      <div class="card-body">
+       
+        <mat-stepper #stepper [linear]="isLinear" >
+          <!---PASO 1--->
+          <mat-step [stepControl]="FormDestinatario" label="DESTINATARIO"  >
+            <button mat-raised-button color="primary" style="margin-bottom: 10px; margin-top: 10px;" data-bs-toggle="modal"
+              data-bs-target="#exampleModalUsuario">Agregar Destinatario </button>
+            <form [formGroup]="FormDestinatario">
+              <div class="flex-container">
+                <mat-form-field>
+                  <mat-label>Cédula:</mat-label>
+                  <input matInput placeholder="" name="cedula" formControlName="cedula" [readonly]="true"  />
+                  <mat-error>
+                    Debe seleccionar un destinatario
+                  </mat-error>
+                </mat-form-field>
+                <mat-form-field>
+                  <mat-label>Nombre:</mat-label>
+                  <input matInput placeholder="" name="nombre" formControlName="nombre" [readonly]="true" />
+                  <mat-error>
+                    Debe seleccionar un destinatario
+                  </mat-error>
+                </mat-form-field>
+                <mat-form-field>
+                  <mat-label>Cargo:</mat-label>
+                  <input matInput placeholder="" name="cargo" formControlName="cargo"  [readonly]="true"/>
+                  <mat-error>
+                    Debe seleccionar un destinatario
+                  </mat-error>
+                </mat-form-field>
+                <mat-form-field>
+                  <mat-label>Correo:</mat-label>
+                  <input matInput placeholder="" name="correo" formControlName="correo" [readonly]="true" />
+                  <mat-error>
+                    Debe seleccionar un destinatario
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <mat-form-field style="width: 100%">
+                <mat-label>Motivo de la solicitud</mat-label>
+                <textarea matInput style="width: 100%; height: 200px; text-align: justify; line-height: 1.5;" formControlName="detalle" name="detalle"></textarea>
+                <mat-error>
+                  El motivo de la solicitud no puede estar vacío
+                </mat-error>
+              </mat-form-field>
+              
+              <div>
+                <button mat-raised-button matStepperNext  [disabled]="!FormDestinatario.valid"  (click)="AgregarDestinatario()">Siguiente</button>
+              </div>
+            </form>
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModalUsuario" tabindex="-1" aria-labelledby="exampleModalLabelUsuario"
+              aria-hidden="true">
+              <div class="modal-dialog ">
+                <div class="modal-content">
+                  <div class="modal-header" style="background-color: #077b15" >
+                    <h3 class="modal-title"    style="font-family: Arial, sans-serif; color: white">
+                      <i class="fa fa-info-circle" ></i> LISTADO DE USUARIOS</h3>
+                    <button  type="button" class="btn-close" data-bs-dismiss="modal"  aria-label="Close" ></button>
+                  </div>
+                  <div class="modal-body">
+                  <input type="text"  class="form-control"  name="filterPost3"  placeholder="Buscar por nombre o cedula ..."  [(ngModel)]="filterPost"  (input)="buscar()"  (ngModelChange)="buscar()" />
+                  <br />
+                    <div class="scroll-container">
+                      <mat-selection-list>
+                        <div *ngIf="!resultadosEncontrados" class="alert alert-warning">
+                          No se encontraron resultados.
+                        </div>
+                        <div *ngFor="let usuario of listaUsuarios">
+                          <span>
+                            <div class="d-flex justify-content-between align-items-center">
+                              <div class="card" style="width: 18rem;">
+                                <div class="card-body">
+                                  <h3 class="card-title"><strong>Datos</strong></h3>
+                                  <p class="card-text"><strong>Cedula:</strong> {{ usuario.persona.cedula }}</p>
+                                  <p class="card-text"><strong>Nombre-Apellido:</strong> {{ usuario.persona.primer_nombre }} {{ usuario.persona.primer_apellido }}</p>
+                                </div>
+                              </div>
+                              <button class="btn btn-primary" data-dismiss="modal" data-bs-dismiss="modal" role="button" (click)="SeleccionarUsuario(usuario)" style="width: 150px;">
+                                <i class="fas fa-plus" style="margin-right: 5px;"></i> Agregar
+                              </button>
+                              
+                            </div>
+                          </span>
+                        </div>
+                      </mat-selection-list>
+                    </div>
+                    
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+          </mat-step>
+
+
+
+          <!---PASO 2--->
+
+          <mat-step [stepControl]="FormSolicitud" label="DETALLE"  [completed]="isDetalleStepEnabled"  >
+
+            <div class="row">
+              <div class="col-sm-6 mb-3 mb-sm-0">
+                <div class="card">
+                  <div class="card-body">
+                    <div  class="mat-elevation-z8 table-responsive" style="margin-bottom: 5%" >
+                      <table mat-table [dataSource]="dataActividades">
+                        <ng-container matColumnDef="nombre">
+                          <th mat-header-cell *matHeaderCellDef>NOMBRE</th>
+                          <td mat-cell *matCellDef="let elemento">
+                            {{ elemento.nombre }}
+                          </td>
+                        </ng-container>
+                        <ng-container matColumnDef="descripcion">
+                          <th mat-header-cell *matHeaderCellDef>DESCRIPCIÓN</th>
+                          <td mat-cell *matCellDef="let elemento">
+                            {{ elemento.descripcion }}
+                          </td>
+                        </ng-container>
+                        <ng-container matColumnDef="codificado">
+                          <th mat-header-cell *matHeaderCellDef>MONTO ACTUAL</th>
+                          <td mat-cell *matCellDef="let elemento">
+                            {{ elemento.codificado }}
+                          </td>
+                        </ng-container>
+                        <ng-container matColumnDef="actions">
+                          <th mat-header-cell *matHeaderCellDef>SELECCIONAR</th>
+                          <td mat-cell *matCellDef="let element">
+                            <button
+                            type="button"
+                            class="btn btn-primary"
+                            style="margin-right: 5%; background-color: rgb(8, 67, 177);"
+                              (click)="SeleccionarActividad(element)"
+                            >
+                              <i class="fas fa-plus"></i>
+                            </button>
+            
+                          </td>
+                        </ng-container>
+        
+                   
+        
+                        <tr mat-header-row *matHeaderRowDef="columnasActividades"></tr>
+                        <tr mat-row *matRowDef="let fila; columns: columnasActividades"></tr>
+                      </table>
+                    <mat-paginator
+                      [pageSizeOptions]="[5, 10, 20]"
+                      showFirstLastButtons
+                      aria-label="Select page of periodic elements"
+                      itemsPerPageLabel="Items por página:"
+                      nextPageLabel="Siguiente"
+                      previousPageLabel="Anterior"
+                    >
+                    </mat-paginator>
+                    <div *ngIf="!resultadosEncontrados" class="alert alert-warning">
+                      No se encontraron resultados.
+                    </div>
+                    
+                  </div>
+      
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="card">
+                  <div class="card-body">
+            
+
+                    <form [formGroup]="FormSolicitud">
+
+                      <div class="flex-container">
+                        <mat-form-field>
+                          <mat-label>Nombre:</mat-label>
+                          <input matInput placeholder="" name="nombre" formControlName="nombre" [readonly]="true"  />
+                          <mat-error>Debe seleccionar una actividad </mat-error>
+                        </mat-form-field>
+                        <mat-form-field>
+                          <mat-label>Monto Actual:</mat-label>
+                          <input matInput placeholder="" name="monto_actual" formControlName="monto_actual" type="number" [readonly]="true" />
+                          <mat-error>Debe seleccionar una actividad </mat-error>
+                        </mat-form-field>
+                        
+                        <mat-form-field>
+                          <mat-label>Reforma:</mat-label>
+                          <input matInput placeholder="" name="reforma" formControlName="reforma" type="number"/>
+                          <mat-error>Debe agregar el valor de la reforma </mat-error>
+                        </mat-form-field>
+                        <mat-form-field>
+                          <mat-label>Tipo:</mat-label>
+                          <mat-select formControlName="tipo">
+                              <mat-option [value]="true">Agregar</mat-option>
+                              <mat-option [value]="false">Restar</mat-option>
+                          </mat-select>
+                          <mat-error>
+                            Debe seleccionar
+                          </mat-error>
+                      </mat-form-field>
+                      </div>
+              
+                    </form>
+
+                    <button [disabled]="!FormSolicitud.valid" mat-raised-button color="primary" (click)="AddActividad()">Agregar</button>
+
+
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+
+
+
+
+
+            <div class="mat-elevation-z8 table-responsive" style="margin-bottom: 5%">
+              <table mat-table [dataSource]="dataSolicitud">
+                <ng-container matColumnDef="nombre">
+                  <th mat-header-cell *matHeaderCellDef>NOMBRE</th>
+                  <td mat-cell *matCellDef="let elemento">
+                    {{ elemento.nombre }}
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="descripcion">
+                  <th mat-header-cell *matHeaderCellDef>DESCRIPCIÓN</th>
+                  <td mat-cell *matCellDef="let elemento">
+                    {{ elemento.descripcion }}
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="monto_actual">
+                  <th mat-header-cell *matHeaderCellDef>MONTO ACTUAL</th>
+                  <td mat-cell *matCellDef="let elemento">
+                    {{ elemento.monto_actual }}
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="reforma">
+                  <th mat-header-cell *matHeaderCellDef>REFORMA</th>
+                  <td mat-cell *matCellDef="let elemento">
+                    {{ elemento.reforma }}
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="monto_total">
+                  <th mat-header-cell *matHeaderCellDef>MONTO TOTAL</th>
+                  <td mat-cell *matCellDef="let elemento">
+                    {{ elemento.monto_total }}
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="actions">
+                  <th mat-header-cell *matHeaderCellDef>ACCIONES</th>
+                  <td mat-cell *matCellDef="let element">
+                    <button
+                    class="btn btn-danger"
+                    style="background-color: red"
+                    (click)="Eliminar(element)"
+                    style="margin-right: 5%"
+                  >
+                    <i class="fas fa-trash"></i>
+                  </button>
+    
+                  </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="columnasSolicitud"></tr>
+                <tr mat-row *matRowDef="let fila; columns: columnasSolicitud"></tr>
+              </table>
+
+            </div>
+
+            <div>
+              <button mat-raised-button matStepperPrevious>Regresar</button>
+              <button mat-raised-button matStepperNext [disabled]="dataSolicitud.data.length == 0" >Siguiente</button>
+            </div>
+          </mat-step>
+
+
+
+          <!---PASO 3--->
+
+          <mat-step label="FINALIZAR">
+
+            
+            <div class="card" style="width: auto">
+              <div class="card-body">
+                <div class="fechaa">
+                  <h3> <p>  <strong> Santa Isabel,  {{ fechaActual | date:'dd MMM yyyy' }}  </strong>  </p></h3>
+                </div>
+                
+            <div class="oficio-header">
+              <div class="destinatario">
+                <p>{{ usuarioSeleccionado.persona.primer_nombre }} {{ usuarioSeleccionado.persona.primer_apellido }}  <br> {{ usuarioSeleccionado.persona.cargo }} </p>
+              
+                <p>Su despacho. -</p>
+
+              </div>
+
+              <div class="motivo">
+                <br>
+                <p> De mi consideración.    <br>
+                  Reciba un cordial y efusivo saludo, no sin antes desearle éxito en sus funciones
+                  diarias.
+                </p>
+                <br>
+               <p>{{ datosSolicitud.detalle}}</p>
+             </div>
+            </div>
+            <div class="oficio-body">
+              <div>
+                <table class="custom-table">
+                  <thead>
+                    <tr >
+                      <th class="header-tabla" >NOMBRE</th>
+                      <th>DESCRIPCIÓN</th>
+                      <th>MONTO ACTUAL</th>
+                      <th>REFORMA</th>
+                      <th>MONTO TOTAL</th>
+
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr  *ngFor="let solicitud of listaActividadesSeleccionadas">
+                      <td  >{{ solicitud.nombre }}</td>
+                      <td>{{ solicitud.descripcion }}</td>
+                      <td>{{ solicitud.monto_actual }}</td>
+                      <td>{{ solicitud.reforma }}</td>
+                      <td>{{ solicitud.monto_total }}</td>
+
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="oficio-footer">
+              <p>Atentamente,</p>
+              <p>{{ user.persona.primer_nombre }} {{ user.persona.primer_apellido }} </p>
+              <p><strong>{{ user.persona.cargo }}</strong> </p>
+              <p><strong> GAD MUNICIPAL SANTA ISABEL</strong> </p>
+
+            </div>
+
+
+
+
+
+              </div>
+            </div>
+
+
+            <div>
+              <button mat-raised-button matStepperPrevious>Regresar</button>
+              <button mat-raised-button  (click)="guardar()"> <mat-icon>send</mat-icon> Enviar Solicitud </button>
+                          </div>
+          </mat-step>
+        </mat-stepper>
+
+        <div style="align-self: flex-end">
+          <button mat-raised-button class=" center-button" color="warn" (click)="ListadoSolicitud()">Cancelar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>

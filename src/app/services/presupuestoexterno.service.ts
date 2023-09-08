@@ -29,9 +29,8 @@ export class PresupuestoExternoService {
     return this.http.put(`${baserUrl}/api/presupuestoexterno/eliminarlogic/${pe.id_presupuesto_externo}`, pe);
   }
 
-  listarPEActividades(): Observable<PresupuestoExterno[]> {
-    return this.http.get<PresupuestoExterno[]>(`${baserUrl}/api/presupuestoexterno/listarPEActividades`);
+  listarPEActividades(actividadId: number): Observable<PresupuestoExterno[]> {
+    return this.http.get<PresupuestoExterno[]>(`${baserUrl}/api/presupuestoexterno/listarPEActividades/${actividadId}`);
   }
-
 
 }
