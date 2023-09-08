@@ -29,7 +29,7 @@ export class ReformaTraspasoDService {
     return this.http.put(`${baserUrl}/api/reformatraspaso_d/eliminarlogic/${rtd.id_reftras_d}`, rtd);
   }
 
-  listarRTDActividades(): Observable<ReformaTraspasoD[]> {
-    return this.http.get<ReformaTraspasoD[]>(`${baserUrl}/api/reformatraspaso_d/listarRTDActividades`);
+  listarRTDActividades(actividadId: number): Observable<ReformaTraspasoD[]> {
+    return this.http.get<ReformaTraspasoD[]>(`${baserUrl}/api/reformatraspaso_d/listarRTDActividades/${actividadId}`);
   }
 }
