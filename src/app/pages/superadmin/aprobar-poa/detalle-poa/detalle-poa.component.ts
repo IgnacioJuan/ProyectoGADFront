@@ -6,11 +6,11 @@ import { ActualizarAprobPOA, AprobPoa } from 'src/app/models/AprobPoa';
 import { UsuarioService } from 'src/app/services/usuario.service';
 import { UsuarioAprobPOA } from 'src/app/models/Usuario';
 import { ActividadService } from 'src/app/services/actividad.service';
-import { DatePipe } from '@angular/common';
 import { ActividadesPoaDTO } from 'src/app/models/ActividadesAprobPoa ';
 import { MatTableDataSource } from '@angular/material/table';
 import Swal from 'sweetalert2';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-detalle-poa',
@@ -18,45 +18,32 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
   styleUrls: ['./detalle-poa.component.css'],
 })
 export class DetallePoaComponent implements OnInit {
+
+  //POA
+  poaAprob: AprobPoa | undefined;
+
   @ViewChild('miModal') miModal: ElementRef | undefined;
-  poa: AprobPoa | null = null;
+  //Usuario que evalua
   usuarios: UsuarioAprobPOA[] | null = null;
+  
+  //Evaluacion
   estadoAprobacion: 'APROBADO' | 'RECHAZADO' | 'PENDIENTE' = 'PENDIENTE';
   selectedUserId: number | null = null;
   observacionControl = new FormControl('');
-  listaDetalleActividades: ActividadesPoaDTO[] = [];
   idUsuario: any;
+
+  //Actividades del POA
+  listaDetalleActividades: ActividadesPoaDTO[] = [];
 
   //Manejar estado css de los botones
   isBtnSuccessActive: boolean = false;
   isBtnDangerActive: boolean = false;
-
-  // Definimos los FormControl aquí, pero los inicializamos más tarde
-  responsable!: FormControl;
-  denominacionprogproyecto!: FormControl;
-  supervisionproyecto!: FormControl;
-  fechaInicio!: FormControl;
-  fechaFinal!: FormControl;
-  nombredelproyecto!: FormControl;
-  ods!: FormControl;
-  objetivopnd!: FormControl;
-  objetivopdot!: FormControl;
-  objetivoprogproyecto!: FormControl;
-  indicardemeta!: FormControl;
-  metadelprogproyecto!: FormControl;
-  lineabase!: FormControl;
-  cobertura!: FormControl;
-  localizacion!: FormControl;
-  barrio!: FormControl;
-  comunidad!: FormControl;
-  tipoperiodo!: FormControl;
 
   constructor(
     private poacService: PoacService,
     private usuarioService: UsuarioService,
     private actService: ActividadService,
     private route: ActivatedRoute,
-    private datePipe: DatePipe,
     private modalService: NgbModal,
     private router: Router
   ) {}
@@ -85,6 +72,7 @@ export class DetallePoaComponent implements OnInit {
     'estado',
   ];
 
+  //Carga de datos
   cargarData(idPoa: any){
     this.cargaDatosPoa(idPoa);
     this.cargarActividadesPoa(idPoa);
@@ -92,38 +80,11 @@ export class DetallePoaComponent implements OnInit {
 
   cargaDatosPoa(idParam: any) {
     if (idParam) {
-      const id_poa = +idParam;
-      this.poacService.getPoaAprobById(id_poa).subscribe((data) => {
-        this.poa = data;
-        // Inicializamos los FormControl con los datos de 'poa'
-        this.responsable = new FormControl(this.poa?.responsable || '');
-        this.denominacionprogproyecto = new FormControl(
-          this.poa?.nombre_proyecto || ''
-        );
-        this.supervisionproyecto = new FormControl(this.poa?.responsable || '');
-        this.fechaInicio = new FormControl(
-          this.datePipe.transform(this.poa?.fecha_inicio, 'dd/MM/yyyy') || ''
-        );
-        this.fechaFinal = new FormControl(
-          this.datePipe.transform(this.poa?.fecha_fin, 'dd/MM/yyyy') || ''
-        );
-        this.ods = new FormControl(this.poa?.nombre_ods || '');
-        this.objetivopnd = new FormControl(this.poa?.nombre_pnd || '');
-        this.objetivopdot = new FormControl(this.poa?.nombre_pdot || '');
-        this.objetivoprogproyecto = new FormControl(
-          this.poa?.objetivo_proyecto || ''
-        );
-        this.indicardemeta = new FormControl(this.poa?.nombre_indicador || '');
-        this.metadelprogproyecto = new FormControl(
-          this.poa?.meta_proyecto || ''
-        );
-        this.lineabase = new FormControl(this.poa?.linea_base || '');
-        this.cobertura = new FormControl(this.poa?.cobertura || '');
-        this.localizacion = new FormControl(this.poa?.localizacion || '');
-        this.barrio = new FormControl(this.poa?.barrio || '');
-        this.comunidad = new FormControl(this.poa?.comunidad || '');
-        this.tipoperiodo = new FormControl(this.poa?.tipo_periodo || '');
+      this.poacService.getPoaAprobById(idParam).subscribe(data => {
+        this.poaAprob = data;
       });
+    } else {
+      console.log("No hay parametro");
     }
   }
 
@@ -143,13 +104,13 @@ export class DetallePoaComponent implements OnInit {
 
   actualizarAprobacion() {
     console.log('Actualizando aprobación...');
-    if (this.poa) {
+    if (this.poaAprob) {
       const data: ActualizarAprobPOA = {
         estado: this.estadoAprobacion,
         observacion: this.observacionControl.value || '', // Usa directamente this.observacion aquí
       };
       this.poacService
-        .actualizarEstadoAprobacion(this.poa.id_poa, data)
+        .actualizarEstadoAprobacion(this.poaAprob.id_poa, data)
         .subscribe((response) => {
           console.log('Estado actualizado:', response);
           // Muestra el SweetAlert
@@ -200,5 +161,9 @@ export class DetallePoaComponent implements OnInit {
 
   cerrarModal() {
     this.modalService.dismissAll();
+  }
+
+  verPoas(){
+    this.router.navigate(['/sup/aprobacion-poa/lista-aprobar-poa']);
   }
 }
