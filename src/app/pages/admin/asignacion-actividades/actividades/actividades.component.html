@@ -393,6 +393,13 @@
                     {{ a.cargo }}
                   </td>
                 </ng-container>
+                <ng-container matColumnDef="fecha_asignacion">
+                  <th mat-header-cell *matHeaderCellDef>Fecha Asignación</th>
+                  <td mat-cell *matCellDef="let a; let i = index" [attr.rowspan]="getRowSpan2('fecha_asignacion', i)"
+                    [style.display]="getRowSpan2('fecha_asignacion', i) ? '' : 'none'">
+                    {{ a.fecha_asignacion | date:'yyyy-MM-dd'}}
+                  </td>
+                </ng-container>
                 <tr mat-header-row *matHeaderRowDef="columUsuario2"></tr>
                 <tr mat-row *matRowDef="let a; columns: columUsuario2"></tr>
               </table>
