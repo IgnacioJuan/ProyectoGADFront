@@ -9,55 +9,66 @@ import { MatTableDataSource } from '@angular/material/table';
 import { AprobacionEvidenciaService } from 'src/app/services/aprobacion-evidencia.service';
 import { AprobacionEvidencia } from 'src/app/models/AprobacionEvidencia';
 import Swal from 'sweetalert2';
-import {  forkJoin } from 'rxjs';
+import { forkJoin } from 'rxjs';
 import { Poa } from 'src/app/models/Poa';
+import { AprobacionEvidenciaProjection } from 'src/app/interface/AprobacionEvidenciaProjection';
+
+import { EmailServiceService } from 'src/app/services/email-service.service';
+import { PersonaService } from 'src/app/services/persona.service';
+import { Persona2 } from 'src/app/models/Persona2';
 @Component({
   selector: 'app-list-act-archivo',
   templateUrl: './list-act-archivo.component.html',
   styleUrls: ['./list-act-archivo.component.css']
 })
-export class ListActArchivoComponent implements OnInit  {
+export class ListActArchivoComponent implements OnInit {
   listaArchivos: Archivos[] = [];
-  listaAprobacionEvi: AprobacionEvidencia[] = [];
+  listaAprobacionEvi: AprobacionEvidenciaProjection[] = [];
 
   public aprobarEvi = new AprobacionEvidencia();
   public archivoSeleted = new Archivos();
   //Objeto poa
   poa: Poa = new Poa();
   //Variable para estado
-  public estado="";
-  public observacion="";
+  public correo = "";
+  public estado = "";
+  public observacion = "";
 
   //Usuario logueado
   user: any = null;
-   //Objeto actividad
-   actividad: ActividadesPoa = new ActividadesPoa();
- 
-   //Buscar
-   filterPost: string = "";
-   filteredComponentes: any[] = [];
-   resultadosEncontrados: boolean = true;
-   isLoggedIn = false;
+  //Objeto actividad
+  actividad: ActividadesPoa = new ActividadesPoa();
 
-   constructor(
-     private paginatorIntl: MatPaginatorIntl,
-     private router: Router,
-     private archivoService: ArchivoService,
-     private aprobarEvidenciaService: AprobacionEvidenciaService,
-     public login: LoginService,
- 
-   ) {
- 
-     this.paginatorIntl.nextPageLabel = this.nextPageLabel;
-     this.paginatorIntl.lastPageLabel = this.lastPageLabel;
-     this.paginatorIntl.firstPageLabel=this.firstPageLabel;
-     this.paginatorIntl.previousPageLabel=this.previousPageLabel;
-     this.paginatorIntl.itemsPerPageLabel = this.itemsPerPageLabel;
-     this.paginatorIntl.getRangeLabel=this.rango; }
+  //Buscar
+  filterPost: string = "";
+  filteredComponentes: any[] = [];
+  resultadosEncontrados: boolean = true;
+  isLoggedIn = false;
+  nombre!: string;
+
+  constructor(
+    private paginatorIntl: MatPaginatorIntl,
+    private router: Router,
+    private archivoService: ArchivoService,
+    private aprobarEvidenciaService: AprobacionEvidenciaService,
+    public login: LoginService,
+    private emaservices: EmailServiceService,
+    private serviper: PersonaService
+
+  ) {
+
+    this.paginatorIntl.nextPageLabel = this.nextPageLabel;
+    this.paginatorIntl.lastPageLabel = this.lastPageLabel;
+    this.paginatorIntl.firstPageLabel = this.firstPageLabel;
+    this.paginatorIntl.previousPageLabel = this.previousPageLabel;
+    this.paginatorIntl.itemsPerPageLabel = this.itemsPerPageLabel;
+    this.paginatorIntl.getRangeLabel = this.rango;
+  }
 
 
-   ngAfterViewInit() {
-     this.dataSource2.paginator = this.paginator || null;}
+  ngAfterViewInit() {
+    this.dataSource2.paginator = this.paginator || null;
+  }
 
   ngOnInit(): void {
     //Obtener id del poa
@@ -68,115 +79,134 @@ export class ListActArchivoComponent implements OnInit  {
 
     //Capturar usuario logueado
     this.user = this.login.getUser();
-  console.log(this.user)
+    console.log(this.user)
     this.listar(this.actividad.id_actividad);
   }
-   //Tabla para listado de archivos
-   dataSource2 = new MatTableDataSource<Archivos>();
+  //Tabla para listado de archivos
+  dataSource2 = new MatTableDataSource<Archivos>();
   //Tabla para listado de obsrvaciones
-  dataSource3 = new MatTableDataSource<AprobacionEvidencia>();
-   @ViewChild(MatPaginator, { static: false }) paginator?: MatPaginator;
+  dataSource3 = new MatTableDataSource<AprobacionEvidenciaProjection>();
+  @ViewChild(MatPaginator, { static: false }) paginator?: MatPaginator;
 
   //tabla
-   itemsPerPageLabel = 'Archivos por página';
-   nextPageLabel = 'Siguiente';
-   lastPageLabel = 'Última';
-   firstPageLabel='Primera';
-   previousPageLabel='Anterior';
-   rango:any= (page: number, pageSize: number, length: number) => {
-     if (length == 0 || pageSize == 0) {
-       return `0 de ${length}`;
-     }
-   
-     length = Math.max(length, 0);
-     const startIndex = page * pageSize;
-     const endIndex =
-       startIndex < length
-         ? Math.min(startIndex + pageSize, length)
-         : startIndex + pageSize;
-     return `${startIndex + 1} - ${endIndex} de ${length}`;
-   };
- 
-columnasArchivos: string[] = [ 'nombre', 'descripcion','estado','enlace', 'fecha', 'evaluar' , 'verDetalles'];
-columnasObservaciones: string[] = [  'observacion'];
+  itemsPerPageLabel = 'Archivos por página';
+  nextPageLabel = 'Siguiente';
+  lastPageLabel = 'Última';
+  firstPageLabel = 'Primera';
+  previousPageLabel = 'Anterior';
+  rango: any = (page: number, pageSize: number, length: number) => {
+    if (length == 0 || pageSize == 0) {
+      return `0 de ${length}`;
+    }
+
+    length = Math.max(length, 0);
+    const startIndex = page * pageSize;
+    const endIndex =
+      startIndex < length
+        ? Math.min(startIndex + pageSize, length)
+        : startIndex + pageSize;
+    return `${startIndex + 1} - ${endIndex} de ${length}`;
+  };
+
+  columnasArchivos: string[] = ['nombre', 'descripcion', 'estado', 'enlace', 'fecha', 'evaluar', 'verDetalles'];
+  columnasObservaciones: string[] = ['observacion', 'estado', 'nombre_completo', 'fecha_aprobacion'];
 
 
-seleccionar(archi:Archivos){
-this.archivoSeleted=archi
-this.estado=this.archivoSeleted.estado;
-//Quitar el usuario 
-this.archivoSeleted.actividad = null;}
+  seleccionar(archi: Archivos) {
+    this.archivoSeleted = archi
+    this.estado = this.archivoSeleted.estado;
+    //Quitar el usuario 
+    this.archivoSeleted.actividad = null;
+  }
 
-  listar(activ: number){
+  listar(activ: number) {
     this.archivoService.listarArchivosPorActividad(activ).subscribe(
       (data: any[]) => {
         this.listaArchivos = data;
         this.dataSource2.data = this.listaArchivos;
+
       },
       (error: any) => {
         console.error('Error al listar los componentes:', error);
       }
-    ); }
-  
-//Metodo para Rechazar y Aprobar
-Rechazar(){
-this.estado="RECHAZADO"
-}
-Aprobar(){
-  this.estado="APROBADO"
-
-}
-
-Limpiar(){
-this.estado="";
- this.observacion="";
-}
-
-
-
-guardar() {
-  // Verificar si estado y observación no están vacíos
-  if (!this.estado || !this.observacion) {
- 
-    Swal.fire(
-      'Advertencia',
-      'Existen campos vacios',
-      'warning'
     );
-    return;
   }
 
-  this.aprobarEvi.estado = this.estado;
-  this.aprobarEvi.observacion = this.observacion;
-  this.aprobarEvi.evidencia = this.archivoSeleted
-  this.aprobarEvi.visible = true;
-  this.aprobarEvi.usuario = this.user.id;
-  this.archivoSeleted.estado= this.estado;
-  // Guardamos la aprobación y actualizamos el estado del archivo en paralelo
-  forkJoin([
-    this.aprobarEvidenciaService.crear(this.aprobarEvi),
-    this.archivoService.actualizar(this.archivoSeleted.id_archivo, this.archivoSeleted)
-  ])
-    .subscribe(
-      ([aprobarResponse, archivoResponse]) => {
-        this.Limpiar();
-        this.listar(this.actividad.id_actividad);
-        Swal.fire(
-          'Exitoso',
-          'Se ha completado el registro con éxito',
-          'success'
-        );
+  //Metodo para Rechazar y Aprobar
+  Rechazar() {
+    this.estado = "RECHAZADO"
+  }
+  Aprobar() {
+    this.estado = "APROBADO"
+
+  }
+
+  Limpiar() {
+    this.estado = "";
+    this.observacion = "";
+  }
+
+
+
+  guardar(activ: any) {
+
+    this.serviper.getcorreo(activ).subscribe(
+      (data: Persona2) => {
+        this.correo = data.correo
+        this.nombre = data.primer_nombre + " " + data.primer_apellido;
+
+        console.log(" correo =" + this.correo)
       },
-      (error) => {
-        console.error('Error al realizar alguna de las operaciones:', error);
-        Swal.fire(
-          'Error',
-          'Ha ocurrido un error en una o ambas operaciones',
-          'warning'
-        );
+      (error: any) => {
+        console.error('Error al listar los componentes:', error);
       }
     );
-}
+
+
+
+    // Verificar si el estado es "RECHAZADO" y la observación está vacía
+    if (this.estado === 'RECHAZADO' && !this.observacion) {
+      Swal.fire(
+        'Advertencia',
+        'La observación es obligatoria ',
+        'warning'
+      );
+      return;
+
+    }
+
+    this.aprobarEvi.estado = this.estado;
+    this.aprobarEvi.observacion = this.observacion;
+    this.aprobarEvi.evidencia = this.archivoSeleted
+    this.aprobarEvi.visible = true;
+    this.aprobarEvi.usuario = this.user.id;
+    this.archivoSeleted.estado = this.estado;
+    // Guardamos la aprobación y actualizamos el estado del archivo en paralelo
+    forkJoin([
+      this.aprobarEvidenciaService.crear(this.aprobarEvi),
+      this.archivoService.actualizar(this.archivoSeleted.id_archivo, this.archivoSeleted)
+    ])
+      .subscribe(
+        ([aprobarResponse, archivoResponse]) => {
+          this.sendEmail();
+          this.Limpiar();
+          this.listar(this.actividad.id_actividad);
+          Swal.fire(
+            'Exitoso',
+            'Se ha completado el registro con éxito',
+            'success'
+          );
+        },
+        (error) => {
+          console.error('Error al realizar alguna de las operaciones:', error);
+          Swal.fire(
+            'Error',
+            'Ha ocurrido un error en una o ambas operaciones',
+            'warning'
+          );
+        }
+      );
+  }
 
 
 
@@ -204,19 +234,19 @@ guardar() {
   getEstadoCellStyle(estado: string): any {
     switch (estado) {
       case 'PENDIENTE':
-        return { background: 'yellow' };
+        return { background: 'rgb(235, 253, 133)' };
       case 'APROBADO':
-        return { background: 'green' };
+        return { background: 'rgb(168, 216, 159)' };
       case 'RECHAZADO':
-        return { background: 'red' };
+        return { background: 'rgb(231, 87, 87)' };
       default:
-        return {}; 
+        return {};
     }
   }
-  
+
   //Ver observaciones
   verDetalles(archiv: any) {
-   this.archivoSeleted.nombre= archiv.nombre;
+    this.archivoSeleted.nombre = archiv.nombre;
     this.aprobarEvidenciaService.listaraporbacionEviPorArchivo(archiv.id_archivo).subscribe(
       (data: any[]) => {
         this.listaAprobacionEvi = data;
@@ -225,8 +255,33 @@ guardar() {
       (error: any) => {
         console.error('Error al listar las observaciones:', error);
       }
-    ); 
+    );
   }
-  
-  
+
+
+  /// envio de correo john
+  sendEmail() {
+    const toUser = [this.correo];
+    const subject = this.estado;
+    const message = this.observacion;
+
+    this.emaservices.sendEmail(toUser, subject, message)
+      .subscribe(
+        response => {
+          console.log('Correo electrónico enviado con éxito:', response);
+        },
+        error => {
+          console.error('Error al enviar el correo electrónico:', error);
+        }
+      );
+  }
+  get isAprobado() {
+    return this.estado === 'APROBADO';
+  }
+
+  get isRechazado() {
+    return this.estado === 'RECHAZADO';
+  }
+
+
 }

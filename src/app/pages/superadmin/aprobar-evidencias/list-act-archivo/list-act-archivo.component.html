@@ -1,6 +1,6 @@
 <body>
     <div class="container bg-light border border-start-0 rounded-4">
-      <blockquote class="blockquote text-dark" style="margin-top: 5%">
+      <blockquote class="blockquote text-dark"  style="margin-top: 5%; background-color: #ffffff; border-left: 10px solid green;">
         <h1 style="text-transform: uppercase" class="titulo">
           <strong
             ><a style="cursor: pointer" (click)=" verPoas()"
@@ -45,19 +45,14 @@
                   {{ elemento.descripcion }}
                 </td>
               </ng-container>
-              <!---
+           
               <ng-container matColumnDef="estado">
                 <th mat-header-cell *matHeaderCellDef>ESTADO</th>
                 <td mat-cell *matCellDef="let elemento" [ngStyle]="getEstadoCellStyle(elemento.estado)">
                   {{ elemento.estado }}
                 </td>
-              </ng-container>--->
-              <ng-container matColumnDef="estado">
-                <th mat-header-cell *matHeaderCellDef>ESTADO</th>
-                <td mat-cell *matCellDef="let elemento">
-                  {{ elemento.estado }}
-                </td>
               </ng-container>
+          
               <ng-container matColumnDef="enlace">
                 <th mat-header-cell *matHeaderCellDef>ENLACE</th>
                 <td mat-cell *matCellDef="let elemento">
@@ -164,20 +159,31 @@
                     <input
                       name="usuario"
                       matInput
+                      disabled
                       [value]="user.persona.primer_nombre +'  ' + user.persona.primer_apellido  "
+                      
+                    />
+                  </mat-form-field>
+                  <mat-form-field class="full-width" appearance="outline">
+                    <mat-label>Subido por:{{nombre}} </mat-label>
+                    <input
+                      name="usuario"
+                      matInput
+                      [(ngModel)]="correo"
                     />
                   </mat-form-field>
 
 
-                  <div class="container text-center">
-                  
+                  <div class="container text-center">                  
                     <div class="row">
                       <div class="col-8">  
-                        <mat-form-field appearance="outline" class="full-width">
-                        <mat-label>Estado</mat-label>
-                        <input matInput name="estado" [(ngModel)]="estado">
-                      </mat-form-field>
-                      
+                        <mat-form-field  appearance="outline" class="full-width">
+                          <mat-label >Estado</mat-label>
+                          <input [ngStyle]="{ 'background-color': isAprobado ? 'rgb(0, 128, 0)' : isRechazado ? 'rgb(255, 0, 0)' : '' }" matInput name="estado" [(ngModel)]="estado" 
+                          [ngClass]="{ 'aprobado-input': isAprobado, 'rechazado-input': isRechazado }" style="font-weight:bold;">
+                        </mat-form-field>
+                        
+                        
                      </div>
                       <div class="col-4"> 
                       <button mat-fab class="thumb-up" (click)="Aprobar()" >
@@ -259,20 +265,33 @@
               <div class="card-body" style="height: 100%;">
                 <div class="mat-elevation-z8 table-responsive"  style="margin-bottom: 5%"  >
                   <table mat-table [dataSource]="dataSource3">
-                      <ng-container matColumnDef="observacion">
+                    <ng-container matColumnDef="observacion">
                       <th mat-header-cell *matHeaderCellDef>OBSERVACIÓN</th>
                       <td mat-cell *matCellDef="let elemento">
-                        {{ elemento.observacion }}
+                        {{ elemento.observacion ? elemento.observacion : 'NINGUNA' }}
                       </td>
                     </ng-container>
-     <!---
+                    
+    
                     <ng-container matColumnDef="estado">
                       <th mat-header-cell *matHeaderCellDef>ESTADO</th>
-                      <td mat-cell *matCellDef="let elemento">
+                      <td mat-cell *matCellDef="let elemento" [ngStyle]="getEstadoCellStyle(elemento.estado)">
                         {{ elemento.estado }}
                       </td>
                     </ng-container>
-                  --->
+                    <ng-container matColumnDef="nombre_completo">
+                      <th mat-header-cell *matHeaderCellDef>EVALUADO POR</th>
+                      <td mat-cell *matCellDef="let elemento">
+                        {{ elemento.primer_nombre }} {{ elemento.primer_apellido }}
+                      </td>
+                    </ng-container>
+                    
+                    <ng-container matColumnDef="fecha_aprobacion">
+                      <th mat-header-cell *matHeaderCellDef>FECHA DE EVALUACIÓN</th>
+                      <td mat-cell *matCellDef="let elemento" >
+                        {{ elemento.fecha_aprobacion  | date:'dd/MM/yyyy'}}
+                      </td>
+                    </ng-container>
                     <tr mat-header-row *matHeaderRowDef="columnasObservaciones"></tr>
                     <tr mat-row *matRowDef="let fila; columns: columnasObservaciones"></tr>
                   </table>

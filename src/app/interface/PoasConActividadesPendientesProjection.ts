@@ -6,5 +6,7 @@ export interface PoasConActividadesPendientesProjection{
     fecha_inicio: string;
     fecha_fin: string;
     nombre: string;
+    codigo: string;
+    usuario: string;
     nro_actividades: string;
 }
