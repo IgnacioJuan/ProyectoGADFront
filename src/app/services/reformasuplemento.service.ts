@@ -30,7 +30,7 @@ export class ReformaSuplementoService {
     return this.http.put(`${baserUrl}/api/reformasuplemento/eliminarlogic/${rs.id_ref_suplemento}`, rs);
   }
   
-  listarRSActividades(): Observable<ReformaSuplemento[]> {
-    return this.http.get<ReformaSuplemento[]>(`${baserUrl}/api/reformasuplemento/listarRSActividades`);
+  listarRSActividades(actividadId: number): Observable<ReformaSuplemento[]> {
+    return this.http.get<ReformaSuplemento[]>(`${baserUrl}/api/reformasuplemento/listarRSActividades/${actividadId}`);
   }
 }

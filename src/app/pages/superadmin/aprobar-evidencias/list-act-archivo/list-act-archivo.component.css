@@ -54,3 +54,8 @@
 .mat-form-field{
   margin-left: 10px;
 }
+
+input:disabled,mat-label {
+  color: #000000; 
+  background-color: #ffffff; 
+}

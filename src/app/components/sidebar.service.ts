@@ -48,7 +48,7 @@ export class SidebarService {
         { titulo: 'Modelo', url: 'sup/flujo-modelo/modelo', icono: 'fas fa-list-ul ' },
         { titulo: 'Indicador', url: 'sup/flujo_Componentes/componentesSuper', icono: 'fas fa-list-ul ' },
         { titulo: 'Programas', url: 'sup/crearpro', icono: 'fas fa-list-ul ' },
-        { titulo: 'Componentes', url: 'sup/ejes/ejestabla', icono: 'fas fa-list-ul ' },
+        { titulo: 'Objetivos PND', url: 'sup/ejes/ejestabla', icono: 'fas fa-list-ul ' },
         { titulo: 'Competencia', url: 'sup/crearcompe', icono: 'fas fa-list-ul ' },
         { titulo: 'ODS', url: 'sup/objetivoods-lista', icono: 'fas fa-list-ul ' },
 
@@ -80,7 +80,14 @@ export class SidebarService {
 
       ]
     },
+    {
+      icono: 'nav-icon fas fa-solid fa-list',
+      titulo: "Evaluación",
+      submenu: [
+        { titulo: 'Actividades', url: 'sup/aprobar-actividades/poa-actividad', icono: 'fas fa-list-ul ' },
 
+      ]
+    },
     {
       icono: 'nav-icon fas fa-solid fa-list',
       titulo: "Reportes",
@@ -105,6 +112,8 @@ export class SidebarService {
       submenu: [
         { titulo: 'Mis Actividades', url: 'res/activ/actividadesdesig', icono: 'fas fa-file-contract' },
         { titulo: 'Resumen Presupuestos', url: 'res/resumen-presupuestos/lista-actividades', icono: 'fas fa-list-ul ' },
+        { titulo: 'Solicitud de Presupuesto', url: 'res/solicitar-presupuestos/listSolicitudes', icono: 'fas fa-list-ul ' },
+
       ]
     }
 

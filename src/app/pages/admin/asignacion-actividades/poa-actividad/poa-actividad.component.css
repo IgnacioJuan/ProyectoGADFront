@@ -26,3 +26,18 @@
   .titulo {
     color: green !important;
   }
+  .header-title {
+    font-size: 30px;
+    font-weight: bold;
+    color:rgb(9, 70, 9); /* You can choose your preferred color */
+    text-align: left;
+  }
+  .align-right-dollar {
+    text-align: right; /* Alinear a la derecha */
+  }
+  
+  .align-right-dollar::before {
+    content: "$"; /* Agregar el símbolo de dólar antes del contenido */
+    margin-right: 5px; /* Espacio entre el símbolo de dólar y el número */
+  }
+  

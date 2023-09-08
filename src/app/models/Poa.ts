@@ -13,6 +13,7 @@ export class Poa {
     linea_base!: number; 
     meta_alcanzar!: number; 
     meta_planificada!: number;
+    valorTotal!:number;
     visible!: boolean;
     usuario!:Usuario2;
 }

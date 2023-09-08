@@ -1,11 +1,11 @@
 <body>
   <div class="container bg-light border border-start-0 rounded-4">
-    <blockquote class="blockquote text-dark" style="margin-top: 5%">
-      <h1 style="text-transform: uppercase" class="titulo">
+    <blockquote style="margin-top: 5%; background-color: #ffffff; border-left: 10px solid green;">
+      <h1 style="text-transform: uppercase" class="header-title">
         <strong><a style="cursor: pointer" (click)=" verPoas()">LISTADO POAS
           </a>
           >
-          <a class="titulo">ACTIVIDADES </a></strong>
+          <a class="header-title">ACTIVIDADES </a></strong>
       </h1>
     </blockquote>
     <div class="card">
@@ -22,7 +22,8 @@
           <table mat-table [dataSource]="dataSource">
             <ng-container matColumnDef="id_actividad">
               <th mat-header-cell *matHeaderCellDef>ID</th>
-              <td mat-cell *matCellDef="let elemento">
+              <td mat-cell *matCellDef="let elemento" (mouseenter)="showHint = true" (mouseleave)="showHint = false"
+                [class.show-hint]="showHint">
                 {{ elemento.id_actividad }}
               </td>
             </ng-container>
@@ -40,61 +41,84 @@
             </ng-container>
             <ng-container matColumnDef="presupuesto_referencial">
               <th mat-header-cell *matHeaderCellDef>PRESUPUESTO REFERENCIAL</th>
-              <td mat-cell *matCellDef="let elemento">
+              <td mat-cell *matCellDef="let elemento" class="align-right-dollar">
                 {{ elemento.presupuesto_referencial }}
               </td>
             </ng-container>
             <ng-container matColumnDef="recursos_propios">
               <th mat-header-cell *matHeaderCellDef>R. PROPIOS</th>
-              <td mat-cell *matCellDef="let elemento">
+              <td mat-cell *matCellDef="let elemento" class="align-right-dollar">
                 {{ elemento.recursos_propios }}
               </td>
             </ng-container>
             <ng-container matColumnDef="codificado">
               <th mat-header-cell *matHeaderCellDef>CODIFICADO</th>
-              <td mat-cell *matCellDef="let elemento">
+              <td mat-cell *matCellDef="let elemento" class="align-right-dollar">
                 {{ elemento.codificado }}
               </td>
             </ng-container>
             <ng-container matColumnDef="devengado">
               <th mat-header-cell *matHeaderCellDef>DEVENGADO</th>
-              <td mat-cell *matCellDef="let elemento">
+              <td mat-cell *matCellDef="let elemento" class="align-right-dollar">
                 {{ elemento.devengado }}
               </td>
             </ng-container>
-            <ng-container matColumnDef="estado">
+            <ng-container matColumnDef="totalpresupuestoEterno">
+              <th mat-header-cell *matHeaderCellDef>P.EXRTERNO</th>
+              <td mat-cell *matCellDef="let elemento" class="align-right-dollar">
+                {{ elemento.totalpresupuestoEterno }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="totalreformaSuplemento">
+              <th mat-header-cell *matHeaderCellDef>SUPLEMENTO</th>
+              <td mat-cell *matCellDef="let elemento" class="align-right-dollar">
+                {{ elemento.totalreformaSuplemento }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="totalreformaTIncremento">
+              <th mat-header-cell *matHeaderCellDef>INCREMENTO</th>
+              <td mat-cell *matCellDef="let elemento" class="align-right-dollar">
+                {{ elemento.totalreformaTIncremento }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="totalreformaTDecremento">
+              <th mat-header-cell *matHeaderCellDef>DECREMENTO</th>
+              <td mat-cell *matCellDef="let elemento" class="align-right-dollar">
+                {{ elemento.totalreformaTDecremento }}
+              </td>
+            </ng-container>
+            <!--<ng-container matColumnDef="estado">
               <th mat-header-cell *matHeaderCellDef>ESTADO</th>
               <td mat-cell *matCellDef="let elemento">
                 {{ elemento.estado }}
               </td>
-            </ng-container>
+            </ng-container>-->
             <ng-container matColumnDef="actions">
-              <th mat-header-cell *matHeaderCellDef>ACCIONES</th>
-              <td mat-cell *matCellDef="let element">
+              <th mat-header-cell *matHeaderCellDef class="acciones-header">ACCIONES</th>
+              <td mat-cell *matCellDef="let element" class="acciones-cell">
                 <button class="btn btn-sm btn-custom-red" title="Asignar Presupuesto Externo" data-bs-toggle="modal"
                   data-bs-target="#materiaModal1" (click)="abrirModal(element.id_actividad)">
                   <i class="fas fa-file-invoice-dollar" style="color:  hsl(156, 81%, 21%); font-size: 24px;"></i>
                 </button>
                 <button class="btn btn-sm btn-custom-red" title="Asignar Reforma Suplemento" data-bs-toggle="modal"
                   data-bs-target="#materiaModal2" (click)="abrirModal(element.id_actividad)">
-                  <i class="fas fa-plus" style="color:  yellow; font-size: 24px;"></i>
+                  <i class="fas fa-plus-square" style="color:  rgb(184, 129, 27); font-size: 24px;"></i>
                 </button>
                 <button class="btn btn-sm btn-custom-red" title="Asignar Traspaso Incremento" data-bs-toggle="modal"
                   data-bs-target="#materiaModal3" (click)="abrirModal(element.id_actividad)">
-                  <i class="fas fa-chart-line" style="color:  blue; font-size: 24px;"></i>
+                  <i class="fas fa-plus" style="color:  blue; font-size: 24px;"></i>
                 </button>
                 <button class="btn btn-sm btn-custom-red" title="Asignar Traspaso Decremento" data-bs-toggle="modal"
                   data-bs-target="#materiaModal4" (click)="abrirModal(element.id_actividad)">
-                  <i class="fas fa-chart-line icon-inverted" style="color:  red; font-size: 24px;"></i>
+                  <i class="fas fa-minus" style="color:  red; font-size: 24px;"></i>
                 </button>
               </td>
             </ng-container>
             <tr mat-header-row *matHeaderRowDef="columnasUsuario"></tr>
-            <tr mat-row *matRowDef="let fila; columns: columnasUsuario"></tr>
+            <tr mat-row *matRowDef="let fila; columns: columnasUsuario" (click)="clicEnActividad(fila)"></tr>
           </table>
-          <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
-            aria-label="Select page of periodic elements" itemsPerPageLabel="Items por página:"
-            nextPageLabel="Siguiente" previousPageLabel="Anterior">
+          <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Seleccione"
+            itemsPerPageLabel="Items por página:" nextPageLabel="Siguiente" previousPageLabel="Anterior">
           </mat-paginator>
         </div>
         <!--Modal 1 para presupuesto externo-->
@@ -325,194 +349,197 @@
             </div>
           </div>
         </div>
-
-        <!--SELECT PARA LISTAR TIPOS DE PRESUPUESTOS-->
-        <mat-select [(value)]="opcionSeleccionada" (selectionChange)="seleccionarOpcion($event)" class="custom-select">
-          <mat-option value="visualizarAsignaciones">Asignaciones de Presupuesto de Actividad</mat-option>
-          <mat-option value="presupuestoExterno">Listar Presupuestos Externos</mat-option>
-          <mat-option value="reformaSuplemento">Listar Reformas Suplementos</mat-option>
-          <mat-option value="rtincremento">Listar Reforma Traspaso Incrementos</mat-option>
-          <mat-option value="rtdecremento">Listar Reforma Traspaso Decremento</mat-option>
-        </mat-select><br/><br/>
-        
-        <!-- LISTAR TABLAS DE PRESUPUESTOS-->
-        <div *ngIf="opcionSeleccionada === 'presupuestoExterno'" class="mat-elevation-z8 table-responsive">
-          <table mat-table [dataSource]="dataSource2">
-            <ng-container matColumnDef="id_presupuesto_externo">
-              <th mat-header-cell *matHeaderCellDef>ID</th>
-              <td mat-cell *matCellDef="let elemento">
-                {{ elemento.id_presupuesto_externo }}
-              </td>
-            </ng-container>
-            <ng-container matColumnDef="nombre_institucion">
-              <th mat-header-cell *matHeaderCellDef>NOMBRE CONTRIBUYENTE</th>
-              <td mat-cell *matCellDef="let elemento">
-                {{ elemento.nombre_institucion }}
-              </td>
-            </ng-container>
-            <ng-container matColumnDef="valor">
-              <th mat-header-cell *matHeaderCellDef>VALOR</th>
-              <td mat-cell *matCellDef="let elemento">
-                {{ elemento.valor }}
-              </td>
-            </ng-container>
-            <ng-container matColumnDef="fecha">
-              <th mat-header-cell *matHeaderCellDef>FECHA</th>
-              <td mat-cell *matCellDef="let elemento">
-                {{ elemento.fecha }}
-              </td>
-            </ng-container>
-            <ng-container matColumnDef="observacion">
-              <th mat-header-cell *matHeaderCellDef>OBSERVACION</th>
-              <td mat-cell *matCellDef="let elemento">
-                {{ elemento.observacion }}
-              </td>
-            </ng-container>
-            <ng-container matColumnDef="nombreActividad">
-              <th mat-header-cell *matHeaderCellDef>Actividad</th>
-              <td mat-cell *matCellDef="let elemento">
-                {{ elemento.nombreActividad }}
-              </td>
-            </ng-container>
-            <ng-container matColumnDef="nombreProyecto">
-              <th mat-header-cell *matHeaderCellDef>Proyecto</th>
-              <td mat-cell *matCellDef="let elemento">
-                {{ elemento.nombreProyecto }}
-              </td>
-            </ng-container>
-            <tr mat-header-row *matHeaderRowDef="columnasUsuario2"></tr>
-            <tr mat-row *matRowDef="let fila; columns: columnasUsuario2"></tr>
-          </table>
-          <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
-            aria-label="Select page of periodic elements" itemsPerPageLabel="Items por página:"
-            nextPageLabel="Siguiente" previousPageLabel="Anterior">
-          </mat-paginator>
-        </div>
-        <!-- LISTAR TABLAS DE REFORMA SUPLEMENTOS-->
-        <div *ngIf="opcionSeleccionada === 'reformaSuplemento'" class="mat-elevation-z8 table-responsive">
-          <table mat-table [dataSource]="dataSource3">
-            <ng-container matColumnDef="id_ref_suplemento">
-              <th mat-header-cell *matHeaderCellDef>ID</th>
-              <td mat-cell *matCellDef="let elemento">
-                {{ elemento.id_ref_suplemento }}
-              </td>
-            </ng-container>
-            <ng-container matColumnDef="valor">
-              <th mat-header-cell *matHeaderCellDef>VALOR</th>
-              <td mat-cell *matCellDef="let elemento">
-                {{ elemento.valor }}
-              </td>
-            </ng-container>
-            <ng-container matColumnDef="fecha">
-              <th mat-header-cell *matHeaderCellDef>FECHA</th>
-              <td mat-cell *matCellDef="let elemento">
-                {{ elemento.fecha }}
-              </td>
-            </ng-container>
-            <ng-container matColumnDef="nombreActividad">
-              <th mat-header-cell *matHeaderCellDef>Actividad</th>
-              <td mat-cell *matCellDef="let elemento">
-                {{ elemento.nombreActividad }}
-              </td>
-            </ng-container>
-            <ng-container matColumnDef="nombreProyecto">
-              <th mat-header-cell *matHeaderCellDef>Proyecto</th>
-              <td mat-cell *matCellDef="let elemento">
-                {{ elemento.nombreProyecto }}
-              </td>
-            </ng-container>
-            <tr mat-header-row *matHeaderRowDef="columnasUsuario3"></tr>
-            <tr mat-row *matRowDef="let fila; columns: columnasUsuario3"></tr>
-          </table>
-          <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
-            aria-label="Select page of periodic elements" itemsPerPageLabel="Items por página:"
-            nextPageLabel="Siguiente" previousPageLabel="Anterior">
-          </mat-paginator>
-        </div>
-        <!-- LISTAR TABLAS DE REFORMAS TRASPASO INCREMENTO-->
-        <div *ngIf="opcionSeleccionada === 'rtincremento'" class="mat-elevation-z8 table-responsive">
-          <table mat-table [dataSource]="dataSource4">
-            <ng-container matColumnDef="id_reftras_i">
-              <th mat-header-cell *matHeaderCellDef>ID</th>
-              <td mat-cell *matCellDef="let elemento">
-                {{ elemento.id_reftras_i }}
-              </td>
-            </ng-container>
-            <ng-container matColumnDef="valor">
-              <th mat-header-cell *matHeaderCellDef>VALOR</th>
-              <td mat-cell *matCellDef="let elemento">
-                {{ elemento.valor }}
-              </td>
-            </ng-container>
-            <ng-container matColumnDef="fecha">
-              <th mat-header-cell *matHeaderCellDef>FECHA</th>
-              <td mat-cell *matCellDef="let elemento">
-                {{ elemento.fecha }}
-              </td>
-            </ng-container>
-            <ng-container matColumnDef="nombreActividad">
-              <th mat-header-cell *matHeaderCellDef>Actividad</th>
-              <td mat-cell *matCellDef="let elemento">
-                {{ elemento.nombreActividad }}
-              </td>
-            </ng-container>
-            <ng-container matColumnDef="nombreProyecto">
-              <th mat-header-cell *matHeaderCellDef>Proyecto</th>
-              <td mat-cell *matCellDef="let elemento">
-                {{ elemento.nombreProyecto }}
-              </td>
-            </ng-container>
-            <tr mat-header-row *matHeaderRowDef="columnasUsuario4"></tr>
-            <tr mat-row *matRowDef="let fila; columns: columnasUsuario4"></tr>
-          </table>
-          <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
-            aria-label="Select page of periodic elements" itemsPerPageLabel="Items por página:"
-            nextPageLabel="Siguiente" previousPageLabel="Anterior">
-          </mat-paginator>
-        </div>
-        <!-- LISTAR TABLAS DE REFORMAS TRASPASOS DECREMENTOS-->
-        <div *ngIf="opcionSeleccionada === 'rtdecremento'" class="mat-elevation-z8 table-responsive">
-          <table mat-table [dataSource]="dataSource5">
-            <ng-container matColumnDef="id_reftras_d">
-              <th mat-header-cell *matHeaderCellDef>ID</th>
-              <td mat-cell *matCellDef="let elemento">
-                {{ elemento.id_reftras_d }}
-              </td>
-            </ng-container>
-            <ng-container matColumnDef="valor">
-              <th mat-header-cell *matHeaderCellDef>VALOR</th>
-              <td mat-cell *matCellDef="let elemento">
-                {{ elemento.valor }}
-              </td>
-            </ng-container>
-            <ng-container matColumnDef="fecha">
-              <th mat-header-cell *matHeaderCellDef>FECHA</th>
-              <td mat-cell *matCellDef="let elemento">
-                {{ elemento.fecha }}
-              </td>
-            </ng-container>
-            <ng-container matColumnDef="nombreActividad">
-              <th mat-header-cell *matHeaderCellDef>Actividad</th>
-              <td mat-cell *matCellDef="let elemento">
-                {{ elemento.nombreActividad }}
-              </td>
-            </ng-container>
-            <ng-container matColumnDef="nombreProyecto">
-              <th mat-header-cell *matHeaderCellDef>Proyecto</th>
-              <td mat-cell *matCellDef="let elemento">
-                {{ elemento.nombreProyecto }}
-              </td>
-            </ng-container>
-            <tr mat-header-row *matHeaderRowDef="columnasUsuario5"></tr>
-            <tr mat-row *matRowDef="let fila; columns: columnasUsuario5"></tr>
-          </table>
-          <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
-            aria-label="Select page of periodic elements" itemsPerPageLabel="Items por página:"
-            nextPageLabel="Siguiente" previousPageLabel="Anterior">
-          </mat-paginator>
-        </div>
-        
       </div>
     </div>
+
+    <!--TABLAS DE TIPOS DE PRESUPUESTOS-->
+    <div>
+      <section class="content-header" id="enc">
+        <div class="container-fluid" style="border: 1px; border-radius: 2%">
+          <div class="row mb-2">
+            <div class="col-sm-6" id="letra">
+              <h3>
+                <strong>Presupuestos de la actividad:</strong>
+                {{ nombreActividad }}
+              </h3>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+    <mat-tab-group>
+      <mat-tab label="Presupuesto Externo">
+        <div class="card">
+          <div class="card-body">
+            <div class="input-group mb-3">
+              <input type="text" class="form-control" placeholder="Buscar..." [(ngModel)]="searchTerm1" />
+            </div>
+            <div class="mat-elevation-z8">
+              <table mat-table [dataSource]="listaPE | responsable : searchTerm1" class="table table-hover">
+                <ng-container matColumnDef="id_presupuesto_externo">
+                  <th mat-header-cell *matHeaderCellDef>ID</th>
+                  <td mat-cell *matCellDef="let a; let i = index" [attr.rowspan]="getRowSpan('id_presupuesto_externo', i)"
+                    [style.display]="getRowSpan('id_presupuesto_externo', i) ? '' : 'none'">
+                    {{ a.id_presupuesto_externo }}
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="nombre_institucion">
+                  <th mat-header-cell *matHeaderCellDef>Nombre Institución</th>
+                  <td mat-cell *matCellDef="let a; let i = index" [attr.rowspan]="getRowSpan('nombre_institucion', i)"
+                    [style.display]="getRowSpan('nombre_institucion', i) ? '' : 'none'">
+                    {{ a.nombre_institucion }}
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="valor">
+                  <th mat-header-cell *matHeaderCellDef>Valor</th>
+                  <td mat-cell *matCellDef="let a; let i = index" [attr.rowspan]="getRowSpan('valor', i)"
+                    [style.display]="getRowSpan('valor', i) ? '' : 'none'">
+                    {{ a.valor }}
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="fecha">
+                  <th mat-header-cell *matHeaderCellDef>Fecha</th>
+                  <td mat-cell *matCellDef="let a; let i = index" [attr.rowspan]="getRowSpan('fecha', i)"
+                    [style.display]="getRowSpan('fecha', i) ? '' : 'none'">
+                    {{ a.fecha | date:'yyyy-MM-dd'}}
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="observacion">
+                  <th mat-header-cell *matHeaderCellDef>Observación</th>
+                  <td mat-cell *matCellDef="let a; let i = index" [attr.rowspan]="getRowSpan('observacion', i)"
+                    [style.display]="getRowSpan('observacion', i) ? '' : 'none'">
+                    {{ a.observacion }}
+                  </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="columnasPE"></tr>
+                <tr mat-row *matRowDef="let a; columns: columnasPE"></tr>
+              </table>
+              <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Seleccione">
+              </mat-paginator>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+
+      <!-- Tab RS -->
+      <mat-tab label="Reforma Suplemento">
+        <div class="card">
+          <div class="card-body">
+            <div class="input-group mb-3">
+              <input type="text" class="form-control" placeholder="Buscar..." [(ngModel)]="searchTerm2" />
+            </div>
+            <div class="mat-elevation-z8">
+              <table mat-table [dataSource]="listaRS | responsable : searchTerm2" class="table table-hover">
+                <ng-container matColumnDef="id_ref_suplemento">
+                  <th mat-header-cell *matHeaderCellDef>ID</th>
+                  <td mat-cell *matCellDef="let e; let i = index" [attr.rowspan]="getRowSpan2('id_ref_suplemento', i)"
+                    [style.display]="getRowSpan2('id_ref_suplemento', i) ? '' : 'none'">
+                    {{ e.id_ref_suplemento }}
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="valor">
+                  <th mat-header-cell *matHeaderCellDef>Valor</th>
+                  <td mat-cell *matCellDef="let e; let i = index" [attr.rowspan]="getRowSpan2('valor', i)"
+                    [style.display]="getRowSpan2('valor', i) ? '' : 'none'">
+                    {{ e.valor }}
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="fecha">
+                  <th mat-header-cell *matHeaderCellDef>Fecha</th>
+                  <td mat-cell *matCellDef="let e; let i = index" [attr.rowspan]="getRowSpan2('fecha', i)"
+                    [style.display]="getRowSpan2('fecha', i) ? '' : 'none'">
+                    {{ e.fecha | date:'yyyy-MM-dd'}}
+                  </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="columnasRS"></tr>
+                <tr mat-row *matRowDef="let e; columns: columnasRS"></tr>
+              </table>
+              <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Seleccione">
+              </mat-paginator>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+
+      <!-- Tab RTI -->
+      <mat-tab label="Reforma Traspaso Incremento">
+        <div class="card">
+          <div class="card-body">
+            <div class="input-group mb-3">
+              <input type="text" class="form-control" placeholder="Buscar..." [(ngModel)]="searchTerm3" />
+            </div>
+            <div class="mat-elevation-z8">
+              <table mat-table [dataSource]="listaRTI | responsable : searchTerm3" class="table table-hover">
+                <ng-container matColumnDef="id_reftras_i">
+                  <th mat-header-cell *matHeaderCellDef>ID</th>
+                  <td mat-cell *matCellDef="let r; let i = index" [attr.rowspan]="getRowSpan3('id_reftras_i', i)"
+                    [style.display]="getRowSpan3('id_reftras_i', i) ? '' : 'none'">
+                    {{ r.id_reftras_i }}
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="valor">
+                  <th mat-header-cell *matHeaderCellDef>Valor</th>
+                  <td mat-cell *matCellDef="let r; let i = index" [attr.rowspan]="getRowSpan3('valor', i)"
+                    [style.display]="getRowSpan3('valor', i) ? '' : 'none'">
+                    {{ r.valor }}
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="fecha">
+                  <th mat-header-cell *matHeaderCellDef>Fecha</th>
+                  <td mat-cell *matCellDef="let r; let i = index" [attr.rowspan]="getRowSpan3('fecha', i)"
+                    [style.display]="getRowSpan3('fecha', i) ? '' : 'none'">
+                    {{ r.fecha | date:'yyyy-MM-dd' }}
+                  </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="columnasRTI"></tr>
+                <tr mat-row *matRowDef="let a; columns: columnasRTI"></tr>
+              </table>
+              <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Seleccione">
+              </mat-paginator>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+
+      <!-- Tab para RTD -->
+      <mat-tab label="Reforma Traspaso Decremento">
+        <div class="card">
+          <div class="card-body">
+            <div class="input-group mb-3">
+              <input type="text" class="form-control" placeholder="Buscar..." [(ngModel)]="searchTerm4" />
+            </div>
+            <div class="mat-elevation-z8">
+              <table mat-table [dataSource]="listaRTD | responsable : searchTerm4" class="table table-hover">
+                <ng-container matColumnDef="id_reftras_d">
+                  <th mat-header-cell *matHeaderCellDef>ID</th>
+                  <td mat-cell *matCellDef="let a; let i = index" [attr.rowspan]="getRowSpan4('id_reftras_d', i)"
+                    [style.display]="getRowSpan4('id_reftras_d', i) ? '' : 'none'">
+                    {{ a.id_reftras_d }}
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="valor">
+                  <th mat-header-cell *matHeaderCellDef>Valor</th>
+                  <td mat-cell *matCellDef="let a; let i = index" [attr.rowspan]="getRowSpan4('valor', i)"
+                    [style.display]="getRowSpan4('valor', i) ? '' : 'none'">
+                    {{ a.valor }}
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="fecha">
+                  <th mat-header-cell *matHeaderCellDef>Fecha</th>
+                  <td mat-cell *matCellDef="let a; let i = index" [attr.rowspan]="getRowSpan4('fecha', i)"
+                    [style.display]="getRowSpan4('fecha', i) ? '' : 'none'">
+                    {{ a.fecha | date:'yyyy-MM-dd' }}
+                  </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="columnasRTD"></tr>
+                <tr mat-row *matRowDef="let a; columns: columnasRTD"></tr>
+              </table>
+              <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Seleccione">
+              </mat-paginator>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
   </div>
 </body>

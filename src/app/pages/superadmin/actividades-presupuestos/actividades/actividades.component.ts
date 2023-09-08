@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
@@ -16,7 +16,6 @@ import { PresupuestoExternoService } from 'src/app/services/presupuestoexterno.s
 import { ReformaSuplementoService } from 'src/app/services/reformasuplemento.service';
 import { ReformaTraspasoIService } from 'src/app/services/reformatraspaso-i.service';
 import { ReformaTraspasoDService } from 'src/app/services/reformatraspaso-d.service';
-import { MatSelectChange } from '@angular/material/select';
 
 @Component({
   selector: 'app-actividades',
@@ -36,14 +35,27 @@ export class ListaActividadesComponent implements OnInit {
   mostrarTabla2: boolean = false;
   mostrarTabla3: boolean = false;
   mostrarTabla4: boolean = false;
+
+  searchTerm: string = '';
+  searchTerm1: string = '';
+  searchTerm2: string = '';
+  searchTerm3: string = '';
+  searchTerm4: string = '';
+  showHint!: boolean;
+  nombreActividad: string = '';
+  listaPE!: PresupuestoExterno[];
+  listaRS!: ReformaSuplemento[];
+  listaRTI!: ReformaTraspasoI[];
+  listaRTD!: ReformaTraspasoD[];
+  spans: any[] = [];
+  spans2: any[] = [];
+  spans3: any[] = [];
+  spans4: any[] = [];
+  act!: ActividadesPoa[];
   
 
   //tabla
-  itemsPerPageLabel = 'Actividades por página';
-  itemsPerPageLabel2 = 'Presupuesto Externo por página';
-  itemsPerPageLabel3 = 'R.Suplemento por página';
-  itemsPerPageLabel4 = 'R.T.Incremento por página';
-  itemsPerPageLabel5 = 'R.T.Decremento por página';
+  itemsPerPageLabel = 'Items por página';
   nextPageLabel = 'Siguiente';
   lastPageLabel = 'Última';
   firstPageLabel = 'Primera';
@@ -82,21 +94,20 @@ export class ListaActividadesComponent implements OnInit {
   poaId!: number;
 
   filterPost: string = "";
-  filteredPoas: any[] = [];
   resultadosEncontrados: boolean = true;
 
-  dataSource = new MatTableDataSource<ActividadesPoa>();
-  columnasUsuario: string[] = ['id_actividad', 'nombre', 'descripcion', 'presupuesto_referencial', 'recursos_propios', 'codificado', 'devengado', 'estado', 'actions'];
+  dataSource = new MatTableDataSource<ActividadesPoa>(this.act);
+  columnasUsuario: string[] = ['id_actividad', 'nombre', 'descripcion', 'presupuesto_referencial', 'recursos_propios', 'codificado', 'devengado','totalpresupuestoEterno','totalreformaSuplemento','totalreformaTIncremento','totalreformaTDecremento', 'actions'];
 
-
-  dataSource2 = new MatTableDataSource<PresupuestoExterno>();
-  columnasUsuario2: string[] = ['id_presupuesto_externo', 'nombre_institucion', 'valor', 'fecha', 'observacion', 'nombreActividad','nombreProyecto'];
-  dataSource3 = new MatTableDataSource<ReformaSuplemento>();
-  columnasUsuario3: string[] = ['id_ref_suplemento', 'valor', 'fecha', 'nombreActividad','nombreProyecto'];
-  dataSource4 = new MatTableDataSource<ReformaTraspasoI>();
-  columnasUsuario4: string[] = ['id_reftras_i', 'valor', 'fecha', 'nombreActividad','nombreProyecto'];
-  dataSource5 = new MatTableDataSource<ReformaTraspasoD>();
-  columnasUsuario5: string[] = ['id_reftras_d', 'valor', 'fecha', 'nombreActividad','nombreProyecto'];
+  //LISTAR LOS 4 TIPOS DE PRESUPUESTOS
+ // dataSourcePE = new MatTableDataSource<PresupuestoExterno>();
+  columnasPE: string[] = ['id_presupuesto_externo', 'nombre_institucion', 'valor', 'fecha','observacion'];
+  //dataSourceRS = new MatTableDataSource<ReformaSuplemento>();
+  columnasRS: string[] = ['id_ref_suplemento', 'valor', 'fecha'];
+//dataSourceRTI = new MatTableDataSource<ReformaTraspasoI>();
+  columnasRTI: string[] = ['id_reftras_i', 'valor', 'fecha'];
+ // dataSourceRTD = new MatTableDataSource<ReformaTraspasoD>();
+  columnasRTD: string[] = ['id_reftras_d', 'valor', 'fecha'];
   
   @ViewChild('datosModalRef') datosModalRef: any;
   @ViewChild(MatPaginator, { static: false }) paginator?: MatPaginator;
@@ -142,15 +153,9 @@ export class ListaActividadesComponent implements OnInit {
     this.poa = data;
     console.log(this.poa);
     this.listar(this.poa.id_poa);
-    this.listarPE();
-    this.listarRS();
-    this.listarRTI();
-    this.listarRTD();
-  }
-
-  opcionSeleccionada: string = 'visualizarAsignaciones'; 
-  seleccionarOpcion(event: MatSelectChange) {
-    this.opcionSeleccionada = event.value;
+    this.actividadservice.obtenerActividades().subscribe((data: ActividadesPoa[]) => {
+      this.act = data;
+    });
   }
 
   // VALIDACIONES
@@ -195,7 +200,7 @@ export class ListaActividadesComponent implements OnInit {
 
   listar(poaId: number): void {
     this.dataSource.data = [];
-    this.actividadservice.getActividadesPoa(poaId).subscribe(
+    this.actividadservice.getActividadesPoa2(poaId).subscribe(
       (data: any[]) => {
         this.actividades = data;
         this.dataSource.data = this.actividades;
@@ -348,50 +353,138 @@ export class ListaActividadesComponent implements OnInit {
     }
   }
 
+  //PROCESOS PARA LISTAR PRESUPUESTOS DE UNA ACTIVIDAD
+  getRowSpan(col: any, index: any) {
+    return this.spans[index] && this.spans[index][col];
+  }
+  getRowSpan2(col: any, index: any) {
+    return this.spans2[index] && this.spans2[index][col];
+  }
+  getRowSpan3(col: any, index: any) {
+    return this.spans3[index] && this.spans3[index][col];
+  }
+  getRowSpan4(col: any, index: any) {
+    return this.spans4[index] && this.spans4[index][col];
+  }
+  cacheSpan(key: string, accessor: (d: any) => any) {
+    for (let i = 0; i < this.listaPE.length;) {
+      let currentValue = accessor(this.listaPE[i]);
+      let count = 1;
 
-  //LISTAR TABLAS DE PRESUPUESTOS
-  listarPE(): void {
-    this.pexternoservice.listarPEActividades().subscribe(
-      (data: any[]) => {
-        this.listaPEActividades = data;
-        this.dataSource2.data = this.listaPEActividades;
-      },
-      (error: any) => {
-        console.error('Error al listar presupuesto externos:', error);
+      for (let j = i + 1; j < this.listaPE.length; j++) {
+        if (currentValue !== accessor(this.listaPE[j])) {
+          break;
+        }
+        count++;
       }
-    );
+  
+      if (!this.spans[i]) {
+        this.spans[i] = {};
+      }
+  
+      this.spans[i][key] = count;
+      i += count;
+    }
   }
-  listarRS(): void {
-    this.rsuplementoservice.listarRSActividades().subscribe(
-      (data: any[]) => {
-        this.listaRSActividades = data;
-        this.dataSource3.data = this.listaRSActividades;
-      },
-      (error: any) => {
-        console.error('Error al listar reformas suplementos:', error);
+  cacheSpan2(key: string, accessor: (d: any) => any) {
+    for (let i = 0; i < this.listaRS.length;) {
+      let currentValue = accessor(this.listaRS[i]);
+      let count = 1;
+  
+      for (let j = i + 1; j < this.listaRS.length; j++) {
+        if (currentValue !== accessor(this.listaRS[j])) {
+          break;
+        }
+        count++;
       }
-    );
+  
+      if (!this.spans2[i]) {
+        this.spans2[i] = {};
+      }
+  
+      this.spans2[i][key] = count;
+      i += count;
+    }
   }
-  listarRTI(): void {
-    this.rtincrementoservice.listarRTIActividades().subscribe(
-      (data: any[]) => {
-        this.listaRTIActividades = data;
-        this.dataSource4.data = this.listaRTIActividades;
-      },
-      (error: any) => {
-        console.error('Error al listar reformas traspasos incrementos:', error);
+  cacheSpan3(key: string, accessor: (d: any) => any) {
+    for (let i = 0; i < this.listaRTI.length;) {
+      let currentValue = accessor(this.listaRTI[i]);
+      let count = 1;
+  
+      for (let j = i + 1; j < this.listaRTI.length; j++) {
+        if (currentValue !== accessor(this.listaRTI[j])) {
+          break;
+        }
+        count++;
       }
-    );
+  
+      if (!this.spans3[i]) {
+        this.spans3[i] = {};
+      }
+  
+      this.spans3[i][key] = count;
+      i += count;
+    }
   }
-  listarRTD(): void {
-    this.rtdecrementoservice.listarRTDActividades().subscribe(
-      (data: any[]) => {
-        this.listaRTDActividades = data;
-        this.dataSource5.data = this.listaRTDActividades;
-      },
-      (error: any) => {
-        console.error('Error al listar reformas traspasos decrementos:', error);
+  cacheSpan4(key: string, accessor: (d: any) => any) {
+    for (let i = 0; i < this.listaRTD.length;) {
+      let currentValue = accessor(this.listaRTD[i]);
+      let count = 1;
+  
+      for (let j = i + 1; j < this.listaRTD.length; j++) {
+        if (currentValue !== accessor(this.listaRTD[j])) {
+          break;
+        }
+        count++;
       }
-    );
+  
+      if (!this.spans4[i]) {
+        this.spans4[i] = {};
+      }
+  
+      this.spans4[i][key] = count;
+      i += count;
+    }
+  }
+
+  clicEnActividad(actividad: ActividadesPoa) {
+    this.actividad = actividad; 
+    this.cargarTabla(actividad.id_actividad);
+  }
+
+  cargarTabla(actividadId: number) {
+    console.log(this.actividad);
+    this.nombreActividad= this.act.find(m => m.id_actividad === actividadId)?.nombre || '';
+    console.log('Cargando tabla para el id_actividad', actividadId);
+    this.pexternoservice.listarPEActividades(actividadId).subscribe((data:PresupuestoExterno[])=>{
+      this.listaPE=data;
+      console.log("PRESUPUESTOS EXTERNOS ", JSON.stringify(this.listaPE))
+      this.cacheSpan('id_presupuesto_externo', (d) => d.id_presupuesto_externo);
+      this.cacheSpan('nombre_institucion', (d) => d.id_presupuesto_externo + d.nombre_institucion);
+      this.cacheSpan('valor', (d) => d.id_presupuesto_externo + d.nombre_institucion + d.valor);
+      this.cacheSpan('fecha', (d) => d.id_presupuesto_externo + d.nombre_institucion + d.valor + d.fecha);
+      this.cacheSpan('observacion', (d) => d.id_presupuesto_externo + d.nombre_institucion + d.valor + d.fecha + d.observacion);
+    });
+    this.rsuplementoservice.listarRSActividades(actividadId).subscribe((data:ReformaSuplemento[])=>{
+      this.listaRS=data;
+      console.log("REFORMAS SUPLEMENTOS ", JSON.stringify(this.listaRS))
+      this.cacheSpan2('id_ref_suplemento', (d) => d.id_ref_suplemento);
+      this.cacheSpan2('valor', (d) => d.id_ref_suplemento + d.valor);
+      this.cacheSpan2('fecha', (d) => d.id_ref_suplemento + d.valor + d.fecha);
+    });
+    this.rtincrementoservice.listarRTIActividades(actividadId).subscribe((data:ReformaTraspasoI[])=>{
+      this.listaRTI=data;
+      console.log("RTINCREMENTOS ", JSON.stringify(this.listaRTI))
+      this.cacheSpan3('id_reftras_i', (d) => d.id_reftras_i);
+      this.cacheSpan3('valor', (d) => d.id_reftras_i + d.valor);
+      this.cacheSpan3('fecha', (d) => d.id_reftras_i + d.valor + d.fecha);
+    });
+    this.rtdecrementoservice.listarRTDActividades(actividadId).subscribe((data:ReformaTraspasoD[])=>{
+      this.listaRTD=data;
+      console.log("RTDECREMENTOS ", JSON.stringify(this.listaRTD))
+      this.cacheSpan4('id_reftras_d', (d) => d.id_reftras_d);
+      this.cacheSpan4('valor', (d) => d.id_reftras_d + d.valor);
+      this.cacheSpan4('fecha', (d) => d.id_reftras_d + d.valor + d.fecha);
+    });
   }
 }
