@@ -60,7 +60,7 @@ export class ListPoaActividadComponent  implements OnInit {
    return `${startIndex + 1} - ${endIndex} de ${length}`;
  };
 //Columnas Tabla
- columnasUsuario: string[] = ['id_poa', 'barrio', 'cobertura','fecha_inicio','fecha_fin','usuario', 'evidencias'];
+ columnasUsuario: string[] = ['nombre_proyecto', 'barrio', 'cobertura','fecha_inicio','fecha_fin','usuario', 'evidencias'];
 
  listar(): void {
   this.poaService.PoasConActividadesPendientes().subscribe(
@@ -91,7 +91,7 @@ export class ListPoaActividadComponent  implements OnInit {
 
 //Ir a actividades
 verDetalles(poa: any) {
-  this.router.navigate(['/sup/aprobarEvidencias/listActividadAprobar'], { state: { data: poa } });
+  this.router.navigate(['/sup/aprobar-actividades/listActividadAprobar'], { state: { data: poa } });
 }
 
 }

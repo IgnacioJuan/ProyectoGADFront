@@ -1,7 +1,3 @@
-.btn-guardar {
-  background-color: green;
-}
-
 
   #calc{
     font-family:myFirstFont;
@@ -31,4 +27,7 @@
   
   .titulo {
     color: green;
+  }
+  .card-table{
+    width: 100%;
   }

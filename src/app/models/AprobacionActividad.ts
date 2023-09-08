@@ -10,4 +10,5 @@ export class AprobacionActividad {
     usuario!:Usuario2;
     poa!: Poa;
     actividad!: ActividadesPoa;
+    fechaAprobacion!: string;
 }

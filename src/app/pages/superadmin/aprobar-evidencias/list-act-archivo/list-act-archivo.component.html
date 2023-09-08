@@ -45,19 +45,14 @@
                   {{ elemento.descripcion }}
                 </td>
               </ng-container>
-              <!---
+           
               <ng-container matColumnDef="estado">
                 <th mat-header-cell *matHeaderCellDef>ESTADO</th>
                 <td mat-cell *matCellDef="let elemento" [ngStyle]="getEstadoCellStyle(elemento.estado)">
                   {{ elemento.estado }}
                 </td>
-              </ng-container>--->
-              <ng-container matColumnDef="estado">
-                <th mat-header-cell *matHeaderCellDef>ESTADO</th>
-                <td mat-cell *matCellDef="let elemento">
-                  {{ elemento.estado }}
-                </td>
               </ng-container>
+          
               <ng-container matColumnDef="enlace">
                 <th mat-header-cell *matHeaderCellDef>ENLACE</th>
                 <td mat-cell *matCellDef="let elemento">
@@ -164,6 +159,7 @@
                     <input
                       name="usuario"
                       matInput
+                      disabled
                       [value]="user.persona.primer_nombre +'  ' + user.persona.primer_apellido  "
                     />
                   </mat-form-field>
@@ -174,10 +170,10 @@
                     <div class="row">
                       <div class="col-8">  
                         <mat-form-field appearance="outline" class="full-width">
-                        <mat-label>Estado</mat-label>
+                        <mat-label [ngStyle]="{ 'color': isAprobado ? 'rgb(0, 128, 0)' : isRechazado ? 'rgb(255, 0, 0)' : '' }">Estado</mat-label>
                         <input matInput name="estado" [(ngModel)]="estado">
                       </mat-form-field>
-                      
+                     
                      </div>
                       <div class="col-4"> 
                       <button mat-fab class="thumb-up" (click)="Aprobar()" >
@@ -259,20 +255,33 @@
               <div class="card-body" style="height: 100%;">
                 <div class="mat-elevation-z8 table-responsive"  style="margin-bottom: 5%"  >
                   <table mat-table [dataSource]="dataSource3">
-                      <ng-container matColumnDef="observacion">
+                    <ng-container matColumnDef="observacion">
                       <th mat-header-cell *matHeaderCellDef>OBSERVACIÓN</th>
                       <td mat-cell *matCellDef="let elemento">
-                        {{ elemento.observacion }}
+                        {{ elemento.observacion ? elemento.observacion : 'NINGUNA' }}
                       </td>
                     </ng-container>
-     <!---
+                    
+    
                     <ng-container matColumnDef="estado">
                       <th mat-header-cell *matHeaderCellDef>ESTADO</th>
-                      <td mat-cell *matCellDef="let elemento">
+                      <td mat-cell *matCellDef="let elemento" [ngStyle]="getEstadoCellStyle(elemento.estado)">
                         {{ elemento.estado }}
                       </td>
                     </ng-container>
-                  --->
+                    <ng-container matColumnDef="nombre_completo">
+                      <th mat-header-cell *matHeaderCellDef>EVALUADO POR</th>
+                      <td mat-cell *matCellDef="let elemento">
+                        {{ elemento.primer_nombre }} {{ elemento.primer_apellido }}
+                      </td>
+                    </ng-container>
+                    
+                    <ng-container matColumnDef="fecha_aprobacion">
+                      <th mat-header-cell *matHeaderCellDef>FECHA DE EVALUACIÓN</th>
+                      <td mat-cell *matCellDef="let elemento" >
+                        {{ elemento.fecha_aprobacion  | date:'dd/MM/yyyy'}}
+                      </td>
+                    </ng-container>
                     <tr mat-header-row *matHeaderRowDef="columnasObservaciones"></tr>
                     <tr mat-row *matRowDef="let fila; columns: columnasObservaciones"></tr>
                   </table>

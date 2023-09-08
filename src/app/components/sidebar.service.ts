@@ -92,7 +92,7 @@ export class SidebarService {
       icono: 'nav-icon fas fa-solid fa-list',
       titulo: "Reportes",
       submenu: [
-        { titulo: 'Reporte Poa', url: 'sup/reportes/reportePoa', icono: 'fas fa-list-ul ' },
+        { titulo: 'Reporte Poa', url: 'sup/reportePoa', icono: 'fas fa-list-ul ' },
 
       ]
     },
@@ -112,6 +112,8 @@ export class SidebarService {
       submenu: [
         { titulo: 'Mis Actividades', url: 'res/activ/actividadesdesig', icono: 'fas fa-file-contract' },
         { titulo: 'Resumen Presupuestos', url: 'res/resumen-presupuestos/lista-actividades', icono: 'fas fa-list-ul ' },
+        { titulo: 'Solicitud de Presupuesto', url: 'res/solicitar-presupuestos/listSolicitudes', icono: 'fas fa-list-ul ' },
+
       ]
     }
 
