@@ -62,10 +62,4 @@ export class PersonaService {
     return this.http.put(`${baserUrl}/api/persona/actualizar/${id}`, crite);
   }
 
-  
-  
-  public getcorreo(idUsua: number): Observable<Persona2> {
-    return this.http.get<Persona2>(`${baserUrl}/api/persona/correo/${idUsua}`);
-  }
-
 }
