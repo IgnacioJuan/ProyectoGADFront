@@ -3,18 +3,13 @@
 <body>
   <div class="container bg-light border border-start-0 rounded-4">
     <!-- Detalle POA -->
-    <blockquote
-      class="blockquote text-dark"
-      style="
-        margin-top: 5%;
-        background-color: #ffffff;
-        border-left: 10px solid green;
-      "
-    >
-      <h1 style="cursor: pointer; color: green">
-        <strong>Detalle POA</strong>
+    <blockquote class="blockquote text-dark" style="margin-top: 5%; background-color: #ffffff; border-left: 10px solid green;">
+      <h1 style="text-transform: uppercase">
+          <strong><a style="cursor: pointer; color: rgba(0, 128, 0, 0.822);" (click)="verPoas()">DETALLE POA >
+              </a>
+              <a style="cursor: pointer; color: green; ">{{ poaAprob?.nombre_proyecto }} </a></strong>
       </h1>
-    </blockquote>
+  </blockquote>
     <!-- Botón Evaluar -->
     <div class="contBtnEva">
       <button class="btn btn-warning" (click)="abrirModal(evaluarPOAModal)">
