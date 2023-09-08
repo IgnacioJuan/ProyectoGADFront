@@ -6,10 +6,7 @@ export class ActividadesPoaDTO {
     nombre!: string;
     descripcion!: string;
     presupuesto_referencial!: number;
-    codificado!: number;
-    devengado!: number;
     recursos_propios!: number;
+    recursos_externos!: number;
     estado!: string
-    visible!: boolean;
-    responsable!: string;
 }

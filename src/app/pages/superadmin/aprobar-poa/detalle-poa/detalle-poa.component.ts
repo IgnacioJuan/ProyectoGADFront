@@ -80,11 +80,9 @@ export class DetallePoaComponent implements OnInit {
     'nombre_actividad',
     'descripcion',
     'presupuesto_referencial',
-    'codificado',
-    'devengado',
     'recursos_propios',
+    'recursos_externos',
     'estado',
-    'responsable',
   ];
 
   cargarData(idPoa: any){
@@ -175,6 +173,7 @@ export class DetallePoaComponent implements OnInit {
     this.isBtnSuccessActive = false;
     this.isBtnDangerActive = true;
     this.estadoAprobacion = 'RECHAZADO';
+    this.observacionControl.setValue(''); // Vacía el textarea cuando se selecciona "Rechazar"
   }
 
   showSuccessAlert() {
