@@ -15,6 +15,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { UsuariorolService } from 'src/app/services/usuariorol.service';
 import 'jquery';
 import 'popper.js';
+import { AsignacionUsuarioService } from 'src/app/services/asignacionusuario.service';
+import { AsignacionUsuario } from 'src/app/models/AsignacionUsuario';
 declare var $: any;
 
 @Component({
@@ -53,6 +55,7 @@ export class ActividadesComponent implements OnInit {
   public actividad = new ActividadesPoa();
   act!: ActividadesPoa[];
   public aprobAct = new AprobacionActividad();
+  public asignacion = new AsignacionUsuario();
   usuarios: Usuario2[] = [];
   poaId!: number;
   filterPost: string = "";
@@ -74,7 +77,7 @@ export class ActividadesComponent implements OnInit {
   columnasUsuario: string[] = ['id_actividad', 'nombre', 'descripcion', 'presupuesto_referencial', 'recursos_propios', 'codificado', 'devengado', 'estado', 'actions'];
   //listarUsuariosconActividades
   columUsuario1: string[] = ['id_usuario', 'username', 'nombre', 'apellido', 'cargo'];
-  columUsuario2: string[] = ['id_usuario', 'username', 'nombre', 'apellido', 'cargo'];
+  columUsuario2: string[] = ['id_usuario', 'username', 'nombre', 'apellido', 'cargo','fecha_asignacion'];
   //Listar Usuarios para Asignarles Actividad
   dataSource3 = new MatTableDataSource<Usuario2>();
   columnasUsuario3: string[] = ['id','nombre', 'apellido','usuario','actions'];
@@ -86,7 +89,7 @@ export class ActividadesComponent implements OnInit {
     private cdRef: ChangeDetectorRef, public dialog: MatDialog,
     private actividadservice: ActividadespoaService, private paginatorIntl: MatPaginatorIntl,
     private router: Router, private fb: FormBuilder, private userService: UsuarioService,
-    private usuariorolservice: UsuariorolService
+    private usuariorolservice: UsuariorolService, private asignacionservice: AsignacionUsuarioService
   ) {
     this.frmActividad = fb.group({
       nombre: ['', Validators.required],
@@ -283,26 +286,47 @@ export class ActividadesComponent implements OnInit {
   }
   
   //METODO QUE FUNCIONA CON LA SELECCION EN LA TABLA DE USUARIOS
+
   guardarResponsable(usuarioSeleccionado: any) {
     this.actividadservice.getActividadPorId(this.idActividadSeleccionada)
       .subscribe(
         (actividadToUpdate: ActividadesPoa) => {
-          actividadToUpdate.usuario = usuarioSeleccionado;
-          this.actividadservice.actualizar(this.idActividadSeleccionada, actividadToUpdate)
+          const actividadActualizada = { ...actividadToUpdate };
+          actividadActualizada.usuario = usuarioSeleccionado;
+          this.actividadservice.actualizar(this.idActividadSeleccionada, actividadActualizada)
             .subscribe(
               () => {
-                this.listar(this.poa.id_poa);
-                Swal.fire(
-                  'Exitoso',
-                  'Se ha asignado el responsable con éxito',
-                  'success'
-                );
+                // Registro en la tabla asignaciones_usuarios
+                const asignacion = new AsignacionUsuario();
+                asignacion.usuario = usuarioSeleccionado;
+                asignacion.actividad = new ActividadesPoa();
+                asignacion.actividad.id_actividad = actividadToUpdate.id_actividad;
+                asignacion.fecha_asignacion = new Date();
+                this.asignacionservice.crear(asignacion)
+                  .subscribe(
+                    () => {
+                      this.listar(this.poa.id_poa);
+                      Swal.fire(
+                        'Exitoso',
+                        'Se ha asignado el responsable con éxito',
+                        'success'
+                      );
+                    },
+                    (error) => {
+                      console.error('Error al crear la asignación de responsable:', error);
+                      Swal.fire(
+                        'Error',
+                        'Ha ocurrido un error al crear la asignación de responsable',
+                        'warning'
+                      );
+                    }
+                  );
               },
               (error) => {
                 console.error('Error al actualizar el responsable:', error);
                 Swal.fire(
                   'Error',
-                  'Ha ocurrido un error',
+                  'Ha ocurrido un error al actualizar el responsable',
                   'warning'
                 );
               }
@@ -312,7 +336,7 @@ export class ActividadesComponent implements OnInit {
           console.error('Error al obtener la actividad:', error);
           Swal.fire(
             'Error',
-            'Ha ocurrido un error',
+            'Ha ocurrido un error al obtener la actividad',
             'warning'
           );
         }
@@ -402,7 +426,7 @@ export class ActividadesComponent implements OnInit {
     console.log('Cargando tabla para el id_actividad', actividadId);
     this.actividadservice.listarUsuariosActividades(actividadId).subscribe((data:ListaActividadesUsuario[])=>{
       this.listaU=data;
-      console.log("actividades ", JSON.stringify(this.listaU))
+      console.log("Responsable Actual ", JSON.stringify(this.listaU))
       this.cacheSpan('id_usuario', (d) => d.id_usuario);
       this.cacheSpan('username', (d) => d.id_usuario + d.username);
       this.cacheSpan('nombre', (d) => d.id_usuario + d.username + d.nombre);
@@ -410,14 +434,15 @@ export class ActividadesComponent implements OnInit {
       this.cacheSpan('cargo', (d) => d.id_usuario + d.username + d.nombre + d.apellido + d.cargo );
     });
 
-    this.actividadservice.listarUsuariosActividades(actividadId).subscribe((data:ListaActividadesUsuario[])=>{
+    this.asignacionservice.getAsignacionesUsuarios(actividadId).subscribe((data:ListaActividadesUsuario[])=>{
       this.listaU2=data;
-      console.log("actividades ", JSON.stringify(this.listaU2))
+      console.log("Usuario Anteriores ", JSON.stringify(this.listaU2))
       this.cacheSpan2('id_usuario', (d) => d.id_usuario);
       this.cacheSpan2('username', (d) => d.id_usuario + d.username);
       this.cacheSpan2('nombre', (d) => d.id_usuario + d.username + d.nombre);
       this.cacheSpan2('apellido', (d) => d.id_usuario + d.username + d.nombre + d.apellido);
       this.cacheSpan2('cargo', (d) => d.id_usuario + d.username + d.nombre + d.apellido + d.cargo );
+      this.cacheSpan2('fecha_asignacion', (d) => d.id_usuario + d.username + d.nombre + d.apellido + d.cargo + d.fecha_asignacion);
     });
   }
 }
