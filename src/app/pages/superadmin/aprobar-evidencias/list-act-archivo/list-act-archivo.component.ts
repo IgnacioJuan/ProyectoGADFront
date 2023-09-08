@@ -12,6 +12,10 @@ import Swal from 'sweetalert2';
 import { forkJoin } from 'rxjs';
 import { Poa } from 'src/app/models/Poa';
 import { AprobacionEvidenciaProjection } from 'src/app/interface/AprobacionEvidenciaProjection';
+
+import { EmailServiceService } from 'src/app/services/email-service.service';
+import { PersonaService } from 'src/app/services/persona.service';
+import { Persona2 } from 'src/app/models/Persona2';
 @Component({
   selector: 'app-list-act-archivo',
   templateUrl: './list-act-archivo.component.html',
@@ -26,6 +30,7 @@ export class ListActArchivoComponent implements OnInit {
   //Objeto poa
   poa: Poa = new Poa();
   //Variable para estado
+  public correo = "";
   public estado = "";
   public observacion = "";
 
@@ -39,7 +44,7 @@ export class ListActArchivoComponent implements OnInit {
   filteredComponentes: any[] = [];
   resultadosEncontrados: boolean = true;
   isLoggedIn = false;
-  fechaActual: Date;
+  nombre!: string;
 
   constructor(
     private paginatorIntl: MatPaginatorIntl,
@@ -47,6 +52,8 @@ export class ListActArchivoComponent implements OnInit {
     private archivoService: ArchivoService,
     private aprobarEvidenciaService: AprobacionEvidenciaService,
     public login: LoginService,
+    private emaservices: EmailServiceService,
+    private serviper: PersonaService
 
   ) {
 
@@ -56,7 +63,6 @@ export class ListActArchivoComponent implements OnInit {
     this.paginatorIntl.previousPageLabel = this.previousPageLabel;
     this.paginatorIntl.itemsPerPageLabel = this.itemsPerPageLabel;
     this.paginatorIntl.getRangeLabel = this.rango;
-    this.fechaActual = new Date();
   }
 
 
@@ -118,6 +124,7 @@ export class ListActArchivoComponent implements OnInit {
       (data: any[]) => {
         this.listaArchivos = data;
         this.dataSource2.data = this.listaArchivos;
+
       },
       (error: any) => {
         console.error('Error al listar los componentes:', error);
@@ -141,27 +148,38 @@ export class ListActArchivoComponent implements OnInit {
 
 
 
-  guardar() {
-  
+  guardar(activ: any) {
 
-  // Verificar si el estado es "RECHAZADO" y la observación está vacía
-  if (this.estado === 'RECHAZADO' && !this.observacion) {
-    Swal.fire(
-      'Advertencia',
-      'La observación es obligatoria ',
-      'warning'
+    this.serviper.getcorreo(activ).subscribe(
+      (data: Persona2) => {
+        this.correo = data.correo
+        this.nombre = data.primer_nombre + " " + data.primer_apellido;
+
+        console.log(" correo =" + this.correo)
+      },
+      (error: any) => {
+        console.error('Error al listar los componentes:', error);
+      }
     );
-    return;
-  }
 
+
+
+    // Verificar si el estado es "RECHAZADO" y la observación está vacía
+    if (this.estado === 'RECHAZADO' && !this.observacion) {
+      Swal.fire(
+        'Advertencia',
+        'La observación es obligatoria ',
+        'warning'
+      );
+      return;
+
+    }
 
     this.aprobarEvi.estado = this.estado;
     this.aprobarEvi.observacion = this.observacion;
     this.aprobarEvi.evidencia = this.archivoSeleted
     this.aprobarEvi.visible = true;
     this.aprobarEvi.usuario = this.user.id;
-    this.aprobarEvi.fecha_aprobacion = this.fechaActual;
-
     this.archivoSeleted.estado = this.estado;
     // Guardamos la aprobación y actualizamos el estado del archivo en paralelo
     forkJoin([
@@ -170,6 +188,7 @@ export class ListActArchivoComponent implements OnInit {
     ])
       .subscribe(
         ([aprobarResponse, archivoResponse]) => {
+          this.sendEmail();
           this.Limpiar();
           this.listar(this.actividad.id_actividad);
           Swal.fire(
@@ -211,19 +230,19 @@ export class ListActArchivoComponent implements OnInit {
     this.router.navigate(['/sup/aprobarEvidencias/listPoaAprobarEvidenciaSuper']);
   }
 
- //Cambiar colores de la tabkla
- getEstadoCellStyle(estado: string): any {
-  switch (estado) {
-    case 'PENDIENTE':
-      return { background: 'rgb(235, 253, 133)' };
-    case 'APROBADO':
-      return { background: 'rgb(168, 216, 159)' };
-    case 'RECHAZADO':
-      return { background: 'rgb(231, 87, 87)' };
-    default:
-      return {};
+  //Cambiar colores de la tabkla
+  getEstadoCellStyle(estado: string): any {
+    switch (estado) {
+      case 'PENDIENTE':
+        return { background: 'rgb(235, 253, 133)' };
+      case 'APROBADO':
+        return { background: 'rgb(168, 216, 159)' };
+      case 'RECHAZADO':
+        return { background: 'rgb(231, 87, 87)' };
+      default:
+        return {};
+    }
   }
-}
 
   //Ver observaciones
   verDetalles(archiv: any) {
@@ -237,6 +256,31 @@ export class ListActArchivoComponent implements OnInit {
         console.error('Error al listar las observaciones:', error);
       }
     );
+  }
+
+
+  /// envio de correo john
+  sendEmail() {
+    const toUser = [this.correo];
+    const subject = this.estado;
+    const message = this.observacion;
+
+    this.emaservices.sendEmail(toUser, subject, message)
+      .subscribe(
+        response => {
+          console.log('Correo electrónico enviado con éxito:', response);
+        },
+        error => {
+          console.error('Error al enviar el correo electrónico:', error);
+        }
+      );
+  }
+  get isAprobado() {
+    return this.estado === 'APROBADO';
+  }
+
+  get isRechazado() {
+    return this.estado === 'RECHAZADO';
   }
 
 
