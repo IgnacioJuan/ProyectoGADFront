@@ -7,15 +7,28 @@ import { ActividadespoaService } from 'src/app/services/actividadespoa.service';
 import { Archivos } from 'src/app/models/Archivos';
 import { LoginService } from 'src/app/services/login.service';
 import { Poa } from 'src/app/models/Poa';
+import Swal from 'sweetalert2';
+import { AprobacionActividadService } from 'src/app/services/aprobacion-actividad.service';
+import { AprobacionActividad } from 'src/app/models/AprobacionActividad';
+import { Usuario2 } from 'src/app/models/Usuario2';
 @Component({
   selector: 'app-list-activ-evidencia',
   templateUrl: './list-activ-evidencia.component.html',
   styleUrls: ['./list-activ-evidencia.component.css']
 })
 export class ListActivEvidenciaComponent implements OnInit {
-//Listar actividades-acrchivos-acitividad seleccionada
+  //Listar actividades-acrchivos-acitividad seleccionada
   public actividadSe = new ActividadesPoa();
   listaActividades: ActividadesPoa[] = [];
+
+  public aprobarAct = new AprobacionActividad();
+  public actividadSelected :any;
+
+  //Usuario logueado
+  //Variable para estado
+  public estado = "";
+  public observacion = "";
+
   //Usuario logueado
   user: any = null;
   isLoggedIn = false;
@@ -31,16 +44,17 @@ export class ListActivEvidenciaComponent implements OnInit {
     private paginatorIntl: MatPaginatorIntl,
     private router: Router,
     private actividadService: ActividadespoaService,
+    private aprobacionActvidadService: AprobacionActividadService,
     public login: LoginService,
 
   ) {
 
     this.paginatorIntl.nextPageLabel = this.nextPageLabel;
     this.paginatorIntl.lastPageLabel = this.lastPageLabel;
-    this.paginatorIntl.firstPageLabel=this.firstPageLabel;
-    this.paginatorIntl.previousPageLabel=this.previousPageLabel;
+    this.paginatorIntl.firstPageLabel = this.firstPageLabel;
+    this.paginatorIntl.previousPageLabel = this.previousPageLabel;
     this.paginatorIntl.itemsPerPageLabel = this.itemsPerPageLabel;
-    this.paginatorIntl.getRangeLabel=this.rango;
+    this.paginatorIntl.getRangeLabel = this.rango;
   }
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator || null;
@@ -52,11 +66,10 @@ export class ListActivEvidenciaComponent implements OnInit {
     //Obtener id del poa
     const data = history.state.data;
     this.poa = data;
-    console.log(this.poa);
     if (this.poa == undefined) {
       this.router.navigate(['user-dashboard']);
       location.replace('/use/user-dashboard');
-    } 
+    }
     //Capturar usuario logueado
     this.isLoggedIn = this.login.isLoggedIn();
     this.user = this.login.getUser();
@@ -64,7 +77,7 @@ export class ListActivEvidenciaComponent implements OnInit {
       this.isLoggedIn = this.login.isLoggedIn();
       this.user = this.login.getUser();
     });
-    this.listar(this.poa.id_poa);
+    this.listar();
   }
   //Tabla para listado de actividades
   dataSource = new MatTableDataSource<ActividadesPoa>();
@@ -77,13 +90,13 @@ export class ListActivEvidenciaComponent implements OnInit {
   itemsPerPageLabel = 'Actividades por página';
   nextPageLabel = 'Siguiente';
   lastPageLabel = 'Última';
-  firstPageLabel='Primera';
-  previousPageLabel='Anterior';
-  rango:any= (page: number, pageSize: number, length: number) => {
+  firstPageLabel = 'Primera';
+  previousPageLabel = 'Anterior';
+  rango: any = (page: number, pageSize: number, length: number) => {
     if (length == 0 || pageSize == 0) {
       return `0 de ${length}`;
     }
-  
+
     length = Math.max(length, 0);
     const startIndex = page * pageSize;
     const endIndex =
@@ -92,11 +105,11 @@ export class ListActivEvidenciaComponent implements OnInit {
         : startIndex + pageSize;
     return `${startIndex + 1} - ${endIndex} de ${length}`;
   };
-//Columnas tabla actividades
-  columnasUsuario: string[] = ['id_actividad', 'nombre', 'descripcion', 'evidencias'];
+  //Columnas tabla actividades
+  columnasUsuario: string[] = ['id_actividad', 'nombre', 'descripcion', 'responsable', 'detalle', 'evaluar', 'historial'];
 
-  listar(idPoa: number): void {
-    this.actividadService.getActividadesPoa(idPoa).subscribe(
+  listar(): void {
+    this.actividadService.ActividadesPendientesPorPoa(this.poa.id_poa).subscribe(
       (data: any[]) => {
         this.listaActividades = data;
         console.log("Dataa")
@@ -110,18 +123,66 @@ export class ListActivEvidenciaComponent implements OnInit {
   }
 
 
-
-
+  guardar() {
+  
+    // Verificar si el estado es "RECHAZADO" y la observación está vacía
+    if (this.estado === 'RECHAZADO' && !this.observacion) {
+      Swal.fire(
+        'Advertencia',
+        'La observación es obligatoria ',
+        'warning'
+      );
+      return;
+    }
+  
+  
+      this.aprobarAct.estado = this.estado;
+      this.aprobarAct.observacion = this.observacion;
+      this.aprobarAct.visible = true;
+      this.aprobarAct.usuario = this.user.id;
+      this.aprobarAct.poa = this.poa;
+      this.aprobarAct.actividad=this.actividadSelected;
+      this.aprobarAct.poa.usuario=new Usuario2();
+      this.aprobarAct.actividad.usuario=new Usuario2();
+      console.log(this.aprobarAct)
+      this.aprobacionActvidadService.crear(this.aprobarAct)
+        .subscribe(
+          () => {
+            this.Limpiar();
+            this.listar();
+            Swal.fire(
+              'Exitoso',
+              'Se ha completado el registro con éxito',
+              'success'
+            );
+          },
+          (error) => {
+            Swal.fire(
+              'Error',
+              'Ha ocurrido un error al realizar la operacion ...',
+              'warning'
+            );
+          }
+        );
+    }
+  
+  
+    seleccionar(archi: Archivos) {
+      this.actividadSelected = archi
+      this.estado = this.actividadSelected.estado;
+      //Quitar el usuario 
+      this.actividadSelected.actividad = null;
+    }
 
   buscar() {
     // Filtra los componentes basados en el filtro
     this.filteredComponentes = this.listaActividades.filter((componente) =>
       componente.nombre.toLowerCase().includes(this.filterPost.toLowerCase())
     );
-  
+
     // Actualiza los datos del dataSource con los resultados filtrados
     this.dataSource.data = this.filteredComponentes;
-  
+
     // Verifica si se encontraron resultados
     this.resultadosEncontrados = this.filteredComponentes.length > 0;
   }
@@ -129,10 +190,19 @@ export class ListActivEvidenciaComponent implements OnInit {
 
   //Ir a poas
   verPoas() {
-    this.router.navigate(['/sup/aprobarEvidencias/listPoaAprobarEvidenciaSuper']);
+    this.router.navigate(['/sup/aprobar-actividades/poa-actividad']);
   }
-  //Ir archivos
-verDetalles(acti: any) {
-  this.router.navigate(['/sup/aprobarEvidencias/listPoaAprobarArchivoSuper'], { state: { data: acti, poa: this.poa } });
-}
+
+  Rechazar() {
+    this.estado = "RECHAZADO"
+  }
+  Aprobar() {
+    this.estado = "APROBADO"
+
+  }
+  Limpiar() {
+    this.estado = "";
+    this.observacion = "";
+  }
+
 }
