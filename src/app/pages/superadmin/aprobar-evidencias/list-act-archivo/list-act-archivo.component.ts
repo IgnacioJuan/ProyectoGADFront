@@ -46,6 +46,7 @@ export class ListActArchivoComponent implements OnInit {
   resultadosEncontrados: boolean = true;
   isLoggedIn = false;
   nombre!: string;
+  fechaActual: Date;
 
   constructor(
     private paginatorIntl: MatPaginatorIntl,
@@ -64,6 +65,8 @@ export class ListActArchivoComponent implements OnInit {
     this.paginatorIntl.previousPageLabel = this.previousPageLabel;
     this.paginatorIntl.itemsPerPageLabel = this.itemsPerPageLabel;
     this.paginatorIntl.getRangeLabel = this.rango;
+    this.fechaActual = new Date();
+
 }
   ngAfterViewInit() {
     this.dataSource2.paginator = this.paginator || null;
@@ -177,6 +180,8 @@ guardar() {
   this.aprobarEvi.visible = true;
   this.aprobarEvi.usuario = this.user.id;
   this.archivoSeleted.estado= this.estado;
+  this.aprobarEvi.fecha_aprobacion=this.fechaActual
+
   // Guardamos la aprobación y actualizamos el estado del archivo en paralelo
   forkJoin([
     this.aprobarEvidenciaService.crear(this.aprobarEvi),
