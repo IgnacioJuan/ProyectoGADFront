@@ -42,6 +42,11 @@
     max-width: 40%; /* Ajusta el porcentaje según tus necesidades */
     width: auto; /* Para permitir un ancho máximo */
   }
+
+  #materiaModal .modal-dialog {
+    max-width: 30%; /* Ajusta el porcentaje según tus necesidades */
+    width: auto; /* Para permitir un ancho máximo */
+  }
   .acciones-header {
     min-width: 100px; /* Ajusta el ancho según tus necesidades */
   }

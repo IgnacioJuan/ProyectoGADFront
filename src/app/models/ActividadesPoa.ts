@@ -20,4 +20,11 @@ export class ActividadesPoa {
     totalreformaSuplemento!: number;
     totalreformaTIncremento!: number;
     totalreformaTDecremento!: number;
+
+
+    ///
+    valor1!: number;
+    valor2!: number;
+    valor3!: number;
+    valor4!: number;
 }
