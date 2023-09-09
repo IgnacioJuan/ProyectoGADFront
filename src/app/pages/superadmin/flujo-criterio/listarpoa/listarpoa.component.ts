@@ -20,7 +20,7 @@ export class ListarpoaComponent implements OnInit {
   guardadoExitoso: boolean = false;
   miModal!: ElementRef;
   //tabla
-  itemsPerPageLabel = 'Competencias por página';
+  itemsPerPageLabel = 'Poas por página';
   nextPageLabel = 'Siguiente';
   lastPageLabel = 'Última';
   firstPageLabel='Primera';
@@ -40,13 +40,13 @@ export class ListarpoaComponent implements OnInit {
   };
 
 
-  public compete = new PoaNoAprobadoProjection();
+  public compete = new PoaNoAprobadoProjection(); 
   competencias: PoaNoAprobadoProjection[] = [];
   
 
   filterPost = '';
   dataSource = new MatTableDataSource<PoaNoAprobadoProjection>();
-  columnasUsuario: string[] = [ 'nombre', 'localizacion','barrio','comunidad', 'estado','observacion'];
+  columnasUsuario: string[] = ['nombrecompleto', 'nombre', 'fecha_inicio','fecha_fin', 'estado','observacion','fecha_aprobacion'];
 
 
 

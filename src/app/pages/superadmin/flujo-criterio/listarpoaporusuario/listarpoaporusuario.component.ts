@@ -20,7 +20,7 @@ export class ListarporUsuarioComponent implements OnInit {
   guardadoExitoso: boolean = false;
   miModal!: ElementRef;
   //tabla
-  itemsPerPageLabel = 'Competencias por página';
+  itemsPerPageLabel = 'Poas por página';
   nextPageLabel = 'Siguiente';
   lastPageLabel = 'Última';
   firstPageLabel='Primera';
@@ -46,7 +46,7 @@ export class ListarporUsuarioComponent implements OnInit {
 
   filterPost = '';
   dataSource = new MatTableDataSource<PoaporUsuarioProjection>();
-  columnasUsuario: string[] = ['username', 'nombre', 'localizacion','barrio', 'estado'];
+  columnasUsuario: string[] = ['cedula','nombre_completo','username','nombre','nombrepro', 'estado'];
 
 
 

@@ -1,9 +1,9 @@
 export class PoaporUsuarioProjection {
-    localizacion!: number; 
+    cedula!: number; 
     username!: string; 
     estado!: string; 
-    barrio!: string; 
+    primer_nombre!: string; 
     nombre!: string;
-
+    primer_apellido!: string; 
 }
 

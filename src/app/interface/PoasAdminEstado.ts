@@ -7,7 +7,7 @@ export interface PoasAdminEstadoProjection {
     barrio: string;
     comunidad: string;
     linea_base: number;
-    tipo_periodo: string;
+    tipo_periodo: string; 
     estado: string;
     meta_planificada: number;
     meta_alcanzar: number;
