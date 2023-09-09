@@ -17,8 +17,13 @@ import 'jquery';
 import 'popper.js';
 import { AsignacionUsuarioService } from 'src/app/services/asignacionusuario.service';
 import { AsignacionUsuario } from 'src/app/models/AsignacionUsuario';
+import { PoaInsertService } from 'src/app/services/poa/poa-insert.service';
 declare var $: any;
 
+
+interface Periodo {
+  value: string;
+}
 @Component({
   selector: 'app-actividades',
   templateUrl: './actividades.component.html',
@@ -72,6 +77,7 @@ export class ActividadesComponent implements OnInit {
   spans: any[] = [];
   spans2: any[] = [];
 
+
   //listarActividades
   dataSource = new MatTableDataSource<ActividadesPoa>(this.act);
   columnasUsuario: string[] = ['id_actividad', 'nombre', 'descripcion', 'presupuesto_referencial', 'recursos_propios', 'codificado', 'devengado', 'estado', 'actions'];
@@ -89,7 +95,8 @@ export class ActividadesComponent implements OnInit {
     private cdRef: ChangeDetectorRef, public dialog: MatDialog,
     private actividadservice: ActividadespoaService, private paginatorIntl: MatPaginatorIntl,
     private router: Router, private fb: FormBuilder, private userService: UsuarioService,
-    private usuariorolservice: UsuariorolService, private asignacionservice: AsignacionUsuarioService
+    private usuariorolservice: UsuariorolService, private asignacionservice: AsignacionUsuarioService,
+    private poaInsertService: PoaInsertService
   ) {
     this.frmActividad = fb.group({
       nombre: ['', Validators.required],
@@ -97,7 +104,11 @@ export class ActividadesComponent implements OnInit {
       presupuesto_referencial: [0, Validators.min(0)],
       recursos_propios: [0, Validators.min(0)],
       codificado: [0, Validators.min(0)],
-      devengado: [0, Validators.min(0)]
+      devengado: [0, Validators.min(0)],
+      valor1: [''],
+      valor2: [''],
+      valor3: [''],
+      valor4: ['']
     });
     this.paginatorIntl.nextPageLabel = this.nextPageLabel;
     this.paginatorIntl.lastPageLabel = this.lastPageLabel;
@@ -122,6 +133,14 @@ export class ActividadesComponent implements OnInit {
     });
   }
 
+
+  //SELECT
+  periodo: Periodo[] = [
+    { value: 'TRIMESTRE' },
+    { value: 'CUATRIMESTRE' },
+  ];
+  selectedPeriod = this.periodo[1].value;
+
   verPoas() {
     this.router.navigate(['/adm/asignacion-actividades/poa-actividad']);
   }
@@ -140,7 +159,7 @@ export class ActividadesComponent implements OnInit {
     );
   }
 
-  guardar() {
+  guardar2() {
     this.actividad = this.frmActividad.value;
     this.actividad.poa = this.poa;
     this.actividad.estado = 'PENDIENTE';
@@ -186,6 +205,60 @@ export class ActividadesComponent implements OnInit {
       }
     );
   }
+
+  
+
+  guardar() {
+    this.actividad = this.frmActividad.value;
+    this.actividad.poa = this.poa;
+    this.actividad.estado = 'PENDIENTE';
+  
+    this.actividadservice.crear(this.actividad).subscribe(
+      (response) => {
+        console.log('Actividad creada con éxito:', response);
+  
+        // Obtener el ID de la actividad creada
+        const idActividad = response.id_actividad;
+  
+        // Verificar el valor de selectedPeriod
+        if (this.selectedPeriod === 'CUATRIMESTRE') {
+          // Si es cuatrimestre, crear 3 registros de período con valores específicos
+          this.crearPeriodo(idActividad, this.actividad.valor1, 1);
+          this.crearPeriodo(idActividad, this.actividad.valor2, 2);
+          this.crearPeriodo(idActividad, this.actividad.valor3, 3);
+        } else if (this.selectedPeriod === 'TRIMESTRE') {
+          this.crearPeriodo(idActividad, this.actividad.valor1, 1);
+          this.crearPeriodo(idActividad, this.actividad.valor2, 2);
+          this.crearPeriodo(idActividad, this.actividad.valor3, 3);
+          this.crearPeriodo(idActividad, this.actividad.valor4, 4);
+        }
+        this.guardadoExitoso = true;
+        const idActividadCreada = response.id_actividad;
+        const idPoa = this.poa.id_poa;
+        this.crearAprobacion(response);
+        console.log(idActividadCreada + ' ' + idPoa);
+        this.listar(this.poa.id_poa);
+        Swal.fire('Exitoso', 'Se ha completado el registro con éxito', 'success');
+      },
+      (error) => {
+        console.error('Error al crear la actividad:', error);
+        Swal.fire('Error', 'Ha ocurrido un error', 'warning');
+      }
+    );
+  }
+  
+  crearPeriodo(idActividad: number, porcentaje: number, referencia: number) {
+    this.poaInsertService.crearPeriodo(porcentaje, idActividad, referencia).subscribe(
+      (periodoResponse) => {
+        console.log('Registro de período creado con éxito:', periodoResponse);
+      },
+      (periodoError) => {
+        console.error('Error al crear el registro de período:', periodoError);
+      }
+    );
+  }
+  
+
   editDatos(activ: ActividadesPoa) {
     this.actividad = activ;
     this.frmActividad = new FormGroup({
