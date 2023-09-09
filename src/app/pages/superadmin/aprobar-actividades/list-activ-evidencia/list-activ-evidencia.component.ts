@@ -11,6 +11,7 @@ import Swal from 'sweetalert2';
 import { AprobacionActividadService } from 'src/app/services/aprobacion-actividad.service';
 import { AprobacionActividad } from 'src/app/models/AprobacionActividad';
 import { Usuario2 } from 'src/app/models/Usuario2';
+import { AprobacionporActividadProjection } from 'src/app/interface/AprobacionporActividadProjection';
 @Component({
   selector: 'app-list-activ-evidencia',
   templateUrl: './list-activ-evidencia.component.html',
@@ -23,6 +24,9 @@ export class ListActivEvidenciaComponent implements OnInit {
 
   public aprobarAct = new AprobacionActividad();
   public actividadSelected :any;
+  listaAprobacionAct: AprobacionporActividadProjection[] = [];
+
+  observacionsSource = new MatTableDataSource<AprobacionporActividadProjection>();
 
   //Usuario logueado
   //Variable para estado
@@ -60,7 +64,6 @@ export class ListActivEvidenciaComponent implements OnInit {
     this.dataSource.paginator = this.paginator || null;
     this.dataSource2.paginator = this.paginator || null;
 
-
   }
   ngOnInit(): void {
     //Obtener id del poa
@@ -85,9 +88,10 @@ export class ListActivEvidenciaComponent implements OnInit {
   dataSource2 = new MatTableDataSource<Archivos>();
 
   @ViewChild(MatPaginator, { static: false }) paginator?: MatPaginator;
+  @ViewChild(MatPaginator, { static: false }) paginatorobs?: MatPaginator;
 
   //tabla
-  itemsPerPageLabel = 'Actividades por página';
+  itemsPerPageLabel = 'Items por página';
   nextPageLabel = 'Siguiente';
   lastPageLabel = 'Última';
   firstPageLabel = 'Primera';
@@ -107,6 +111,7 @@ export class ListActivEvidenciaComponent implements OnInit {
   };
   //Columnas tabla actividades
   columnasUsuario: string[] = ['id_actividad', 'nombre', 'descripcion', 'responsable', 'detalle', 'evaluar', 'historial'];
+  columnasObservaciones: string[] = ['observacion', 'estado', 'nombre_completo', 'fecha_aprobacion'];
 
   listar(): void {
     this.actividadService.ActividadesPendientesPorPoa(this.poa.id_poa).subscribe(
@@ -187,7 +192,31 @@ export class ListActivEvidenciaComponent implements OnInit {
     this.resultadosEncontrados = this.filteredComponentes.length > 0;
   }
 
+  verDetalles(actividad: any) {
+    this.aprobacionActvidadService.listarAprobacionesporActividad(actividad.id_actividad).subscribe(
+      (data: any[]) => {
+        this.listaAprobacionAct = data;
+        this.observacionsSource.data = this.listaAprobacionAct;
+        this.observacionsSource.paginator = this.paginatorobs  || null;
 
+      },
+      (error: any) => {
+        console.error('Error al listar las observaciones:', error);
+      }
+    );
+  }
+    getEstadoCellStyle(estado: string): any {
+    switch (estado) {
+      case 'PENDIENTE':
+        return { background: 'rgb(235, 253, 133)' };
+      case 'APROBADO':
+        return { background: 'rgb(168, 216, 159)' };
+      case 'RECHAZADO':
+        return { background: 'rgb(231, 87, 87)' };
+      default:
+        return {};
+    }
+  }
   //Ir a poas
   verPoas() {
     this.router.navigate(['/sup/aprobar-actividades/poa-actividad']);
@@ -204,5 +233,7 @@ export class ListActivEvidenciaComponent implements OnInit {
     this.estado = "";
     this.observacion = "";
   }
-
+  limpiarObservacion(){
+    this.observacionsSource =  new MatTableDataSource<AprobacionporActividadProjection>();
+  }
 }
