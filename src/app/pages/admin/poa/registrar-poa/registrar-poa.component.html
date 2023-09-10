@@ -12,7 +12,10 @@
                         <div class="table-cell"><strong>DIRECCION DEPARTAMENTAL:
                             </strong>{{projectSelect.nombre_programa}}
                         </div>
-                        <div class="table-cell"><strong>RESPONSABLE:</strong> NICOLÁS CEVALLOS CABRERA</div>
+                        <div class="table-cell"><strong>RESPONSABLE:</strong>
+                            {{persona.primer_nombre}} {{persona.segundo_nombre}} {{persona.primer_apellido}}
+                            {{persona.segundo_apellido}}
+                        </div>
                     </div>
                     <div class="table-row">
                         <div class="table-cell"><strong>AREA QUE PRESENTA EL PROYECTO:</strong> {{projectSelect.area}}
@@ -112,7 +115,7 @@
                     <div class="table-row">
                         <div class="table-cell"><strong>META PLANIFICADA:</strong></div>
                         <div class="table-cell ">
-                            <input class="form-control" type="text" id="meta" name="meta"
+                            <input [(ngModel)]="metaPlanificada" class="form-control" type="text" id="meta" name="meta"
                                 style="width: 100%; margin-bottom: 10px" appCurrencyInput />
                         </div>
                     </div>
@@ -130,13 +133,13 @@
 
                             <mat-form-field appearance="outline" class="example-full-width">
                                 <mat-label>Cobertura</mat-label>
-                                <input matInput value="">
+                                <input [(ngModel)]="cobertura" matInput value="">
                             </mat-form-field>
                         </div>
                         <div class="table-cell">
                             <mat-form-field appearance="outline" class="example-full-width">
                                 <mat-label>Barrio</mat-label>
-                                <input matInput value="">
+                                <input [(ngModel)]="barrio" matInput value="">
                             </mat-form-field>
                         </div>
                     </div>
@@ -144,13 +147,13 @@
                         <div class="table-cell">
                             <mat-form-field appearance="outline" class="example-full-width">
                                 <mat-label>Localizacion</mat-label>
-                                <input matInput value="">
+                                <input [(ngModel)]="localizacion" matInput value="">
                             </mat-form-field>
                         </div>
                         <div class="table-cell">
                             <mat-form-field appearance="outline" class="example-full-width">
                                 <mat-label>Comunidad</mat-label>
-                                <input matInput value="">
+                                <input [(ngModel)]="comunidad" matInput value="">
                             </mat-form-field>
                         </div>
                     </div>
@@ -213,33 +216,48 @@
                 <br />
                 <div class="table-container">
                     <div class="table-row">
-                        <div class="table-cell"><strong>{{selectedPeriod}} 1:</strong></div>
-                        <div class="table-cell ">${{valueUno}}</div>
-                        <div class="table-cell"><strong>{{selectedPeriod}} 2:</strong></div>
-                        <div class="table-cell ">${{valueDos}}</div>
-                        <div class="table-cell"><strong>{{selectedPeriod}} 3:</strong></div>
-                        <div class="table-cell ">${{valueTres}}</div>
-                        <div class="table-cell" *ngIf="selectedPeriod === 'TRIMESTRE'"><strong>{{selectedPeriod}}
-                                4:</strong></div>
-                        <div class="table-cell " *ngIf="selectedPeriod === 'TRIMESTRE'">${{valueCuatro}}</div>
-                    </div>
-                </div>
-                <div class="table-container ">
-                    <div class="table-row">
-                        <div class="table-cell wide-cell"><strong>TOTAL:</strong></div>
-                        <div class="table-cell">$ {{totalActividades}}</div>
-                    </div>
-                </div>
-                <br />
-                <br />
-                <div class="table-container">
-                    <div class="table-row">
                         <div class="table-cell"><strong>Recursos Propios:</strong></div>
                         <div class="table-cell ">${{recursosPropios}}</div>
                         <div class="table-cell"><strong>Recursos Externos:</strong></div>
                         <div class="table-cell ">${{recursosExternos}}</div>
                     </div>
                 </div>
+                <br />
+                <br />
+                <div class="table-container">
+                    <div class="table-row">
+                        <div class="table-cell wide-cell"><strong>{{selectedPeriod}} 1:</strong></div>
+                        <div class="table-cell ">${{valueUno}}</div>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <div class="table-row">
+                        <div class="table-cell wide-cell"><strong>{{selectedPeriod}} 2:</strong></div>
+                        <div class="table-cell ">${{valueDos}}</div>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <div class="table-row">
+                        <div class="table-cell wide-cell"><strong>{{selectedPeriod}} 3:</strong></div>
+                        <div class="table-cell ">${{valueTres}}</div>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <div class="table-row">
+                        <div class="table-cell wide-cell" *ngIf="selectedPeriod === 'TRIMESTRE'">
+                            <strong>{{selectedPeriod}}
+                                4:</strong>
+                        </div>
+                        <div class="table-cell " *ngIf="selectedPeriod === 'TRIMESTRE'">${{valueCuatro}}</div>
+                    </div>
+                </div>
+                <div class="table-container ">
+                    <div class="table-row">
+                        <div class="table-cell wide-cell"><strong>TOTAL:</strong></div>
+                        <div class="table-cell">${{totalActividades}}</div>
+                    </div>
+                </div>
+
                 <br />
                 <br />
                 <div class="table-container">
