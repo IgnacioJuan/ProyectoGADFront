@@ -15,8 +15,15 @@ import { MatDialog } from '@angular/material/dialog';
 import { UsuariorolService } from 'src/app/services/usuariorol.service';
 import 'jquery';
 import 'popper.js';
+import { AsignacionUsuarioService } from 'src/app/services/asignacionusuario.service';
+import { AsignacionUsuario } from 'src/app/models/AsignacionUsuario';
+import { PoaInsertService } from 'src/app/services/poa/poa-insert.service';
 declare var $: any;
 
+
+interface Periodo {
+  value: string;
+}
 @Component({
   selector: 'app-actividades',
   templateUrl: './actividades.component.html',
@@ -53,6 +60,7 @@ export class ActividadesComponent implements OnInit {
   public actividad = new ActividadesPoa();
   act!: ActividadesPoa[];
   public aprobAct = new AprobacionActividad();
+  public asignacion = new AsignacionUsuario();
   usuarios: Usuario2[] = [];
   poaId!: number;
   filterPost: string = "";
@@ -69,12 +77,13 @@ export class ActividadesComponent implements OnInit {
   spans: any[] = [];
   spans2: any[] = [];
 
+
   //listarActividades
   dataSource = new MatTableDataSource<ActividadesPoa>(this.act);
   columnasUsuario: string[] = ['id_actividad', 'nombre', 'descripcion', 'presupuesto_referencial', 'recursos_propios', 'codificado', 'devengado', 'estado', 'actions'];
   //listarUsuariosconActividades
   columUsuario1: string[] = ['id_usuario', 'username', 'nombre', 'apellido', 'cargo'];
-  columUsuario2: string[] = ['id_usuario', 'username', 'nombre', 'apellido', 'cargo'];
+  columUsuario2: string[] = ['id_usuario', 'username', 'nombre', 'apellido', 'cargo','fecha_asignacion'];
   //Listar Usuarios para Asignarles Actividad
   dataSource3 = new MatTableDataSource<Usuario2>();
   columnasUsuario3: string[] = ['id','nombre', 'apellido','usuario','actions'];
@@ -86,7 +95,8 @@ export class ActividadesComponent implements OnInit {
     private cdRef: ChangeDetectorRef, public dialog: MatDialog,
     private actividadservice: ActividadespoaService, private paginatorIntl: MatPaginatorIntl,
     private router: Router, private fb: FormBuilder, private userService: UsuarioService,
-    private usuariorolservice: UsuariorolService
+    private usuariorolservice: UsuariorolService, private asignacionservice: AsignacionUsuarioService,
+    private poaInsertService: PoaInsertService
   ) {
     this.frmActividad = fb.group({
       nombre: ['', Validators.required],
@@ -94,7 +104,11 @@ export class ActividadesComponent implements OnInit {
       presupuesto_referencial: [0, Validators.min(0)],
       recursos_propios: [0, Validators.min(0)],
       codificado: [0, Validators.min(0)],
-      devengado: [0, Validators.min(0)]
+      devengado: [0, Validators.min(0)],
+      valor1: [''],
+      valor2: [''],
+      valor3: [''],
+      valor4: ['']
     });
     this.paginatorIntl.nextPageLabel = this.nextPageLabel;
     this.paginatorIntl.lastPageLabel = this.lastPageLabel;
@@ -119,6 +133,14 @@ export class ActividadesComponent implements OnInit {
     });
   }
 
+
+  //SELECT
+  periodo: Periodo[] = [
+    { value: 'TRIMESTRE' },
+    { value: 'CUATRIMESTRE' },
+  ];
+  selectedPeriod = this.periodo[1].value;
+
   verPoas() {
     this.router.navigate(['/adm/asignacion-actividades/poa-actividad']);
   }
@@ -137,7 +159,7 @@ export class ActividadesComponent implements OnInit {
     );
   }
 
-  guardar() {
+  guardar2() {
     this.actividad = this.frmActividad.value;
     this.actividad.poa = this.poa;
     this.actividad.estado = 'PENDIENTE';
@@ -183,6 +205,60 @@ export class ActividadesComponent implements OnInit {
       }
     );
   }
+
+  
+
+  guardar() {
+    this.actividad = this.frmActividad.value;
+    this.actividad.poa = this.poa;
+    this.actividad.estado = 'PENDIENTE';
+  
+    this.actividadservice.crear(this.actividad).subscribe(
+      (response) => {
+        console.log('Actividad creada con éxito:', response);
+  
+        // Obtener el ID de la actividad creada
+        const idActividad = response.id_actividad;
+  
+        // Verificar el valor de selectedPeriod
+        if (this.selectedPeriod === 'CUATRIMESTRE') {
+          // Si es cuatrimestre, crear 3 registros de período con valores específicos
+          this.crearPeriodo(idActividad, this.actividad.valor1, 1);
+          this.crearPeriodo(idActividad, this.actividad.valor2, 2);
+          this.crearPeriodo(idActividad, this.actividad.valor3, 3);
+        } else if (this.selectedPeriod === 'TRIMESTRE') {
+          this.crearPeriodo(idActividad, this.actividad.valor1, 1);
+          this.crearPeriodo(idActividad, this.actividad.valor2, 2);
+          this.crearPeriodo(idActividad, this.actividad.valor3, 3);
+          this.crearPeriodo(idActividad, this.actividad.valor4, 4);
+        }
+        this.guardadoExitoso = true;
+        const idActividadCreada = response.id_actividad;
+        const idPoa = this.poa.id_poa;
+        this.crearAprobacion(response);
+        console.log(idActividadCreada + ' ' + idPoa);
+        this.listar(this.poa.id_poa);
+        Swal.fire('Exitoso', 'Se ha completado el registro con éxito', 'success');
+      },
+      (error) => {
+        console.error('Error al crear la actividad:', error);
+        Swal.fire('Error', 'Ha ocurrido un error', 'warning');
+      }
+    );
+  }
+  
+  crearPeriodo(idActividad: number, porcentaje: number, referencia: number) {
+    this.poaInsertService.crearPeriodo(porcentaje, idActividad, referencia).subscribe(
+      (periodoResponse) => {
+        console.log('Registro de período creado con éxito:', periodoResponse);
+      },
+      (periodoError) => {
+        console.error('Error al crear el registro de período:', periodoError);
+      }
+    );
+  }
+  
+
   editDatos(activ: ActividadesPoa) {
     this.actividad = activ;
     this.frmActividad = new FormGroup({
@@ -283,26 +359,47 @@ export class ActividadesComponent implements OnInit {
   }
   
   //METODO QUE FUNCIONA CON LA SELECCION EN LA TABLA DE USUARIOS
+
   guardarResponsable(usuarioSeleccionado: any) {
     this.actividadservice.getActividadPorId(this.idActividadSeleccionada)
       .subscribe(
         (actividadToUpdate: ActividadesPoa) => {
-          actividadToUpdate.usuario = usuarioSeleccionado;
-          this.actividadservice.actualizar(this.idActividadSeleccionada, actividadToUpdate)
+          const actividadActualizada = { ...actividadToUpdate };
+          actividadActualizada.usuario = usuarioSeleccionado;
+          this.actividadservice.actualizar(this.idActividadSeleccionada, actividadActualizada)
             .subscribe(
               () => {
-                this.listar(this.poa.id_poa);
-                Swal.fire(
-                  'Exitoso',
-                  'Se ha asignado el responsable con éxito',
-                  'success'
-                );
+                // Registro en la tabla asignaciones_usuarios
+                const asignacion = new AsignacionUsuario();
+                asignacion.usuario = usuarioSeleccionado;
+                asignacion.actividad = new ActividadesPoa();
+                asignacion.actividad.id_actividad = actividadToUpdate.id_actividad;
+                asignacion.fecha_asignacion = new Date();
+                this.asignacionservice.crear(asignacion)
+                  .subscribe(
+                    () => {
+                      this.listar(this.poa.id_poa);
+                      Swal.fire(
+                        'Exitoso',
+                        'Se ha asignado el responsable con éxito',
+                        'success'
+                      );
+                    },
+                    (error) => {
+                      console.error('Error al crear la asignación de responsable:', error);
+                      Swal.fire(
+                        'Error',
+                        'Ha ocurrido un error al crear la asignación de responsable',
+                        'warning'
+                      );
+                    }
+                  );
               },
               (error) => {
                 console.error('Error al actualizar el responsable:', error);
                 Swal.fire(
                   'Error',
-                  'Ha ocurrido un error',
+                  'Ha ocurrido un error al actualizar el responsable',
                   'warning'
                 );
               }
@@ -312,7 +409,7 @@ export class ActividadesComponent implements OnInit {
           console.error('Error al obtener la actividad:', error);
           Swal.fire(
             'Error',
-            'Ha ocurrido un error',
+            'Ha ocurrido un error al obtener la actividad',
             'warning'
           );
         }
@@ -402,7 +499,7 @@ export class ActividadesComponent implements OnInit {
     console.log('Cargando tabla para el id_actividad', actividadId);
     this.actividadservice.listarUsuariosActividades(actividadId).subscribe((data:ListaActividadesUsuario[])=>{
       this.listaU=data;
-      console.log("actividades ", JSON.stringify(this.listaU))
+      console.log("Responsable Actual ", JSON.stringify(this.listaU))
       this.cacheSpan('id_usuario', (d) => d.id_usuario);
       this.cacheSpan('username', (d) => d.id_usuario + d.username);
       this.cacheSpan('nombre', (d) => d.id_usuario + d.username + d.nombre);
@@ -410,14 +507,15 @@ export class ActividadesComponent implements OnInit {
       this.cacheSpan('cargo', (d) => d.id_usuario + d.username + d.nombre + d.apellido + d.cargo );
     });
 
-    this.actividadservice.listarUsuariosActividades(actividadId).subscribe((data:ListaActividadesUsuario[])=>{
+    this.asignacionservice.getAsignacionesUsuarios(actividadId).subscribe((data:ListaActividadesUsuario[])=>{
       this.listaU2=data;
-      console.log("actividades ", JSON.stringify(this.listaU2))
+      console.log("Usuario Anteriores ", JSON.stringify(this.listaU2))
       this.cacheSpan2('id_usuario', (d) => d.id_usuario);
       this.cacheSpan2('username', (d) => d.id_usuario + d.username);
       this.cacheSpan2('nombre', (d) => d.id_usuario + d.username + d.nombre);
       this.cacheSpan2('apellido', (d) => d.id_usuario + d.username + d.nombre + d.apellido);
       this.cacheSpan2('cargo', (d) => d.id_usuario + d.username + d.nombre + d.apellido + d.cargo );
+      this.cacheSpan2('fecha_asignacion', (d) => d.id_usuario + d.username + d.nombre + d.apellido + d.cargo + d.fecha_asignacion);
     });
   }
 }

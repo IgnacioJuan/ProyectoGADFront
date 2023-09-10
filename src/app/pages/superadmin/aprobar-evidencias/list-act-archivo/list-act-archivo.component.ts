@@ -16,6 +16,7 @@ import { AprobacionEvidenciaProjection } from 'src/app/interface/AprobacionEvide
 import { EmailServiceService } from 'src/app/services/email-service.service';
 import { PersonaService } from 'src/app/services/persona.service';
 import { Persona2 } from 'src/app/models/Persona2';
+
 @Component({
   selector: 'app-list-act-archivo',
   templateUrl: './list-act-archivo.component.html',
@@ -63,9 +64,7 @@ export class ListActArchivoComponent implements OnInit {
     this.paginatorIntl.previousPageLabel = this.previousPageLabel;
     this.paginatorIntl.itemsPerPageLabel = this.itemsPerPageLabel;
     this.paginatorIntl.getRangeLabel = this.rango;
-  }
-
-
+}
   ngAfterViewInit() {
     this.dataSource2.paginator = this.paginator || null;
   }
@@ -124,91 +123,86 @@ export class ListActArchivoComponent implements OnInit {
       (data: any[]) => {
         this.listaArchivos = data;
         this.dataSource2.data = this.listaArchivos;
-
       },
       (error: any) => {
         console.error('Error al listar los componentes:', error);
       }
+      
     );
-  }
-
-  //Metodo para Rechazar y Aprobar
-  Rechazar() {
-    this.estado = "RECHAZADO"
-  }
-  Aprobar() {
-    this.estado = "APROBADO"
-
-  }
-
-  Limpiar() {
-    this.estado = "";
-    this.observacion = "";
-  }
-
-
-
-  guardar(activ: any) {
-
     this.serviper.getcorreo(activ).subscribe(
       (data: Persona2) => {
-        this.correo = data.correo
-        this.nombre = data.primer_nombre + " " + data.primer_apellido;
+ this.correo= data.correo
+ this.nombre= data.primer_nombre+ " "+data.primer_apellido;
 
-        console.log(" correo =" + this.correo)
-      },
+console.log(" correo ="+this.correo)
+},
       (error: any) => {
         console.error('Error al listar los componentes:', error);
       }
-    );
-
-
-
-    // Verificar si el estado es "RECHAZADO" y la observación está vacía
-    if (this.estado === 'RECHAZADO' && !this.observacion) {
-      Swal.fire(
-        'Advertencia',
-        'La observación es obligatoria ',
-        'warning'
-      );
-      return;
-
-    }
-
-    this.aprobarEvi.estado = this.estado;
-    this.aprobarEvi.observacion = this.observacion;
-    this.aprobarEvi.evidencia = this.archivoSeleted
-    this.aprobarEvi.visible = true;
-    this.aprobarEvi.usuario = this.user.id;
-    this.archivoSeleted.estado = this.estado;
-    // Guardamos la aprobación y actualizamos el estado del archivo en paralelo
-    forkJoin([
-      this.aprobarEvidenciaService.crear(this.aprobarEvi),
-      this.archivoService.actualizar(this.archivoSeleted.id_archivo, this.archivoSeleted)
-    ])
-      .subscribe(
-        ([aprobarResponse, archivoResponse]) => {
-          this.sendEmail();
-          this.Limpiar();
-          this.listar(this.actividad.id_actividad);
-          Swal.fire(
-            'Exitoso',
-            'Se ha completado el registro con éxito',
-            'success'
-          );
-        },
-        (error) => {
-          console.error('Error al realizar alguna de las operaciones:', error);
-          Swal.fire(
-            'Error',
-            'Ha ocurrido un error en una o ambas operaciones',
-            'warning'
-          );
-        }
-      );
+    ); 
   }
 
 
+//Metodo para Rechazar y Aprobar
+Rechazar(){
+this.estado="RECHAZADO"
+}
+Aprobar(){
+  this.estado="APROBADO"
+
+}
+
+Limpiar(){
+this.estado="";
+ this.observacion="";
+}
+
+
+
+guardar() {
+  // Verificar si estado y observación no están vacíos
+  if (!this.estado || !this.observacion) {
+ 
+    Swal.fire(
+      'Advertencia',
+      'Existen campos vacios',
+      'warning'
+    );
+    return;
+  }
+
+  this.aprobarEvi.estado = this.estado;
+  this.aprobarEvi.observacion = this.observacion;
+  this.aprobarEvi.evidencia = this.archivoSeleted
+  this.aprobarEvi.visible = true;
+  this.aprobarEvi.usuario = this.user.id;
+  this.archivoSeleted.estado= this.estado;
+  // Guardamos la aprobación y actualizamos el estado del archivo en paralelo
+  forkJoin([
+    this.aprobarEvidenciaService.crear(this.aprobarEvi),
+    this.archivoService.actualizar(this.archivoSeleted.id_archivo, this.archivoSeleted)
+  ])
+    .subscribe(
+      ([aprobarResponse, archivoResponse]) => {
+        this.sendEmail();
+        this.Limpiar();
+        this.listar(this.actividad.id_actividad);
+        Swal.fire(
+          'Exitoso',
+          'Se ha completado el registro con éxito',
+          'success'
+        );
+      },
+      (error) => {
+        console.error('Error al realizar alguna de las operaciones:', error);
+        Swal.fire(
+          'Error',
+          'Ha ocurrido un error en una o ambas operaciones',
+          'warning'
+        );
+      }
+    );
+}
 
   buscar() {
     // Filtra los componentes basados en el filtro
@@ -257,7 +251,6 @@ export class ListActArchivoComponent implements OnInit {
       }
     );
   }
-
 
   /// envio de correo john
   sendEmail() {
