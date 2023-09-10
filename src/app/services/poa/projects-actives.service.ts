@@ -11,7 +11,13 @@ export class ProjectsActivesService {
     constructor(private http: HttpClient) { }
 
     //metod for get all projects actives
-    public getProjectsActives(): Observable<any> {
-        return this.http.get(`${baserUrl}/api/proyecto/listsActiveProjects`);
+    // public getProjectsActives(): Observable<any> {
+    //     return this.http.get(`${baserUrl}/api/proyecto/listsActiveProjects?id_usuario=2`);
+    // }
+
+    //metod for get all projects actives
+    public getProjectsActives(id_user: string): Observable<any> {
+        console.log(`${baserUrl}/api/proyecto/listsActiveProjects?id_usuario=${id_user}`);
+        return this.http.get(`${baserUrl}/api/proyecto/listsActiveProjects?id_usuario=${id_user}`);
     }
 }
