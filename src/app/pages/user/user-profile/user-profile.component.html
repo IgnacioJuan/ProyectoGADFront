@@ -8,46 +8,61 @@
             <div class="col-md-4 gradient-custom text-center text-white" style="
                     border-top-left-radius: 0.5rem;
                     border-bottom-left-radius: 0.5rem;
+                    width: 100%;
                   ">
               <img src="./assets/profile.png" alt="Avatar" class="img-fluid my-5" style="width: 80px" />
               <h4>
                 {{ user.persona.primer_apellido }}
+                {{ user.persona.segundo_apellido }}
                 {{ user.persona.primer_nombre }}
+                {{ user.persona.segundo_nombre }}
               </h4>
+              <p>{{ user.persona.cedula }}</p>
               <p>{{ rol }}</p>
             </div>
-            <div class="col-md-8">
-              <div class="card-body p-4">
+
+            <div class="col-md-8" style=" width: 100%;">
+              <div class="card-body p-4" style="margin-left: 10px;">
                 <h1>Información</h1>
-                <hr class="mt-0 mb-4" />
-                <div class="row pt-1">
-                  <div class="col-6 mb-3">
+                <hr class="mt-0 mb-3" />
+                <div class="row pt-1 d-flex justify-content-between" style="margin-left: 10px">
+                  <div class="col mb-3">
+                    <h3>Nombre de Usuario</h3>
+                    <p class="text-muted">{{ user.username }}</p>
+                  </div>
+                  <div class="col mb-3">
+                    <h3>Cargo</h3>
+                    <p class="text-muted">{{ user.persona.cargo }}</p>
+                  </div>
+                  <div class="col mb-3">
+                    <h3>Programa</h3>
+                    <p class="text-muted">{{ user.programa.nombre }}</p>
+                  </div>
+                </div>
+                <div class="row pt-1 d-flex justify-content-between" style="margin-left: 10px">
+                  <div class="col mb-3">
+                    <h3>Correo</h3>
+                    <p class="text-muted">{{ user.persona.correo }}</p>
+                  </div>
+                  <div class="col mb-3">
                     <h3>Direccion</h3>
                     <p class="text-muted">{{ user.persona.direccion }}</p>
                   </div>
-                  <div class="col-6 mb-3">
+                  <div class="col mb-3">
                     <h3>Celular</h3>
                     <p class="text-muted">{{ user.persona.celular }}</p>
                   </div>
                 </div>
-                <div class="row pt-1">
-                  <div class="col-6 mb-3">
-                    <h3>Username</h3>
-                    <p class="text-muted">{{ user.username }}</p>
-                  </div>
-                  <div class="col-6 mb-3">
-                    <h3>Email</h3>
-                    <p class="text-muted">{{ user.persona.correo }}</p>
-                  </div>
-                </div>
+
               </div>
               <div class="button-group w-60 d-flex justify-content-center" style="margin: 1%; align-items: center">
-                <button mat-raised-button class="rounded-button" style="background-color: rgba(13, 182, 13, 0.712); margin-left: 5%" data-bs-toggle="modal"
-                  data-bs-target="#exampleModal3">
+                <button mat-raised-button class="rounded-button" style="background-color: rgba(13, 182, 13, 0.712)"
+                  data-bs-toggle="modal" data-bs-target="#exampleModal3">
                   <mat-icon>vpn_key</mat-icon>Cambiar Contraseña
                 </button>
-                <button mat-raised-button class="rounded-button" data-bs-toggle="modal" style="background-color: rgba(13, 182, 13, 0.712); margin-left: 5%"
-                  data-bs-target="#exampleModal4" (click)="edit()">
+                <button mat-raised-button class="rounded-button" data-bs-toggle="modal"
+                  style="background-color: rgba(13, 182, 13, 0.712); margin-left: 5%" data-bs-target="#exampleModal4"
+                  (click)="edit()">
                   <mat-icon>edit</mat-icon>Actualizar Datos
                 </button>
               </div>
@@ -95,12 +110,13 @@
           </mat-form-field>
 
           <div class="container text-center">
-            <button mat-raised-button class="rounded-button" style="background-color: rgb(211, 192, 20); margin-right: 5%" [disabled]="contraForm.invalid"
+            <button mat-raised-button class="rounded-button"
+              style="color: white; background-color: green; margin-right: 5%" [disabled]="contraForm.invalid"
               data-bs-dismiss="modal" (click)="Actualizar(usuariosEditGuar)">
               <mat-icon>save</mat-icon> Guardar
             </button>
             <button mat-raised-button class="rounded-button"
-              style="margin-right: 5%" data-bs-dismiss="modal">
+              style="background-color: rgb(211, 192, 20); margin-right: 5%" data-bs-dismiss="modal">
               <mat-icon>cancel</mat-icon>
               Cancelar
             </button>
@@ -110,6 +126,9 @@
     </div>
   </div>
 </div>
+
+
+<!--DATOS PERSONALES -->
 <div class="modal fade" id="exampleModal4" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -185,11 +204,13 @@
           </div>
           <br />
           <div class="container text-center">
-            <button mat-raised-button class="rounded-button" style="background-color: rgb(211, 192, 20); margin-right: 5%" [disabled]="usuarioForm.invalid"
+            <button mat-raised-button class="rounded-button"
+              style="color: white; background-color: green; margin-right: 5%" [disabled]="usuarioForm.invalid"
               data-bs-dismiss="modal">
               <mat-icon>save</mat-icon>Guardar
             </button>
-            <button mat-raised-button class="rounded-button" style="margin-right: 5%" data-bs-dismiss="modal">
+            <button mat-raised-button class="rounded-button"
+              style="background-color: rgb(211, 192, 20); margin-right: 5%" data-bs-dismiss="modal">
               <mat-icon>cancel</mat-icon>
               Cancelar
             </button>

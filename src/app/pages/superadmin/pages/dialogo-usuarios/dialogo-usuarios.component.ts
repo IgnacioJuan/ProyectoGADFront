@@ -10,6 +10,9 @@ import { Rol } from 'src/app/models/Rol';
 import { PersonaService } from 'src/app/services/persona.service';
 import { CrearUsuariosComponent } from '../crear-usuarios/crear-usuarios.component';
 import { MatDialogRef } from '@angular/material/dialog';
+import { ProgramaService } from 'src/app/services/programa.service';
+import { ProgramaUsuarioDTO } from 'src/app/models/Programa';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-dialogo-usuarios',
@@ -21,7 +24,8 @@ export class DialogoUsuariosComponent implements OnInit {
   secondFormGroup!: FormGroup;
   isLinear = false;
   roles: Rol[] = [];
-
+  programas: ProgramaUsuarioDTO[] = [];
+  Programaformulario!: FormGroup;
 
   constructor(
     private _formBuilder: FormBuilder,
@@ -29,7 +33,8 @@ export class DialogoUsuariosComponent implements OnInit {
     private rolService: RolService,
     private personaService: PersonaService,
     private snack: MatSnackBar,
-    private dialogRef: MatDialogRef<DialogoUsuariosComponent>
+    private dialogRef: MatDialogRef<DialogoUsuariosComponent>,
+    private programaService: ProgramaService
   ) {
 
   }
@@ -51,9 +56,15 @@ export class DialogoUsuariosComponent implements OnInit {
     this.secondFormGroup = this._formBuilder.group({
       username: ['', Validators.required],
       password: ['', Validators.required],
-      rol: ['', Validators.required]
+      rol: ['', Validators.required],
+      id_programa: [null, Validators.required]
     });
 
+    this.programaService.listar().subscribe(data => {
+      this.programas = data;
+      console.log(this.programas);
+    })
+    // Obtiene el programa seleccionado
 
     /*this.rolService.getRoles().subscribe((roles) => {
       this.roles = roles;
@@ -62,6 +73,7 @@ export class DialogoUsuariosComponent implements OnInit {
 
   guardarUsuario(): void {
     if (this.firstFormGroup.valid && this.secondFormGroup.valid) {
+
       const persona: Persona2 = this.firstFormGroup.value;
 
       this.personaService.createPersona(persona).subscribe((personaGuardada) => {
@@ -71,6 +83,15 @@ export class DialogoUsuariosComponent implements OnInit {
         // Obtiene el rol seleccionado
         const rolControl = this.secondFormGroup.get('rol');
         const idRol = rolControl ? rolControl.value : null;
+
+        // Obtiene el programa seleccionado
+
+        const programaControl = this.secondFormGroup.get('id_programa');
+        const programaSeleccionado = programaControl ? programaControl.value : null;
+        console.log(programaSeleccionado);
+        usuario.programa = programaSeleccionado;
+        console.log(usuario);
+
 
         this.usuarioService.createUsuario(usuario, idRol).subscribe(() => {
           Swal.fire('Usuario guardado', 'Usuario registrado con éxito en el sistema', 'success');
@@ -120,7 +141,8 @@ export class DialogoUsuariosComponent implements OnInit {
     this.secondFormGroup.reset({
       username: '',
       password: '',
-      rol: ''
+      rol: '',
+      programa: ''
     });
   }
 

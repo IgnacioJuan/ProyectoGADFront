@@ -16,7 +16,7 @@ export class UserProfileComponent implements OnInit {
   isLoggedIn = false;
   user: any = null;
   rol: any = null;
-//
+
   usuariosEditGuar = new Usuario2();
   usuarioForm: FormGroup;
   contraForm: FormGroup;
@@ -101,9 +101,9 @@ export class UserProfileComponent implements OnInit {
       primer_nombre: new FormControl(this.user.persona.primer_nombre, [Validators.required]),
       primer_apellido: new FormControl(this.user.persona.primer_apellido, [Validators.required])
   });
-
-
   }
+
+  
   Actualizardatos(usuariosdit: Usuario2) {
     const persona: Persona2 = this.usuarioForm.value;
     persona.id_persona=usuariosdit.persona.id_persona;
