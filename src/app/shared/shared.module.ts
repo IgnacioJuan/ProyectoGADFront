@@ -40,9 +40,10 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { FiltrarEvidenciasPorIDPipe } from '../pages/admin/aprobar-rechazar-admin/filtro-prueba.pipe';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { MatSortModule } from '@angular/material/sort';
+import { LoadingSpinnerComponent } from '../components/loading-spinner/loading-spinner.component';
 @NgModule({
   declarations: [BuscarPipe,BuscarUsuarioPipe,PageNotFoundComponent,
-    FiltrarEvidenciasPorIDPipe, ResponsablePipe,
+    FiltrarEvidenciasPorIDPipe, ResponsablePipe,LoadingSpinnerComponent
   ],
   imports: [
     CommonModule,
@@ -79,7 +80,7 @@ import { MatSortModule } from '@angular/material/sort';
     CdkTableModule,
     MatTooltipModule,
     NgxSpinnerModule,
-    MatSortModule
+    MatSortModule,
   ],
   exports: [
     BuscarPipe,
@@ -121,7 +122,7 @@ import { MatSortModule } from '@angular/material/sort';
     MatTabsModule,
     NgxSpinnerModule,
     MatSortModule,
-    
+    LoadingSpinnerComponent,
     MatProgressBarModule,
     NgIf,
   ],
