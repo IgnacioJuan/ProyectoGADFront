@@ -44,3 +44,28 @@ body {
     max-width: 900px;
     /* o el valor que prefieras */
 }
+
+/*Css para el divider del editor */
+
+.divider-with-text {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.divider-with-text span {
+    background-color: #ffffff5e;
+    /* El color de fondo del contenedor, para que el texto se superponga al divider */
+    padding: 0 10px;
+    /* Espacio a los lados del texto */
+    z-index: 1;
+    /* Asegurarse de que el texto esté por encima del divider */
+    color: #afaeae;
+}
+
+mat-divider {
+    flex-grow: 1;
+    /* Asegurarse de que el divider ocupe todo el espacio restante a ambos lados del texto */
+    margin: 0 10px;
+    /* Espacio a los lados del divider */
+}
