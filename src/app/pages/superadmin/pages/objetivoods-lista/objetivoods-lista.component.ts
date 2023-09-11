@@ -142,16 +142,7 @@ export class ObjetivoodsListaComponent implements OnInit {
       }
     );
   }
-  /*listarObjetivos(idComponente: number): void {
-    this.objetivoPDOTService.listarObjetivosPdotsPorIdComponente(idComponente).subscribe(
-      (data: any) => {
-        this.numeroObjetivos = data.length; // Asigna el número de registros obtenidos
-      },
-      (error: any) => {
-        console.error('Error al listar los objetivos:', error);
-      }
-    );
-  }*/
+
   editDatos(componente: Objetivoods) {
     this.componentes = componente;
     this.formComponentes = new FormGroup({
@@ -183,7 +174,7 @@ export class ObjetivoodsListaComponent implements OnInit {
     this.router.navigate(['/sup/flujo_Componentes/componente_objetivoPDOT'], { state: { data: componente } });
   }
 
-
+  
 
   buscar() {
     // Filtra los componentes basados en el filtro

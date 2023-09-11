@@ -6,7 +6,6 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { ModeloPoa } from 'src/app/models/ModeloPoa';
 import { Proyecto } from 'src/app/models/Proyecto';
-import { IndicadorService } from 'src/app/services/indicador.service';
 import { ProyectoService } from 'src/app/services/proyecto.service';
 
 @Component({
@@ -40,10 +39,13 @@ export class ProyectosComponent {
   modelopoa: ModeloPoa = new ModeloPoa();
   proyectos: any[] = [];
 
-  miModal!: ElementRef;
-  public subcrite = new Proyecto();
+  public subcrite = new Proyecto(); 
+  subcriterios: Proyecto[] = [];
 
-  filterPost = '';
+  filterPost: string = "";
+  filteredComponentes: any[] = [];
+  resultadosEncontrados: boolean = true;
+
   dataSource = new MatTableDataSource<Proyecto>();
   columnasUsuario: string[] = ['id_proyecto', 'nombre', 'codigo', 'objetivo', 'meta', 'poa'];
 
@@ -55,7 +57,6 @@ export class ProyectosComponent {
   selectedCodigo: string = "";
   constructor(
     private proyectoservice: ProyectoService,
-    private indicadorservice: IndicadorService,
     private paginatorIntl: MatPaginatorIntl,
     private router: Router,
     private fb: FormBuilder
@@ -80,7 +81,6 @@ export class ProyectosComponent {
       indicadorControl: [''],
       competenciaControl: ['']
     });
-  
     this.paginatorIntl.nextPageLabel = this.nextPageLabel;
     this.paginatorIntl.lastPageLabel = this.lastPageLabel;
     this.paginatorIntl.firstPageLabel=this.firstPageLabel;
@@ -96,10 +96,6 @@ export class ProyectosComponent {
     
     this.listar()
   }
-
-
-
- 
   //optimizar
   listar(): void {
     this.proyectoservice.getProyectos().subscribe(
@@ -112,43 +108,19 @@ export class ProyectosComponent {
       }
     );
   }
-
-
-  validarFechas(): void {
-    // const fechaInicio = this.frmModeloPoa.get('fecha_inicial')?.value as string;
-    // const fechaFin = this.frmModeloPoa.get('fecha_final')?.value as string;
-
-    // if (fechaInicio && fechaFin) {
-    //   const dateInicio = new Date(fechaInicio);
-    //   const dateFin = new Date(fechaFin);
-
-    //   if (dateFin < dateInicio) {
-    //     this.frmModeloPoa.setErrors({ fechasInvalidas: true });
-    //   } else {
-    //     this.frmModeloPoa.setErrors(null);
-    //   }
-    // }
-  }
-  
-
   verDetalles(proyecto: any) {
    this.router.navigate(['/sup/flujo-criterio/listarpoausu'], { state: { proyecto: proyecto, modelo: this.modelopoa } });
   }
   verProyectos() {
   this.router.navigate(['/sup/flujo-criterio/listaproyecto']);
   }
-
-  aplicarFiltro() {
-    if (this.filterPost) {
-      const lowerCaseFilter = this.filterPost.toLowerCase();
-      this.dataSource.data = this.dataSource.data.filter((item: any) => {
-        return JSON.stringify(item).toLowerCase().includes(lowerCaseFilter);
-      });
-    } else {
-      this.dataSource.data = this.proyectos;;
-    }
-  }
-
- 
+  
+  buscar() {
+    this.filteredComponentes = this.proyectos.filter((componente) =>
+      componente.nombre.toLowerCase().includes(this.filterPost.toLowerCase())
+    );
+    this.dataSource.data = this.filteredComponentes;
+    this.resultadosEncontrados = this.filteredComponentes.length > 0;
+  }  
 
 }
