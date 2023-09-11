@@ -139,7 +139,7 @@
                   <div style="flex: 1; margin-right: 20px;">
                     <label for="presupuesto_referencial">Presupuesto Referencial:</label>
                     <input class="form-control" formControlName="presupuesto_referencial" id="presupuesto_referencial"
-                      name="presupuesto_referencial" style="margin-bottom: 10px" type="number" min="0" Read/>
+                      name="presupuesto_referencial" style="margin-bottom: 10px" type="number" min="0" readonly />
                   </div>
                   <div style="flex: 1;">
                     <label for="recursos_propios">Valor Recursos Propios:</label>
@@ -191,23 +191,14 @@
                 </div>
               </div>-->
 
-                <!--CUATRIMESTRES O TRIMESTRES-->
-                <div *ngIf="modoCreacion">
-                  <mat-form-field>
-                    <mat-label>Tipo de seguimiento</mat-label>
-                    <mat-select [(value)]="selectedPeriod">
-                      <mat-option [value]="option.value" *ngFor="let option of periodo">{{ option.value }}</mat-option>
-                    </mat-select>
-                  </mat-form-field>
-                </div>
                 <div style="display: flex; justify-content: space-between;" *ngIf="modoCreacion">
                   <div style="flex: 1; margin-right: 20px;">
-                    <label for="valor_uno">{{selectedPeriod}} 1</label>
+                    <label for="valor1">{{poa.tipo_periodo}} 1</label>
                     <input class="form-control" formControlName="valor1" type="text" id="valor1" name="valor1"
                       style="margin-bottom: 10px" appCurrencyInput />
                   </div>
                   <div style="flex: 1; margin-right: 20px;" *ngIf="modoCreacion">
-                    <label for="valor2">{{selectedPeriod}} 2</label>
+                    <label for="valor2">{{poa.tipo_periodo}} 2</label>
                     <input class="form-control" formControlName="valor2" type="text" id="valor2" name="valor2"
                       style="margin-bottom: 10px" appCurrencyInput />
                   </div>
@@ -215,19 +206,20 @@
 
                 <div style="display: flex; justify-content: space-between;" *ngIf="modoCreacion">
                   <div style="flex: 1; margin-right: 20px;">
-                    <label for="valor3">{{selectedPeriod}} 3</label>
+                    <label for="valor3">{{poa.tipo_periodo}} 3</label>
                     <input class="form-control" formControlName="valor3" type="text" id="valor3" name="valor3"
                       style="margin-bottom: 10px" appCurrencyInput />
                   </div>
                   <div style="flex: 1; margin-right: 20px;" *ngIf="modoCreacion">
-                    <div class="form-group" *ngIf="selectedPeriod === 'TRIMESTRE'">
-                      <label for="valor4">{{selectedPeriod}} 4</label>
+                    <div class="form-group" *ngIf="poa.tipo_periodo === 'TRIMESTRE'">
+                      <label for="valor4">{{poa.tipo_periodo}} 4</label>
                       <input class="form-control" formControlName="valor4" type="text" id="valor4" name="valor4"
                         style="margin-bottom: 10px" appCurrencyInput />
                     </div>
-
                   </div>
                 </div>
+
+
               </div>
             </form>
             <div class="modal-footer">

@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@an
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ActividadesPoa } from 'src/app/models/ActividadesPoa';
 import { Poa } from 'src/app/models/Poa';
 import { Usuario2 } from 'src/app/models/Usuario2';
@@ -20,10 +20,6 @@ import { AsignacionUsuario } from 'src/app/models/AsignacionUsuario';
 import { PoaInsertService } from 'src/app/services/poa/poa-insert.service';
 declare var $: any;
 
-
-interface Periodo {
-  value: string;
-}
 @Component({
   selector: 'app-actividades',
   templateUrl: './actividades.component.html',
@@ -97,7 +93,7 @@ export class ActividadesComponent implements OnInit {
     private actividadservice: ActividadespoaService, private paginatorIntl: MatPaginatorIntl,
     private router: Router, private fb: FormBuilder, private userService: UsuarioService,
     private usuariorolservice: UsuariorolService, private asignacionservice: AsignacionUsuarioService,
-    private poaInsertService: PoaInsertService
+    private poaInsertService: PoaInsertService, private route: ActivatedRoute
   ) {
     this.frmActividad = fb.group({
       nombre: ['', Validators.required],
@@ -127,20 +123,14 @@ export class ActividadesComponent implements OnInit {
     this.cargarUsuarios();
     this.poa = data;
     console.log(this.poa);
+    const tipoPeriodo = data.tipo_periodo;
+    console.log('Tipo de período:', tipoPeriodo);
     this.listar(this.poa.id_poa);
     this.Listado();
     this.actividadservice.obtenerActividades().subscribe((data: ActividadesPoa[]) => {
       this.act = data;
     });
   }
-
-
-  //SELECT
-  periodo: Periodo[] = [
-    { value: 'TRIMESTRE' },
-    { value: 'CUATRIMESTRE' },
-  ];
-  selectedPeriod = this.periodo[1].value;
 
   verPoas() {
     this.router.navigate(['/adm/asignacion-actividades/poa-actividad']);
@@ -192,23 +182,6 @@ export class ActividadesComponent implements OnInit {
       );
   }
 
-  crearAprobacion(actividad: any) {
-    this.aprobAct.estado = 'PENDIENTE';
-    this.aprobAct.observacion = '';
-    this.aprobAct.actividad = actividad;
-    this.aprobAct.poa = this.poa;
-    this.actividadservice.crearRelacionAprobacion(this.aprobAct).subscribe(
-      (response) => {
-        console.log('Relación de aprobación creada:', response);
-      },
-      (error) => {
-        console.error('Error al crear la relación de aprobación:', error);
-      }
-    );
-  }
-
-  
-
   guardar() {
     this.actividad = this.frmActividad.value;
     this.actividad.presupuesto_referencial = this.actividad.recursos_propios;
@@ -223,12 +196,12 @@ export class ActividadesComponent implements OnInit {
         const idActividad = response.id_actividad;
   
         // Verificar el valor de selectedPeriod
-        if (this.selectedPeriod === 'CUATRIMESTRE') {
+        if (this.poa.tipo_periodo === 'CUATRIMESTRE') {
           // Si es cuatrimestre, crear 3 registros de período con valores específicos
           this.crearPeriodo(idActividad, this.actividad.valor1, 1);
           this.crearPeriodo(idActividad, this.actividad.valor2, 2);
           this.crearPeriodo(idActividad, this.actividad.valor3, 3);
-        } else if (this.selectedPeriod === 'TRIMESTRE') {
+        } else if (this.poa.tipo_periodo === 'TRIMESTRE') {
           this.crearPeriodo(idActividad, this.actividad.valor1, 1);
           this.crearPeriodo(idActividad, this.actividad.valor2, 2);
           this.crearPeriodo(idActividad, this.actividad.valor3, 3);
@@ -247,7 +220,7 @@ export class ActividadesComponent implements OnInit {
         Swal.fire('Error', 'Ha ocurrido un error', 'warning');
       }
     );
-  }
+  }  
   
   crearPeriodo(idActividad: number, porcentaje: number, referencia: number) {
     this.poaInsertService.crearPeriodo(porcentaje, idActividad, referencia).subscribe(
@@ -259,6 +232,22 @@ export class ActividadesComponent implements OnInit {
       }
     );
   }
+  
+  crearAprobacion(actividad: any) {
+    this.aprobAct.estado = 'PENDIENTE';
+    this.aprobAct.observacion = '';
+    this.aprobAct.actividad = actividad;
+    this.aprobAct.poa = this.poa;
+    this.actividadservice.crearRelacionAprobacion(this.aprobAct).subscribe(
+      (response) => {
+        console.log('Relación de aprobación creada:', response);
+      },
+      (error) => {
+        console.error('Error al crear la relación de aprobación:', error);
+      }
+    );
+  }
+  
   
   editDatos(activ: ActividadesPoa) {
     this.modoCreacion = false;
@@ -323,11 +312,11 @@ export class ActividadesComponent implements OnInit {
   // LISTA USUARIOS TABLA
   listaUsuarios: any[] = [];
   Listado() {
-    this.usuariorolservice.getusuarios().subscribe(
+    this.usuariorolservice.getusuariosResponsable().subscribe(
       (listaAsig: any[]) => {
         this.listaUsuarios = listaAsig;
         this.dataSource3.data = this.listaUsuarios;
-        console.log(listaAsig)
+        console.log("AQUIIII"+listaAsig)
       }
     );
   }
