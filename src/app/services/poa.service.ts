@@ -71,8 +71,8 @@ export class PoaService {
   obtenerDatosPoas(): Observable<PoaActividadProjection[]> {
     return this.http.get<PoaActividadProjection[]>(`${baserUrl}/api/poa/listarPoasDeModelo`);
   }
-  listarPoasdelProyecto(estado:string): Observable<Poa[]> {
-    return this.http.get<Poa[]>(`${baserUrl}/api/poa/listardelProyecto/${estado}`);
+  listarPoasdelProyecto(id_proyecto:number, estado:string): Observable<Poa[]> {
+    return this.http.get<Poa[]>(`${baserUrl}/api/poa/listardelProyecto/${id_proyecto}/${estado}`);
   }
 
 

@@ -54,7 +54,7 @@ export class EvidenciasComponent implements OnInit {
   };
 
   //Columnas Tabla
-  columnasObservaciones: string[] = ['observacion'];
+  columnasObservaciones: string[] = ['observacion','estadox'];
   columnasUsuario: string[] = [
     'barrio',
     'comunidad',

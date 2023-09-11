@@ -76,6 +76,7 @@ export class ActividadesComponent implements OnInit {
   listaU2!: ListaActividadesUsuario[];
   spans: any[] = [];
   spans2: any[] = [];
+  modoCreacion: boolean = true;
 
 
   //listarActividades
@@ -210,6 +211,7 @@ export class ActividadesComponent implements OnInit {
 
   guardar() {
     this.actividad = this.frmActividad.value;
+    this.actividad.presupuesto_referencial = this.actividad.recursos_propios;
     this.actividad.poa = this.poa;
     this.actividad.estado = 'PENDIENTE';
   
@@ -258,8 +260,8 @@ export class ActividadesComponent implements OnInit {
     );
   }
   
-
   editDatos(activ: ActividadesPoa) {
+    this.modoCreacion = false;
     this.actividad = activ;
     this.frmActividad = new FormGroup({
       nombre: new FormControl(this.actividad.nombre),
@@ -267,17 +269,25 @@ export class ActividadesComponent implements OnInit {
       presupuesto_referencial: new FormControl(this.actividad.presupuesto_referencial),
       recursos_propios: new FormControl(this.actividad.recursos_propios),
       codificado: new FormControl(this.actividad.codificado),
-      devengado: new FormControl(this.actividad.devengado)
+      devengado: new FormControl(this.actividad.devengado),
+      /*valor1: new FormControl(this.actividad.valor1),
+      valor2: new FormControl(this.actividad.valor2),
+      valor3: new FormControl(this.actividad.valor3),
+      valor4: new FormControl(this.actividad.valor4),*/
     });
   }
   actualizar() {
     this.actividad.nombre = this.frmActividad.value.nombre;
     this.actividad.descripcion = this.frmActividad.value.descripcion;
-    this.actividad.presupuesto_referencial = this.frmActividad.value.presupuesto_referencial;
+    this.actividad.presupuesto_referencial = this.frmActividad.value.recursos_propios;
     this.actividad.codificado = this.frmActividad.value.codificado;
     this.actividad.devengado = this.frmActividad.value.devengado;
     this.actividad.recursos_propios = this.frmActividad.value.recursos_propios;
     this.actividad.estado = 'PENDIENTE';
+    /*this.actividad.valor1 = this.frmActividad.value.valor1;
+    this.actividad.valor2 = this.frmActividad.value.valor2;
+    this.actividad.valor3 = this.frmActividad.value.valor3;
+    this.actividad.valor4 = this.frmActividad.value.valor4;*/
     this.actividadservice.actualizar(this.actividad.id_actividad, this.actividad)
       .subscribe(response => {
         this.actividad = new ActividadesPoa();
@@ -359,7 +369,6 @@ export class ActividadesComponent implements OnInit {
   }
   
   //METODO QUE FUNCIONA CON LA SELECCION EN LA TABLA DE USUARIOS
-
   guardarResponsable(usuarioSeleccionado: any) {
     this.actividadservice.getActividadPorId(this.idActividadSeleccionada)
       .subscribe(
