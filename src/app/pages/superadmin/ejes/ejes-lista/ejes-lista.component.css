@@ -31,4 +31,9 @@
        center / cover no-repeat fixed;
    }
 
-
+.header-title {
+  font-size: 30px;
+  font-weight: bold;
+  color:green; /* You can choose your preferred color */
+  text-align: left;
+}

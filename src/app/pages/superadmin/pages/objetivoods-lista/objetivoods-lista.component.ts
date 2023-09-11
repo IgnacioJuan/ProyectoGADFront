@@ -22,7 +22,7 @@ export class ObjetivoodsListaComponent implements OnInit {
   guardadoExitoso: boolean = false;
   miModal!: ElementRef;
   //tabla
-  itemsPerPageLabel = 'Componentes por página';
+  itemsPerPageLabel = 'Objetivos por página';
   nextPageLabel = 'Siguiente';
   lastPageLabel = 'Última';
   firstPageLabel='Primera';

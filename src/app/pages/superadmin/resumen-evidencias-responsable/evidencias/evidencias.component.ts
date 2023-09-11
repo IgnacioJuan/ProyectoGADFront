@@ -31,7 +31,7 @@ export class EvidenciasComponent implements OnInit {
   //Usuario logueado
   user: any = null;
   //tabla
-  itemsPerPageLabel = 'Poas por página';
+  itemsPerPageLabel = 'Evidencias por página';
   nextPageLabel = 'Siguiente';
   lastPageLabel = 'Última';
   firstPageLabel = 'Primera';
@@ -54,7 +54,7 @@ export class EvidenciasComponent implements OnInit {
   };
 
   //Columnas Tabla
-  columnasObservaciones: string[] = ['observacion','estadox'];
+  columnasObservaciones: string[] = ['observacion','estadox','fecha_aprobacion','usuario_creacion'];
   columnasUsuario: string[] = [
     'barrio',
     'comunidad',
@@ -72,7 +72,7 @@ export class EvidenciasComponent implements OnInit {
 
   constructor(
     private paginatorIntl: MatPaginatorIntl,
-
+    public login: LoginService,
     private archivoServicio: ArchivoService,
     private AprobacionEvienciaServicio: AprobacionEvidenciaService
   ) {
@@ -89,7 +89,7 @@ export class EvidenciasComponent implements OnInit {
   }
   ngOnInit(): void {
     //Capturar usuario logueado
-
+    this.user = this.login.getUser();
     console.log(this.estadoSeleccionado);
     this.listarPoas(this.estadoSeleccionado);
   }
@@ -102,12 +102,11 @@ export class EvidenciasComponent implements OnInit {
   resultadosEncontradosporObservaciones: boolean = true;
 
   //Metodo para listar
+
   listarPoas( estado: string): void {
-    this.archivoServicio.listarArchivosPorEstadoYFechaDesc(estado).subscribe(
+    this.archivoServicio.listarArchivosPorEstadoYFechaDesc(estado,this.user.username).subscribe(
       (data: any[]) => {
         this.listaPoas = data;
-        console.log('Dataa');
-        console.log(this.listaPoas);
         this.dataSource.data = this.listaPoas;
         this.resultadosEncontradosporEstado = this.listaPoas.length > 0; // Actualiza la variable según si se encontraron resultados
       },

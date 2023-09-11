@@ -1,7 +1,12 @@
 .btn-guardar {
   background-color: #D4BC37;
 }
-
+.header-title {
+  font-size: 30px;
+  font-weight: bold;
+  color:green; /* You can choose your preferred color */
+  text-align: left;
+}
 @font-face {
   font-family: myFirstFont;
 }
