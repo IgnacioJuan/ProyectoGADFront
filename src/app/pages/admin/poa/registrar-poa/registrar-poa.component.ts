@@ -383,7 +383,7 @@ export class RegistrarPoaComponent implements OnInit {
         this.solicitudPoa.comunidad = this.comunidad;
         this.solicitudPoa.localizacion = this.localizacion;
         this.solicitudPoa.tipo_periodo = this.selectedPeriod;
-        this.poaInsertService.crear(this.solicitudPoa).subscribe((data: any) => {
+        this.poaInsertService.crear(this.solicitudPoa, this.user.id).subscribe((data: any) => {
           if (data) {
             this.poaInsertService.solicitarAprobacion(data.id_poa, this.id_super_admin, this.proyecto).subscribe((aprobPoa: any) => {
               console.log("aprobacion poa", aprobPoa);
