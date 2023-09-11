@@ -5,6 +5,7 @@ import { CrearcompetenciaComponent } from '../pages/crear-competencia/crear-comp
 import { CrearComponent } from '../pages/crear-programa/crear-programa.component';
 import { ListarpoaComponent } from './listarpoa/listarpoa.component';
 import { ListarporUsuarioComponent } from './listarpoaporusuario/listarpoaporusuario.component';
+import { ProyectosComponent } from './listaproyecto/listaproyecto.component';
 
 
 
@@ -18,6 +19,12 @@ const routes: Routes = [
   {
     path: 'listarpoa',
     component: ListarpoaComponent,
+    pathMatch: 'full',
+    canActivate: [SuperGuard]
+  },
+  {
+    path: 'listaproyecto',
+    component: ProyectosComponent,
     pathMatch: 'full',
     canActivate: [SuperGuard]
   },

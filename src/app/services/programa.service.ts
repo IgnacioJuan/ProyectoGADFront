@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { map, Observable, catchError, of } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import baserUrl from './helper';
-import { Programa } from '../models/Programa';
+import { Programa, ProgramaUsuarioDTO } from '../models/Programa';
 
 
 @Injectable({
@@ -20,6 +20,10 @@ export class ProgramaService {
 
   listar(): Observable<Programa[]> {
     return this.http.get<Programa[]>(`${this.baseUrl}/listar`);
+  }
+
+  listarUserPrograma(): Observable<ProgramaUsuarioDTO[]> {
+    return this.http.get<ProgramaUsuarioDTO[]>(`${this.baseUrl}/listar`);
   }
 
   getById(id: number): Observable<Programa> {

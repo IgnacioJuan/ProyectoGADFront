@@ -111,8 +111,16 @@
                             <mat-option [value]="3">RESPONSABLE</mat-option>
                         </mat-select>
                     </mat-form-field>
+                    <mat-form-field>
+                        <mat-label>Programa</mat-label>
+                        <mat-select formControlName="id_programa">
+                            <mat-option *ngFor="let programa of programas" [value]="programa">
+                                {{ programa.nombre }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
                 </div>
-                <div class="button-container">
+                <div class=" button-container">
                     <button mat-raised-button class="rounded-button" (click)="stepper.previous()"><mat-icon
                             class="custom-colorRegresar">arrow_back</mat-icon> Regresar</button>
                     <button mat-raised-button class="rounded-button" (click)="resetForm2()"><mat-icon
