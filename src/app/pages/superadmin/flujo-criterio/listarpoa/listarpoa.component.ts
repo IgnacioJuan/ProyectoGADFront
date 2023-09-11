@@ -104,11 +104,13 @@ export class ListarpoaComponent implements OnInit {
   
 
   getColor(estado: string): any {
-    const estadoLower = estado.toLowerCase(); // Convertir el estado a minúsculas
-    let backgroundColor = estadoLower !== 'APROBADO' ? 'red' : 'white'; // Color de fondo rojo si no es "aprobado"
+    const estadoLower = estado.toLowerCase();
+    let backgroundColor = estadoLower == 'RECHAZADO' ? 'rgb(231, 87, 87)' : 'white'; // Color de fondo rojo si no es "aprobado"
   
     return { 'background-color': backgroundColor };
   }
+
+
   
 
 }
