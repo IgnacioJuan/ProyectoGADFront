@@ -97,7 +97,15 @@ export class SidebarService {
       ]
     },
 
-    
+    {
+      icono: 'nav-icon fas fa-file-invoice',
+      titulo: "Solicitud de Presupuesto",
+      submenu: [
+        { titulo: 'Listado de Solicitudes', url: 'sup/listadoSolicitudes', icono: 'fas fa-list-ul ' },
+
+      ]
+    },
+
 
 
 
