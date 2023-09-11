@@ -1,7 +1,7 @@
 <body>
 <div class="container bg-light border border-start-0 rounded-4">
   <blockquote class="blockquote text-dark" style="margin-top: 5%">
-    <h1><strong> LISTADO DE OBJETIVO ODS</strong></h1>
+    <h1 class="titulo" ><strong> LISTADO DE OBJETIVO ODS</strong></h1>
   </blockquote>
   <div></div>
 
@@ -25,6 +25,8 @@
         class="btn btn-guardar"
         data-bs-toggle="modal"
         data-bs-target="#materiaModal"
+        style="background-color: green; color: white;"
+
       >
         CREAR NUEVO OBJETIVO ODS
       </button>
@@ -89,6 +91,8 @@
                 data-bs-target="#materiaModal"
                 style="margin-right: 5%"
                 (click)="editDatos(element)"
+                style="background-color: green"
+
               >
                 <i class="fas fa-edit"></i>
               </button>
@@ -143,17 +147,10 @@
                 id="formulario"
               >
                 <div>
-
-
-
-
-
-
-
                   <label for="nombre">Nombre:</label>
                   <input
                     class="form-control"
-                    formControlName="nombre"
+                    formControlName=""
                     type="text"
                     id="nombre"
                     name="nombre"
@@ -174,15 +171,10 @@
                       Debe ingresar un nombre
                     </div>
                   </div>
-
-
-
-
-
                   <label for="descripcion">Descripción:</label>
                   <textarea
                     class="form-control"
-                    formControlName="descripcion"
+                    formControlName=" "
                     id="descripcion"
                     name="descripcion"
                     style="margin-bottom: 10px"
@@ -232,6 +224,8 @@
                   data-dismiss="modal"
                   data-bs-dismiss="modal"
                   [disabled]="!formComponentes.valid"
+                  style="background-color: green"
+
                 >
                   Agregar
                 </button>
@@ -242,6 +236,8 @@
                   data-bs-dismiss="modal"
                   (click)="actualizar()"
                   [disabled]="!formComponentes.valid"
+                  style="background-color: green"
+
                 >
                   Actualizar
                 </button>
