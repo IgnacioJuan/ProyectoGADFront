@@ -13,8 +13,8 @@ export class PoaInsertService {
         return this.http.get(`${baserUrl}/api/proyecto/getProject?id_proyecto=${id}`);
     }
 
-    public crear(r: any): Observable<any> {
-        return this.http.post<any>(`${baserUrl}/api/poa/solicitud`, r
+    public crear(r: any, id_responsable: any): Observable<any> {
+        return this.http.post<any>(`${baserUrl}/api/poa/solicitud?id_responsable=${id_responsable}`, r
         );
     }
 
