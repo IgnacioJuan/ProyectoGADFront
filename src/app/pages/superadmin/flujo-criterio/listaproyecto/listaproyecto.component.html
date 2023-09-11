@@ -3,15 +3,17 @@
     <blockquote class="blockquote text-dark" style="margin-top: 5%">
       <h1 style="text-transform: uppercase">
         <strong
-          ><a style="cursor: pointer" (click)="verModelos()" class="titulo" >PROYECTOS
+          ><a style="cursor: pointer" (click)="verProyectos() " class="titulo"
+            > PROYECTOS 
           </a>
+          
+
           <span class="titulo">></span>
 
-          <a class="titulo" > POAS DEL PROYECTO</a></strong
+          <a>{{ modelopoa.nombre }} </a></strong
         >
       </h1>
     </blockquote>
-
     <div class="card">
       <div class="card-body">
         <div class="form-group">
@@ -21,63 +23,59 @@
             name="filterPost3"
             placeholder="Buscar..."
             [(ngModel)]="filterPost"
-            (input)="aplicarFiltro()"
+            (input)="aplicarFiltro()" 
           />
         </div>
-
-        <div
+        <br />
+               <div
           class="mat-elevation-z8 table-responsive"
           style="margin-bottom: 5%"
         >
-
           <table mat-table [dataSource]="dataSource">
-            <ng-container matColumnDef="cedula">
-              <th mat-header-cell *matHeaderCellDef>CEDULA</th>
+            <ng-container matColumnDef="id_proyecto">
+              <th mat-header-cell *matHeaderCellDef>ID</th>
               <td mat-cell *matCellDef="let elemento">
-                {{ elemento.cedula }}
+                {{ elemento.id_proyecto }}
               </td>
             </ng-container>
-
-            <ng-container matColumnDef="nombre_completo">
-              <th mat-header-cell *matHeaderCellDef>NOMBRE Y APELLIDO</th>
-              <td mat-cell *matCellDef="let elemento">
-                {{ elemento.primer_nombre }} {{ elemento.primer_apellido }}
-              </td>
-            </ng-container>
-            
-
-            <ng-container matColumnDef="username">
-              <th mat-header-cell *matHeaderCellDef>USUARIO</th>
-              <td mat-cell *matCellDef="let elemento">
-                {{ elemento.username }}
-              </td>
-            </ng-container>
-
             <ng-container matColumnDef="nombre">
-              <th mat-header-cell *matHeaderCellDef> PROYECTO</th>
+              <th mat-header-cell *matHeaderCellDef>NOMBRE</th>
               <td mat-cell *matCellDef="let elemento">
                 {{ elemento.nombre }}
               </td>
             </ng-container>
-         
-
-            
-
-            <ng-container matColumnDef="nombrepro">
-              <th mat-header-cell *matHeaderCellDef>PROGRAMA</th>
+            <ng-container matColumnDef="codigo">
+              <th mat-header-cell *matHeaderCellDef>CODIGO</th>
               <td mat-cell *matCellDef="let elemento">
-                {{ elemento.nombrepro }}
+                {{ elemento.codigo }}
               </td>
             </ng-container>
-        
-            <ng-container matColumnDef="estado">
-              <th mat-header-cell *matHeaderCellDef>ESTADO</th>
-              <td mat-cell *matCellDef="let elemento" [ngStyle]="getColor(elemento.estado)">
-                {{ elemento.estado }}
+            <ng-container matColumnDef="objetivo">
+              <th mat-header-cell *matHeaderCellDef>OBJETIVO</th>
+              <td mat-cell *matCellDef="let elemento">
+                {{ elemento.objetivo }}
               </td>
             </ng-container>
-            
-
+            <ng-container matColumnDef="meta">
+              <th mat-header-cell *matHeaderCellDef>META</th>
+              <td mat-cell *matCellDef="let elemento">
+                {{ elemento.meta }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="poa">
+              <th mat-header-cell *matHeaderCellDef>POA</th>
+              <td mat-cell *matCellDef="let elemento">
+                <button
+                  class="btn btn-primary"
+                  role="button"
+                  (click)="verDetalles(elemento)"
+                >
+                  <div class="d-flex">
+                    <i class="fa fa-folder-open"></i>
+                  </div>
+                </button>
+              </td>
+            </ng-container>  
             <tr mat-header-row *matHeaderRowDef="columnasUsuario"></tr>
             <tr mat-row *matRowDef="let fila; columns: columnasUsuario"></tr>
           </table>
@@ -87,10 +85,12 @@
             aria-label="Select page of periodic elements"
             itemsPerPageLabel="Items por página:"
             nextPageLabel="Siguiente"
-            previousPageLabel="Anterior"  
+            previousPageLabel="Anterior"
           >
           </mat-paginator>
         </div>
+
+        
       </div>
     </div>
   </div>

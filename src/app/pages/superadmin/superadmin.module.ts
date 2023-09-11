@@ -25,6 +25,7 @@ import { CrearcompetenciaComponent } from './pages/crear-competencia/crear-compe
 import { ListarpoaComponent } from './flujo-criterio/listarpoa/listarpoa.component';
 import { ListarporUsuarioComponent } from './flujo-criterio/listarpoaporusuario/listarpoaporusuario.component';
 import { ListSolicitudesPresupuestoSuperadminComponent } from './pages/list-solicitudes-presupuesto-superadmin/list-solicitudes-presupuesto-superadmin.component';
+import { ProyectosComponent } from './flujo-criterio/listaproyecto/listaproyecto.component';
 
 
 @NgModule({
@@ -38,6 +39,7 @@ import { ListSolicitudesPresupuestoSuperadminComponent } from './pages/list-soli
     ReporteavancepoaComponent,
     ReporteEspecificoPoaComponent,
     CrearcompetenciaComponent,
+    ProyectosComponent,
    
     CustomDatePipe,
     ListarpoaComponent  ,

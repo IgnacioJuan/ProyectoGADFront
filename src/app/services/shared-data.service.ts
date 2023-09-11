@@ -1,6 +1,5 @@
 import { Injectable } from "@angular/core";
 import { BehaviorSubject } from 'rxjs';
-import { Indicador } from "../models/Indicador";
 
 let id_criterio: number;
 let id_subcriterio: number;
