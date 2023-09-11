@@ -123,7 +123,7 @@
                         <mat-label>Programa</mat-label>
                         <select matNativeControl [(ngModel)]="usuarioEdit.usuario.programa" name="programa"
                           class="form-control">
-                          <option *ngFor="let programa of programas" [ngValue]="programa"   [selected]="programa.nombre == usuarioDB.usuario.programa.nombre">
+                          <option *ngFor="let programa of programas" [ngValue]="programa"   [selected]="programa.id_programa == usuarioDB.usuario.programa.id_programa">
                             {{ programa.nombre }}
                           </option>
                         </select>
