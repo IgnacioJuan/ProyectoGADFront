@@ -86,10 +86,11 @@ export class PoaService {
   }
 
 
-  getporUsuario(): Observable<PoaporUsuarioProjection[]> {
-    return this.http.get<PoaporUsuarioProjection[]>(`${baserUrl}/api/poa/listarporusuario`);
+  getporUsuario(id_proyecto: number): Observable<PoaporUsuarioProjection[]> {
+    return this.http.get<PoaporUsuarioProjection[]>(`${baserUrl}/api/poa/listarporusuario/${id_proyecto}`);
 
   }
+
 
 
   

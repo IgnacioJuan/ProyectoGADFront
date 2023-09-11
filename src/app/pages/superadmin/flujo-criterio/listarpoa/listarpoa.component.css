@@ -25,4 +25,5 @@
 
 .titulo {
   color: green !important;
+  text-decoration: none;
 }
