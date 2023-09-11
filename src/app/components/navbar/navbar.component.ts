@@ -108,7 +108,13 @@ export class NavbarComponent implements OnInit {
   }
 
   verPerfil() {
-    this.rout.navigate(['/use/userprofile']);
+    location.replace('/use/userprofile')
+    //this.rout.navigate(['/use/userprofile']);
+  }
+
+  redirectToDashboard() {
+    location.replace('use/user-dashboard');
+    //this.rout.navigate(['use/user-dashboard']);
   }
 
 }

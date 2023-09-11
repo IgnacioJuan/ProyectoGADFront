@@ -36,10 +36,10 @@
                         <ng-container matColumnDef="actividades">
                             <th mat-header-cell *matHeaderCellDef>VER ACTIVIDADES</th>
                             <td mat-cell *matCellDef="let element">{{ element.actividades }}
-                                <button mat-raised-button class="rounded-button"
-                                    style="background-color: rgba(7, 165, 7, 0.849); margin-right: 5%"
+                                <button class="btn btn-primary" role="button"
+                                    style="background-color: green; margin-left: 35px;"
                                     (click)="redirectToDetails(element)">
-                                    <i class="fas fa-folder-open fa-lg" style="color: #000000;"></i>
+                                    <i class="fa fa-folder-open"></i>
                                 </button>
                             </td>
                         </ng-container>

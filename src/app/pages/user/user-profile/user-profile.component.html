@@ -8,46 +8,61 @@
             <div class="col-md-4 gradient-custom text-center text-white" style="
                     border-top-left-radius: 0.5rem;
                     border-bottom-left-radius: 0.5rem;
+                    width: 100%;
                   ">
               <img src="./assets/profile.png" alt="Avatar" class="img-fluid my-5" style="width: 80px" />
               <h4>
                 {{ user.persona.primer_apellido }}
+                {{ user.persona.segundo_apellido }}
                 {{ user.persona.primer_nombre }}
+                {{ user.persona.segundo_nombre }}
               </h4>
+              <p>{{ user.persona.cedula }}</p>
               <p>{{ rol }}</p>
             </div>
-            <div class="col-md-8">
-              <div class="card-body p-4">
+
+            <div class="col-md-8" style=" width: 100%;">
+              <div class="card-body p-4" style="margin-left: 10px;">
                 <h1>Información</h1>
-                <hr class="mt-0 mb-4" />
-                <div class="row pt-1">
-                  <div class="col-6 mb-3">
+                <hr class="mt-0 mb-3" />
+                <div class="row pt-1 d-flex justify-content-between" style="margin-left: 10px">
+                  <div class="col mb-3">
+                    <h3>Nombre de Usuario</h3>
+                    <p class="text-muted">{{ user.username }}</p>
+                  </div>
+                  <div class="col mb-3">
+                    <h3>Cargo</h3>
+                    <p class="text-muted">{{ user.persona.cargo }}</p>
+                  </div>
+                  <div class="col mb-3">
+                    <h3>Programa</h3>
+                    <p class="text-muted">{{ user.programa.nombre }}</p>
+                  </div>
+                </div>
+                <div class="row pt-1 d-flex justify-content-between" style="margin-left: 10px">
+                  <div class="col mb-3">
+                    <h3>Correo</h3>
+                    <p class="text-muted">{{ user.persona.correo }}</p>
+                  </div>
+                  <div class="col mb-3">
                     <h3>Direccion</h3>
                     <p class="text-muted">{{ user.persona.direccion }}</p>
                   </div>
-                  <div class="col-6 mb-3">
+                  <div class="col mb-3">
                     <h3>Celular</h3>
                     <p class="text-muted">{{ user.persona.celular }}</p>
                   </div>
                 </div>
-                <div class="row pt-1">
-                  <div class="col-6 mb-3">
-                    <h3>Username</h3>
-                    <p class="text-muted">{{ user.username }}</p>
-                  </div>
-                  <div class="col-6 mb-3">
-                    <h3>Email</h3>
-                    <p class="text-muted">{{ user.persona.correo }}</p>
-                  </div>
-                </div>
+
               </div>
               <div class="button-group w-60 d-flex justify-content-center" style="margin: 1%; align-items: center">
-                <button mat-raised-button class="rounded-button" style="background-color: rgba(13, 182, 13, 0.712); margin-left: 5%" data-bs-toggle="modal"
-                  data-bs-target="#exampleModal3">
+                <button mat-raised-button class="rounded-button" style="background-color: rgba(13, 182, 13, 0.712)"
+                  data-bs-toggle="modal" data-bs-target="#exampleModal3">
                   <mat-icon>vpn_key</mat-icon>Cambiar Contraseña
                 </button>
-                <button mat-raised-button class="rounded-button" data-bs-toggle="modal" style="background-color: rgba(13, 182, 13, 0.712); margin-left: 5%"
-                  data-bs-target="#exampleModal4" (click)="edit()">
+                <button mat-raised-button class="rounded-button" data-bs-toggle="modal"
+                  style="background-color: rgba(13, 182, 13, 0.712); margin-left: 5%" data-bs-target="#exampleModal4"
+                  (click)="edit()">
                   <mat-icon>edit</mat-icon>Actualizar Datos
                 </button>
               </div>
@@ -59,7 +74,10 @@
     </div>
   </div>
 </body>
+
 <!-- </section> -->
+
+<!--DATOS USUARIO -->
 <div class="modal fade" id="exampleModal3" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -95,12 +113,13 @@
           </mat-form-field>
 
           <div class="container text-center">
-            <button mat-raised-button class="rounded-button" style="background-color: rgb(211, 192, 20); margin-right: 5%" [disabled]="contraForm.invalid"
+            <button mat-raised-button class="rounded-button"
+              style="color: white; background-color: green; margin-right: 5%" [disabled]="contraForm.invalid"
               data-bs-dismiss="modal" (click)="Actualizar(usuariosEditGuar)">
               <mat-icon>save</mat-icon> Guardar
             </button>
             <button mat-raised-button class="rounded-button"
-              style="margin-right: 5%" data-bs-dismiss="modal">
+              style="background-color: rgb(211, 192, 20); margin-right: 5%" data-bs-dismiss="modal">
               <mat-icon>cancel</mat-icon>
               Cancelar
             </button>
@@ -110,86 +129,166 @@
     </div>
   </div>
 </div>
+
+
+<!--DATOS PERSONALES -->
 <div class="modal fade" id="exampleModal4" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal-dialog  modal-xl">
     <div class="modal-content">
       <div class="modal-header text-center" style="background-color: rgba(18, 141, 18, 0.849);">
         <strong>
-          <h1 class="modal-title font-weight-bold" style="font-family: Arial, sans-serif; color: white">
-            Actualizar Datos
+          <h1 class="modal-title font-weight-bold"
+            style="font-family: Arial, sans-serif; color: white; text-transform: uppercase">
+            Actualizar Datos > {{user.username}}
           </h1>
         </strong>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
+        <!--
         <mat-form-field class="full-width" appearance="outline">
           <mat-label>Nombre de usuario</mat-label>
           <input disabled required name="username" matInput [value]="user.username" />
         </mat-form-field>
+        -->
+        <div class="divider-with-text">
+          <span>Datos personales</span>
+          <mat-divider></mat-divider>
+        </div>
+        <br />
         <form [formGroup]="usuarioForm" (ngSubmit)="Actualizardatos(usuariosEditGuar)">
-          <mat-label>Email</mat-label>
-          <input class="form-control" formControlName="correo" matInput placeholder="Digite su correo" />
-          <mat-error *ngIf="
-                  usuarioForm.controls['correo'].invalid &&
-                  usuarioForm.controls['correo'].touched
-                ">
-            El correo electrónico es inválido.
-          </mat-error>
+          <div class="row">
+            <!-- Primera fila -->
 
-          <mat-label>Celular</mat-label>
-          <input class="form-control" formControlName="celular" matInput placeholder="Digite su celular" />
-          <div class="alert alert-danger" *ngIf="
-                  usuarioForm.controls['celular'].invalid &&
-                  usuarioForm.controls['celular'].touched
-                ">
-            <div>El numero es invalido</div>
+            <div class="col-md-6">
+              <mat-form-field class="full-width" appearance="outline">
+                <mat-label>Cédula</mat-label>
+                <input class="form-control" formControlName="cedula" name="cedula" type="text" matInput
+                  placeholder="Digite su cedula" />
+                <div class="alert alert-danger" *ngIf="
+                      usuarioForm.controls['cedula'].invalid &&
+                      usuarioForm.controls['cedula'].touched
+                    ">
+                  <div *ngIf="
+                        usuarioForm.controls['cedula'].hasError('required')
+                      ">
+                    Debe ingresar su cedula
+                  </div>
+                </div>
+              </mat-form-field>
+            </div>
+
+            <div class="col-md-6">
+              <mat-form-field class="full-width" appearance="outline">
+                <mat-label>Email</mat-label>
+                <input class="form-control" formControlName="correo" matInput placeholder="Digite su correo" />
+                <mat-error *ngIf="
+                        usuarioForm.controls['correo'].invalid &&
+                        usuarioForm.controls['correo'].touched
+                      ">
+                  El correo electrónico es inválido.
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <!-- Segunda fila -->
+
+            <div class="col-md-6">
+              <mat-form-field class="full-width" appearance="outline">
+                <mat-label>Primer Nombre</mat-label>
+                <input class="form-control" formControlName="primer_nombre" name="primer_nombre" type="text" matInput
+                  placeholder="Digite su nombre" />
+                <div class="alert alert-danger" *ngIf="
+                      usuarioForm.controls['primer_nombre'].invalid &&
+                      usuarioForm.controls['primer_nombre'].touched
+                    ">
+                  <div *ngIf="
+                        usuarioForm.controls['primer_nombre'].hasError('required')
+                      ">
+                    Debe ingresar su nombre
+                  </div>
+                </div>
+              </mat-form-field>
+            </div>
+            <div class="col-md-6">
+              <mat-form-field class="full-width" appearance="outline">
+                <mat-label>Segundo Nombre</mat-label>
+                <input class="form-control" formControlName="segundo_nombre" name="segundo_nombre" type="text" matInput
+                  placeholder="Digite su segundo_nombre" />
+              </mat-form-field>
+            </div>
+
+            <!-- Tercera fila -->
+
+            <div class="col-md-6">
+              <mat-form-field class="full-width" appearance="outline">
+                <mat-label>Primer Apellido</mat-label>
+                <input class="form-control" formControlName="primer_apellido" name="primer_apellido" type="text"
+                  matInput placeholder="Digite su apellido" />
+                <div class="alert alert-danger" *ngIf="
+                      usuarioForm.controls['primer_apellido'].invalid &&
+                      usuarioForm.controls['primer_apellido'].touched
+                    ">
+                  <div *ngIf="
+                        usuarioForm.controls['primer_apellido'].hasError('required')
+                      ">
+                    Debe ingresar su primer apellido
+                  </div>
+                </div>
+              </mat-form-field>
+            </div>
+            <div class="col-md-6">
+              <mat-form-field class="full-width" appearance="outline">
+                <mat-label>Segundo Apellido</mat-label>
+                <input class="form-control" formControlName="segundo_apellido" name="segundo_apellido" type="text"
+                  matInput placeholder="Digite su apellido" />
+              </mat-form-field>
+            </div>
+
+            <!-- Cuarta fila -->
+
+            <div class="col-md-6">
+              <mat-form-field class="full-width" appearance="outline">
+                <mat-label>Direccion</mat-label>
+                <input class="form-control" formControlName="direccion" name="direccion" type="text" matInput
+                  placeholder="Digite su direccion" />
+                <div class="alert alert-danger" *ngIf="
+                      usuarioForm.controls['direccion'].invalid &&
+                      usuarioForm.controls['direccion'].touched
+                    ">
+                  <div *ngIf="usuarioForm.controls['direccion'].hasError('required')">
+                    Debe ingresar una direccion
+                  </div>
+                </div>
+              </mat-form-field>
+            </div>
+
+            <div class="col-md-6">
+              <mat-form-field class="full-width" appearance="outline">
+                <mat-label>Celular</mat-label>
+                <input class="form-control" formControlName="celular" matInput placeholder="Digite su celular" />
+                <div class="alert alert-danger" *ngIf="
+                      usuarioForm.controls['celular'].invalid &&
+                      usuarioForm.controls['celular'].touched
+                    ">
+                  <div>El numero es invalido</div>
+                </div>
+              </mat-form-field>
+            </div>
+
+
+
           </div>
 
-          <mat-label>Direccion</mat-label>
-          <input class="form-control" formControlName="direccion" name="direccion" type="text" matInput
-            placeholder="Digite su direccion" />
-          <div class="alert alert-danger" *ngIf="
-                  usuarioForm.controls['direccion'].invalid &&
-                  usuarioForm.controls['direccion'].touched
-                ">
-            <div *ngIf="usuarioForm.controls['direccion'].hasError('required')">
-              Debe ingresar una direccion
-            </div>
-          </div>
-
-          <mat-label>Nombre</mat-label>
-          <input class="form-control" formControlName="primer_nombre" name="primer_nombre" type="text" matInput
-            placeholder="Digite su nombre" />
-          <div class="alert alert-danger" *ngIf="
-                  usuarioForm.controls['primer_nombre'].invalid &&
-                  usuarioForm.controls['primer_nombre'].touched
-                ">
-            <div *ngIf="
-                    usuarioForm.controls['primer_nombre'].hasError('required')
-                  ">
-              Debe ingresar su nombre
-            </div>
-          </div>
-          <mat-label>Apellido</mat-label>
-          <input class="form-control" formControlName="primer_apellido" name="primer_apellido" type="text" matInput
-            placeholder="Digite su apellido" />
-          <div class="alert alert-danger" *ngIf="
-                  usuarioForm.controls['primer_apellido'].invalid &&
-                  usuarioForm.controls['primer_apellido'].touched
-                ">
-            <div *ngIf="
-                    usuarioForm.controls['primer_apellido'].hasError('required')
-                  ">
-              Debe ingresar su apellido
-            </div>
-          </div>
           <br />
           <div class="container text-center">
-            <button mat-raised-button class="rounded-button" style="background-color: rgb(211, 192, 20); margin-right: 5%" [disabled]="usuarioForm.invalid"
+            <button mat-raised-button class="rounded-button"
+              style="color: white; background-color: green; margin-right: 5%" [disabled]="usuarioForm.invalid"
               data-bs-dismiss="modal">
               <mat-icon>save</mat-icon>Guardar
             </button>
-            <button mat-raised-button class="rounded-button" style="margin-right: 5%" data-bs-dismiss="modal">
+            <button mat-raised-button class="rounded-button"
+              style="background-color: rgb(211, 192, 20); margin-right: 5%" data-bs-dismiss="modal">
               <mat-icon>cancel</mat-icon>
               Cancelar
             </button>
