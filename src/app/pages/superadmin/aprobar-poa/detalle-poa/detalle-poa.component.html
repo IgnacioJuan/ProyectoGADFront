@@ -3,16 +3,35 @@
 <body>
   <div class="container bg-light border border-start-0 rounded-4">
     <!-- Detalle POA -->
-    <blockquote class="blockquote text-dark" style="margin-top: 5%; background-color: #ffffff; border-left: 10px solid green;">
+    <blockquote
+      class="blockquote text-dark"
+      style="
+        margin-top: 5%;
+        background-color: #ffffff;
+        border-left: 10px solid green;
+      "
+    >
       <h1 style="text-transform: uppercase">
-          <strong><a style="cursor: pointer; color: rgba(0, 128, 0, 0.822);" (click)="verPoas()">DETALLE POA >
-              </a>
-              <a style="cursor: pointer; color: green; ">{{ poaAprob?.nombre_proyecto }} </a></strong>
+        <strong
+          ><a
+            style="cursor: pointer; color: rgba(0, 128, 0, 0.822)"
+            (click)="verPoas()"
+            >DETALLE POA >
+          </a>
+          <a style="cursor: pointer; color: green"
+            >{{ poaAprob?.nombre_proyecto || "No Definido" }}
+          </a></strong
+        >
       </h1>
-  </blockquote>
+    </blockquote>
     <!-- Botón Evaluar -->
     <div class="contBtnEva">
-      <button class="btn btn-warning" (click)="abrirModal(evaluarPOAModal)">
+      <button
+        class="btn btn-warning"
+        role="button"
+        data-bs-toggle="modal"
+        data-bs-target="#materiaModal"
+      >
         Evaluar
       </button>
     </div>
@@ -35,7 +54,9 @@
             </div>
             <div class="table-cell">
               <strong>SUPERVISION DEL PROYECTO:</strong>
-              {{ poaAprob.responsable }}
+              {{
+                user.persona.primer_nombre + "  " + user.persona.primer_apellido
+              }}
             </div>
           </div>
         </div>
@@ -53,6 +74,25 @@
         </div>
         <br />
         <br />
+        <!--
+        <div class="table-container">
+          <div class="table-row">
+            <div
+              class="table-cell"
+              style="display: flex; flex-direction: column; gap: 8px"
+            >
+              <mat-form-field>
+                <mat-label>Tipo de seguimiento</mat-label>
+                <input
+                  matInput
+                  placeholder="Introduce el tipo de seguimiento"
+                  [value]="tipSeguimiento"
+                />
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+        -->
         <div class="table-container">
           <div class="table-row">
             <div class="table-cell">
@@ -134,7 +174,11 @@
         <div class="table-container">
           <div class="table-row">
             <div class="table-cell">
-              <mat-form-field appearance="outline" readonly class="example-full-width">
+              <mat-form-field
+                appearance="outline"
+                readonly
+                class="example-full-width"
+              >
                 <mat-label>Cobertura</mat-label>
                 <input matInput readonly value="{{ poaAprob.cobertura }}" />
               </mat-form-field>
@@ -163,30 +207,29 @@
 
           <br />
           <br />
-        
-            <div class="table-row">
-              <div class="table-cell"><strong>Nombre funcionario:</strong></div>
-              <div class="table-cell">
-                {{ poaAprob.nombre_completo }}
-              </div>
+
+          <div class="table-row">
+            <div class="table-cell"><strong>Nombre funcionario:</strong></div>
+            <div class="table-cell">
+              {{ poaAprob.nombre_completo }}
             </div>
-            <div class="table-row">
-              <div class="table-cell">
-                <strong>Cargo:</strong>
-              </div>
-              <div class="table-cell">
-                {{ poaAprob.cargo }}
-              </div>
+          </div>
+          <div class="table-row">
+            <div class="table-cell">
+              <strong>Cargo:</strong>
             </div>
-            <div class="table-row">
-              <div class="table-cell">
-                <strong>Fecha de emisión:</strong>
-              </div>
-              <div class="table-cell">
-                {{ poaAprob.fecha_inicio | date : "dd/MM/yyyy" }}
-              </div>
+            <div class="table-cell">
+              {{ poaAprob.cargo }}
             </div>
-         
+          </div>
+          <div class="table-row">
+            <div class="table-cell">
+              <strong>Fecha de emisión:</strong>
+            </div>
+            <div class="table-cell">
+              {{ poaAprob.fecha_inicio | date : "dd/MM/yyyy" }}
+            </div>
+          </div>
         </div>
         <br />
         <br />
@@ -218,7 +261,7 @@
           <ng-container matColumnDef="descripcion">
             <th mat-header-cell *matHeaderCellDef>DESCRIPCIÓN</th>
             <td mat-cell *matCellDef="let elemento">
-              {{ elemento?.descripcion || '' }}
+              {{ elemento?.descripcion || "" }}
             </td>
           </ng-container>
           <ng-container matColumnDef="presupuesto_referencial">
@@ -251,138 +294,160 @@
             </td>
           </ng-container>
 
-          <ng-container matColumnDef="estado">
-            <th mat-header-cell *matHeaderCellDef>ESTADO</th>
-            <td mat-cell *matCellDef="let elemento">
-              {{ elemento.estado }}
-            </td>
-          </ng-container>
-
           <tr mat-header-row *matHeaderRowDef="columnasActividades"></tr>
           <tr mat-row *matRowDef="let row; columns: columnasActividades"></tr>
         </table>
       </div>
 
-      <!--Porcentajes presupuestados por periodo-->
-      <!-- 
-  <br />
-    <br />
-    <div class="table-container">
+      <!--Porcentajes presupuestados por periodo
+
+      <br />
+      <br />
+      <div class="table-container">
         <div class="table-row">
-            <div class="table-cell"><strong>{{selectedPeriod}} 1:</strong></div>
-            <div class="table-cell ">${{valueUno}}</div>
-            <div class="table-cell"><strong>{{selectedPeriod}} 2:</strong></div>
-            <div class="table-cell ">${{valueDos}}</div>
-            <div class="table-cell"><strong>{{selectedPeriod}} 3:</strong></div>
-            <div class="table-cell ">${{valueTres}}</div>
-            <div class="table-cell" *ngIf="selectedPeriod === 'TRIMESTRE'"><strong>{{selectedPeriod}}
-                    4:</strong></div>
-            <div class="table-cell " *ngIf="selectedPeriod === 'TRIMESTRE'">${{valueCuatro}}</div>
+          <div class="table-cell">
+            <strong>{{ tipSeguimiento }} 1: </strong>
+          </div>
+          <div class="table-cell">$ {{porcentajes[0] | number:'1.0-3'}}</div>
+          <div class="table-cell">
+            <strong>{{ tipSeguimiento }} 2: </strong>
+          </div>
+          <div class="table-cell">$ {{porcentajes[1] | number:'1.0-3'}}</div>
+          <div class="table-cell">
+            <strong>{{ tipSeguimiento }} 3:</strong>
+          </div>
+          <div class="table-cell">$ {{porcentajes[2] | number:'1.0-3'}}</div>
+          <div class="table-cell" *ngIf="tipSeguimiento === 'TRIMESTRE'">
+            <strong>{{ tipSeguimiento }} 4:</strong>
+          </div>
+          <div class="table-cell" *ngIf="tipSeguimiento === 'TRIMESTRE'">$</div>
         </div>
-    </div>
-    <div class="table-container ">
+      </div>
+
+      <div class="table-container">
         <div class="table-row">
-            <div class="table-cell wide-cell"><strong>TOTAL:</strong></div>
-            <div class="table-cell">$ {{totalActividades}}</div>
+          <div class="table-cell wide-cell"><strong>TOTAL:</strong></div>
+          <div class="table-cell">$ {{totalf}}</div>
         </div>
-    </div>
-  -->
-      <!-- Modal Evaluar POA -->
-      <ng-template
-        #evaluarPOAModal
-        class="modal fade"
-        id="evaluarPOAModal"
-        tabindex="-1"
-        aria-labelledby="evaluarPOALabel"
-        aria-hidden="true"
-      >
-        <div
-          class="modal-header text-center"
-          style="background-color: rgb(0, 122, 255)"
-        >
-          <strong>
-            <h1
-              class="modal-title font-weight-bold"
-              style="font-family: Arial, sans-serif; color: white"
-            >
-              Evaluar POA
-            </h1>
-          </strong>
-          <button
-            type="button"
-            class="btn-close"
-            data-bs-dismiss="modal"
-            aria-label="Close"
-            (click)="cerrarModal()"
-          ></button>
+      </div>
+      -->
+      <br />
+      <br />
+      <div class="table-container">
+        <div class="table-row">
+          <div class="table-cell"><strong>Recursos Propios:</strong></div>
+          <div class="table-cell">$ {{totalesPoa?.total_recursos_propios}}</div>
+          <div class="table-cell"><strong>Recursos Externos:</strong></div>
+          <div class="table-cell">$ {{totalesPoa?.total_presupuesto_externo}}</div>
         </div>
-        <div class="modal-body">
-          <form action="">
-            <div class="form-group">
-              <label for="usuarioCombo">Usuario</label>
-              <select id="usuarioCombo" class="form-control">
-                <option *ngFor="let usuario of usuarios" [value]="usuario.id">
-                  {{ usuario.primer_nombre }} {{ usuario.primer_apellido }}
-                </option>
-              </select>
-            </div>
-            <div class="btn-group" role="group" aria-label="Aprobar/Rechazar">
-              <!-- Botón Aprobar (Verde) -->
-              <button
-                class="btn btn-success"
-                [class.btn-on]="isBtnSuccessActive"
-                (click)="toggleBtnSuccess()"
-              >
-                Aprobar
-              </button>
-
-              <!-- Botón Rechazar (Rojo) -->
-              <button
-                class="btn btn-danger"
-                [class.btn-on]="isBtnDangerActive"
-                (click)="toggleBtnDanger()"
-              >
-                Rechazar
-              </button>
-            </div>
-
-            <div class="form-group mt-3">
-              <label for="observacionTextarea">Observación</label>
-              <textarea
-                id="observacionTextarea"
-                class="form-control"
-                [class.is-invalid]="
-                  isBtnDangerActive && !observacionControl.value
-                "
-                rows="3"
-                [formControl]="observacionControl"
-              ></textarea>
-            </div>
-            <div class="container text-center mt-3">
-              <button
-                type="button"
-                class="btn btn-primary"
-                [disabled]="
-                  !isBtnSuccessActive &&
-                  (!isBtnDangerActive ||
-                    (isBtnDangerActive && observacionControl.value === ''))
-                "
-                (click)="actualizarAprobacion()"
-              >
-                Guardar
-              </button>
-
-              <button
-                type="button"
-                class="btn btn-secondary"
-                (click)="cerrarModal()"
-              >
-                Cancelar
-              </button>
-            </div>
-          </form>
-        </div>
-      </ng-template>
+      </div>
+      <br />
     </div>
   </div>
 </body>
+
+<div
+  class="modal fade"
+  id="materiaModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header" style="background-color: #077b15">
+        <h3
+          class="modal-title"
+          style="font-family: Arial, sans-serif; color: white"
+        >
+          <i class="fa fa-info-circle"></i> EVALUAR
+        </h3>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+          (click)="Limpiar()"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div class="card">
+          <div class="card-body" style="height: 100%">
+            <mat-form-field class="full-width" appearance="outline">
+              <mat-label>Usuario Evaluador</mat-label>
+              <input
+                name="usuario"
+                matInput
+                disabled
+                [value]="
+                  user.persona.primer_nombre +
+                  '  ' +
+                  user.persona.primer_apellido
+                "
+              />
+            </mat-form-field>
+
+            <div class="container text-center">
+              <div class="row">
+                <div class="col-8">
+                  <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Estado</mat-label>
+                    <input
+                      matInput
+                      name="estado"
+                      disabled
+                      [(ngModel)]="estado"
+                    />
+                  </mat-form-field>
+                </div>
+                <div class="col-4">
+                  <button mat-fab class="thumb-up" (click)="Aprobar()">
+                    <mat-icon>thumb_up</mat-icon>
+                  </button>
+
+                  <button mat-fab class="thumb-down" (click)="Rechazar()">
+                    <mat-icon>thumb_down</mat-icon>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-floating">
+              <textarea
+                class="form-control"
+                placeholder="Leave a comment here"
+                id="floatingTextarea2"
+                style="height: 100px"
+                [(ngModel)]="observacion"
+              ></textarea>
+              <label for="floatingTextarea2">Observación</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button
+            type="button"
+            form="formulario"
+            class="btn btn-warning"
+            data-bs-dismiss="modal"
+            (click)="Limpiar()"
+          >
+            Cancelar
+          </button>
+          <button
+            type="submit"
+            class="btn btn-primary"
+            form="formulario"
+            data-dismiss="modal"
+            data-bs-dismiss="modal"
+            (click)="actualizarAprobacion()"
+            [disabled]="!estado"
+          >
+            Agregar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

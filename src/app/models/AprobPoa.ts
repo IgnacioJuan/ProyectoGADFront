@@ -4,6 +4,7 @@ export class AprobPoa {
     id_poa!: number;
     direccion_departamental!: string;
     responsable!: string;
+    correo_responsable!: string;
     area!: string;
     fecha_inicio!: Date;
     fecha_fin!: Date;
