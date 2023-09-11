@@ -78,10 +78,14 @@ export class PoaActividadComponent implements OnInit{
     );
   }
 
-  verActividades(poa: any) {
+  verActividades2(poa: any) {
     this.router.navigate(['/adm/asignacion-actividades/actividades'], { state: { data: poa } });
   }
 
+ /* verActividades(poa: any) {
+    this.router.navigate(['/adm/asignacion-actividades/actividades'], { state: { data: { poa, tipo_periodo: this.poa.tipo_periodo } } });
+  }*/
+  
   aplicarFiltro() {
     if (this.filterPost) {
       const lowerCaseFilter = this.filterPost.toLowerCase();
