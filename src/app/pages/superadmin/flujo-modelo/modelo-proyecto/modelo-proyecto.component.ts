@@ -77,11 +77,11 @@ export class ModeloProyectoComponent {
       programa: ['', [Validators.required]],
       indicador: ['', [Validators.required]],
       competencia: ['', [Validators.required]],
-      programaControl: ['', [Validators.required]],
-      pndControl: ['', [Validators.required]],
-      odsControl: ['', [Validators.required]],
-      indicadorControl: ['', [Validators.required]],
-      competenciaControl: ['', [Validators.required]]
+      programaControl: [''],
+      pndControl: [''],
+      odsControl: [''],
+      indicadorControl: [''],
+      competenciaControl: ['']
     });
     this.paginatorIntl.nextPageLabel = this.nextPageLabel;
     this.paginatorIntl.lastPageLabel = this.lastPageLabel;
