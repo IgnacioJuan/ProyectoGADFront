@@ -351,6 +351,8 @@ export class CrearUsuariosComponent implements OnInit {
 
   // usuarioForm es el usuario que recibo del formulario 
   Actualizar(usuarioForm: UsuarioRol) {
+    console.log(usuarioForm.usuario.programa.id_programa)
+
     if (usuarioForm.rol.rolId == 0) {
       usuarioForm.rol = this.usuarioDB.rol;
     }
@@ -406,10 +408,10 @@ export class CrearUsuariosComponent implements OnInit {
 
     usuarioForm.usuario.id = this.usuarioDB.usuario.id;
     usuarioForm.usuario.persona.id_persona = this.usuarioDB.usuario.persona.id_persona;
-    usuarioForm.usuario.programa.id_programa = this.usuarioDB.usuario.programa.id_programa;
+    //usuarioForm.usuario.programa.id_programa = this.usuarioDB.usuario.programa.id_programa;
     usuarioForm.usuarioRolId = this.usuarioDB.usuarioRolId;
     console.log(usuarioForm);
-
+    console.log(this.usuarioDB.usuario.programa.id_programa)
     Swal.fire({
       title: '¿Desea modificar los campos?',
       showCancelButton: true,
@@ -429,6 +431,7 @@ export class CrearUsuariosComponent implements OnInit {
 
             this.usuarioDB = new UsuarioRol();
             this.usuarioEdit = new UsuarioRol();
+            console.log(response)
           });
       } else {
         Swal.fire('Se ha cancelado la operación', '', 'info')
