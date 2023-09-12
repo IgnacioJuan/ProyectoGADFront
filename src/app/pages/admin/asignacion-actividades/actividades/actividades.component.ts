@@ -181,23 +181,31 @@ export class ActividadesComponent implements OnInit {
         }
       );
   }
-
+ 
   guardar() {
     this.actividad = this.frmActividad.value;
     this.actividad.presupuesto_referencial = this.actividad.recursos_propios;
     this.actividad.poa = this.poa;
     this.actividad.estado = 'PENDIENTE';
-  
+
+    // Validación de suma
+    let suma = 0;
+    if (this.poa.tipo_periodo === 'CUATRIMESTRE') {
+        suma = Number(this.actividad.valor1) + Number(this.actividad.valor2) + Number(this.actividad.valor3);
+    } else if (this.poa.tipo_periodo === 'TRIMESTRE') {
+        suma = Number(this.actividad.valor1) + Number(this.actividad.valor2) + Number(this.actividad.valor3) + Number(this.actividad.valor4);
+    }
+    console.log("Suma total:", suma);
+    if (suma !== 100) {
+        Swal.fire('Error', 'La suma de los valores de periodo debe 100', 'warning');
+        return;
+    }
+
     this.actividadservice.crear(this.actividad).subscribe(
       (response) => {
         console.log('Actividad creada con éxito:', response);
-  
-        // Obtener el ID de la actividad creada
         const idActividad = response.id_actividad;
-  
-        // Verificar el valor de selectedPeriod
         if (this.poa.tipo_periodo === 'CUATRIMESTRE') {
-          // Si es cuatrimestre, crear 3 registros de período con valores específicos
           this.crearPeriodo(idActividad, this.actividad.valor1, 1);
           this.crearPeriodo(idActividad, this.actividad.valor2, 2);
           this.crearPeriodo(idActividad, this.actividad.valor3, 3);
@@ -220,7 +228,7 @@ export class ActividadesComponent implements OnInit {
         Swal.fire('Error', 'Ha ocurrido un error', 'warning');
       }
     );
-  }  
+  }
   
   crearPeriodo(idActividad: number, porcentaje: number, referencia: number) {
     this.poaInsertService.crearPeriodo(porcentaje, idActividad, referencia).subscribe(
