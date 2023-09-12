@@ -134,6 +134,7 @@ export class DetallePoaComponent implements OnInit {
     );
   }
 
+  
   cargarActividadesPoa(idParam: any) {
     this.actService
       .obtenerDetalleActividadesAprob(idParam)
@@ -142,25 +143,24 @@ export class DetallePoaComponent implements OnInit {
         this.listaDetalleActividades = data;
         this.dataSource.data = this.listaDetalleActividades;
 
-        // Inicializa los valores en 0
-        this.valores[0] = 0;
-        this.valores[1] = 0;
+        // Utilizar reduce para calcular los totales
+        const totals = this.listaDetalleActividades.reduce((acc, actividad) => {
+          acc[0] += actividad.recursos_propios;
+          acc[1] += actividad.recursos_externos;
+          return acc;
+        }, [0, 0]);
+
+        this.valores[0] = totals[0];
+        this.valores[1] = totals[1];
+        this.totalf = this.valores[0] + this.valores[1];
+        console.log(this.totalf);
         
-       
-        // Acumula los valores
-        this.listaDetalleActividades.forEach(actividad => {
-         
-          this.valores[0] += actividad.recursos_propios;
-          this.valores[1] += actividad.recursos_externos;
-          this.totalf= this.valores[0]+this.valores[1];
-          this.calcularPeriodos(this.totalf);
-        });
+        this.calcularPeriodos(this.totalf);
 
         console.log('Total recursos propios:', this.valores[0]);
         console.log('Total recursos externos:', this.valores[1]);
       });
 }
-
 
   capturarDatosUsuarioLog() {
     this.isLoggedIn = this.login.isLoggedIn();
@@ -177,9 +177,9 @@ export class DetallePoaComponent implements OnInit {
       .subscribe((data) => {
         console.log(data);
         this.periodosPoa = data;
-
+        this.calcularPeriodos(this.totalf); 
       });
-  }
+}
 
   actualizarAprobacion() {
     // Verificar si el estado es "RECHAZADO" y la observación está vacía
@@ -238,16 +238,24 @@ export class DetallePoaComponent implements OnInit {
   }
 
   calcularPeriodos(totalf: number){
-     //Inicializar los porcentajes
-     this.porcentajes[0]=0;
-     this.porcentajes[1]=0;
-     this.porcentajes[2]=0;
+    if (!this.periodosPoa || this.periodosPoa.length < 3) {
+        return; 
+    }
+    this.porcentajes = this.periodosPoa.slice(0, 3).map(periodo => totalf * (periodo.porcentaje / 100));
+}
+  /*calcularPeriodos(totalf: number){
+    //Inicializar los porcentajes
+    this.porcentajes[0]=0;
+    this.porcentajes[1]=0;
+    this.porcentajes[2]=0;
 
-     this.porcentajes[0]=totalf*(this.periodosPoa[0].porcentaje/100);
-     this.porcentajes[1]=totalf*(this.periodosPoa[1].porcentaje/100);
-     this.porcentajes[2]=totalf*(this.periodosPoa[2].porcentaje/100);     
-  }
-
+    if (this.periodosPoa && this.periodosPoa.length >= 3) {
+        this.porcentajes[0]=totalf*(this.periodosPoa[0].porcentaje/100);
+        this.porcentajes[1]=totalf*(this.periodosPoa[1].porcentaje/100);
+        this.porcentajes[2]=totalf*(this.periodosPoa[2].porcentaje/100);     
+    }
+}
+*/
   showSuccessAlert() {
     Swal.fire({
       icon: 'success',
