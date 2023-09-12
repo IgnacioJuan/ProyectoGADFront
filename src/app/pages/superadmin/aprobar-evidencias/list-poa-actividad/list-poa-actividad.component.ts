@@ -68,7 +68,7 @@ export class ListPoaActividadComponent  implements OnInit {
  listar(): void {
   this.loadingService.show();
 
-  this.poaService.getPoas().subscribe(
+  this.poaService.obtenerDatosPoas().subscribe(
     (data: any[]) => {
       this.listaPoas = data;
       console.log("Dataa")

@@ -12,6 +12,8 @@ import { SolicitudActividadPrepuesto } from 'src/app/models/SolicitudActividadPr
 import Swal from 'sweetalert2';
 import { SolicitudPresupuestoService } from 'src/app/services/solicitud-presupuesto.service';
 import { LoadingServiceService } from 'src/app/components/loading-spinner/LoadingService.service';
+import { UsuarioRol } from 'src/app/models/UsuarioRol';
+import { UsuariorolService } from 'src/app/services/usuariorol.service';
 
 
 export class SolicitudActividad {
@@ -31,10 +33,12 @@ export class SolicitudActividad {
 export class CrearSolicitudComponent implements OnInit  {
   FormDestinatario: FormGroup;
   FormSolicitud: FormGroup;
-  listaUsuarios: Usuario2[] = [];
+  listaUsuarios2: UsuarioRol[] = [];
+
   //Usuario logueado
   user: any = null;
-  usuarioSeleccionado: Usuario2 = new Usuario2();
+  usuarioSeleccionado2: UsuarioRol = new UsuarioRol();
+
   datosSolicitud: SolicitudActividad = new SolicitudActividad();
   isLinear = true; // Establece inicialmente el modo lineal como desactivado
   fechaActual: Date;
@@ -83,6 +87,8 @@ export class CrearSolicitudComponent implements OnInit  {
   public login: LoginService,
   private router: Router,
   private userService: UsuarioService,
+  private userROLService: UsuariorolService,
+
   private solicitudPresupuestoService: SolicitudPresupuestoService,
    //importar el spinner como servicio
    private loadingService: LoadingServiceService
@@ -127,10 +133,12 @@ export class CrearSolicitudComponent implements OnInit  {
 
 
   cargarUsuarios() {
-    this.userService.getUsuariosList().subscribe(
-      (data: Usuario2[]) => {
-        this.listaUsuarios = data;
-        this.listaUsuariosOriginal = this.listaUsuarios.slice();
+    this.userROLService.ListarSuperAdmin().subscribe(
+      (data: UsuarioRol[]) => {
+        this.listaUsuarios2=data;
+        this.listaUsuariosOriginal = this.listaUsuarios2.slice();
+
+        console.log(data)
       },
       (error: any) => {
         console.error('Error al cargar usuarios:', error);
@@ -142,13 +150,15 @@ export class CrearSolicitudComponent implements OnInit  {
  
 
   SeleccionarUsuario(elemento: any): void {
-    this.usuarioSeleccionado=elemento
+    this.usuarioSeleccionado2=elemento
     this.FormDestinatario.patchValue({
-      cedula: elemento.persona.cedula,
-      nombre: elemento.persona.primer_nombre,
-      cargo: elemento.persona.cargo,
-      correo: elemento.persona.correo
-    });}
+      cedula: elemento.usuario.persona.cedula,
+      nombre: elemento.usuario.persona.primer_nombre,
+      cargo: elemento.usuario.persona.cargo,
+      correo: elemento.usuario.persona.correo
+    });
+  this.LimpiarBuscador();
+  }
   
  
 
@@ -219,7 +229,7 @@ if (this.dataSolicitud.data.length > 0) {
   guardar() {
     this.loadingService.show();
 
-    this.usuariosdit.id = this.usuarioSeleccionado.id;
+    this.usuariosdit.id = this.usuarioSeleccionado2.usuario.id;
     this.actividadSolicitudPresupuesto.motivo = this.datosSolicitud.detalle;
     this.actividadSolicitudPresupuesto.fecha_solicitud = this.fechaActual;
     this.actividadSolicitudPresupuesto.destinatario = this.usuariosdit;
@@ -276,15 +286,18 @@ if (this.dataSolicitud.data.length > 0) {
     
   }
   
-
+LimpiarBuscador(){
+  this.filterPost="";
+  this.buscar();
+}
 ListadoSolicitud(){
   this.router.navigate(['/res/solicitar-presupuestos/listSolicitudes']);}
 
   buscar() {
     this.filteredComponentes = this.listaUsuariosOriginal.filter((componente) =>
-      componente.persona.primer_nombre.toLowerCase().includes(this.filterPost.toLowerCase()) || componente.persona.cedula.toLowerCase().includes(this.filterPost.toLowerCase())
+      componente.usuario.persona.primer_nombre.toLowerCase().includes(this.filterPost.toLowerCase()) || componente.usuario.persona.cedula.toLowerCase().includes(this.filterPost.toLowerCase())
     );
-    this.listaUsuarios = this.filteredComponentes;
+    this.listaUsuarios2 = this.filteredComponentes;
     this.resultadosEncontrados = this.filteredComponentes.length > 0; }
     
     isDataSolicitudNotEmpty() {
