@@ -19,6 +19,8 @@ import { format } from 'date-fns';
 import { Style, Table } from 'pdfmake/interfaces';
 import { Margins } from 'pdfmake/interfaces';
 import * as moment from 'moment';
+import { Usuario2 } from 'src/app/models/Usuario2';
+import { LoadingServiceService } from 'src/app/components/loading-spinner/LoadingService.service';
 
 @Component({
   selector: 'app-list-solicitudes-presupuesto-superadmin',
@@ -82,7 +84,9 @@ export class ListSolicitudesPresupuestoSuperadminComponent implements OnInit {
     private solicitudPresupuestoService: SolicitudPresupuestoService,
     private emaservices: EmailServiceService,
     private aprobacionSolicitudService: AprobacionSolicitudService,
-    private serviper: PersonaService
+    private serviper: PersonaService,
+       //importar el spinner como servicio
+       private loadingService: LoadingServiceService
   ) {
     this.paginatorIntl.nextPageLabel = this.nextPageLabel;
     this.paginatorIntl.lastPageLabel = this.lastPageLabel;
@@ -103,6 +107,8 @@ export class ListSolicitudesPresupuestoSuperadminComponent implements OnInit {
 
   //Metodo para listar
   listarSolicitudes(idSuper: number): void {
+    this.loadingService.show();
+
     this.solicitudPresupuestoService
       .listarSolicitudesSuperAdmin(idSuper)
       .subscribe(
@@ -111,9 +117,13 @@ export class ListSolicitudesPresupuestoSuperadminComponent implements OnInit {
           console.log('Dataa');
           console.log(this.listaSolicitudes);
           this.dataSource.data = this.listaSolicitudes;
+          this.loadingService.hide();
+
         },
         (error: any) => {
           console.error('Error al listar los poas:', error);
+          this.loadingService.hide();
+
         }
       );
   }
@@ -189,24 +199,25 @@ export class ListSolicitudesPresupuestoSuperadminComponent implements OnInit {
   get isRechazado() {
     return this.estado === 'RECHAZADO';
   }
-
+  usuariosdit: Usuario2 = new Usuario2;
+solic : SolicitudActividadPrepuesto = new SolicitudActividadPrepuesto;
   guardar() {
+    this.loadingService.show();
+
     // Verificar si estado y observación no están vacíos
     if (!this.estado || !this.observacion) {
       Swal.fire('Advertencia', 'Existen campos vacios', 'warning');
       return;
     }
-
+    this.usuariosdit.id = this.user.id;
+    this.solic.id_solicitud_presupuesto=this.solicitudSeleted.id_solicitud_presupuesto
     this.aprobarSolicitud.estado = this.estado;
     this.aprobarSolicitud.observacion = this.observacion;
 
     //Quitar el usuario destinatario, responsable, actividad
-    this.solicitudSeleted.actividadSolicitud = null;
-    this.solicitudSeleted.destinatario = null;
-    this.solicitudSeleted.responsable = null;
-    this.aprobarSolicitud.solicitud = this.solicitudSeleted;
-    this.aprobarSolicitud.usuario = this.user.id;
-    this.solicitudSeleted.estado = this.estado;
+    this.aprobarSolicitud.solicitud = this.solic;
+    this.aprobarSolicitud.usuario = this.usuariosdit;
+    this.solic.estado = this.estado;
     this.aprobarSolicitud.fecha_aprobacion = this.fechaActual;
     // Guardamos la aprobación y actualizamos el estado del archivo en paralelo
 
@@ -214,12 +225,14 @@ export class ListSolicitudesPresupuestoSuperadminComponent implements OnInit {
       this.aprobacionSolicitudService.crear(this.aprobarSolicitud),
       this.solicitudPresupuestoService.actualizar(
         this.solicitudSeleted.id_solicitud_presupuesto,
-        this.solicitudSeleted
+        this.solic
       ),
     ]).subscribe(
       ([aprobarResponse, archivoResponse]) => {
         this.sendEmail();
         this.Limpiar();
+        this.loadingService.hide();
+
         this.listarSolicitudes(this.user.id);
         Swal.fire(
           'Exitoso',
@@ -229,6 +242,8 @@ export class ListSolicitudesPresupuestoSuperadminComponent implements OnInit {
       },
       (error) => {
         console.error('Error al realizar alguna de las operaciones:', error);
+        this.loadingService.hide();
+
         Swal.fire(
           'Error',
           'Ha ocurrido un error en una o ambas operaciones',

@@ -92,6 +92,8 @@ export class ComponentesComponent  implements OnInit {
           console.log('Componente creado con éxito:', response);
           this.guardadoExitoso = true;
           this.listar();
+          this.loadingService.hide();
+
           Swal.fire(
             'Exitoso',
             'Se ha completado el registro con exito',

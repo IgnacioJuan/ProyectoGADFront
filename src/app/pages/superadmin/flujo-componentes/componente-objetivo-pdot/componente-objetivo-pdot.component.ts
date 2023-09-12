@@ -182,6 +182,8 @@ actualizar() {
     .subscribe((response: any) => {
       this.objePDOT = new ObjetivoPDOT;
       this.listar(this.componente.id_componente)
+      this.loadingService.hide();
+
       Swal.fire('Operacion exitosa!', 'El registro se actualizo con exito', 'success')
     }, 
     (error: any) => {

@@ -104,6 +104,8 @@ guardar() {
         console.log('Meta PDOT creado con éxito:', response);
         this.guardadoExitoso = true;
         this.listar(this.objPDOT.id_objetivo_pdot);
+        this.loadingService.hide();
+
         Swal.fire(
           'Exitoso',
           'Se ha completado el registro con exito',

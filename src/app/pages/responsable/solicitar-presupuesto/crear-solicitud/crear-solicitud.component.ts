@@ -11,6 +11,7 @@ import { UsuarioService } from 'src/app/services/usuario.service';
 import { SolicitudActividadPrepuesto } from 'src/app/models/SolicitudActividadPresupuesto';
 import Swal from 'sweetalert2';
 import { SolicitudPresupuestoService } from 'src/app/services/solicitud-presupuesto.service';
+import { LoadingServiceService } from 'src/app/components/loading-spinner/LoadingService.service';
 
 
 export class SolicitudActividad {
@@ -83,6 +84,8 @@ export class CrearSolicitudComponent implements OnInit  {
   private router: Router,
   private userService: UsuarioService,
   private solicitudPresupuestoService: SolicitudPresupuestoService,
+   //importar el spinner como servicio
+   private loadingService: LoadingServiceService
 
 ) {
   this.paginatorIntl.nextPageLabel = this.nextPageLabel;
@@ -155,13 +158,19 @@ AgregarDestinatario(){
   this.datosSolicitud.detalle=this.FormDestinatario.value.detalle}
 
   listar(idUser: number): void {
+    this.loadingService.show();
+
     this.actividadesService.listaractireponsa(idUser).subscribe(
       (data: any[]) => {
         this.listaActividades = data;
         this.dataActividades.data = this.listaActividades;
+        this.loadingService.hide();
+
       },
       (error: any) => {
         console.error('Error al listar los componentes:', error);
+        this.loadingService.hide();
+
       }
     );
   }
@@ -208,6 +217,8 @@ if (this.dataSolicitud.data.length > 0) {
 
 
   guardar() {
+    this.loadingService.show();
+
     this.usuariosdit.id = this.usuarioSeleccionado.id;
     this.actividadSolicitudPresupuesto.motivo = this.datosSolicitud.detalle;
     this.actividadSolicitudPresupuesto.fecha_solicitud = this.fechaActual;
@@ -228,6 +239,8 @@ if (this.dataSolicitud.data.length > 0) {
       this.solicitudPresupuestoService.crear(solicitudActividad) .subscribe(
           (response) => {
             console.log('Solicitud de actividad con éxito:', response);
+            this.loadingService.hide();
+
             Swal.fire(
               'Exitoso',
               'Se ha completado el registro con éxito',
@@ -239,6 +252,8 @@ if (this.dataSolicitud.data.length > 0) {
           },
           (error) => {
             console.error('Error al crear la solicitud de actividad:', error);
+            this.loadingService.hide();
+
             Swal.fire(
               'Error',
               'Ha ocurrido un error',

@@ -100,6 +100,8 @@ ngOnInit() {
 
 
 guardar() {
+  this.loadingService.show();
+
   this.indicad = this.formIndicador.value;
   this.indicad.metapdot = this.metaPDOT;
   this.indicadorService.crear(this.indicad)
@@ -108,6 +110,8 @@ guardar() {
         console.log('Indicador creado con éxito:', response);
         this.guardadoExitoso = true;
         this.listar(this.metaPDOT.id_meta_pdot);
+        this.loadingService.hide();
+
         Swal.fire(
           'Exitoso',
           'Se ha completado el registro con exito',
@@ -116,6 +120,8 @@ guardar() {
       },
       (error: any) => {
         console.error('Error al crear el Indicador :', error);
+        this.loadingService.hide();
+
         Swal.fire(
           'Error',
           'Ha ocurrido un error',
@@ -186,6 +192,8 @@ actualizar() {
     .subscribe((response: any) => {
       this.indicad = new Indicadores();
       this.listar(this.metaPDOT.id_meta_pdot);
+      this.loadingService.hide();
+
       Swal.fire('Operacion exitosa!', 'El registro se actualizo con exito', 'success')
 
     }, (error: any) => {
