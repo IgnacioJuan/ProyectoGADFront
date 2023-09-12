@@ -4,6 +4,7 @@ import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { PoaService } from 'src/app/services/poa.service';
+import { LoadingServiceService } from 'src/app/components/loading-spinner/LoadingService.service';
 @Component({
   selector: 'app-list-poa-actividad',
   templateUrl: './list-poa-actividad.component.html',
@@ -21,6 +22,8 @@ export class ListPoaActividadComponent  implements OnInit {
    private paginatorIntl: MatPaginatorIntl,
    private router: Router,
    private poaService: PoaService,
+      //importar el spinner como servicio
+      private loadingService: LoadingServiceService
  ) {
 
    this.paginatorIntl.nextPageLabel = this.nextPageLabel;
@@ -63,15 +66,21 @@ export class ListPoaActividadComponent  implements OnInit {
  columnasUsuario: string[] = ['barrio', 'cobertura','fecha_inicio','fecha_fin','usuario', 'evidencias'];
 
  listar(): void {
+  this.loadingService.show();
+
   this.poaService.getPoas().subscribe(
     (data: any[]) => {
       this.listaPoas = data;
       console.log("Dataa")
       console.log(this.listaPoas)
       this.dataSource.data = this.listaPoas;
+      this.loadingService.hide();
+
     },
     (error: any) => {
       console.error('Error al listar los poas:', error);
+      this.loadingService.hide();
+
     }
   );
 }

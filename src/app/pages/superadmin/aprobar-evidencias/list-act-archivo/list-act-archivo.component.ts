@@ -16,6 +16,7 @@ import { AprobacionEvidenciaProjection } from 'src/app/interface/AprobacionEvide
 import { EmailServiceService } from 'src/app/services/email-service.service';
 import { PersonaService } from 'src/app/services/persona.service';
 import { Persona2 } from 'src/app/models/Persona2';
+import { LoadingServiceService } from 'src/app/components/loading-spinner/LoadingService.service';
 
 @Component({
   selector: 'app-list-act-archivo',
@@ -57,7 +58,9 @@ export class ListActArchivoComponent implements OnInit {
     private aprobarEvidenciaService: AprobacionEvidenciaService,
     public login: LoginService,
     private emaservices: EmailServiceService,
-    private serviper: PersonaService
+    private serviper: PersonaService,
+    //importar el spinner como servicio
+    private loadingService: LoadingServiceService
 
   ) {
 
@@ -76,10 +79,16 @@ export class ListActArchivoComponent implements OnInit {
 
   ngOnInit(): void {
     //Obtener id del poa
+    console.log("Datos iniciales: ", history.state.data);
+
     const data = history.state.data;
+    console.log("Datos actuales: ", history.state.data);
+
     this.actividad = data;
     this.poa = history.state.poa;
-    console.log(this.poa)
+   // console.log("actividad")
+
+ //.log(data)
 
     //Capturar usuario logueado
     this.user = this.login.getUser();
@@ -124,15 +133,22 @@ export class ListActArchivoComponent implements OnInit {
   }
 
   listar(activ: number) {
+    this.loadingService.show();
+
     this.archivoService.listarArchivosPorActividad(activ).subscribe(
       (data: any[]) => {
         this.listaArchivos = data;
         this.dataSource2.data = this.listaArchivos;
         this.resultadosEncontradosEvidencias = this.listaArchivos.length > 0;
+        console.log("adadad")
+        console.log(this.listaArchivos)
+        this.loadingService.hide();
 
       },
       (error: any) => {
-        console.error('Error al listar los componentes:', error);
+        console.error('Error al listar las evidencias:', error);
+        this.loadingService.hide();
+
       }
       
     );
@@ -144,7 +160,7 @@ export class ListActArchivoComponent implements OnInit {
 console.log(" correo ="+this.correo)
 },
       (error: any) => {
-        console.error('Error al listar los componentes:', error);
+        console.error('Error al listar el correo:', error);
       }
     ); 
   }
@@ -167,6 +183,8 @@ this.estado="";
 
 
 guardar() {
+  this.loadingService.show();
+
   // Verificar si estado y observación no están vacíos
   if (!this.estado || !this.observacion) {
  
@@ -193,6 +211,8 @@ guardar() {
   ])
     .subscribe(
       ([aprobarResponse, archivoResponse]) => {
+        this.loadingService.hide();
+
         this.sendEmail();
         this.Limpiar();
         this.listar(this.actividad.id_actividad);
@@ -204,6 +224,8 @@ guardar() {
       },
       (error) => {
         console.error('Error al realizar alguna de las operaciones:', error);
+        this.loadingService.hide();
+
         Swal.fire(
           'Error',
           'Ha ocurrido un error en una o ambas operaciones',
