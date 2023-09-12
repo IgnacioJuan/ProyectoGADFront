@@ -16,22 +16,26 @@ export class UserProfileComponent implements OnInit {
   isLoggedIn = false;
   user: any = null;
   rol: any = null;
-//
+
   usuariosEditGuar = new Usuario2();
   usuarioForm: FormGroup;
   contraForm: FormGroup;
   constructor(public login: LoginService,
     private usuariosService: UsuarioService,
     private personaService: PersonaService
-  ) { 
+  ) {
     this.usuarioForm = new FormGroup({
       correo: new FormControl('', [Validators.required, Validators.email]),
       celular: new FormControl('', [Validators.required, Validators.pattern(/^\d{10}$/)]),
       direccion: new FormControl('', [Validators.required]),
       primer_nombre: new FormControl('', [Validators.required,]),
       primer_apellido: new FormControl('', [Validators.required]),
-
+      segundo_nombre: new FormControl(''),
+      segundo_apellido: new FormControl(''),
+      cedula: new FormControl('', [Validators.required]),
+      cargo: new FormControl('', [Validators.required])
     });
+
     this.contraForm = new FormGroup({
       confirmPassword: new FormControl('', [Validators.required, this.validatePasswords.bind(this)])
     });
@@ -87,10 +91,7 @@ export class UserProfileComponent implements OnInit {
         Swal.fire('Se ha cancelado la operación', '', 'info')
       }
     })
-
-
   }
-
 
   edit(): void {
     this.usuariosEditGuar.persona = this.user.persona;
@@ -99,14 +100,18 @@ export class UserProfileComponent implements OnInit {
       celular: new FormControl(this.user.persona.celular, [Validators.required, Validators.pattern(/^\d{10}$/)]),
       direccion: new FormControl(this.user.persona.direccion, [Validators.required]),
       primer_nombre: new FormControl(this.user.persona.primer_nombre, [Validators.required]),
-      primer_apellido: new FormControl(this.user.persona.primer_apellido, [Validators.required])
-  });
-
-
+      primer_apellido: new FormControl(this.user.persona.primer_apellido, [Validators.required]),
+      segundo_nombre: new FormControl(this.user.persona.segundo_nombre),
+      segundo_apellido: new FormControl(this.user.persona.segundo_apellido),
+      cedula: new FormControl(this.user.persona.cedula, [Validators.required]),
+      cargo: new FormControl(this.user.persona.cargo, [Validators.required])
+    });
   }
+
+
   Actualizardatos(usuariosdit: Usuario2) {
     const persona: Persona2 = this.usuarioForm.value;
-    persona.id_persona=usuariosdit.persona.id_persona;
+    persona.id_persona = usuariosdit.persona.id_persona;
     console.log(persona)
     Swal.fire({
       title: 'Esta seguro de modificar sus datos?',

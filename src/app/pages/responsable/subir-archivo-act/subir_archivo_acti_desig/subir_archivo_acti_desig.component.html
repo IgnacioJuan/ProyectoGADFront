@@ -54,7 +54,7 @@
               </ng-container>
               <ng-container matColumnDef="Estado">
                 <mat-header-cell *matHeaderCellDef>Estado</mat-header-cell>
-                <mat-cell *matCellDef="let file">
+                <mat-cell *matCellDef="let file" [ngStyle]="getEstadoCellStyle(file.estado)">
                   {{ file.estado }}
                 </mat-cell>
               </ng-container>
@@ -63,11 +63,11 @@
                 <mat-cell *matCellDef="let file">
                   <button type="button"  [disabled]="botonDeshabilitado" class="btn btn-primary" style="margin-right: 5%;background-color: green"
                     data-bs-toggle="modal" data-bs-target="#materiaModal" (click)="editDatos(file)"
-                    *ngIf="file.estado !== 'APROBADO'">
+                    *ngIf="file.estado !== 'APROBADO'" [disabled]="file.estado == 'RECHAZADO'">
                     <i class="fas fa-edit"></i>
                   </button>
-                  <button class="btn btn-danger" [disabled]="botonDeshabilitado" style="background-color: yellowgreen; margin-right: 5%" role="button"
-                    (click)="elim(file.nombre, file)" *ngIf="file.estado !== 'APROBADO'">
+                  <button class="btn btn-danger" [disabled]="botonDeshabilitado" style="background-color: rgb(255, 0, 0); margin-right: 5%" role="button"
+                    (click)="elim(file.nombre, file)" *ngIf="file.estado !== 'APROBADO'" >
                     <i class="fa fa-trash"></i>
                   </button>
                 </mat-cell>
@@ -123,7 +123,8 @@
                     <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Cancelar</button>
                     <button type="submit" class="btn btn-primary" form="formulario" *ngIf="!archivon.id_archivo"
                       [disabled]="!formulario.valid || !filearchivo"  style="background-color: green"
-                      >Subir
+                      data-dismiss="modal"
+                      data-bs-dismiss="modal" >Subir
                       archivo
                     </button>
                     <button class="btn btn-primary" *ngIf="archivon.id_archivo" data-dismiss="modal"

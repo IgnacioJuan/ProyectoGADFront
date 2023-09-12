@@ -9,6 +9,7 @@ import { PoaInsertService } from 'src/app/services/poa/poa-insert.service';
 import { Poa } from 'src/app/models/Poa';
 import { AprobPoa } from 'src/app/models/AprobPoa';
 import { SolicitudPoa, SolicitudPoaActividad } from 'src/app/models/SolicitudPoa';
+import { LoginService } from 'src/app/services/login.service';
 
 
 
@@ -63,7 +64,7 @@ export class RegistrarPoaComponent implements OnInit {
 
 
 
-  constructor(private cdRef: ChangeDetectorRef, fb: FormBuilder, public dialog: MatDialog, private projectSelectSetvice: ProjectSelectService, private poaInsertService: PoaInsertService) {
+  constructor(private cdRef: ChangeDetectorRef, fb: FormBuilder, public dialog: MatDialog, private projectSelectSetvice: ProjectSelectService, private poaInsertService: PoaInsertService, public login: LoginService) {
     this.formComponentes = fb.group({
 
       nombre: ['', Validators.required],
@@ -80,7 +81,12 @@ export class RegistrarPoaComponent implements OnInit {
 
     });
   }
+
+  user: any = null;
+  persona: any = null;
   ngOnInit(): void {
+    this.user = this.login.getUser();
+    this.persona = this.user.persona;
     this.getProject(0);
     this.dataSource = [];
   }
@@ -349,7 +355,7 @@ export class RegistrarPoaComponent implements OnInit {
   barrio: string = "";
   comunidad: string = "";
   localizacion: string = "";
-  metaPlanificada: number = 10;
+  metaPlanificada: number = 0;
   enviar_solictud: boolean = true;
   solicitudPoa: SolicitudPoa = new SolicitudPoa();
   solicitudPoaActividad: SolicitudPoaActividad = new SolicitudPoaActividad();
@@ -377,7 +383,7 @@ export class RegistrarPoaComponent implements OnInit {
         this.solicitudPoa.comunidad = this.comunidad;
         this.solicitudPoa.localizacion = this.localizacion;
         this.solicitudPoa.tipo_periodo = this.selectedPeriod;
-        this.poaInsertService.crear(this.solicitudPoa).subscribe((data: any) => {
+        this.poaInsertService.crear(this.solicitudPoa, this.user.id).subscribe((data: any) => {
           if (data) {
             this.poaInsertService.solicitarAprobacion(data.id_poa, this.id_super_admin, this.proyecto).subscribe((aprobPoa: any) => {
               console.log("aprobacion poa", aprobPoa);

@@ -20,12 +20,7 @@
                 <br />
                 <div class="mat-elevation-z8 table-responsive" style="margin-bottom: 5%">
                     <table mat-table [dataSource]="dataSource">
-                        <ng-container matColumnDef="id_actividad">
-                            <th mat-header-cell *matHeaderCellDef>ID</th>
-                            <td mat-cell *matCellDef="let elemento">
-                                {{ elemento.id_actividad }}
-                            </td>
-                        </ng-container>
+
                         <ng-container matColumnDef="nombre_actividad">
                             <th mat-header-cell *matHeaderCellDef>NOMBRE</th>
                             <td mat-cell *matCellDef="let elemento">
@@ -38,34 +33,50 @@
                                 {{ elemento.descripcion }}
                             </td>
                         </ng-container>
-                        <ng-container matColumnDef="devengado">
-                            <th mat-header-cell *matHeaderCellDef>DEVENGADO</th>
-                            <td mat-cell *matCellDef="let elemento">
-                                {{ elemento.devengado }}
-                            </td>
-                        </ng-container>
                         <ng-container matColumnDef="estado">
                             <th mat-header-cell *matHeaderCellDef>ESTADO</th>
                             <td mat-cell *matCellDef="let elemento">
                                 {{ elemento.estado }}
                             </td>
                         </ng-container>
+                        <ng-container matColumnDef="devengado">
+                            <th mat-header-cell *matHeaderCellDef>DEVENGADO</th>
+                            <td mat-cell *matCellDef="let elemento" class="currency-align">
+                                <span class="currency-symbol">$</span><span class="currency-value">
+                                    {{ elemento.devengado }}
+                                </span>
+                            </td>
+                        </ng-container>
                         <ng-container matColumnDef="codificado">
                             <th mat-header-cell *matHeaderCellDef>CODIFICADO</th>
-                            <td mat-cell *matCellDef="let elemento">
-                                {{ elemento.codificado }}
+                            <td mat-cell *matCellDef="let elemento" class="currency-align">
+                                <span class="currency-symbol">$</span><span class="currency-value">
+                                    {{ elemento.codificado }}
+                                </span>
                             </td>
                         </ng-container>
                         <ng-container matColumnDef="presupuesto_referencial">
                             <th mat-header-cell *matHeaderCellDef>PRESUPUESTO REFERENCIAL</th>
-                            <td mat-cell *matCellDef="let elemento">
-                                {{ elemento.presupuesto_referencial }}
+                            <td mat-cell *matCellDef="let elemento" class="currency-align">
+                                <span class="currency-symbol">$</span><span class="currency-value">
+                                    {{ elemento.presupuesto_referencial }}
+                                </span>
                             </td>
                         </ng-container>
                         <ng-container matColumnDef="recursos_propios">
                             <th mat-header-cell *matHeaderCellDef>RECURSOS PROPIOS</th>
-                            <td mat-cell *matCellDef="let elemento">
-                                {{ elemento.recursos_propios }}
+                            <td mat-cell *matCellDef="let elemento" class="currency-align">
+                                <span class="currency-symbol">$</span><span class="currency-value">
+                                    {{ elemento.recursos_propios }}
+                                </span>
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="presupuesto_externo">
+                            <th mat-header-cell *matHeaderCellDef>PRESUPUESTO EXTERNO</th>
+                            <td mat-cell *matCellDef="let elemento" class="currency-align">
+                                <span class="currency-symbol">$</span><span class="currency-value">
+                                    {{ elemento.presupuesto_externo }}
+                                </span>
                             </td>
                         </ng-container>
 

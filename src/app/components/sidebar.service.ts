@@ -42,7 +42,7 @@ export class SidebarService {
       ]
     },
     {
-      icono: 'nav-icon fas fa-solid fa-list',
+      icono: 'nav-icon fas fa-solid fa-cog',
       titulo: "Configurar Modelo",
       submenu: [
         { titulo: 'Modelo', url: 'sup/flujo-modelo/modelo', icono: 'fas fa-list-ul ' },
@@ -62,9 +62,8 @@ export class SidebarService {
       titulo: "POA",
       submenu: [
         { titulo: 'Poas Rechazados', url: 'sup/flujo-criterio/listarpoa', icono: 'fas fa-list-ul ' },
-        { titulo: 'Poas Asignados', url: 'sup/flujo-criterio/listarpoausu', icono: 'fas fa-list-ul ' },
+        { titulo: 'Poas Asignados', url: 'sup/flujo-criterio/listaproyecto', icono: 'fas fa-list-ul ' },
         { titulo: 'Reporte de POA', url: 'sup/reportePoa', icono: 'fas fa-list-ul ' },
-        { titulo: 'Aprobación de POAS', url: 'sup/aprobacion-poa/lista-aprobar-poa', icono: 'fas fa-list-ul ' }
 
 
       ] 
@@ -76,28 +75,37 @@ export class SidebarService {
         { titulo: 'Presupuestos', url: 'sup/actividades-presupuestos/tabla-poas', icono: 'fas fa-list-ul ' },
         { titulo: 'Evidencias Rechazadas', url: 'sup/archivos-rechazados/Actividades_Evi_Rechazados', icono: 'fas fa-list-ul ' },
         { titulo: 'Lista de Actividades', url: 'sup/usuario-actividades/listar-actividades', icono: 'fas fa-list-ul ' },
-        { titulo: 'Aprobar/Rechazar Evidencia', url: 'sup/aprobarEvidencias/listPoaAprobarEvidenciaSuper', icono: 'fas fa-file-contract' }
 
       ]
     },
     {
-      icono: 'nav-icon fas fa-solid fa-list',
+      icono: 'nav-icon fas fa-solid  fa-check',
       titulo: "Evaluación",
       submenu: [
-        { titulo: 'Actividades', url: 'sup/aprobar-actividades/poa-actividad', icono: 'fas fa-list-ul ' },
+        { titulo: 'Aprobación de POAS', url: 'sup/aprobacion-poa/lista-aprobar-poa', icono: 'fas fa-list-ul ' },
+        { titulo: 'Aprobación de Actividades', url: 'sup/aprobar-actividades/poa-actividad', icono: 'fas fa-list-ul ' },
+        { titulo: 'Aprobación de Evidencias', url: 'sup/aprobarEvidencias/listPoaAprobarEvidenciaSuper', icono: 'fas fa-file-contract' }
 
       ]
     },
+    // {
+    //   icono: 'nav-icon fas fa-solid fa-list',
+    //   titulo: "Reportes",
+    //   submenu: [
+    //     { titulo: 'Reporte Poa', url: 'sup/reportePoa', icono: 'fas fa-list-ul ' },
+
+    //   ]
+    // },
+
     {
-      icono: 'nav-icon fas fa-solid fa-list',
-      titulo: "Reportes",
+      icono: 'nav-icon fas fa-file-invoice',
+      titulo: "Solicitud de Presupuesto",
       submenu: [
-        { titulo: 'Reporte Poa', url: 'sup/reportePoa', icono: 'fas fa-list-ul ' },
+        { titulo: 'Listado de Solicitudes', url: 'sup/listadoSolicitudes', icono: 'fas fa-list-ul ' },
 
       ]
     },
 
-    
 
 
 

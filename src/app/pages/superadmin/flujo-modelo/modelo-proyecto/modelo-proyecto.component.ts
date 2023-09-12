@@ -4,6 +4,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
+import { LoadingServiceService } from 'src/app/components/loading-spinner/LoadingService.service';
 import { ModeloPoa } from 'src/app/models/ModeloPoa';
 import { Proyecto } from 'src/app/models/Proyecto';
 import { IndicadorService } from 'src/app/services/indicador.service';
@@ -58,7 +59,9 @@ export class ModeloProyectoComponent {
     private indicadorservice: IndicadorService,
     private paginatorIntl: MatPaginatorIntl,
     private router: Router,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private loadingService: LoadingServiceService
+
   ) {
     this.frmProyecto = fb.group({
       nombre: ['', Validators.required],
@@ -105,6 +108,8 @@ export class ModeloProyectoComponent {
 
 
   guardar() {
+    this.loadingService.show();
+
     this.subcrite = this.frmProyecto.value;
     let a = this.frmProyecto.value;
     this.subcrite.modelopoa = this.modelopoa;
@@ -137,11 +142,15 @@ export class ModeloProyectoComponent {
             'Ha ocurrido un error',
             'warning'
           )
+          this.loadingService.hide();
+
         }
       );
 
   }
   eliminar(proyecto: any) {
+    this.loadingService.show();
+
     Swal.fire({
       title: 'Estas seguro de eliminar el registro?',
       showDenyButton: true,
@@ -162,13 +171,19 @@ export class ModeloProyectoComponent {
   }
   //optimizar
   listar(): void {
+    this.loadingService.show();
+
     this.proyectoservice.getProyectosdelModelo(this.modelopoa.id_modelo_poa).subscribe(
       (data: any[]) => {
         this.proyectos = data;
         this.dataSource.data = this.proyectos;
+        this.loadingService.hide();
+
       },
       (error: any) => {
         console.error('Error al listar los proyectos:', error);
+        this.loadingService.hide();
+
       }
     );
   }
@@ -206,13 +221,14 @@ export class ModeloProyectoComponent {
   }
 
   actualizar() {
+    this.loadingService.show();
 
     this.subcrite.nombre = this.frmProyecto.value.nombre;
     this.subcrite.codigo = this.frmProyecto.value.codigo;
     this.subcrite.objetivo = this.frmProyecto.value.objetivo;
     this.subcrite.meta = this.frmProyecto.value.meta;
     this.subcrite.porcentaje_alcance = this.frmProyecto.value.porcentaje_alcance;
-        this.subcrite.area = this.frmProyecto.value.area;
+    this.subcrite.area = this.frmProyecto.value.area;
 
     this.subcrite.fecha_inicio = this.frmProyecto.value.fecha_inicio;
     this.subcrite.fecha_fin = this.frmProyecto.value.fecha_fin;
@@ -233,12 +249,23 @@ export class ModeloProyectoComponent {
         this.subcrite = new Proyecto();
         this.listar();
         Swal.fire('Operacion exitosa!', 'El registro se actualizo con exito', 'success')
+      }, (error) => {
+        console.error('Error al crear el modelo_poa:', error);
+        this.loadingService.hide();
+
+        Swal.fire(
+          'Error',
+          'Ha ocurrido un error',
+          'warning'
+        )
       });
   }
 
   verDetalles(proyecto: any) {
     this.router.navigate(['/sup/flujo-modelo/proyecto-poa'], { state: { proyecto: proyecto, modelo: this.modelopoa } });
   }
+
+  
   verModeloPoas() {
     this.router.navigate(['/sup/flujo-modelo/modelo']);
   }

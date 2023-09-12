@@ -101,186 +101,222 @@
             itemsPerPageLabel="Items por página:" nextPageLabel="Siguiente" previousPageLabel="Anterior">
           </mat-paginator>
         </div>
-        <div class="modal fade" id="materiaModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
-          (hidden.bs.modal)="limpiarFormulario()">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header" style="background-color: darkgreen; color: white;">
-                <h3 class="modal-title">
-                  <i class="fa fa-info-circle"></i> ACTIVIDAD
-                </h3>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
-              <div class="modal-body">
-                <form [formGroup]="frmActividad" (ngSubmit)="guardar()" id="formulario">
-                  <div>
-                    <label for="nombre">Nombre:</label>
-                    <input class="form-control" formControlName="nombre" type="text" id="nombre" name="nombre"
-                      style="margin-bottom: 10px" />
-                    <div class="alert alert-danger" *ngIf="
-                      frmActividad.controls['nombre'].invalid &&
-                      frmActividad.controls['nombre'].touched
-                      ">
-                      <div *ngIf="
-                        frmActividad.controls['nombre'].hasError('required')
-                        ">
-                        Debe ingresar un nombre
-                      </div>
-                    </div>
-                    <label for="descripcion">Descripción:</label>
-                    <input class="form-control" formControlName="descripcion" type="text" id="descripcion"
-                      name="descripcion" style="margin-bottom: 10px" />
-                    <div class="alert alert-danger" *ngIf="
-                      frmActividad.controls['descripcion'].invalid &&
-                      frmActividad.controls['descripcion'].touched
-                      ">
-                      <div *ngIf="
-                        frmActividad.controls['descripcion'].hasError('required')
-                        ">
-                        Debe ingresar una descripcion de la actividad
-                      </div>
-                    </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="materiaModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
+      (hidden.bs.modal)="limpiarFormulario()">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header" style="background-color: darkgreen; color: white;">
+            <h3 class="modal-title">
+              <i class="fa fa-info-circle"></i> ACTIVIDAD
+            </h3>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form [formGroup]="frmActividad" (ngSubmit)="guardar()" id="formulario">
+              <div>
+                <label for="nombre">Nombre:</label>
+                <input class="form-control" formControlName="nombre" type="text" id="nombre" name="nombre"
+                  style="margin-bottom: 10px" />
+                <div class="alert alert-danger"
+                  *ngIf="frmActividad.controls['nombre'].invalid && frmActividad.controls['nombre'].touched">
+                  <div *ngIf="frmActividad.controls['nombre'].hasError('required')">
+                    Debe ingresar un nombre
+                  </div>
+                </div>
+                <label for="descripcion">Descripción:</label>
+                <textarea class="form-control" formControlName="descripcion" id="descripcion" name="descripcion"
+                  style="margin-bottom: 10px"></textarea>
+                <div class="alert alert-danger"
+                  *ngIf="frmActividad.controls['descripcion'].invalid && frmActividad.controls['descripcion'].touched">
+                  <div *ngIf="frmActividad.controls['descripcion'].hasError('required')">
+                    Debe ingresar una descripción de la actividad
+                  </div>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                  <div style="flex: 1; margin-right: 20px;">
                     <label for="presupuesto_referencial">Presupuesto Referencial:</label>
                     <input class="form-control" formControlName="presupuesto_referencial" id="presupuesto_referencial"
-                      name="presupuesto_referencial" style="margin-bottom: 10px" type="number" min="0" />
-                    <div class="alert alert-danger" *ngIf="
-                      frmActividad.controls['presupuesto_referencial'].invalid &&
-                      frmActividad.controls['presupuesto_referencial'].touched
-                      ">
-                      <div *ngIf="
-                        frmActividad.controls['presupuesto_referencial'].hasError(
-                            'required'
-                          )
-                        ">
-                        Asigne un presupuesto referencial a la actividad
-                      </div>
-                    </div>
+                      name="presupuesto_referencial" style="margin-bottom: 10px" type="number" min="0" readonly />
+                  </div>
+                  <div style="flex: 1;">
                     <label for="recursos_propios">Valor Recursos Propios:</label>
                     <input class="form-control" formControlName="recursos_propios" id="recursos_propios"
                       name="recursos_propios" style="margin-bottom: 10px" type="number" min="0" />
                     <div class="alert alert-danger" *ngIf="
-                      frmActividad.controls['recursos_propios'].invalid &&
-                      frmActividad.controls['recursos_propios'].touched
-                      ">
+                frmActividad.controls['recursos_propios'].invalid &&
+                frmActividad.controls['recursos_propios'].touched
+                ">
                       <div *ngIf="
-                        frmActividad.controls['nombre'].hasError('required')
-                        ">
+                  frmActividad.controls['nombre'].hasError('required')
+                  ">
                         Debe ingresar un valor propio
                       </div>
                     </div>
-                    <label for="codificado">Codificado:</label>
-                    <input class="form-control" formControlName="codificado" id="codificado" name="codificado"
-                      style="margin-bottom: 10px" type="number" min="0" value="0" readonly />
-                    <div class="alert alert-danger" *ngIf="
-                      frmActividad.controls['codificado'].invalid &&
-                      frmActividad.controls['codificado'].touched
-                      ">
-                      <div *ngIf="
-                        frmActividad.controls['codificado'].hasError('required')
-                        ">
-                        Debe ingresar un codificado
-                      </div>
-                    </div>
-                    <label for="devengado">Devengado:</label>
-                    <input class="form-control" formControlName="devengado" id="devengado" name="devengado"
-                      style="margin-bottom: 10px" type="number" min="0" />
-                    <div class="alert alert-danger" *ngIf="
-                      frmActividad.controls['devengado'].invalid &&
-                      frmActividad.controls['devengado'].touched
-                      ">
-                      <div *ngIf="
-                        frmActividad.controls['devengado'].hasError('required')
-                        ">
-                        Debe ingresar un devengado
-                      </div>
-                    </div>
-                  </div>
-                </form>
-                <div class="modal-footer">
-                  <button type="button" form="formulario" class="btn btn-warning" data-bs-dismiss="modal">
-                    Cancelar
-                  </button>
-                  <button type="submit" class="btn btn-primary" form="formulario" *ngIf="!actividad.id_actividad"
-                    data-dismiss="modal" data-bs-dismiss="modal" style="background-color: green"
-                    [disabled]="!frmActividad.valid">
-                    Agregar
-                  </button>
-                  <button class="btn btn-primary" *ngIf="actividad.id_actividad" data-dismiss="modal"
-                    data-bs-dismiss="modal" style="background-color: green" (click)="actualizar()"
-                    [disabled]="!frmActividad.valid">
-                    Actualizar
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!--TABLA ASIGNAR RESPONSABLE-->
-        <div class="modal fade" id="asignarResponsableModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-          aria-hidden="true">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header" style="background-color: darkgreen; color: white;">
-                <h3 class="modal-title">
-                  <i class="fa fa-info-circle"></i>ASIGNACIÓN RESPONSABLE
-                </h3>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
-              <div class="modal-body">
-                <div class="form-group d-flex justify-between align-center" role="search" id="buscar">
-                  <div class="input-container">
-                    <input type="text" class="form-control" name="filtroUsuarios3" placeholder="Buscar..."
-                      [(ngModel)]="filtroUsuarios" (input)="filtrarUsers()" />
                   </div>
                 </div>
-                <div class="mat-elevation-z8 table-responsive" style="margin-bottom: 5%">
-                  <table mat-table [dataSource]="dataSource3">
-                    <ng-container matColumnDef="id">
-                      <th mat-header-cell *matHeaderCellDef>ID</th>
-                      <td mat-cell *matCellDef="let elemento">
-                        {{ elemento.usuario.id }}
-                      </td>
-                    </ng-container>
-                    <ng-container matColumnDef="nombre">
-                      <th mat-header-cell *matHeaderCellDef>NOMBRE</th>
-                      <td mat-cell *matCellDef="let elemento">
-                        {{ elemento.usuario.persona.primer_nombre }}
-                      </td>
-                    </ng-container>
-                    <ng-container matColumnDef="apellido">
-                      <th mat-header-cell *matHeaderCellDef>APELLIDO</th>
-                      <td mat-cell *matCellDef="let elemento">
-                        {{ elemento.usuario.persona.primer_apellido }}
-                      </td>
-                    </ng-container>
-                    <ng-container matColumnDef="usuario">
-                      <th mat-header-cell *matHeaderCellDef>USUARIO</th>
-                      <td mat-cell *matCellDef="let elemento">
-                        {{ elemento.usuario.username }}
-                      </td>
-                    </ng-container>
-                    <ng-container matColumnDef="actions">
-                      <th mat-header-cell *matHeaderCellDef>SELECCIONAR</th>
-                      <td mat-cell *matCellDef="let element">
-                        <button class="btn btn-md btn-custom-green" role="button" data-dismiss="modal"
-                          data-bs-dismiss="modal" style="background-color: green"
-                          (click)="guardarResponsable(element.usuario.id)">
-                          <mat-icon class="custom-color" style="color: hsl(160, 9%, 94%); font-size: 24px;"> check
-                          </mat-icon>
-                        </button>
-                      </td>
-                    </ng-container>
-                    <tr mat-header-row *matHeaderRowDef="columnasUsuario3"></tr>
-                    <tr mat-row *matRowDef="let f; columns: columnasUsuario3"></tr>
-                  </table>
-                  <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Seleccione">
-                  </mat-paginator>
+                <!--
+              <div style="display: flex; justify-content: space-between;">
+                <div style="flex: 1; margin-right: 20px;">
+                  <label for="codificado">Codificado:</label>
+                  <input class="form-control" formControlName="codificado" id="codificado" name="codificado"
+                    style="margin-bottom: 10px" type="number" min="0" value="0" readonly />
+                  <div class="alert alert-danger" *ngIf="
+                frmActividad.controls['codificado'].invalid &&
+                frmActividad.controls['codificado'].touched
+                ">
+                    <div *ngIf="
+                  frmActividad.controls['codificado'].hasError('required')
+                  ">
+                      Debe ingresar un codificado
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-          </div>
-        </div>
+                <div style="flex: 1;">
+                  <label for="devengado">Devengado:</label>
+                  <input class="form-control" formControlName="devengado" id="devengado" name="devengado"
+                    style="margin-bottom: 10px" type="number" min="0" />
+                  <div class="alert alert-danger" *ngIf="
+                frmActividad.controls['devengado'].invalid &&
+                frmActividad.controls['devengado'].touched
+                ">
+                    <div *ngIf="
+                  frmActividad.controls['devengado'].hasError('required')
+                  ">
+                      Debe ingresar un devengado
+                    </div>
+                  </div>
+                </div>
+              </div>-->
 
+                <div style="display: flex; justify-content: space-between;" *ngIf="modoCreacion">
+                  <div style="flex: 1; margin-right: 20px;">
+                    <label for="valor1">{{poa.tipo_periodo}} 1</label>
+                    <div style="display: flex; align-items: center;">
+                      <input class="form-control" formControlName="valor1" type="text" id="valor1" name="valor1"
+                        style="margin-bottom: 10px" appCurrencyInput type="number" min="0" />
+                      <span style="margin-left: 5px;">%</span>
+                    </div>
+                  </div>
+                  <div style="flex: 1; margin-right: 20px;" *ngIf="modoCreacion">
+                    <label for="valor2">{{poa.tipo_periodo}} 2</label>
+                    <div style="display: flex; align-items: center;">
+                      <input class="form-control" formControlName="valor2" type="text" id="valor2" name="valor2"
+                        style="margin-bottom: 10px" appCurrencyInput type="number" min="0" />
+                      <span style="margin-left: 5px;">%</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div style="display: flex; justify-content: space-between;" *ngIf="modoCreacion">
+                  <div style="flex: 1; margin-right: 20px;">
+                    <label for="valor3">{{poa.tipo_periodo}} 3</label>
+                    <div style="display: flex; align-items: center;">
+                      <input class="form-control" formControlName="valor3" type="text" id="valor3" name="valor3"
+                        style="margin-bottom: 10px" appCurrencyInput type="number" min="0" /><span
+                        style="margin-left: 5px;">%</span>
+                    </div>
+                  </div>
+                  <div style="flex: 1; margin-right: 20px;" *ngIf="modoCreacion">
+                    <div class="form-group" *ngIf="poa.tipo_periodo === 'TRIMESTRE'">
+                      <label for="valor4">{{poa.tipo_periodo}} 4</label>
+                      <div style="display: flex; align-items: center;">
+                        <input class="form-control" formControlName="valor4" type="text" id="valor4" name="valor4"
+                          style="margin-bottom: 10px" appCurrencyInput type="number" min="0" /><span
+                          style="margin-left: 5px;">%</span>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+
+
+              </div>
+            </form>
+            <div class="modal-footer">
+              <button type="button" form="formulario" class="btn btn-warning" data-bs-dismiss="modal">
+                Cancelar
+              </button>
+              <button type="submit" class="btn btn-primary" form="formulario" *ngIf="!actividad.id_actividad"
+                data-dismiss="modal" data-bs-dismiss="modal" style="background-color: green"
+                [disabled]="!frmActividad.valid">
+                Agregar
+              </button>
+              <button class="btn btn-primary" *ngIf="actividad.id_actividad" data-dismiss="modal"
+                data-bs-dismiss="modal" style="background-color: green" (click)="actualizar()"
+                [disabled]="!frmActividad.valid">
+                Actualizar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--TABLA ASIGNAR RESPONSABLE-->
+    <div class="modal fade" id="asignarResponsableModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header" style="background-color: darkgreen; color: white;">
+            <h3 class="modal-title">
+              <i class="fa fa-info-circle"></i>ASIGNACIÓN RESPONSABLE
+            </h3>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="form-group d-flex justify-between align-center" role="search" id="buscar">
+              <div class="input-container">
+                <input type="text" class="form-control" name="filtroUsuarios3" placeholder="Buscar..."
+                  [(ngModel)]="filtroUsuarios" (input)="filtrarUsers()" />
+              </div>
+            </div>
+            <div class="mat-elevation-z8 table-responsive" style="margin-bottom: 5%">
+              <table mat-table [dataSource]="dataSource3">
+                <ng-container matColumnDef="id">
+                  <th mat-header-cell *matHeaderCellDef>ID</th>
+                  <td mat-cell *matCellDef="let elemento">
+                    {{ elemento.usuario.id }}
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="nombre">
+                  <th mat-header-cell *matHeaderCellDef>NOMBRE</th>
+                  <td mat-cell *matCellDef="let elemento">
+                    {{ elemento.usuario.persona.primer_nombre }}
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="apellido">
+                  <th mat-header-cell *matHeaderCellDef>APELLIDO</th>
+                  <td mat-cell *matCellDef="let elemento">
+                    {{ elemento.usuario.persona.primer_apellido }}
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="usuario">
+                  <th mat-header-cell *matHeaderCellDef>USUARIO</th>
+                  <td mat-cell *matCellDef="let elemento">
+                    {{ elemento.usuario.username }}
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="actions">
+                  <th mat-header-cell *matHeaderCellDef>SELECCIONAR</th>
+                  <td mat-cell *matCellDef="let element">
+                    <button class="btn btn-md btn-custom-green" role="button" data-dismiss="modal"
+                      data-bs-dismiss="modal" style="background-color: green"
+                      (click)="guardarResponsable(element.usuario.id)">
+                      <mat-icon class="custom-color" style="color: hsl(160, 9%, 94%); font-size: 24px;"> check
+                      </mat-icon>
+                    </button>
+                  </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="columnasUsuario3"></tr>
+                <tr mat-row *matRowDef="let f; columns: columnasUsuario3"></tr>
+              </table>
+              <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Seleccione">
+              </mat-paginator>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <!--TABLAS DE USUARIOS RESPONSABLES-->
@@ -391,6 +427,13 @@
                   <td mat-cell *matCellDef="let a; let i = index" [attr.rowspan]="getRowSpan2('cargo', i)"
                     [style.display]="getRowSpan2('cargo', i) ? '' : 'none'">
                     {{ a.cargo }}
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="fecha_asignacion">
+                  <th mat-header-cell *matHeaderCellDef>Fecha Asignación</th>
+                  <td mat-cell *matCellDef="let a; let i = index" [attr.rowspan]="getRowSpan2('fecha_asignacion', i)"
+                    [style.display]="getRowSpan2('fecha_asignacion', i) ? '' : 'none'">
+                    {{ a.fecha_asignacion | date:'yyyy-MM-dd'}}
                   </td>
                 </ng-container>
                 <tr mat-header-row *matHeaderRowDef="columUsuario2"></tr>

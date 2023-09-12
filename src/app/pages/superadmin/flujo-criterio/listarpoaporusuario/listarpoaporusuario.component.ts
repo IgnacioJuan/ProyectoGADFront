@@ -7,6 +7,7 @@ import { PoaService } from 'src/app/services/poa.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { PoaporUsuarioProjection } from 'src/app/interface/PoaporUsuarioProjection';
 import { NgStyle } from '@angular/common';
+import { Proyecto } from 'src/app/models/Proyecto';
 
 
 @Component({
@@ -20,7 +21,7 @@ export class ListarporUsuarioComponent implements OnInit {
   guardadoExitoso: boolean = false;
   miModal!: ElementRef;
   //tabla
-  itemsPerPageLabel = 'Competencias por página';
+  itemsPerPageLabel = 'Poas por página';
   nextPageLabel = 'Siguiente';
   lastPageLabel = 'Última';
   firstPageLabel='Primera';
@@ -39,17 +40,20 @@ export class ListarporUsuarioComponent implements OnInit {
     return `${startIndex + 1} - ${endIndex} de ${length}`;
   };
 
+  proyecto: Proyecto = new Proyecto();
+  proyectos: any[] = [];
+
+  filterPost: string = "";
+  filteredComponentes: any[] = [];
+  resultadosEncontrados: boolean = true;
 
   public compete = new PoaporUsuarioProjection();
   competencias: PoaporUsuarioProjection[] = [];
-  
 
-  filterPost = '';
   dataSource = new MatTableDataSource<PoaporUsuarioProjection>();
-  columnasUsuario: string[] = ['username', 'nombre', 'localizacion','barrio', 'estado'];
+  columnasUsuario: string[] = ['cedula','nombre_completo','username','nombre','nombrepro', 'estado'];
 
-
-
+  
   @ViewChild('datosModalRef') datosModalRef: any;
   @ViewChild(MatPaginator, { static: false }) paginator?: MatPaginator;
 
@@ -71,14 +75,22 @@ export class ListarporUsuarioComponent implements OnInit {
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator || null;
   }
+  
   ngOnInit(): void {
+    
+    this.compete = history.state.proyecto;
+    if (this.compete == undefined) {
+      this.router.navigate(['user-dashboard']);
+      location.replace('/use/user-dashboard');
+    }
 
+    this.compete.id_proyecto
+    console.log(this.compete.id_proyecto)
     this.listar( );
   }
-
  
   listar(): void {
-    this.poasservice.getporUsuario().subscribe(
+    this.poasservice.getporUsuario(this.compete.id_proyecto ).subscribe(
       (data: any[]) => {
         this.competencias = data;
         this.dataSource.data = this.competencias;
@@ -88,8 +100,14 @@ export class ListarporUsuarioComponent implements OnInit {
       }
     );
   }
-  
 
+  verProyectos() {
+    this.router.navigate(['/sup/flujo-criterio/listaproyecto'], { state: { data: this.proyecto } });
+  }
+  verModelos() {
+    this.router.navigate(['/sup/flujo-criterio/listaproyecto']);
+  }
+  
   aplicarFiltro() {
     if (this.filterPost) {
       const lowerCaseFilter = this.filterPost.toLowerCase();
@@ -99,31 +117,34 @@ export class ListarporUsuarioComponent implements OnInit {
     } else {
       this.dataSource.data = this.competencias;;
     }
-  } 
+  }
+
+  buscar() {
+    this.filteredComponentes = this.competencias.filter((componente) =>
+      componente.nombre.toLowerCase().includes(this.filterPost.toLowerCase())
+    );
+    this.dataSource.data = this.filteredComponentes;
+    this.resultadosEncontrados = this.filteredComponentes.length > 0;
+  }
   
   getColor(estado: string): any {
-    const estadoUpper = estado.toUpperCase(); // Convertir el estado a mayúsculas
-    let backgroundColor = 'white'; // Color de fondo predeterminado
-  
+    const estadoUpper = estado.toUpperCase(); 
+    let backgroundColor = 'white';   
     switch (estadoUpper) {
       case 'APROBADO':
-        backgroundColor = 'green';
+        backgroundColor = 'rgb(168, 216, 159)';
         break;
       case 'RECHAZADO':
-        backgroundColor = 'yellow';
+        backgroundColor = 'rgb(231, 87, 87)';
         break;
       case 'PENDIENTE':
-        backgroundColor = 'red';
+        backgroundColor = 'rgb(235, 253, 133)';
         break;
       default:
         break;
     }
-  
     return { 'background-color': backgroundColor };
   }
-  
-  
-  
 
 }
 

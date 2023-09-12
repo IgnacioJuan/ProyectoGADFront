@@ -1,7 +1,14 @@
 <body>
   <div class="container bg-light border border-start-0 rounded-4">
-    <blockquote class="blockquote text-dark" style="margin-top: 5%">
-      <h1 style="text-transform: uppercase">
+    <blockquote
+      class="blockquote text-dark"
+      style="
+        margin-top: 5%;
+        background-color: #ffffff;
+        border-left: 10px solid green;
+      "
+    >
+      <h1 class="header-title" style="text-transform: uppercase">
         <strong
           ><a style="cursor: pointer" (click)="verModelos()"
             >LISTADO MODELOS
@@ -57,21 +64,21 @@
             <ng-container matColumnDef="fecha_inicio">
               <th mat-header-cell *matHeaderCellDef>INICIO</th>
               <td mat-cell *matCellDef="let elemento">
-                {{ elemento.fecha_inicio }}
+                {{ elemento.fecha_inicio | date : "dd/MM/yyyy" }}
               </td>
             </ng-container>
             <ng-container matColumnDef="fecha_fin">
               <th mat-header-cell *matHeaderCellDef>FIN</th>
               <td mat-cell *matCellDef="let elemento">
-                {{ elemento.fecha_fin }}
+                {{ elemento.fecha_fin | date : "dd/MM/yyyy" }}
               </td>
             </ng-container>
             <ng-container matColumnDef="localizacion">
-                <th mat-header-cell *matHeaderCellDef>LOCALIZACION</th>
-                <td mat-cell *matCellDef="let elemento">
-                  {{ elemento.localizacion }}
-                </td>
-              </ng-container>
+              <th mat-header-cell *matHeaderCellDef>LOCALIZACION</th>
+              <td mat-cell *matCellDef="let elemento">
+                {{ elemento.localizacion }}
+              </td>
+            </ng-container>
             <ng-container matColumnDef="actividades">
               <th mat-header-cell *matHeaderCellDef>ACTIVIDAD</th>
               <td mat-cell *matCellDef="let elemento">
@@ -87,20 +94,19 @@
               </td>
             </ng-container>
             <ng-container matColumnDef="actions">
-                <th mat-header-cell *matHeaderCellDef>ACCIONES</th>
-                <td mat-cell *matCellDef="let elemento">
-                  <button
-                    class="btn btn-primary"
-                    role="button"
-                    (click)="verActividades(elemento)"
-                  >
-                    <div class="d-flex">
-                      <i class="fa fa-folder-open"></i>
-                    </div>
-                  </button>
-                </td>
-              </ng-container>
-            
+              <th mat-header-cell *matHeaderCellDef>ACCIONES</th>
+              <td mat-cell *matCellDef="let elemento">
+                <button
+                  class="btn btn-primary"
+                  role="button"
+                  (click)="verActividades(elemento)"
+                >
+                  <div class="d-flex">
+                    <i class="fa fa-folder-open"></i>
+                  </div>
+                </button>
+              </td>
+            </ng-container>
 
             <tr mat-header-row *matHeaderRowDef="columnasUsuario"></tr>
             <tr mat-row *matRowDef="let fila; columns: columnasUsuario"></tr>
