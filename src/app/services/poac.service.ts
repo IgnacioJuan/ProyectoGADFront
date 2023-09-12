@@ -14,12 +14,12 @@ export class PoacService {
 
   //Metodo para listar POA
   public getPoaAprob(): Observable<AprobPoa[]> {
-    return this.httpClient.get(`${baserUrl}/api/aprobacionpoa/listarAprobaciones`).
+    return this.httpClient.get(`${baserUrl}/api/aprobacionpoa/obtenerpoasaprb`).
       pipe(map((response) => response as AprobPoa[]));
   }
   // Método para obtener una aprobación de POA por su ID
   public getPoaAprobById(idPoa: number): Observable<AprobPoa> {
-    return this.httpClient.get(`${baserUrl}/api/aprobacionpoa/obtenerAprobacionPorId/${idPoa}`)
+    return this.httpClient.get(`${baserUrl}/api/aprobacionpoa/obtenerpoaprb/${idPoa}`)
       .pipe(map((response) => response as AprobPoa));
   }
   // Método para actualizar el estado de aprobación del POA
