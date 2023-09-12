@@ -200,7 +200,40 @@
                         </div>
                       </div>
   
-                      
+
+
+                      <div class="form-group">
+                        <label for="tipo_evaluacion">Tipo de Evaluación:</label>
+                        <select
+                          class="form-control"
+                          formControlName="tipo_evaluacion"
+                          id="tipo_evaluacion"
+                          name="tipo_evaluacion"
+                        >
+                          <option value="CRECIENTE">CRECIENTE</option>
+                          <option value="DECRECIENTE">DECRECIENTE</option>
+                        </select>
+                        <div
+                          class="alert alert-danger"
+                          *ngIf="
+                          formIndicador.controls['tipo_evaluacion'].invalid &&
+                          formIndicador.controls['tipo_evaluacion'].touched
+                          "
+                        >
+                          <div
+                            *ngIf="
+                            formIndicador.controls['tipo_evaluacion'].hasError('required')
+                            "
+                          >
+                            Debe ingresar un tipo
+                          </div>
+                        </div>
+                      </div>
+
+
+
+
+                      <!----
                       <label for="tipo_evaluacion">Tipo de Evaluación:</label>
                       <input
                         class="form-control"
@@ -226,6 +259,10 @@
                         </div>
                       </div>
                    
+---->
+
+
+
                     </div>
                   </form>
                   <div class="modal-footer">
