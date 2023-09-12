@@ -194,10 +194,12 @@ export class ObjetivopndComponent  implements OnInit {
       });
   }
 
-  verDetalles(componente: any) {
-    this.router.navigate(['/sup/flujo_Componentes/componente_objetivoPDOT'], { state: { data: componente } });
+  //verDetalles(componente: any) {
+  //  this.router.navigate(['/sup/flujo_Componentes/componente_objetivoPDOT'], { state: { data: componente } });
+  //}
+  AnteriorPagina() {
+    this.router.navigate(['/sup/ejes/ejestabla']);
   }
-
 
 
   buscar() {
