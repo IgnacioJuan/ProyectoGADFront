@@ -31,4 +31,9 @@
     center / cover no-repeat fixed; */ 
    }
 
+   .titulo {
+    color: green !important;
+    text-decoration: none;
+  }
+
 

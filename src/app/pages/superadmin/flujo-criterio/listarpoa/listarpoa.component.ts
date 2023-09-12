@@ -39,16 +39,15 @@ export class ListarpoaComponent implements OnInit {
     return `${startIndex + 1} - ${endIndex} de ${length}`;
   };
 
-
   public compete = new PoaNoAprobadoProjection(); 
   competencias: PoaNoAprobadoProjection[] = [];
-  
 
-  filterPost = '';
+  filterPost: string = "";
+  filteredComponentes: any[] = [];
+  resultadosEncontrados: boolean = true;
+  
   dataSource = new MatTableDataSource<PoaNoAprobadoProjection>();
   columnasUsuario: string[] = ['nombrecompleto', 'nombre', 'fecha_inicio','fecha_fin', 'estado','observacion','fecha_aprobacion'];
-
-
 
   @ViewChild('datosModalRef') datosModalRef: any;
   @ViewChild(MatPaginator, { static: false }) paginator?: MatPaginator;
@@ -74,8 +73,7 @@ export class ListarpoaComponent implements OnInit {
   ngOnInit(): void {
 
     this.listar( );
-  }
-
+  } 
 
   listar(): void {
     this.poasservice.getNoAprobados().subscribe(
@@ -88,24 +86,21 @@ export class ListarpoaComponent implements OnInit {
       }
     );
   }
-  
+   
 
-  aplicarFiltro() {
-    if (this.filterPost) {
-      const lowerCaseFilter = this.filterPost.toLowerCase();
-      this.dataSource.data = this.dataSource.data.filter((item: any) => {
-        return JSON.stringify(item).toLowerCase().includes(lowerCaseFilter);
-      });
-    } else {
-      this.dataSource.data = this.competencias;;
-    }
-  } 
+  buscar() {
+    this.filteredComponentes = this.competencias.filter((componente) =>
+      componente.nombre.toLowerCase().includes(this.filterPost.toLowerCase())
+    );
+    this.dataSource.data = this.filteredComponentes;
+    this.resultadosEncontrados = this.filteredComponentes.length > 0;
+  }
   
   
 
   getColor(estado: string): any {
     const estadoLower = estado.toLowerCase();
-    let backgroundColor = estadoLower == 'RECHAZADO' ? 'rgb(231, 87, 87)' : 'white'; // Color de fondo rojo si no es "aprobado"
+    let backgroundColor = estadoLower !== 'APROBADO' ? 'rgb(231, 87, 87)' : 'white'; // Color de fondo rojo si no es "aprobado"
   
     return { 'background-color': backgroundColor };
   }
