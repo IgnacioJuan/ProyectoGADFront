@@ -44,6 +44,8 @@ export class ListActArchivoComponent implements OnInit {
   filterPost: string = "";
   filteredComponentes: any[] = [];
   resultadosEncontrados: boolean = true;
+  resultadosEncontradosEvidencias: boolean = true;
+
   isLoggedIn = false;
   nombre!: string;
   fechaActual: Date;
@@ -126,6 +128,8 @@ export class ListActArchivoComponent implements OnInit {
       (data: any[]) => {
         this.listaArchivos = data;
         this.dataSource2.data = this.listaArchivos;
+        this.resultadosEncontradosEvidencias = this.listaArchivos.length > 0;
+
       },
       (error: any) => {
         console.error('Error al listar los componentes:', error);
