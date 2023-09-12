@@ -46,7 +46,7 @@ export class ListSolicitudesComponent implements OnInit {
 
   dataSource = new MatTableDataSource<SolicitudesPresupuestoProjection>();
 
-  columnasUsuario: string[] = ['actividad_nombre','responsable', 'destinatario', 'estado', 'fecha_solicitud', 'actions'];
+  columnasUsuario: string[] = ['actividad_nombre','responsable', 'destinatario', 'estado', 'fecha_solicitud'];
 
   @ViewChild('datosModalRef') datosModalRef: any;
   @ViewChild(MatPaginator, { static: false }) paginator?: MatPaginator;

@@ -11,7 +11,7 @@
         <mat-stepper #stepper [linear]="isLinear" >
           <!---PASO 1--->
           <mat-step [stepControl]="FormDestinatario" label="DESTINATARIO"  >
-            <button mat-raised-button color="primary" style="margin-bottom: 10px; margin-top: 10px;" data-bs-toggle="modal"
+            <button mat-raised-button color="primary" style="margin-bottom: 10px; margin-top: 10px; background-color: #077b15;" data-bs-toggle="modal"
               data-bs-target="#exampleModalUsuario">Agregar Destinatario </button>
             <form [formGroup]="FormDestinatario">
               <div class="flex-container">
@@ -84,7 +84,8 @@
                                   <p class="card-text"><strong>Nombre-Apellido:</strong> {{ usuario.persona.primer_nombre }} {{ usuario.persona.primer_apellido }}</p>
                                 </div>
                               </div>
-                              <button class="btn btn-primary" data-dismiss="modal" data-bs-dismiss="modal" role="button" (click)="SeleccionarUsuario(usuario)" style="width: 150px;">
+                              <button class="btn btn-primary bt-seleccionar" data-dismiss="modal" data-bs-dismiss="modal" role="button"
+                                (click)="SeleccionarUsuario(usuario)" style="width: 150px;">
                                 <i class="fas fa-plus" style="margin-right: 5px;"></i> Agregar
                               </button>
                               
