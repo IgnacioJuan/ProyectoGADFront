@@ -18,6 +18,7 @@ import 'popper.js';
 import { AsignacionUsuarioService } from 'src/app/services/asignacionusuario.service';
 import { AsignacionUsuario } from 'src/app/models/AsignacionUsuario';
 import { PoaInsertService } from 'src/app/services/poa/poa-insert.service';
+import { LoadingServiceService } from 'src/app/components/loading-spinner/LoadingService.service';
 declare var $: any;
 
 @Component({
@@ -93,7 +94,7 @@ export class ActividadesComponent implements OnInit {
     private actividadservice: ActividadespoaService, private paginatorIntl: MatPaginatorIntl,
     private router: Router, private fb: FormBuilder, private userService: UsuarioService,
     private usuariorolservice: UsuariorolService, private asignacionservice: AsignacionUsuarioService,
-    private poaInsertService: PoaInsertService, private route: ActivatedRoute
+    private poaInsertService: PoaInsertService, private route: ActivatedRoute, private loadingService: LoadingServiceService
   ) {
     this.frmActividad = fb.group({
       nombre: ['', Validators.required],
@@ -183,6 +184,7 @@ export class ActividadesComponent implements OnInit {
   }
  
   guardar() {
+    this.loadingService.show();
     this.actividad = this.frmActividad.value;
     this.actividad.presupuesto_referencial = this.actividad.recursos_propios;
     this.actividad.poa = this.poa;
@@ -216,15 +218,14 @@ export class ActividadesComponent implements OnInit {
           this.crearPeriodo(idActividad, this.actividad.valor4, 4);
         }
         this.guardadoExitoso = true;
-        const idActividadCreada = response.id_actividad;
-        const idPoa = this.poa.id_poa;
         this.crearAprobacion(response);
-        console.log(idActividadCreada + ' ' + idPoa);
-        this.listar(this.poa.id_poa);
+        this.loadingService.hide();
         Swal.fire('Exitoso', 'Se ha completado el registro con éxito', 'success');
+        this.listar(this.poa.id_poa);
       },
       (error) => {
         console.error('Error al crear la actividad:', error);
+        this.loadingService.hide();
         Swal.fire('Error', 'Ha ocurrido un error', 'warning');
       }
     );
@@ -274,6 +275,7 @@ export class ActividadesComponent implements OnInit {
     });
   }
   actualizar() {
+    this.loadingService.show();
     this.actividad.nombre = this.frmActividad.value.nombre;
     this.actividad.descripcion = this.frmActividad.value.descripcion;
     this.actividad.presupuesto_referencial = this.frmActividad.value.recursos_propios;
@@ -289,11 +291,13 @@ export class ActividadesComponent implements OnInit {
       .subscribe(response => {
         this.actividad = new ActividadesPoa();
         this.listar(this.poa.id_poa);
+        this.loadingService.hide();
         Swal.fire('Operacion exitosa!', 'El registro se actualizo con exito', 'success')
       });
   }
   
   eliminar(activ: any) {
+    this.loadingService.show();
     Swal.fire({
       title: 'Estas seguro de eliminar el registro?',
       showDenyButton: true,
@@ -304,6 +308,7 @@ export class ActividadesComponent implements OnInit {
         this.actividadservice.eliminarActividad(activ).subscribe(
           (response) => {
             this.listar(this.poa.id_poa)
+            this.loadingService.hide();
             Swal.fire('Eliminado!', '', 'success')
           }
         );
