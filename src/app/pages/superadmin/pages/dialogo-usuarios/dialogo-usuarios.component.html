@@ -1,11 +1,11 @@
 <blockquote class="blockquote text-dark"
-    style="margin-top: 5%; background-color: #ffffff; border-left: 10px solid green;">
+    style="margin-top: 2%; background-color: #ffffff; border-left: 10px solid green;">
     <h1 style="cursor: pointer; color: green; "><strong>Nuevo Usuario</strong></h1>
 </blockquote>
-<mat-dialog-content>
+<mat-dialog-content #dialogContainer>
     <mat-stepper [linear]="isLinear" #stepper>
         <mat-step [stepControl]="firstFormGroup">
-            <form [formGroup]="firstFormGroup" style="width: 100%;">
+            <form [formGroup]="firstFormGroup" style="width: 90%;">
                 <ng-template matStepLabel>Datos Personales</ng-template>
                 <div class="flex-container">
                     <mat-form-field>
