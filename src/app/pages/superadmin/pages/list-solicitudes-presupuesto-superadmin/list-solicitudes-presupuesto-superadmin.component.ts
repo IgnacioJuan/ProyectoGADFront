@@ -18,6 +18,7 @@ import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 import { format } from 'date-fns';
 import { Style, Table } from 'pdfmake/interfaces';
 import { Margins } from 'pdfmake/interfaces';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-list-solicitudes-presupuesto-superadmin',
@@ -255,13 +256,9 @@ export class ListSolicitudesPresupuestoSuperadminComponent implements OnInit {
       'dd MMM yyyy'
     );
 
-
-
-
-
-
     const contenido = [
-      
+  
+
       { text: 'Santa Isabel, ' + fechaSolicitud, style: 'encabezado' },
       '\n\n',
       {
@@ -286,6 +283,8 @@ export class ListSolicitudesPresupuestoSuperadminComponent implements OnInit {
       '\n\n',
       { text: this.solicitudSeleted.motivo, style: 'cuerpo' },
       '\n\n',
+      '\n\n',
+      '\n\n',
       {
         table: {
           headerRows: 1,
@@ -309,27 +308,31 @@ export class ListSolicitudesPresupuestoSuperadminComponent implements OnInit {
         style: 'tabla',
       },
       '\n\n',
-      { text: 'Atentamente,', style: 'firma' },
+      { text: 'Atentamente,',  absolutePosition: { x: 40, y: 650} },
       '\n\n',
       {
         text:
           (this.solicitudSeleted.responsable?.persona.primer_nombre || '') +
           ' ' +
           (this.solicitudSeleted.responsable?.persona.primer_apellido || ''),
-        style: 'firma',
+        style: 'firma',  absolutePosition: { x: 40, y: 700},
       },
       {
         text: this.solicitudSeleted.responsable?.persona.cargo || '',
-        style: 'firma',
+        style: 'firma',  absolutePosition: { x: 40, y: 715 },
       },
-      { text: 'GAD MUNICIPAL SANTA ISABEL.', style: 'firma' },
+      { text: 'GAD MUNICIPAL SANTA ISABEL.', style: 'firma',  absolutePosition: { x: 40, y: 730}  },
+      { text: 'Calle 3 de Noviembre y 24 de Mayo | 072270412 | info@santaisabel.gob.ec',  style: 'info', absolutePosition: { x: 2, y: 780}  },
+      
     ];
 
     const estilos: { [key: string]: Style } = {
       encabezado: { fontSize: 12, bold: true, alignment: 'right' },
       destinatario: { fontSize: 12 },
       cuerpo: { fontSize: 12 },
-      firma: { fontSize: 12, bold: true },
+      firma: { fontSize: 12, bold: true},
+      info: { fontSize:9 , margin: [20, 0, 40, 0]    },
+
       tabla: {
         margin: [20, 0, 40, 0] as Margins,
         fontSize: 15,
@@ -343,14 +346,31 @@ export class ListSolicitudesPresupuestoSuperadminComponent implements OnInit {
       },
     };
 
+    const opcionesPdf = {
+      
+      pageMargins: [0, 0, 0, 0],
+      pageOrientation: 'portrait', 
+    };
+  
+
+
     const documentoPdf = {
+      watermark: { text: 'SANTA ISABEL', color: 'green', opacity: 0.1, bold: false, italics: false },
       content: contenido,
       styles: estilos,
+      opcionesPdf
     };
 
     pdfMake.createPdf(documentoPdf).open();
+    ///const fileName = `Oficio_${moment().format('YYYY-MM-DD')}.pdf`;
+
+    //const pdf = pdfMake.createPdf(pdfDefinition);
+    //const pdf = pdfMake.createPdf(documentoPdf).download(fileName);
   }
 
+
+  
+  
 
 
 }
