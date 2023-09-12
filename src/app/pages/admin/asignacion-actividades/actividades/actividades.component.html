@@ -194,27 +194,40 @@
                 <div style="display: flex; justify-content: space-between;" *ngIf="modoCreacion">
                   <div style="flex: 1; margin-right: 20px;">
                     <label for="valor1">{{poa.tipo_periodo}} 1</label>
-                    <input class="form-control" formControlName="valor1" type="text" id="valor1" name="valor1"
-                      style="margin-bottom: 10px" appCurrencyInput />
+                    <div style="display: flex; align-items: center;">
+                      <input class="form-control" formControlName="valor1" type="text" id="valor1" name="valor1"
+                        style="margin-bottom: 10px" appCurrencyInput type="number" min="0" />
+                      <span style="margin-left: 5px;">%</span>
+                    </div>
                   </div>
                   <div style="flex: 1; margin-right: 20px;" *ngIf="modoCreacion">
                     <label for="valor2">{{poa.tipo_periodo}} 2</label>
-                    <input class="form-control" formControlName="valor2" type="text" id="valor2" name="valor2"
-                      style="margin-bottom: 10px" appCurrencyInput />
+                    <div style="display: flex; align-items: center;">
+                      <input class="form-control" formControlName="valor2" type="text" id="valor2" name="valor2"
+                        style="margin-bottom: 10px" appCurrencyInput type="number" min="0" />
+                      <span style="margin-left: 5px;">%</span>
+                    </div>
                   </div>
                 </div>
 
                 <div style="display: flex; justify-content: space-between;" *ngIf="modoCreacion">
                   <div style="flex: 1; margin-right: 20px;">
                     <label for="valor3">{{poa.tipo_periodo}} 3</label>
-                    <input class="form-control" formControlName="valor3" type="text" id="valor3" name="valor3"
-                      style="margin-bottom: 10px" appCurrencyInput />
+                    <div style="display: flex; align-items: center;">
+                      <input class="form-control" formControlName="valor3" type="text" id="valor3" name="valor3"
+                        style="margin-bottom: 10px" appCurrencyInput type="number" min="0" /><span
+                        style="margin-left: 5px;">%</span>
+                    </div>
                   </div>
                   <div style="flex: 1; margin-right: 20px;" *ngIf="modoCreacion">
                     <div class="form-group" *ngIf="poa.tipo_periodo === 'TRIMESTRE'">
                       <label for="valor4">{{poa.tipo_periodo}} 4</label>
-                      <input class="form-control" formControlName="valor4" type="text" id="valor4" name="valor4"
-                        style="margin-bottom: 10px" appCurrencyInput />
+                      <div style="display: flex; align-items: center;">
+                        <input class="form-control" formControlName="valor4" type="text" id="valor4" name="valor4"
+                          style="margin-bottom: 10px" appCurrencyInput type="number" min="0" /><span
+                          style="margin-left: 5px;">%</span>
+                      </div>
+
                     </div>
                   </div>
                 </div>
