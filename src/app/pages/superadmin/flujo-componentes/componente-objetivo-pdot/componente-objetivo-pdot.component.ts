@@ -3,6 +3,7 @@ import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms'
 import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
+import { LoadingServiceService } from 'src/app/components/loading-spinner/LoadingService.service';
 import { Componentes } from 'src/app/models/Componentes';
 import { ObjetivoPDOT } from 'src/app/models/ObjetivoPDOT';
 import { ObjetivoPdotService } from 'src/app/services/objetivo-pdot.service';
@@ -58,6 +59,8 @@ constructor(
   private paginatorIntl: MatPaginatorIntl,
   private router: Router, private fb: FormBuilder,
   private objetivoPdotService: ObjetivoPdotService,
+      //importar el spinner como servicio
+      private loadingService: LoadingServiceService
 ) {
   this.formObjetivoPdot = fb.group({
     nombre: ['', Validators.required],
@@ -88,6 +91,8 @@ ngOnInit() {
 
 //metodo para guardar
 guardar() {
+  this.loadingService.show();
+
   this.objePDOT = this.formObjetivoPdot.value;
   this.objePDOT.componente = this.componente;
   this.objetivoPdotService.crear(this.objePDOT)
@@ -96,6 +101,7 @@ guardar() {
         console.log('Objetivo PDOT creado con éxito:', response);
         this.guardadoExitoso = true;
         this.listar(this.componente.id_componente);
+        
         Swal.fire(
           'Exitoso',
           'Se ha completado el registro con exito',
@@ -115,6 +121,8 @@ guardar() {
 
 //metodo para eliminar
 eliminar(objetivoP: any) {
+  this.loadingService.show();
+
   Swal.fire({
     title: 'Estas seguro de eliminar el registro?',
     showDenyButton: true,
@@ -134,13 +142,19 @@ eliminar(objetivoP: any) {
 }
 //metodo para listar
 listar(idComponente: number): void {
+  this.loadingService.show();
+
   this.objetivoPdotService.listarObjetivosPdotsPorIdComponente(idComponente).subscribe(
     (data: any[]) => {
       this.objetivoPDOT = data;
       this.dataSource.data = this.objetivoPDOT;
+      this.loadingService.hide();
+
     },
     (error: any) => {
       console.error('Error al listar los objetivos:', error);
+      this.loadingService.hide();
+
     }
   );
 }
@@ -159,6 +173,8 @@ limpiarFormulario() {
   this.objePDOT = new ObjetivoPDOT;}
 
 actualizar() {
+  this.loadingService.show();
+
   this.objePDOT.nombre = this.formObjetivoPdot.value.nombre;
   this.objePDOT.descripcion = this.formObjetivoPdot.value.descripcion;
   this.objePDOT.componente = this.componente;
@@ -167,6 +183,11 @@ actualizar() {
       this.objePDOT = new ObjetivoPDOT;
       this.listar(this.componente.id_componente)
       Swal.fire('Operacion exitosa!', 'El registro se actualizo con exito', 'success')
+    }, 
+    (error: any) => {
+      console.error('Error al listar los modeloPoas:', error);
+      this.loadingService.hide();
+
     });
 }
 

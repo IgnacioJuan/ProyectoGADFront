@@ -4,6 +4,7 @@ import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
+import { LoadingServiceService } from 'src/app/components/loading-spinner/LoadingService.service';
 import { Componentes } from 'src/app/models/Componentes';
 import { MetasPDOT } from 'src/app/models/MetasPDOT';
 import { ObjetivoPDOT } from 'src/app/models/ObjetivoPDOT';
@@ -63,7 +64,9 @@ columnasUsuario: string[] = ['id_meta_pdot', 'nombre', 'descripcion','meta_final
 constructor(private paginatorIntl: MatPaginatorIntl,
   private router: Router, private fb: FormBuilder,
   private route: ActivatedRoute,
-  private metaPDOTService: MetasPdotService
+  private metaPDOTService: MetasPdotService,
+     //importar el spinner como servicio
+     private loadingService: LoadingServiceService
 ) {
   this.formMeta = fb.group({
     nombre: ['', Validators.required],
@@ -91,6 +94,8 @@ ngOnInit() {
 
 
 guardar() {
+  this.loadingService.show();
+
   this.metaPDOT = this.formMeta.value;
   this.metaPDOT.objetivopdot = this.objPDOT;
   this.metaPDOTService.crear(this.metaPDOT)
@@ -107,6 +112,9 @@ guardar() {
       },
       (error: any) => {
         console.error('Error al crear la Meta PDOT :', error);
+        this.loadingService.hide();
+
+
         Swal.fire(
           'Error',
           'Ha ocurrido un error',
@@ -117,6 +125,8 @@ guardar() {
 
 }
 eliminar(meta: any) {
+  this.loadingService.show();
+
   Swal.fire({
     title: 'Estas seguro de eliminar el registro?',
     showDenyButton: true,
@@ -136,13 +146,19 @@ eliminar(meta: any) {
 
 
 listar(idObjetivo: number): void {
+  this.loadingService.show();
+
   this.metaPDOTService.listarmetasPdotsPorIdObjetivo(idObjetivo).subscribe(
     (data: any[]) => {
       this.listaMetasPdot = data;
       this.dataSource.data = this.listaMetasPdot;
+      this.loadingService.hide();
+
     },
     (error: any) => {
       console.error('Error al listar los objetivos:', error);
+      this.loadingService.hide();
+
     }
   );
 }
@@ -164,6 +180,8 @@ limpiarFormulario() {
 }
 
 actualizar() {
+  this.loadingService.show();
+
   this.metaPDOT.nombre = this.formMeta.value.nombre;
   this.metaPDOT.descripcion = this.formMeta.value.descripcion;
   this.metaPDOT.meta_final = this.formMeta.value.meta_final;
@@ -175,6 +193,10 @@ actualizar() {
       this.metaPDOT = new MetasPDOT;
       this.listar(this.objPDOT.id_objetivo_pdot);
       Swal.fire('Operacion exitosa!', 'El registro se actualizo con exito', 'success')
+
+    }, (error: any) => {
+      console.error('Error al listar los modeloPoas:', error);
+      this.loadingService.hide();
 
     });
 }

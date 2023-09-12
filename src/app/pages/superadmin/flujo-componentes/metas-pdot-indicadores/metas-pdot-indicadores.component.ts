@@ -4,6 +4,7 @@ import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
+import { LoadingServiceService } from 'src/app/components/loading-spinner/LoadingService.service';
 import { Componentes } from 'src/app/models/Componentes';
 import { Indicadores } from 'src/app/models/Indicadores';
 import { MetasPDOT } from 'src/app/models/MetasPDOT';
@@ -65,7 +66,9 @@ columnasUsuario: string[] = ['id_indicador', 'nombre', 'descripcion','tipo_evalu
 constructor(private indicadorservice: IndicadorService,private paginatorIntl: MatPaginatorIntl,
   private router: Router, private fb: FormBuilder,
   private route: ActivatedRoute,
-  private indicadorService: IndicadorService
+  private indicadorService: IndicadorService,
+    //importar el spinner como servicio
+    private loadingService: LoadingServiceService
 
 ) {
   this.formIndicador = fb.group({
@@ -122,6 +125,8 @@ guardar() {
     );}
 
 eliminar(indicador: any) {
+  this.loadingService.show();
+
   Swal.fire({
     title: 'Estas seguro de eliminar el registro?',
     showDenyButton: true,
@@ -136,13 +141,19 @@ eliminar(indicador: any) {
 }
 
 listar(idMeta: number): void {
+  this.loadingService.show();
+
   this.indicadorService.listarmetasPdotsPorIdObjetivo(idMeta).subscribe(
     (data: any[]) => {
       this.listadoIndicadores= data;
       this.dataSource.data = this.listadoIndicadores;
+      this.loadingService.hide();
+
     },
     (error: any) => {
       console.error('Error al listar los objetivos:', error);
+      this.loadingService.hide();
+
     }
   );
 }
@@ -164,6 +175,8 @@ limpiarFormulario() {
 }
 
 actualizar() {
+  this.loadingService.show();
+
   this.indicad.nombre = this.formIndicador.value.nombre;
   this.indicad.descripcion = this.formIndicador.value.descripcion;
   this.indicad.tipo_evaluacion = this.formIndicador.value.tipo_evaluacion;
@@ -174,6 +187,10 @@ actualizar() {
       this.indicad = new Indicadores();
       this.listar(this.metaPDOT.id_meta_pdot);
       Swal.fire('Operacion exitosa!', 'El registro se actualizo con exito', 'success')
+
+    }, (error: any) => {
+      console.error('Error al listar los modeloPoas:', error);
+      this.loadingService.hide();
 
     });
 }

@@ -3,9 +3,9 @@ import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms'
 import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
+import { LoadingServiceService } from 'src/app/components/loading-spinner/LoadingService.service';
 import { Componentes } from 'src/app/models/Componentes';
 import { ComponentesService } from 'src/app/services/componentes.service';
-import { ObjetivoPdotService } from 'src/app/services/objetivo-pdot.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -58,7 +58,8 @@ export class ComponentesComponent  implements OnInit {
     private paginatorIntl: MatPaginatorIntl,
     private router: Router, private fb: FormBuilder,
     private componentesService: ComponentesService,
-    private objetivoPDOTService: ObjetivoPdotService
+      //importar el spinner como servicio
+      private loadingService: LoadingServiceService
   ) {
     this.formComponentes = fb.group({
       codigo: ['', Validators.required],
@@ -82,6 +83,8 @@ export class ComponentesComponent  implements OnInit {
   
  
   guardar() {
+    this.loadingService.show();
+
     this.componentes = this.formComponentes.value;
     this.componentesService.crear(this.componentes)
       .subscribe(
@@ -97,6 +100,8 @@ export class ComponentesComponent  implements OnInit {
         },
         (error) => {
           console.error('Error al crear el Componente:', error);
+          this.loadingService.hide();
+
           Swal.fire(
             'Error',
             'Ha ocurrido un error',
@@ -108,6 +113,8 @@ export class ComponentesComponent  implements OnInit {
 
 
   eliminar(componente: any) {
+    this.loadingService.show();
+
     Swal.fire({
       title: 'Estas seguro de eliminar el registro?',
       showDenyButton: true,
@@ -117,6 +124,8 @@ export class ComponentesComponent  implements OnInit {
       if (!result.isConfirmed) {
         this.componentesService.eliminar(componente).subscribe(
           (response) => {
+            this.loadingService.hide();
+
             this.listar()
             Swal.fire('Eliminado!', '', 'success')
           }
@@ -127,13 +136,19 @@ export class ComponentesComponent  implements OnInit {
   }
 
   listar(): void {
+    this.loadingService.show();
+
     this.componentesService.listar().subscribe(
       (data: any[]) => {
         this.listaComponentes = data;
         this.dataSource.data = this.listaComponentes;
+        this.loadingService.hide();
+
       },
       (error: any) => {
         console.error('Error al listar los componentes:', error);
+        this.loadingService.hide();
+
       }
     );
   }
@@ -154,6 +169,8 @@ export class ComponentesComponent  implements OnInit {
   }
 
   actualizar() {
+    this.loadingService.show();
+
     this.componentes.codigo = this.formComponentes.value.codigo;
    this.componentes.nombre = this.formComponentes.value.nombre;
     this.componentes.descripcion = this.formComponentes.value.descripcion;
@@ -162,7 +179,14 @@ export class ComponentesComponent  implements OnInit {
         this.componentes = new Componentes();
         this.listar();
         Swal.fire('Operacion exitosa!', 'El registro se actualizo con exito', 'success')
-      });
+
+      },
+      (error: any) => {
+        console.error('Error al listar los modeloPoas:', error);
+        this.loadingService.hide();
+
+      })
+      
   }
 
   verDetalles(componente: any) {
