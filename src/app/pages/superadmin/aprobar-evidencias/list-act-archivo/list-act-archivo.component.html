@@ -138,7 +138,7 @@
                       <div class="col-8">  
                         <mat-form-field appearance="outline" class="full-width">
                         <mat-label [ngStyle]="{ 'color': isAprobado ? 'rgb(0, 128, 0)' : isRechazado ? 'rgb(255, 0, 0)' : '' }">Estado</mat-label>
-                        <input matInput name="estado" [(ngModel)]="estado">
+                        <input matInput name="estado" [(ngModel)]="estado" disabled>
                       </mat-form-field>
                      
                      </div>
@@ -172,7 +172,7 @@
                 Cancelar
               </button>
               <button type="submit" class="btn btn-primary" form="formulario" data-dismiss="modal"
-                data-bs-dismiss="modal">
+                data-bs-dismiss="modal" (click)="guardar()">
                 Agregar
               </button>
             </div>
