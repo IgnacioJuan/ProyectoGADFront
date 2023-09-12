@@ -112,6 +112,7 @@ export class DetallePoaComponent implements OnInit {
       this.poacService.getPoaAprobById(idParam).subscribe(
         (data) => {
           this.poaAprob = data;
+          console.log(this.poaAprob);
           this.tipSeguimiento=this.poaAprob.tipo_periodo;
           this.correoRecep.push(this.poaAprob.correo_responsable);
         },
