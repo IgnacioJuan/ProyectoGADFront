@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { PoacService } from 'src/app/services/poac.service';
 import { AprobPoa } from 'src/app/models/AprobPoa';
 import { DatePipe } from '@angular/common';
+import { LoadingServiceService } from 'src/app/components/loading-spinner/LoadingService.service';
 
 @Component({
   selector: 'app-aprobar-poa',
@@ -24,17 +25,16 @@ export class AprobarPoaComponent {
   constructor(
     private router: Router,
     private poacService: PoacService,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private loadingService: LoadingServiceService
   ) {
+    this.loadingService.show();
     this.poacService.getPoaAprob().subscribe((data) => {
       this.allCards = data;
       this.totalCards = this.allCards.length;
       this.updateCardsToShow();
+      this.loadingService.hide();
     });
-  }
-
-  transformDate(date: Date): string {
-    return this.datePipe.transform(date, 'dd/MM/yyyy') || '';
   }
 
   onPageChange(event: any) {

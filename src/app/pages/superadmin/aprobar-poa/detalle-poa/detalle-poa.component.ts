@@ -12,6 +12,7 @@ import { Periodo_DTO } from 'src/app/interface/Periodo_DTO';
 import { LoginService } from 'src/app/services/login.service';
 import { EmailServiceService } from 'src/app/services/email-service.service';
 import { PeriodoTotalPOA_DTO } from 'src/app/interface/PeriodoTotalPOA_DTO';
+import { LoadingServiceService } from 'src/app/components/loading-spinner/LoadingService.service';
 
 @Component({
   selector: 'app-detalle-poa',
@@ -79,8 +80,9 @@ export class DetallePoaComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private periodoService: PeriodoService,
-    public login: LoginService
-  ) {}
+    public login: LoginService,
+    private loadingService: LoadingServiceService
+  ) {this.loadingService.show();}
 
   ngOnInit(): void {
     //Parametro enviado desde el componente aprobar poa
@@ -88,9 +90,10 @@ export class DetallePoaComponent implements OnInit {
     //Cargar los datos del poa por el id
     this.cargarData(idParam);
     this.capturarDatosUsuarioLog();
+    this.loadingService.hide();
     }
 
-  // Nuevas propiedades para la nueva tabla
+  // Nuevas propiedades para la nueva  tabla
   dataSource = new MatTableDataSource<ActividadesPoaDTO>();
   columnasActividades: string[] = [
     'nombre_actividad',
@@ -102,9 +105,12 @@ export class DetallePoaComponent implements OnInit {
 
   //Carga de datos
   cargarData(idPoa: any) {
+    
     this.cargaDatosPoa(idPoa);
     this.cargarActividadesPoa(idPoa);
-    this.cargarPeriodosTotales(idPoa)
+    this.cargarPeriodosTotales(idPoa);
+    setTimeout(() => {}, 2000);
+   
   }
 
   cargaDatosPoa(idParam: any) {

@@ -32,7 +32,7 @@
                         <mat-card-subtitle>Localización </mat-card-subtitle>
                         <p>{{ card.localizacion }}</p>
                         <mat-card-subtitle>Fecha Fin Del Proyecto: </mat-card-subtitle>
-                        <p>{{ transformDate(card.fecha_fin) }}</p>                        
+                        <p>{{ card.fecha_fin || 'dd/MM/yyyy'}}</p>                        
                     </mat-card-content>
                 </div>
                 <mat-divider></mat-divider>
