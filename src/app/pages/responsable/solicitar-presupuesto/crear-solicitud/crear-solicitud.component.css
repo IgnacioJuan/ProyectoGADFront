@@ -1,0 +1,121 @@
+.btn-guardar {
+    background-color: #D4BC37;
+}
+
+
+  #calc{
+    font-family:myFirstFont;
+    font-size: 250%;
+    text-align: right;
+    background-color: inherit;
+    border: none;
+    padding-left:20px;
+    padding-right:20px;
+    padding-bottom: 10px;
+  }  body {
+    font: 1em/1.618 Inter, sans-serif;
+  
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    min-height: 100vh;
+    padding: 30px;
+    
+    color: #224;
+    /* background:
+      url(https://source.unsplash.com/E8Ufcyxz514/2400x1823)
+      center / cover no-repeat fixed; */
+  }
+  
+  
+  .titulo {
+    color: green;
+  }
+  /*-----------------------*/
+.flex-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+input:disabled,mat-label {
+  color: #000000; 
+}
+
+.scroll-container {
+  max-height: 300px; 
+  overflow-y: auto;
+}
+.center-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.bt-seleccionar{
+  background-color: green;
+}
+
+
+/* Estilos para la cabecera del oficio */
+.oficio-header {
+  padding: 10px;
+}
+
+/* Estilos para el cuerpo del oficio */
+.oficio-body {
+  padding: 10px;
+}
+
+/* Estilos para la tabla personalizada */
+.custom-table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid #ddd;
+  margin-bottom: 20px;
+}
+
+.custom-table th,
+.custom-table td {
+  padding: 8px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+/* Estilos para el encabezado de la tabla */
+.custom-table th {
+  background-color: #007bff; /* Cambia el color de fondo del encabezado */
+  color: #fff; /* Cambia el color del texto en el encabezado */
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+/* Estilos para las filas impares de la tabla */
+.custom-table tr:nth-child(odd) {
+  background-color: #f2f2f2; /* Cambia el color de fondo de las filas impares */
+}
+
+/* Estilos para las filas al pasar el ratón por encima */
+.custom-table tr:hover {
+  background-color: #ddd; /* Cambia el color de fondo al pasar el ratón */
+}
+
+/* Estilos para los botones */
+.oficio-button {
+  margin-right: 10px;
+  background-color: #007bff; /* Cambia el color de fondo del botón */
+  color: #fff; /* Cambia el color del texto del botón */
+}
+
+/* Estilos para el pie del oficio */
+.oficio-footer {
+  margin-top: 20px;
+  text-align: left;
+  margin-left: 10px;
+}
+.fechaa{
+  text-align: right;
+
+}

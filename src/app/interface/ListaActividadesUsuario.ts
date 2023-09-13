@@ -5,6 +5,7 @@ export interface ListaActividadesUsuario {
     nombre: string,
     apellido: string,
     cargo: string,
-    nombreActividad: string;
-    
+
+    //OTRO
+    fecha_asignacion: Date;
 }

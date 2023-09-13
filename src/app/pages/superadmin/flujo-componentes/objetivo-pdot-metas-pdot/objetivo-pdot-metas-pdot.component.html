@@ -1,6 +1,6 @@
 <body>
     <div class="container bg-light border border-start-0 rounded-4">
-      <blockquote class="blockquote text-dark" style="margin-top: 5%">
+      <blockquote class="blockquote text-dark"  style="margin-top: 5%; background-color: #ffffff; border-left: 10px solid green;">
         <h1 style="text-transform: uppercase" class="titulo">
           <strong
             ><a style="cursor: pointer" (click)="verComponentes()"
@@ -8,10 +8,10 @@
             </a>
             >
             <a style="cursor: pointer" (click)="verObjetivosDOT() "
-              >{{ componente.nombre }}
+              >OBJETIVOS PDOT
             </a>
             >
-            <a>{{ objPDOT.nombre }}</a></strong
+            <a>METAS PDOT</a></strong
           >
         </h1>
       </blockquote>
@@ -32,7 +32,9 @@
             type="button"
             class="btn btn-guardar"
             data-bs-toggle="modal"
-            data-bs-target="#materiaModal"          >
+            data-bs-target="#materiaModal" 
+            style="color: white;"
+            >
             CREAR UNA NUEVA META PDOT
           </button>
   
@@ -83,6 +85,7 @@
                     class="btn btn-primary"
                     role="button"
                     (click)="verIndicadores(elemento)"
+                    style="background-color: green"
                   >
                     <div class="d-flex">
                       <span class="badge">{{
@@ -110,7 +113,7 @@
                     class="btn btn-primary"
                     data-bs-toggle="modal"
                     data-bs-target="#materiaModal"
-                    style="margin-right: 5%"
+                    style="margin-right: 5%; background-color: green;"
                     (click)="editDatos(element)"
                   >
                     <i class="fas fa-edit"></i>

@@ -6,6 +6,8 @@ import { LoginService } from 'src/app/services/login.service';
 import { PoaService } from 'src/app/services/poa.service';
 import { AprobacionPoaService } from 'src/app/services/aprobacion-poa.service';
 import { AprobacionPoa } from 'src/app/models/AprobacionPoa';
+import { PoasEnviadosProjection } from 'src/app/interface/PoasAdminEnviadosProjection';
+import { AprobacionPoasEnviadosProjection } from 'src/app/interface/AprobacionPoaEnviados';
 
 @Component({
   selector: 'app-list-poas-enviados-admin',
@@ -14,8 +16,8 @@ import { AprobacionPoa } from 'src/app/models/AprobacionPoa';
 })
 export class ListPoasEnviadosAdminComponent implements OnInit {
   //Listar Poas
-  listaPoas: Poa[] = [];
-  listaAprobacionPoa: AprobacionPoa[] = [];
+  listaPoas: PoasEnviadosProjection[] = [];
+  listaAprobacionPoa: AprobacionPoasEnviadosProjection[] = [];
 
   //Usuario logueado
   user: any = null;
@@ -43,20 +45,20 @@ export class ListPoasEnviadosAdminComponent implements OnInit {
   };
 
   //Columnas Tabla
-  columnasObservaciones: string[] = ['observacion'];
+  columnasObservaciones: string[] = ['observacion', 'estado', 'nombre_completo', 'fecha_aprobacion'];
   columnasUsuario: string[] = [
+    'nombre',
     'barrio',
-    'comunidad',
     'cobertura',
+    'comunidad',
     'fecha_inicio',
     'fecha_fin',
     'estado',
     'localizacion',
-    'tipo_periodo',
     'observaciones',
   ];
-  dataSource = new MatTableDataSource<Poa>();
-  dataSource3 = new MatTableDataSource<AprobacionPoa>();
+  dataSource = new MatTableDataSource<PoasEnviadosProjection>();
+  dataSource3 = new MatTableDataSource<AprobacionPoasEnviadosProjection>();
 
   @ViewChild('datosModalRef') datosModalRef: any;
   @ViewChild(MatPaginator, { static: false }) paginator?: MatPaginator;

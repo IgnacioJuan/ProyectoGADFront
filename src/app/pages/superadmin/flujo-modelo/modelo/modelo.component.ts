@@ -10,6 +10,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 import { LoginService } from 'src/app/services/login.service';
 import { Usuario2 } from 'src/app/models/Usuario2';
+import { LoadingServiceService } from 'src/app/components/loading-spinner/LoadingService.service';
 @Component({
   selector: 'app-modelo',
   templateUrl: './modelo.component.html',
@@ -23,14 +24,14 @@ export class ModeloComponent {
   itemsPerPageLabel = 'Modelos por página';
   nextPageLabel = 'Siguiente';
   lastPageLabel = 'Última';
-  firstPageLabel='Primera';
-  previousPageLabel='Anterior';
-  
-  rango:any= (page: number, pageSize: number, length: number) => {
+  firstPageLabel = 'Primera';
+  previousPageLabel = 'Anterior';
+
+  rango: any = (page: number, pageSize: number, length: number) => {
     if (length == 0 || pageSize == 0) {
       return `0 de ${length}`;
     }
-  
+
     length = Math.max(length, 0);
     const startIndex = page * pageSize;
     const endIndex =
@@ -50,7 +51,7 @@ export class ModeloComponent {
 
   filterPost = '';
   dataSource = new MatTableDataSource<ModeloPoa>();
-  columnasUsuario: string[] = ['id_modelo_poa', 'nombre', 'descripcion', 'fecha_inicial', 'fecha_final', 'usuario','proyecto', 'actions'];
+  columnasUsuario: string[] = ['id_modelo_poa', 'nombre', 'descripcion', 'fecha_inicial', 'fecha_final', 'usuario', 'proyecto', 'actions'];
 
   @ViewChild('datosModalRef') datosModalRef: any;
   @ViewChild(MatPaginator, { static: false }) paginator?: MatPaginator;
@@ -59,9 +60,11 @@ export class ModeloComponent {
   fechaMax: string = "";
   user: any = null;
   constructor(
-    private modeloPoaservice: ModeloPoaService,private paginatorIntl: MatPaginatorIntl,
+    private modeloPoaservice: ModeloPoaService, private paginatorIntl: MatPaginatorIntl,
     private router: Router, private fb: FormBuilder,
     public login: LoginService,
+    //importar el spinner como servicio
+    private loadingService: LoadingServiceService
   ) {
     this.frmModeloPoa = fb.group({
       nombre: ['', Validators.required],
@@ -71,10 +74,10 @@ export class ModeloComponent {
     });
     this.paginatorIntl.nextPageLabel = this.nextPageLabel;
     this.paginatorIntl.lastPageLabel = this.lastPageLabel;
-    this.paginatorIntl.firstPageLabel=this.firstPageLabel;
-    this.paginatorIntl.previousPageLabel=this.previousPageLabel;
+    this.paginatorIntl.firstPageLabel = this.firstPageLabel;
+    this.paginatorIntl.previousPageLabel = this.previousPageLabel;
     this.paginatorIntl.itemsPerPageLabel = this.itemsPerPageLabel;
-    this.paginatorIntl.getRangeLabel=this.rango;
+    this.paginatorIntl.getRangeLabel = this.rango;
   }
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator || null;
@@ -112,24 +115,30 @@ export class ModeloComponent {
   usuariosdit: Usuario2 = new Usuario2;
 
   guardar() {
+    this.loadingService.show();
 
     this.crite = this.frmModeloPoa.value;
     this.usuariosdit.id = this.user.id;
-    this.crite.usuario= this.usuariosdit;
+    this.crite.usuario = this.usuariosdit;
     this.modeloPoaservice.crear(this.crite)
       .subscribe(
         (response) => {
           console.log('ModeloPoa creado con éxito:', response);
           this.guardadoExitoso = true;
-          this.listar();
+          this.loadingService.hide();
+
+
           Swal.fire(
             'Exitoso',
             'Se ha completado el registro con exito',
             'success'
           )
+          this.listar();
         },
         (error) => {
           console.error('Error al crear el modelo_poa:', error);
+          this.loadingService.hide();
+
           Swal.fire(
             'Error',
             'Ha ocurrido un error',
@@ -140,6 +149,8 @@ export class ModeloComponent {
 
   }
   eliminar(modelo_poa: any) {
+    this.loadingService.show();
+
     Swal.fire({
       title: 'Estas seguro de eliminar el registro?',
       showDenyButton: true,
@@ -150,8 +161,10 @@ export class ModeloComponent {
       if (!result.isConfirmed) {
         this.modeloPoaservice.eliminar(modelo_poa).subscribe(
           (response) => {
-            this.listar()
+            this.loadingService.hide();
+
             Swal.fire('Eliminado!', '', 'success')
+            this.listar()
 
           }
         );
@@ -161,17 +174,23 @@ export class ModeloComponent {
   }
 
   listar(): void {
+    this.loadingService.show();
+
     this.modeloPoaservice.getModeloPoas().subscribe(
       (data: any[]) => {
-       // this.modeloPoas = data;
+        // this.modeloPoas = data;
         this.modeloPoastot = data;
         this.totalCards = this.modeloPoastot.length;
         this.updateCardsToShow();
 
         this.dataSource.data = this.modeloPoas;
+        this.loadingService.hide();
+
       },
       (error: any) => {
         console.error('Error al listar los modeloPoas:', error);
+        this.loadingService.hide();
+
       }
     );
   }
@@ -192,23 +211,29 @@ export class ModeloComponent {
   }
 
   actualizar() {
-    
+    this.loadingService.show();
+
     this.crite.nombre = this.frmModeloPoa.value.nombre;
     this.crite.descripcion = this.frmModeloPoa.value.descripcion;
     this.crite.fecha_inicial = this.frmModeloPoa.value.fecha_inicial
     this.crite.fecha_final = this.frmModeloPoa.value.fecha_final;
-    this.crite.usuario=null;
-    console.log(this.crite)
+    this.crite.usuario = null;
     this.modeloPoaservice.actualizar(this.crite.id_modelo_poa, this.crite)
       .subscribe(response => {
         this.crite = new ModeloPoa();
-        this.listar();
+        //this.loadingService.hide();
         Swal.fire('Operacion exitosa!', 'El registro se actualizo con exito', 'success')
-      });
+        this.listar();
+      },
+        (error: any) => {
+          console.error('Error al listar los modeloPoas:', error);
+          this.loadingService.hide();
+
+        });
   }
 
   verDetalles(modelo_poa: any) {
-    modelo_poa.usuario=null;
+    modelo_poa.usuario = null;
     this.router.navigate(['/sup/flujo-modelo/modelo-proyecto'], { state: { data: modelo_poa } });
   }
 

@@ -1,7 +1,10 @@
 <body>
 <div class="container bg-light border border-start-0 rounded-4">
   <blockquote class="blockquote text-dark" style="margin-top: 5%">
-    <h1 class="header-title"><strong> EJES </strong></h1>
+   
+
+    <h1  class="titulo"  ><strong> EJES </strong></h1>
+
   </blockquote>
   <div></div>
 
@@ -55,6 +58,8 @@
               <button
                 class="btn btn-primary"
                 role="button"
+                style="background-color: green"
+
                 (click)="verDetalles(elemento)"
               >
                 <div class="d-flex">
@@ -84,6 +89,8 @@
                 data-bs-toggle="modal"
                 data-bs-target="#materiaModal"
                 style="margin-right: 5%"
+                style="background-color: green"
+
                 (click)="editDatos(element)"
               >
                 <i class="fas fa-edit"></i>
@@ -108,9 +115,6 @@
         </div>
 
       </div>
-
-
-
       <div
         class="modal fade"
         id="materiaModal"
@@ -130,6 +134,8 @@
                 class="btn-close"
                 data-bs-dismiss="modal"
                 aria-label="Close"
+                style="background-color: green"
+
               ></button>
             </div>
             <div class="modal-body">
@@ -139,13 +145,6 @@
                 id="formulario"
               >
                 <div>
-
-
-
-
-
-
-
                   <label for="nombre">Nombre:</label>
                   <input
                     class="form-control"
@@ -170,12 +169,6 @@
                       Debe ingresar un nombre
                     </div>
                   </div>
-
-
-
-
-
-
                 </div>
               </form>
               <div class="modal-footer">
@@ -195,6 +188,8 @@
                   data-dismiss="modal"
                   data-bs-dismiss="modal"
                   [disabled]="!formComponentes.valid"
+                  style="background-color: green"
+
                 >
                   Agregar
                 </button>
@@ -205,6 +200,8 @@
                   data-bs-dismiss="modal"
                   (click)="actualizar()"
                   [disabled]="!formComponentes.valid"
+                  style="background-color: green"
+
                 >
                   Actualizar
                 </button>

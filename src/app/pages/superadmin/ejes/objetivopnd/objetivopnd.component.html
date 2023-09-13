@@ -76,6 +76,8 @@
                 data-bs-toggle="modal"
                 data-bs-target="#materiaModal"
                 style="margin-right: 5%"
+                style="background-color: green"
+
                 (click)="editDatos(element)"
               >
                 <i class="fas fa-edit"></i>
@@ -131,13 +133,6 @@
                 id="formulario"
               >
                 <div>
-
-
-
-
-
-
-
                   <label for="nombre">Nombre:</label>
                   <input
                     class="form-control"
@@ -162,12 +157,6 @@
                       Debe ingresar un nombre
                     </div>
                   </div>
-
-
-
-
-
-
                 </div>
               </form>
               <div class="modal-footer">
@@ -187,6 +176,8 @@
                   data-dismiss="modal"
                   data-bs-dismiss="modal"
                   [disabled]="!formComponentes.valid"
+                  style="background-color: green"
+
                 >
                   Agregar
                 </button>
@@ -197,6 +188,8 @@
                   data-bs-dismiss="modal"
                   (click)="actualizar()"
                   [disabled]="!formComponentes.valid"
+                  style="background-color: green"
+
                 >
                   Actualizar
                 </button>

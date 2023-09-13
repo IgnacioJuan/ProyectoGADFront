@@ -5,3 +5,8 @@ export class Programa {
     descripcion: string = "";
     visible: boolean = false;
 }
+
+export interface ProgramaUsuarioDTO {
+    id_programa: number;
+    nombre: string;
+}

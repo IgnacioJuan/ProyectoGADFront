@@ -9,4 +9,5 @@ export class AprobacionEvidencia {
   fecha_aprobacion: Date | undefined;
     usuario:Usuario2|null=null;
     evidencia:Archivos | null= new Archivos();
+    fecha_aprobacion!: Date;
 }

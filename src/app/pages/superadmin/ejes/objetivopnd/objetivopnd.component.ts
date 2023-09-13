@@ -41,6 +41,8 @@ export class ObjetivopndComponent  implements OnInit {
     return `${startIndex + 1} - ${endIndex} de ${length}`;
   };
   //
+
+  ejes: Eje = new Eje();
   public componentes = new Objetivopnd();
   componentex: Eje = new Eje();
 
@@ -157,16 +159,6 @@ export class ObjetivopndComponent  implements OnInit {
       }
     );
   }
-  /*listarObjetivos(idComponente: number): void {
-    this.objetivoPDOTService.listarObjetivosPdotsPorIdComponente(idComponente).subscribe(
-      (data: any) => {
-        this.numeroObjetivos = data.length; // Asigna el número de registros obtenidos
-      },
-      (error: any) => {
-        console.error('Error al listar los objetivos:', error);
-      }
-    );
-  }*/
   editDatos(componente: Objetivopnd) {
     this.componentes = componente;
     this.formComponentes = new FormGroup({
@@ -200,6 +192,15 @@ export class ObjetivopndComponent  implements OnInit {
   AnteriorPagina() {
     this.router.navigate(['/sup/ejes/ejestabla']);
   }
+
+
+  verProyectos() {
+    this.router.navigate(['/sup/ejes/ejestabla'], { state: { data: this.ejes } });
+  }
+  verModelos() {
+    this.router.navigate(['/sup/ejes/ejestabla']);
+  }
+
 
 
   buscar() {

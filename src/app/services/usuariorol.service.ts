@@ -14,6 +14,11 @@ export class UsuariorolService {
   getusuarios(): Observable<any[]> {
     return this.http.get<UsuarioRol[]>(`${baserUrl}/api/usuariorol/listarv`);
   }
+
+  getusuariosResponsable(): Observable<any[]> {
+    return this.http.get<UsuarioRol[]>(`${baserUrl}/api/usuariorol/listarUsuariosResponsables`);
+  }
+  
   actualizar(id: any, crite: any): Observable<any> {
     return this.http.put(`${baserUrl}/api/usuariorol/actualizar/${id}`, crite);
   }

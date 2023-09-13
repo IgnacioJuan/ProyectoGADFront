@@ -1,7 +1,8 @@
 <body>
     <div class="container bg-light border border-start-0 rounded-4">
-      <blockquote class="blockquote text-dark" style="margin-top: 5%">
-        <h1 class="titulo"><strong> LISTADO DE POAS
+      <blockquote class="blockquote text-dark" style="background-color: #ffffff;
+      border-left: 10px solid green;;margin-top: 5%">
+        <h1 class="titulo"><strong> POAS CON ACTIVIDADES PENDIENTES
         </strong></h1>
       </blockquote>
       <div></div>
@@ -27,10 +28,10 @@
           style="margin-bottom: 5%"
         >
           <table mat-table [dataSource]="dataSource">
-            <ng-container matColumnDef="id_poa">
-              <th mat-header-cell *matHeaderCellDef>ID</th>
+            <ng-container matColumnDef="nombre_proyecto">
+              <th mat-header-cell *matHeaderCellDef>Proyecto</th>
               <td mat-cell *matCellDef="let elemento">
-                {{ elemento.id_poa }}
+                {{ elemento.codigo }}
               </td>
             </ng-container>
 
@@ -61,7 +62,7 @@
             <ng-container matColumnDef="usuario">
               <th mat-header-cell *matHeaderCellDef>USUARIO</th>
               <td mat-cell *matCellDef="let elemento">
-                {{ elemento.usuario.persona.primer_nombre }}
+                {{ elemento.usuario }}
               </td>
             </ng-container>
             <ng-container matColumnDef="evidencias">
@@ -71,7 +72,7 @@
                   class="btn btn-primary"
                   role="button"
                   (click)="verDetalles(elemento)"
-
+                  style="background-color: green;"
                 >
                   <div class="d-flex">
                     <span class="badge">{{
@@ -105,4 +106,4 @@
       </div>
     </div>
   </body>
-  
+  <!-- <app-loading-spinner *ngIf="isLoading$ | async"></app-loading-spinner> -->

@@ -69,7 +69,15 @@ export class ProyectoPoaComponent {
   }
  
   listar(): void {
-   
+    this.poaervice.listarPoasdelProyecto(this.proyecto.id_proyecto, 'APROBADO').subscribe(
+      (data: any[]) => {
+        this.poa = data;
+        this.dataSource.data = this.poa;
+      },
+      (error: any) => {
+        console.error('Error al listar los poa:', error);
+      }
+    );   
   }
 
 

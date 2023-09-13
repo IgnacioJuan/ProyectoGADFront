@@ -18,7 +18,7 @@ export class VisualizarActividadesComponent {
   actividades: any[] = [];
   // Nuevas propiedades para la nueva tabla
   dataSource = new MatTableDataSource<DetalleActividadDTO>();
-  columnasActividades: string[] = ['id_actividad', 'nombre_actividad', 'descripcion', 'devengado', 'estado', 'codificado', 'presupuesto_referencial', 'recursos_propios'];
+  columnasActividades: string[] = ['nombre_actividad', 'descripcion', 'estado', 'devengado', 'codificado', 'presupuesto_referencial', 'recursos_propios', 'presupuesto_externo'];
   constructor(
     private router: ActivatedRoute,
     private rout: Router,
