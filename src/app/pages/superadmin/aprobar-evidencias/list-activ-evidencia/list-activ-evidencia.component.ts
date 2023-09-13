@@ -95,7 +95,7 @@ export class ListActivEvidenciaComponent implements OnInit {
     return `${startIndex + 1} - ${endIndex} de ${length}`;
   };
 //Columnas tabla actividades
-  columnasUsuario: string[] = [ 'nombre', 'descripcion', 'evidencias'];
+  columnasUsuario: string[] = [ 'nombre', 'descripcion','codificado', 'devengado', 'evidencias'];
 
   listar(idPoa: number): void {
     this.loadingService.show();
