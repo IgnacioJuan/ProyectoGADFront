@@ -9,6 +9,7 @@
     <app-loading-spinner *ngIf="isLoading$ | async"></app-loading-spinner>
 
     <router-outlet></router-outlet>
-    <app-footer *ngIf="isLoggedIn"></app-footer>
+    
   </div>
 </div>
+<app-footer *ngIf="isLoggedIn"></app-footer>

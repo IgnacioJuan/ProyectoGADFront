@@ -43,17 +43,17 @@ export class ListarporUsuarioComponent implements OnInit {
   proyecto: Proyecto = new Proyecto();
   proyectos: any[] = [];
 
+  filterPost: string = "";
+  filteredComponentes: any[] = [];
+  resultadosEncontrados: boolean = true;
 
   public compete = new PoaporUsuarioProjection();
   competencias: PoaporUsuarioProjection[] = [];
-  
 
-  filterPost = '';
   dataSource = new MatTableDataSource<PoaporUsuarioProjection>();
   columnasUsuario: string[] = ['cedula','nombre_completo','username','nombre','nombrepro', 'estado'];
 
-
-
+  
   @ViewChild('datosModalRef') datosModalRef: any;
   @ViewChild(MatPaginator, { static: false }) paginator?: MatPaginator;
 
@@ -85,12 +85,9 @@ export class ListarporUsuarioComponent implements OnInit {
     }
 
     this.compete.id_proyecto
-
     console.log(this.compete.id_proyecto)
-
     this.listar( );
   }
-
  
   listar(): void {
     this.poasservice.getporUsuario(this.compete.id_proyecto ).subscribe(
@@ -104,17 +101,13 @@ export class ListarporUsuarioComponent implements OnInit {
     );
   }
 
-
-  
-
-     verProyectos() {
+  verProyectos() {
     this.router.navigate(['/sup/flujo-criterio/listaproyecto'], { state: { data: this.proyecto } });
   }
   verModelos() {
     this.router.navigate(['/sup/flujo-criterio/listaproyecto']);
   }
   
-
   aplicarFiltro() {
     if (this.filterPost) {
       const lowerCaseFilter = this.filterPost.toLowerCase();
@@ -124,12 +117,19 @@ export class ListarporUsuarioComponent implements OnInit {
     } else {
       this.dataSource.data = this.competencias;;
     }
-  } 
+  }
+
+  buscar() {
+    this.filteredComponentes = this.competencias.filter((componente) =>
+      componente.nombre.toLowerCase().includes(this.filterPost.toLowerCase())
+    );
+    this.dataSource.data = this.filteredComponentes;
+    this.resultadosEncontrados = this.filteredComponentes.length > 0;
+  }
   
   getColor(estado: string): any {
-    const estadoUpper = estado.toUpperCase(); // Convertir el estado a mayúsculas
-    let backgroundColor = 'white'; // Color de fondo predeterminado
-  
+    const estadoUpper = estado.toUpperCase(); 
+    let backgroundColor = 'white';   
     switch (estadoUpper) {
       case 'APROBADO':
         backgroundColor = 'rgb(168, 216, 159)';
@@ -143,14 +143,8 @@ export class ListarporUsuarioComponent implements OnInit {
       default:
         break;
     }
-
-
-  
     return { 'background-color': backgroundColor };
   }
-  
-  
-  
 
 }
 

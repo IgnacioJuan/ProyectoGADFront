@@ -6,10 +6,6 @@
           ><a style="cursor: pointer" (click)="verProyectos() " class="titulo"
             > PROYECTOS 
           </a>
-          
-
-          <span class="titulo">></span>
-
           <a>{{ modelopoa.nombre }} </a></strong
         >
       </h1>
@@ -23,7 +19,7 @@
             name="filterPost3"
             placeholder="Buscar..."
             [(ngModel)]="filterPost"
-            (input)="aplicarFiltro()" 
+            (input)="buscar()" 
           />
         </div>
         <br />
@@ -69,6 +65,7 @@
                   class="btn btn-primary"
                   role="button"
                   (click)="verDetalles(elemento)"
+                  style="background-color: green "
                 >
                   <div class="d-flex">
                     <i class="fa fa-folder-open"></i>
