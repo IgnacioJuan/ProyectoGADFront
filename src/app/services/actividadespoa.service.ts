@@ -6,6 +6,7 @@ import baserUrl from './helper';
 import { ActividadesPoa } from '../models/ActividadesPoa';
 import { ListaActividadesUsuario } from '../interface/ListaActividadesUsuario';
 import { ActividadesPendientesPorPoaProjection } from '../interface/ActividadesPendientesPorPoaProjection';
+import { Periodo } from '../models/Periodo';
 
 @Injectable({
   providedIn: 'root'
@@ -55,7 +56,9 @@ export class ActividadespoaService {
     return this.http.get<ActividadesPoa[]>(`${baserUrl}/api/actividades/listarActividadesPorIdResponsable/${responsableId}`);
   }
 
-
+  listarPeriodosPorActividad(actividadId: number): Observable<Periodo[]> {
+    return this.http.get<Periodo[]>(`${baserUrl}/api/actividades/listarPeriodosPorActividad/${actividadId}`);
+  }
   public ActividadesPendientesPorPoa(id_Poa: any): Observable<any[]> {
     return this.http.get<any[]>(`${baserUrl}/api/actividades/ActividadesPendientesPorPoa/${id_Poa}`);
   }
