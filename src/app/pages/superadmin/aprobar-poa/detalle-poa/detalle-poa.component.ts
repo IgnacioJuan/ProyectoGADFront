@@ -97,7 +97,7 @@ export class DetallePoaComponent implements OnInit {
   dataSource = new MatTableDataSource<ActividadesPoaDTO>();
   columnasActividades: string[] = [
     'nombre_actividad',
-    'descripcion',
+    'descripcion', 
     'presupuesto_referencial',
     'recursos_propios',
     'recursos_externos',

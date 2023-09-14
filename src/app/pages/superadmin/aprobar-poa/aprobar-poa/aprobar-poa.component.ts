@@ -11,13 +11,8 @@ import { LoadingServiceService } from 'src/app/components/loading-spinner/Loadin
   styleUrls: ['./aprobar-poa.component.css'],
 })
 export class AprobarPoaComponent {
-  responsable = 'NICOLÁS CEVALLOS CABRERA';
-  longText = 'Algunos Detalles del POA.';
-
   allCards: AprobPoa[] = [];
-
   cardsToShow: AprobPoa[] = [];
-
   totalCards = this.allCards.length;
   pageSize = 3;
   pageIndex = 0;
@@ -25,15 +20,18 @@ export class AprobarPoaComponent {
   constructor(
     private router: Router,
     private poacService: PoacService,
-    private datePipe: DatePipe,
     private loadingService: LoadingServiceService
   ) {
     this.loadingService.show();
+    this.loadData();
+    this.loadingService.hide();
+  }
+
+  loadData(){
     this.poacService.getPoaAprob().subscribe((data) => {
       this.allCards = data;
       this.totalCards = this.allCards.length;
       this.updateCardsToShow();
-      this.loadingService.hide();
     });
   }
 
@@ -48,7 +46,6 @@ export class AprobarPoaComponent {
     const end = start + this.pageSize;
     this.cardsToShow = this.allCards.slice(start, end);
   }
-
   // Modifica el método redirectToDetails para aceptar el ID del POA
   redirectToDetails(id_Poa: number) {
     this.router.navigate(['/sup/aprobacion-poa/detalle-poa', id_Poa]);

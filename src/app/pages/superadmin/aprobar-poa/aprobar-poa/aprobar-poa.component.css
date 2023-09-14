@@ -46,6 +46,18 @@ body {
     box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2); /* Sombra suave */
     transition: box-shadow 0.3s ease;
 }
+.example-card-vacio {
+    width: 300px; /* Ancho fijo */
+    height: 400px; /* Altura fija */
+    overflow: auto; /* Si el contenido es demasiado, mostrará barras de desplazamiento */
+    flex: 1; /* Permite que las tarjetas crezcan para ocupar el espacio disponible */
+    margin: 0 1rem;
+    overflow: auto;
+    display: flex;
+    flex-direction: column; /* Establece la dirección principal como columna */
+    box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.1); /* Sombra suave */
+    transition: box-shadow 0.3s ease;
+}
 .example-card:hover {
     box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.25); /* Sombra más intensa al pasar el cursor */
 }
@@ -93,4 +105,9 @@ button[mat-button]:hover {
     width: 100%;
 }
 
+.frame_msj{
+    width: 50%;
+    height: 20%;
+    box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.25); 
+}
 
