@@ -12,7 +12,7 @@ export class SidebarService {
       titulo: "POA",
       submenu: [
         { titulo: 'Creacion', url: 'adm/poa/registrarpoa', icono: 'fas fa-check-square' },
-        
+
       ]
     },
     {
@@ -20,7 +20,15 @@ export class SidebarService {
       titulo: "Asignación",
       submenu: [
         { titulo: 'POA', url: 'adm/asignacion-actividades/poa-actividad', icono: 'fas fa-check-square' },
-        
+
+      ]
+    },
+    {
+      icono: 'nav-icon fas fa-users',
+      titulo: "Responsables",
+      submenu: [
+        { titulo: 'Listado Responsables', url: 'adm/create-responsables', icono: 'fas fa-check-square' },
+
       ]
     },
     {
@@ -55,8 +63,8 @@ export class SidebarService {
 
       ]
     },
-    
- 
+
+
     {
       icono: 'nav-icon fas fa-tasks',
       titulo: "POA",
@@ -67,7 +75,7 @@ export class SidebarService {
         { titulo: 'Aprobación de POAS', url: 'sup/aprobacion-poa/lista-aprobar-poa', icono: 'fas fa-list-ul ' }
 
 
-      ] 
+      ]
     },
     {
       icono: 'nav-icon fas fa-solid fa-list',
@@ -96,11 +104,6 @@ export class SidebarService {
 
       ]
     },
-
-    
-
-
-
   ]
 
 
