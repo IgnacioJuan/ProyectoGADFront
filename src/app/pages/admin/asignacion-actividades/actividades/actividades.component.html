@@ -82,7 +82,7 @@
                   <i class="fas fa-trash-alt" style="color: red; font-size: 24px;"></i>
                 </button>
                 <button type="button" class="btn btn-sm btn-custom-yellow" data-bs-toggle="modal"
-                  data-bs-target="#materiaModal" (click)="editDatos(element)" title="Editar Datos"
+                  data-bs-target="#materiaModal" (click)="cargarDatosAlForm(element)" title="Editar Datos"
                   *ngIf="element.estado === 'RECHAZADO'">
                   <i class="fas fa-edit" style="color: yellow; font-size: 24px;"></i>
                 </button>
@@ -139,7 +139,7 @@
                   <div style="flex: 1; margin-right: 20px;">
                     <label for="presupuesto_referencial">Presupuesto Referencial:</label>
                     <input class="form-control" formControlName="presupuesto_referencial" id="presupuesto_referencial"
-                      name="presupuesto_referencial" style="margin-bottom: 10px" type="number" min="0" readonly />
+                      name="presupuesto_referencial" style="margin-bottom: 10px" type="number" min="0" />
                   </div>
                   <div style="flex: 1;">
                     <label for="recursos_propios">Valor Recursos Propios:</label>
@@ -191,39 +191,39 @@
                 </div>
               </div>-->
 
-                <div style="display: flex; justify-content: space-between;" *ngIf="modoCreacion">
+                <div style="display: flex; justify-content: space-between;" >
                   <div style="flex: 1; margin-right: 20px;">
                     <label for="valor1">{{poa.tipo_periodo}} 1</label>
                     <div style="display: flex; align-items: center;">
-                      <input class="form-control" formControlName="valor1" type="text" id="valor1" name="valor1"
+                      <input class="form-control" formControlName="valor1" id="valor1" name="valor1"
                         style="margin-bottom: 10px" appCurrencyInput type="number" min="0" />
                       <span style="margin-left: 5px;">%</span>
                     </div>
                   </div>
-                  <div style="flex: 1; margin-right: 20px;" *ngIf="modoCreacion">
+                  <div style="flex: 1; margin-right: 20px;" >
                     <label for="valor2">{{poa.tipo_periodo}} 2</label>
                     <div style="display: flex; align-items: center;">
-                      <input class="form-control" formControlName="valor2" type="text" id="valor2" name="valor2"
+                      <input class="form-control" formControlName="valor2" id="valor2" name="valor2"
                         style="margin-bottom: 10px" appCurrencyInput type="number" min="0" />
                       <span style="margin-left: 5px;">%</span>
                     </div>
                   </div>
                 </div>
 
-                <div style="display: flex; justify-content: space-between;" *ngIf="modoCreacion">
+                <div style="display: flex; justify-content: space-between;">
                   <div style="flex: 1; margin-right: 20px;">
                     <label for="valor3">{{poa.tipo_periodo}} 3</label>
                     <div style="display: flex; align-items: center;">
-                      <input class="form-control" formControlName="valor3" type="text" id="valor3" name="valor3"
+                      <input class="form-control" formControlName="valor3" id="valor3" name="valor3"
                         style="margin-bottom: 10px" appCurrencyInput type="number" min="0" /><span
                         style="margin-left: 5px;">%</span>
                     </div>
                   </div>
-                  <div style="flex: 1; margin-right: 20px;" *ngIf="modoCreacion">
+                  <div style="flex: 1; margin-right: 20px;">
                     <div class="form-group" *ngIf="poa.tipo_periodo === 'TRIMESTRE'">
                       <label for="valor4">{{poa.tipo_periodo}} 4</label>
                       <div style="display: flex; align-items: center;">
-                        <input class="form-control" formControlName="valor4" type="text" id="valor4" name="valor4"
+                        <input class="form-control" formControlName="valor4" id="valor4" name="valor4"
                           style="margin-bottom: 10px" appCurrencyInput type="number" min="0" /><span
                           style="margin-left: 5px;">%</span>
                       </div>
