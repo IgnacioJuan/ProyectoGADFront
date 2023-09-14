@@ -3,6 +3,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Component, OnInit } from '@angular/core';
 import Swal from 'sweetalert2';
 import { LoginService } from 'src/app/services/login.service';
+import { LoadingServiceService } from 'src/app/components/loading-spinner/LoadingService.service';
 
 @Component({
   selector: 'app-login',
@@ -16,7 +17,9 @@ export class LoginComponent implements OnInit {
     "password": '',
   }
 
-  constructor(private _snack: MatSnackBar, private loginService: LoginService, private router: Router) { }
+  constructor(private _snack: MatSnackBar, private loginService: LoginService, private router: Router,
+    private loadingService: LoadingServiceService
+  ) { }
 
   ngOnInit(): void {
     if (this.loginService.isLoggedIn()) {
@@ -24,8 +27,9 @@ export class LoginComponent implements OnInit {
       location.replace('/use/user-dashboard');
     }
   }
-  
+
   formSubmit() {
+    this.loadingService.show();
     if (this.loginData.username.trim() == '' || this.loginData.username.trim() == null) {
       // this._snack.open('El username de usuario es requerido !!', 'Aceptar')
       Swal.fire(
@@ -33,6 +37,8 @@ export class LoginComponent implements OnInit {
         'El username de usuario es requerido !!',
         'warning'
       )
+      this.loadingService.hide();
+
       return;
     }
 
@@ -43,9 +49,10 @@ export class LoginComponent implements OnInit {
         'La password es requerida !!',
         'warning'
       )
+      this.loadingService.hide();
+
       return;
     } else (
-
       this.loginService.generateToken(this.loginData).subscribe(
         (data: any) => {
           console.log(data);
@@ -53,6 +60,7 @@ export class LoginComponent implements OnInit {
           this.loginService.getCurrentUser().subscribe((user: any) => {
             this.loginService.setUser(user);
             console.log(user);
+            this.loadingService.hide();
 
             if (this.loginService.getUserRole() == 'ADMIN') {
               //dashboard admin
@@ -88,6 +96,8 @@ export class LoginComponent implements OnInit {
             }
           })
         }, (error) => {
+          this.loadingService.hide();
+
           Swal.fire(
             'Error',
             'Detalles inválidos , vuelva a intentar !!',

@@ -12,6 +12,7 @@ import { AprobacionActividadService } from 'src/app/services/aprobacion-activida
 import { AprobacionActividad } from 'src/app/models/AprobacionActividad';
 import { Usuario2 } from 'src/app/models/Usuario2';
 import { AprobacionporActividadProjection } from 'src/app/interface/AprobacionporActividadProjection';
+import { LoadingServiceService } from 'src/app/components/loading-spinner/LoadingService.service';
 @Component({
   selector: 'app-list-activ-evidencia',
   templateUrl: './list-activ-evidencia.component.html',
@@ -23,7 +24,7 @@ export class ListActivEvidenciaComponent implements OnInit {
   listaActividades: ActividadesPoa[] = [];
 
   public aprobarAct = new AprobacionActividad();
-  public actividadSelected :any;
+  public actividadSelected: any;
   listaAprobacionAct: AprobacionporActividadProjection[] = [];
 
   observacionsSource = new MatTableDataSource<AprobacionporActividadProjection>();
@@ -50,7 +51,8 @@ export class ListActivEvidenciaComponent implements OnInit {
     private actividadService: ActividadespoaService,
     private aprobacionActvidadService: AprobacionActividadService,
     public login: LoginService,
-
+    //importar el spinner como servicio
+    private loadingService: LoadingServiceService
   ) {
 
     this.paginatorIntl.nextPageLabel = this.nextPageLabel;
@@ -110,26 +112,31 @@ export class ListActivEvidenciaComponent implements OnInit {
     return `${startIndex + 1} - ${endIndex} de ${length}`;
   };
   //Columnas tabla actividades
-  columnasUsuario: string[] = ['id_actividad', 'nombre', 'descripcion', 'responsable', 'detalle', 'evaluar', 'historial'];
+  columnasUsuario: string[] = ['id_actividad', 'nombre', 'descripcion', 'detalle', 'evaluar', 'historial'];
   columnasObservaciones: string[] = ['observacion', 'estado', 'nombre_completo', 'fecha_aprobacion'];
 
   listar(): void {
+    this.loadingService.show();
     this.actividadService.ActividadesPendientesPorPoa(this.poa.id_poa).subscribe(
       (data: any[]) => {
         this.listaActividades = data;
         console.log("Dataa")
         console.log(this.listaActividades)
         this.dataSource.data = this.listaActividades;
+        this.loadingService.hide();
+
       },
       (error: any) => {
         console.error('Error al listar los objetivos:', error);
+        this.loadingService.hide();
+
       }
     );
   }
 
 
   guardar() {
-  
+
     // Verificar si el estado es "RECHAZADO" y la observación está vacía
     if (this.estado === 'RECHAZADO' && !this.observacion) {
       Swal.fire(
@@ -139,45 +146,51 @@ export class ListActivEvidenciaComponent implements OnInit {
       );
       return;
     }
-  
-  
-      this.aprobarAct.estado = this.estado;
-      this.aprobarAct.observacion = this.observacion;
-      this.aprobarAct.visible = true;
-      this.aprobarAct.usuario = this.user.id;
-      this.aprobarAct.poa = this.poa;
-      this.aprobarAct.actividad=this.actividadSelected;
-      this.aprobarAct.poa.usuario=new Usuario2();
-      this.aprobarAct.actividad.usuario=new Usuario2();
-      console.log(this.aprobarAct)
-      this.aprobacionActvidadService.crear(this.aprobarAct)
-        .subscribe(
-          () => {
-            this.Limpiar();
-            this.listar();
-            Swal.fire(
-              'Exitoso',
-              'Se ha completado el registro con éxito',
-              'success'
-            );
-          },
-          (error) => {
-            Swal.fire(
-              'Error',
-              'Ha ocurrido un error al realizar la operacion ...',
-              'warning'
-            );
-          }
-        );
-    }
-  
-  
-    seleccionar(archi: Archivos) {
-      this.actividadSelected = archi
-      this.estado = this.actividadSelected.estado;
-      //Quitar el usuario 
-      this.actividadSelected.actividad = null;
-    }
+
+
+    this.aprobarAct.estado = this.estado;
+    this.aprobarAct.observacion = this.observacion;
+    this.aprobarAct.visible = true;
+    this.aprobarAct.usuario = this.user.id;
+    this.aprobarAct.poa = this.poa;
+    this.aprobarAct.actividad = this.actividadSelected;
+    this.aprobarAct.poa.usuario = new Usuario2();
+    this.aprobarAct.actividad.usuario = new Usuario2();
+    this.loadingService.show();
+    
+    this.aprobacionActvidadService.crear(this.aprobarAct)
+      .subscribe(
+        () => {
+          this.loadingService.hide();
+
+          this.Limpiar();
+          
+          Swal.fire(
+            'Exitoso',
+            'Se ha completado el registro con éxito',
+            'success'
+          );
+          this.listar();
+        },
+        (error) => {
+          Swal.fire(
+            'Error',
+            'Ha ocurrido un error al realizar la operacion ...',
+            'warning'
+          );
+          this.loadingService.hide();
+
+        }
+      );
+  }
+
+
+  seleccionar(archi: Archivos) {
+    this.actividadSelected = archi
+    this.estado = this.actividadSelected.estado;
+    //Quitar el usuario 
+    this.actividadSelected.actividad = null;
+  }
 
   buscar() {
     // Filtra los componentes basados en el filtro
@@ -193,19 +206,24 @@ export class ListActivEvidenciaComponent implements OnInit {
   }
 
   verDetalles(actividad: any) {
+    this.loadingService.show();
+
     this.aprobacionActvidadService.listarAprobacionesporActividad(actividad.id_actividad).subscribe(
       (data: any[]) => {
         this.listaAprobacionAct = data;
         this.observacionsSource.data = this.listaAprobacionAct;
-        this.observacionsSource.paginator = this.paginatorobs  || null;
+        this.observacionsSource.paginator = this.paginatorobs || null;
+        this.loadingService.hide();
 
       },
       (error: any) => {
         console.error('Error al listar las observaciones:', error);
+        this.loadingService.hide();
+
       }
     );
   }
-    getEstadoCellStyle(estado: string): any {
+  getEstadoCellStyle(estado: string): any {
     switch (estado) {
       case 'PENDIENTE':
         return { background: 'rgb(235, 253, 133)' };
@@ -233,7 +251,7 @@ export class ListActivEvidenciaComponent implements OnInit {
     this.estado = "";
     this.observacion = "";
   }
-  limpiarObservacion(){
-    this.observacionsSource =  new MatTableDataSource<AprobacionporActividadProjection>();
+  limpiarObservacion() {
+    this.observacionsSource = new MatTableDataSource<AprobacionporActividadProjection>();
   }
 }

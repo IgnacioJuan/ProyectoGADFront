@@ -356,6 +356,8 @@ export class CrearUsuariosComponent implements OnInit {
 
   // usuarioForm es el usuario que recibo del formulario 
   Actualizar(usuarioForm: UsuarioRol) {
+    console.log(usuarioForm.usuario.programa.id_programa)
+
     if (usuarioForm.rol.rolId == 0) {
       usuarioForm.rol = this.usuarioDB.rol;
     }
@@ -435,6 +437,7 @@ export class CrearUsuariosComponent implements OnInit {
             console.log(response);
             this.usuarioDB = new UsuarioRol();
             this.usuarioEdit = new UsuarioRol();
+            console.log(response)
           });
       } else {
         Swal.fire('Se ha cancelado la operación', '', 'info')

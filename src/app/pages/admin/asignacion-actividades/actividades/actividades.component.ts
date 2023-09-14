@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@an
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ActividadesPoa } from 'src/app/models/ActividadesPoa';
 import { Poa } from 'src/app/models/Poa';
 import { Usuario2 } from 'src/app/models/Usuario2';
@@ -18,12 +18,9 @@ import 'popper.js';
 import { AsignacionUsuarioService } from 'src/app/services/asignacionusuario.service';
 import { AsignacionUsuario } from 'src/app/models/AsignacionUsuario';
 import { PoaInsertService } from 'src/app/services/poa/poa-insert.service';
+import { LoadingServiceService } from 'src/app/components/loading-spinner/LoadingService.service';
 declare var $: any;
 
-
-interface Periodo {
-  value: string;
-}
 @Component({
   selector: 'app-actividades',
   templateUrl: './actividades.component.html',
@@ -76,6 +73,7 @@ export class ActividadesComponent implements OnInit {
   listaU2!: ListaActividadesUsuario[];
   spans: any[] = [];
   spans2: any[] = [];
+  modoCreacion: boolean = true;
 
 
   //listarActividades
@@ -96,7 +94,7 @@ export class ActividadesComponent implements OnInit {
     private actividadservice: ActividadespoaService, private paginatorIntl: MatPaginatorIntl,
     private router: Router, private fb: FormBuilder, private userService: UsuarioService,
     private usuariorolservice: UsuariorolService, private asignacionservice: AsignacionUsuarioService,
-    private poaInsertService: PoaInsertService
+    private poaInsertService: PoaInsertService, private route: ActivatedRoute, private loadingService: LoadingServiceService
   ) {
     this.frmActividad = fb.group({
       nombre: ['', Validators.required],
@@ -126,20 +124,14 @@ export class ActividadesComponent implements OnInit {
     this.cargarUsuarios();
     this.poa = data;
     console.log(this.poa);
+    const tipoPeriodo = data.tipo_periodo;
+    console.log('Tipo de período:', tipoPeriodo);
     this.listar(this.poa.id_poa);
     this.Listado();
     this.actividadservice.obtenerActividades().subscribe((data: ActividadesPoa[]) => {
       this.act = data;
     });
   }
-
-
-  //SELECT
-  periodo: Periodo[] = [
-    { value: 'TRIMESTRE' },
-    { value: 'CUATRIMESTRE' },
-  ];
-  selectedPeriod = this.periodo[1].value;
 
   verPoas() {
     this.router.navigate(['/adm/asignacion-actividades/poa-actividad']);
@@ -190,58 +182,50 @@ export class ActividadesComponent implements OnInit {
         }
       );
   }
-
-  crearAprobacion(actividad: any) {
-    this.aprobAct.estado = 'PENDIENTE';
-    this.aprobAct.observacion = '';
-    this.aprobAct.actividad = actividad;
-    this.aprobAct.poa = this.poa;
-    this.actividadservice.crearRelacionAprobacion(this.aprobAct).subscribe(
-      (response) => {
-        console.log('Relación de aprobación creada:', response);
-      },
-      (error) => {
-        console.error('Error al crear la relación de aprobación:', error);
-      }
-    );
-  }
-
-  
-
+ 
   guardar() {
+    this.loadingService.show();
     this.actividad = this.frmActividad.value;
+    this.actividad.presupuesto_referencial = this.actividad.recursos_propios;
     this.actividad.poa = this.poa;
     this.actividad.estado = 'PENDIENTE';
-  
+
+    // Validación de suma
+    let suma = 0;
+    if (this.poa.tipo_periodo === 'CUATRIMESTRE') {
+        suma = Number(this.actividad.valor1) + Number(this.actividad.valor2) + Number(this.actividad.valor3);
+    } else if (this.poa.tipo_periodo === 'TRIMESTRE') {
+        suma = Number(this.actividad.valor1) + Number(this.actividad.valor2) + Number(this.actividad.valor3) + Number(this.actividad.valor4);
+    }
+    console.log("Suma total:", suma);
+    if (suma !== 100) {
+        Swal.fire('Error', 'La suma de los valores de periodo debe 100', 'warning');
+        return;
+    }
+
     this.actividadservice.crear(this.actividad).subscribe(
       (response) => {
         console.log('Actividad creada con éxito:', response);
-  
-        // Obtener el ID de la actividad creada
         const idActividad = response.id_actividad;
-  
-        // Verificar el valor de selectedPeriod
-        if (this.selectedPeriod === 'CUATRIMESTRE') {
-          // Si es cuatrimestre, crear 3 registros de período con valores específicos
+        if (this.poa.tipo_periodo === 'CUATRIMESTRE') {
           this.crearPeriodo(idActividad, this.actividad.valor1, 1);
           this.crearPeriodo(idActividad, this.actividad.valor2, 2);
           this.crearPeriodo(idActividad, this.actividad.valor3, 3);
-        } else if (this.selectedPeriod === 'TRIMESTRE') {
+        } else if (this.poa.tipo_periodo === 'TRIMESTRE') {
           this.crearPeriodo(idActividad, this.actividad.valor1, 1);
           this.crearPeriodo(idActividad, this.actividad.valor2, 2);
           this.crearPeriodo(idActividad, this.actividad.valor3, 3);
           this.crearPeriodo(idActividad, this.actividad.valor4, 4);
         }
         this.guardadoExitoso = true;
-        const idActividadCreada = response.id_actividad;
-        const idPoa = this.poa.id_poa;
         this.crearAprobacion(response);
-        console.log(idActividadCreada + ' ' + idPoa);
-        this.listar(this.poa.id_poa);
+        this.loadingService.hide();
         Swal.fire('Exitoso', 'Se ha completado el registro con éxito', 'success');
+        this.listar(this.poa.id_poa);
       },
       (error) => {
         console.error('Error al crear la actividad:', error);
+        this.loadingService.hide();
         Swal.fire('Error', 'Ha ocurrido un error', 'warning');
       }
     );
@@ -258,8 +242,24 @@ export class ActividadesComponent implements OnInit {
     );
   }
   
-
+  crearAprobacion(actividad: any) {
+    this.aprobAct.estado = 'PENDIENTE';
+    this.aprobAct.observacion = '';
+    this.aprobAct.actividad = actividad;
+    this.aprobAct.poa = this.poa;
+    this.actividadservice.crearRelacionAprobacion(this.aprobAct).subscribe(
+      (response) => {
+        console.log('Relación de aprobación creada:', response);
+      },
+      (error) => {
+        console.error('Error al crear la relación de aprobación:', error);
+      }
+    );
+  }
+  
+  
   editDatos(activ: ActividadesPoa) {
+    this.modoCreacion = false;
     this.actividad = activ;
     this.frmActividad = new FormGroup({
       nombre: new FormControl(this.actividad.nombre),
@@ -267,26 +267,37 @@ export class ActividadesComponent implements OnInit {
       presupuesto_referencial: new FormControl(this.actividad.presupuesto_referencial),
       recursos_propios: new FormControl(this.actividad.recursos_propios),
       codificado: new FormControl(this.actividad.codificado),
-      devengado: new FormControl(this.actividad.devengado)
+      devengado: new FormControl(this.actividad.devengado),
+      /*valor1: new FormControl(this.actividad.valor1),
+      valor2: new FormControl(this.actividad.valor2),
+      valor3: new FormControl(this.actividad.valor3),
+      valor4: new FormControl(this.actividad.valor4),*/
     });
   }
   actualizar() {
+    this.loadingService.show();
     this.actividad.nombre = this.frmActividad.value.nombre;
     this.actividad.descripcion = this.frmActividad.value.descripcion;
-    this.actividad.presupuesto_referencial = this.frmActividad.value.presupuesto_referencial;
+    this.actividad.presupuesto_referencial = this.frmActividad.value.recursos_propios;
     this.actividad.codificado = this.frmActividad.value.codificado;
     this.actividad.devengado = this.frmActividad.value.devengado;
     this.actividad.recursos_propios = this.frmActividad.value.recursos_propios;
     this.actividad.estado = 'PENDIENTE';
+    /*this.actividad.valor1 = this.frmActividad.value.valor1;
+    this.actividad.valor2 = this.frmActividad.value.valor2;
+    this.actividad.valor3 = this.frmActividad.value.valor3;
+    this.actividad.valor4 = this.frmActividad.value.valor4;*/
     this.actividadservice.actualizar(this.actividad.id_actividad, this.actividad)
       .subscribe(response => {
         this.actividad = new ActividadesPoa();
         this.listar(this.poa.id_poa);
+        this.loadingService.hide();
         Swal.fire('Operacion exitosa!', 'El registro se actualizo con exito', 'success')
       });
   }
   
   eliminar(activ: any) {
+    this.loadingService.show();
     Swal.fire({
       title: 'Estas seguro de eliminar el registro?',
       showDenyButton: true,
@@ -297,6 +308,7 @@ export class ActividadesComponent implements OnInit {
         this.actividadservice.eliminarActividad(activ).subscribe(
           (response) => {
             this.listar(this.poa.id_poa)
+            this.loadingService.hide();
             Swal.fire('Eliminado!', '', 'success')
           }
         );
@@ -313,11 +325,11 @@ export class ActividadesComponent implements OnInit {
   // LISTA USUARIOS TABLA
   listaUsuarios: any[] = [];
   Listado() {
-    this.usuariorolservice.getusuarios().subscribe(
+    this.usuariorolservice.getusuariosResponsable().subscribe(
       (listaAsig: any[]) => {
         this.listaUsuarios = listaAsig;
         this.dataSource3.data = this.listaUsuarios;
-        console.log(listaAsig)
+        console.log("AQUIIII"+listaAsig)
       }
     );
   }
@@ -359,7 +371,6 @@ export class ActividadesComponent implements OnInit {
   }
   
   //METODO QUE FUNCIONA CON LA SELECCION EN LA TABLA DE USUARIOS
-
   guardarResponsable(usuarioSeleccionado: any) {
     this.actividadservice.getActividadPorId(this.idActividadSeleccionada)
       .subscribe(

@@ -7,6 +7,7 @@ export class ModeloPoa {
     fecha_inicial!: string;
     fecha_final!: string;
     visible!: boolean;
+    estado!: string;
     id_super_admin!: number;
     usuario:Usuario2 | null = new Usuario2;                  
 }

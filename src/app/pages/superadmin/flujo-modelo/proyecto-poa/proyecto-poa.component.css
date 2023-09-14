@@ -9,7 +9,14 @@ body {
     padding: 30px;
     
     color: #224;
-    background:
+    /* background:
       url(https://source.unsplash.com/E8Ufcyxz514/2400x1823)
-      center / cover no-repeat fixed;
+      center / cover no-repeat fixed; */
+  }
+
+  .header-title {
+    font-size: 30px;
+    font-weight: bold;
+    color:green; /* You can choose your preferred color */
+    text-align: left;
   }

@@ -6,6 +6,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { ProjectsActivesService } from 'src/app/services/poa/projects-actives.service';
 import { ProjectsActives } from 'src/app/models/ProjectsActives';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { LoginService } from 'src/app/services/login.service';
 
 
 @Component({
@@ -37,6 +38,7 @@ export class ListarProyectosComponent implements OnInit {
 
   searchText = '';
   filterPost = '';
+  user: any = null;
   dataSource = new MatTableDataSource<ProjectsActives>();
   columnasUsuario: string[] = ['codigo', 'nombre', 'meta', 'action'];
   @ViewChild(MatPaginator, { static: false }) paginator?: MatPaginator;
@@ -46,7 +48,8 @@ export class ListarProyectosComponent implements OnInit {
 
   constructor(public dialogRef: MatDialogRef<RegistrarPoaComponent>,
     private projectsActivesService: ProjectsActivesService,
-    private fb: FormBuilder) {
+    private fb: FormBuilder,
+    public login: LoginService) {
     this.frmProjects = fb.group({
       codigo: ['', Validators.required],
       nombre: ['', [Validators.required]]
@@ -54,6 +57,7 @@ export class ListarProyectosComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.user = this.login.getUser();
     this.listarProjectsActives();
   }
 
@@ -71,7 +75,8 @@ export class ListarProyectosComponent implements OnInit {
 
   //listar projectos activos 
   public listarProjectsActives(): void {
-    this.projectsActivesService.getProjectsActives().subscribe(
+    console.log(this.user);
+    this.projectsActivesService.getProjectsActives(this.user.id).subscribe(
       (response: ProjectsActives[]) => {
         this.dataSource.data = response;
         this.projectsActives = response;
