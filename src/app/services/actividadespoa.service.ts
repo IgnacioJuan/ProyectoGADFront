@@ -58,6 +58,10 @@ export class ActividadespoaService {
     return this.http.put(`${baserUrl}/api/actividades/eliminarlogic/${acti.id_actividad}`, acti);
   }
 
+  eliminarPeriodosPorActividad(actividadId: number): Observable<any> {
+    return this.http.delete(`${baserUrl}/api/periodo/eliminarPorActividad/${actividadId}`);
+  }
+
   listarUsuariosActividades(actividadId: number): Observable<ListaActividadesUsuario[]> {
     return this.http.get<ListaActividadesUsuario[]>(`${baserUrl}/api/actividades/listarUsuariosActividadID/${actividadId}`);
   }

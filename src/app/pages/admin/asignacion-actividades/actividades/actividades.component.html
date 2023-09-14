@@ -139,7 +139,7 @@
                   <div style="flex: 1; margin-right: 20px;">
                     <label for="presupuesto_referencial">Presupuesto Referencial:</label>
                     <input class="form-control" formControlName="presupuesto_referencial" id="presupuesto_referencial"
-                      name="presupuesto_referencial" style="margin-bottom: 10px" type="number" min="0" readonly />
+                      name="presupuesto_referencial" style="margin-bottom: 10px" type="number" min="0" />
                   </div>
                   <div style="flex: 1;">
                     <label for="recursos_propios">Valor Recursos Propios:</label>
@@ -245,7 +245,7 @@
                 Agregar
               </button>
               <button class="btn btn-primary" *ngIf="actividad.id_actividad" data-dismiss="modal"
-                data-bs-dismiss="modal" style="background-color: green" (click)="actualiza()"
+                data-bs-dismiss="modal" style="background-color: green" (click)="actualizar()"
                 [disabled]="!frmActividad.valid">
                 Actualizar
               </button>
