@@ -15,6 +15,7 @@ import Swal from 'sweetalert2';
 import { Actividad_arch } from 'src/app/services/actividad_arch';
 import { MatPaginator } from '@angular/material/paginator';
 import { PoaService } from 'src/app/services/poa.service';
+import { LoadingServiceService } from 'src/app/components/loading-spinner/LoadingService.service';
 @Component({
   selector: 'app-subir_archivo_acti_desig',
   templateUrl: './subir_archivo_acti_desig.component.html',
@@ -42,13 +43,17 @@ export class Subir_archivo_acti_desigComponent implements OnInit {
   dataSource = new MatTableDataSource<Archivo>();
   formulario: FormGroup;
   @ViewChild('archivoInput') archivoInput!: ElementRef<HTMLInputElement>; // Note the "!" operator
-
-  constructor(
+  variable1: number = 0; // Asigna un valor predeterminado o inicializa la variable
+  variable2: number = 0; // Asigna un valor predeterminado o inicializa la variable
+  valorMaximo: number=0;
+    constructor(
     private archivo: ArchivoService,
     public login: LoginService,
     private fb: FormBuilder,
     private router: Router,
-    private poaservis: PoaService
+    private poaservis: PoaService,
+    //importar el spinner como servicio
+    private loadingService: LoadingServiceService
   ) {
     this.archivoInput = new ElementRef<HTMLInputElement>(
       document.createElement('input')
@@ -56,7 +61,7 @@ export class Subir_archivo_acti_desigComponent implements OnInit {
 
     this.formulario = this.fb.group({
       descripcion: ['', [Validators.required, Validators.maxLength(255)]],
-      valor: [0, Validators.required],
+      valor: [null, [Validators.required]],
     });
   }
   onFileChange(event: any) {
@@ -85,6 +90,14 @@ export class Subir_archivo_acti_desigComponent implements OnInit {
       this.router.navigate(['user-dashboard']);
       location.replace('/use/user-dashboard');
     }
+    this.variable1=this.activ.codificado;
+    console.log("v1==" + this.variable1);
+    this.variable2=this.activ.devengado;
+    console.log("v2==" + this.variable2);
+   // Calcula el valor máximo como la suma de variable1 y variable2
+   this.valorMaximo = this.variable1 - this.variable2;
+   console.log("vmax=="+this.valorMaximo)
+
     console.log('johb iid acti>>>>' + this.activ.id_actividad);
 
     const datos = history.state.data;
@@ -107,6 +120,7 @@ export class Subir_archivo_acti_desigComponent implements OnInit {
   descripcion: string = '';
   valor: number = 0;
   onUpload(): void {
+    this.loadingService.show();
     this.archivo
       .cargarpparagad(
         this.filearchivo,
@@ -119,7 +133,7 @@ export class Subir_archivo_acti_desigComponent implements OnInit {
           this.descripcion = '';
           this.valor = 0;
           this.listar();
-          console.log('Archivo subido:');
+          this.loadingService.hide();
           Swal.fire({
             title: '¡Éxito!',
             text: 'El archivo se ha subido correctamente',
@@ -128,6 +142,9 @@ export class Subir_archivo_acti_desigComponent implements OnInit {
           });
         },
         (error) => {
+         console.log('Archivo subido:');
+         this.loadingService.hide();
+
           console.error('Error al subir el archivo:', error);
           Swal.fire({
             title: '¡Error!',
@@ -148,11 +165,14 @@ export class Subir_archivo_acti_desigComponent implements OnInit {
   }
 
   listar(): void {
+    this.loadingService.show();
     this.archivo
       .getarchivoActividad(this.activ.id_actividad)
       .subscribe((data) => {
         this.aRCHI = data;
         this.dataSource.data = data;
+        this.loadingService.hide();
+
       });
   }
 
