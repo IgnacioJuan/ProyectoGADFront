@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Renderer2, ElementRef, OnDestroy, Inject } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -13,19 +13,24 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { ProgramaService } from 'src/app/services/programa.service';
 import { ProgramaUsuarioDTO } from 'src/app/models/Programa';
 import { Observable } from 'rxjs';
+import { DOCUMENT } from '@angular/common';
+
 
 @Component({
   selector: 'app-dialogo-usuarios',
   templateUrl: './dialogo-usuarios.component.html',
   styleUrls: ['./dialogo-usuarios.component.css']
 })
-export class DialogoUsuariosComponent implements OnInit {
+export class DialogoUsuariosComponent implements OnInit, OnDestroy {
   firstFormGroup!: FormGroup;
   secondFormGroup!: FormGroup;
   isLinear = false;
   roles: Rol[] = [];
   programas: ProgramaUsuarioDTO[] = [];
   Programaformulario!: FormGroup;
+  
+  private clickListener: ((event: MouseEvent) => void) | undefined = undefined;
+
 
   constructor(
     private _formBuilder: FormBuilder,
@@ -34,7 +39,10 @@ export class DialogoUsuariosComponent implements OnInit {
     private personaService: PersonaService,
     private snack: MatSnackBar,
     private dialogRef: MatDialogRef<DialogoUsuariosComponent>,
-    private programaService: ProgramaService
+    private programaService: ProgramaService,
+    private renderer: Renderer2,
+    private el: ElementRef,
+    @Inject(DOCUMENT) private document: Document
   ) {
 
   }
@@ -63,12 +71,34 @@ export class DialogoUsuariosComponent implements OnInit {
     this.programaService.listar().subscribe(data => {
       this.programas = data;
       console.log(this.programas);
-    })
-    // Obtiene el programa seleccionado
+    });
 
-    /*this.rolService.getRoles().subscribe((roles) => {
-      this.roles = roles;
-    });*/
+    this.clickListener = this.documentClickListener.bind(this);
+    document.addEventListener('click', this.clickListener);
+  }
+
+  documentClickListener(event: MouseEvent): void {
+    const matDialogContainerEl: HTMLElement | null = document.querySelector('mat-dialog-container');
+    if (!matDialogContainerEl) return;
+
+    // Si el clic fue dentro del contenedor del diálogo o en un desplegable, no hacemos nada.
+    if (matDialogContainerEl.contains(event.target as Node) || event.target instanceof HTMLElement && event.target.closest('mat-option')) {
+        return;
+    }
+
+    // Si llegamos a este punto, el clic fue fuera del diálogo. Cerramos el diálogo.
+    this.dialogRef.close();
+}
+
+
+  ngOnDestroy(): void {
+
+    // Eliminar el escuchador cuando el componente se destruye para evitar fugas de memoria
+    if (this.clickListener) {
+      document.removeEventListener('click', this.clickListener);
+    }
+
+
   }
 
   guardarUsuario(): void {

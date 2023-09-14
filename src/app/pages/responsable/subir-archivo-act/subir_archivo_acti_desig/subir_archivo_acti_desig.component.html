@@ -100,12 +100,14 @@
                     </div>
                     
                     <div class="form-group">
-                      <label for="valor">Valor:</label>
-                      <input id="valor" type="number" formControlName="valor" [(ngModel)]="valor" class="form-control" />
+                      <label for="valor">Valor maximo: {{valorMaximo}} </label>
+                      <input id="valor" type="number" formControlName="valor" [(ngModel)]="valor" class="form-control" [max]="valorMaximo" />
                       <div *ngIf="formulario.controls['valor'].invalid && formulario.controls['valor'].touched" class="invalid-feedback">
                         <div *ngIf="formulario.controls['valor'].hasError('required')">El valor es requerido</div>
+                        <div *ngIf="formulario.controls['valor'].hasError('max')">El valor debe ser menor o igual a {{ valorMaximo }}</div>
                       </div>
-                    </div>                    
+                    </div>
+                            
                     <div class="form-group">
                       <label for="descripcion">Descripción:</label>
                       <textarea class="form-control" formControlName="descripcion" id="descripcion" name="descripcion"
