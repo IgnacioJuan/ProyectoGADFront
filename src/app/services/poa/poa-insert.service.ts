@@ -13,8 +13,8 @@ export class PoaInsertService {
         return this.http.get(`${baserUrl}/api/proyecto/getProject?id_proyecto=${id}`);
     }
 
-    public crear(r: any, id_responsable: any): Observable<any> {
-        return this.http.post<any>(`${baserUrl}/api/poa/solicitud?id_responsable=${id_responsable}`, r
+    public crear(r: any, id_responsable: any, id_superadmin: any): Observable<any> {
+        return this.http.post<any>(`${baserUrl}/api/poa/solicitud?id_responsable=${id_responsable}&id_superadmin=${id_superadmin}`, r
         );
     }
 
@@ -24,10 +24,21 @@ export class PoaInsertService {
         );
     }
 
-    //METODO POST PARA http://localhost:5000/api/actividades/solicitud?nombre=4&descripcion=4&recursos_propios=4&presupuesto_referencial=4
-    public crearActividad(nombre: string, descripcion: string, recursos_propios: number, presupuesto_referencial: number): Observable<any> {
-        return this.http.post<any>(`${baserUrl}/api/actividades/solicitud?nombre=${nombre}&descripcion=${descripcion}&recursos_propios=${recursos_propios}&presupuesto_referencial=${presupuesto_referencial}`, null
-        );
+    //METODO POST PARA http://localhost:5000/api/actividades/solicitud?nombre=100&institucion_beneficiaria=100&recursos_externos=100&valor_uno=100&valor_dos=100&valor_tres=100&valor_cuatro=100&descripcion=100&id_poa=100&id_superadmin=100&recursos_propios=100&presupuesto_referencial=100
+    public crearActividad(
+        nombre: string,
+        institucion_beneficiaria: string,
+        recursos_externos: number,
+        valor_uno: number,
+        valor_dos: number,
+        valor_tres: number,
+        valor_cuatro: number,
+        descripcion: string,
+        id_poa: any,
+        id_superadmin: any,
+        recursos_propios: number,
+        presupuesto_referencial: number): Observable<any> {
+        return this.http.post<any>(`${baserUrl}/api/actividades/solicitud?nombre=${nombre}&institucion_beneficiaria=${institucion_beneficiaria}&recursos_externos=${recursos_externos}&valor_uno=${valor_uno}&valor_dos=${valor_dos}&valor_tres=${valor_tres}&valor_cuatro=${valor_cuatro}&descripcion=${descripcion}&id_poa=${id_poa}&id_superadmin=${id_superadmin}&recursos_propios=${recursos_propios}&presupuesto_referencial=${presupuesto_referencial}`, null);
     }
 
     //nuevo post para http://localhost:5000/api/aprobacionactividad/Solicitar?id_usuario=1&id_actividad=1&id_poa=2
