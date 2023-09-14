@@ -82,7 +82,7 @@
                   <i class="fas fa-trash-alt" style="color: red; font-size: 24px;"></i>
                 </button>
                 <button type="button" class="btn btn-sm btn-custom-yellow" data-bs-toggle="modal"
-                  data-bs-target="#materiaModal" (click)="editDatos2(element)" title="Editar Datos"
+                  data-bs-target="#materiaModal" (click)="cargarDatosAlForm(element)" title="Editar Datos"
                   *ngIf="element.estado === 'RECHAZADO'">
                   <i class="fas fa-edit" style="color: yellow; font-size: 24px;"></i>
                 </button>
@@ -245,7 +245,7 @@
                 Agregar
               </button>
               <button class="btn btn-primary" *ngIf="actividad.id_actividad" data-dismiss="modal"
-                data-bs-dismiss="modal" style="background-color: green" (click)="actualizar()"
+                data-bs-dismiss="modal" style="background-color: green" (click)="actualiza()"
                 [disabled]="!frmActividad.valid">
                 Actualizar
               </button>
