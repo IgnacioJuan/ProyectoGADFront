@@ -143,6 +143,8 @@ export class Subir_archivo_acti_desigComponent implements OnInit {
         },
         (error) => {
          console.log('Archivo subido:');
+         this.loadingService.hide();
+
           console.error('Error al subir el archivo:', error);
           Swal.fire({
             title: '¡Error!',
