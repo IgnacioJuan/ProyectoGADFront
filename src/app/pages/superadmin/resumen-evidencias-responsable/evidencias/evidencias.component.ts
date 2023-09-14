@@ -17,6 +17,7 @@ import {LoginService} from "../../../../services/login.service";
 import {AprobacionPoaService} from "../../../../services/aprobacion-poa.service";
 import {AprobacionEvidencia} from "../../../../models/AprobacionEvidencia";
 import {AprobacionEvidenciaService} from "../../../../services/aprobacion-evidencia.service";
+import {LoadingServiceService} from "../../../../components/loading-spinner/LoadingService.service";
 
 @Component({
   selector: 'app-evidencias',
@@ -74,7 +75,9 @@ export class EvidenciasComponent implements OnInit {
     private paginatorIntl: MatPaginatorIntl,
     public login: LoginService,
     private archivoServicio: ArchivoService,
-    private AprobacionEvienciaServicio: AprobacionEvidenciaService
+    private AprobacionEvienciaServicio: AprobacionEvidenciaService,
+    private loadingService: LoadingServiceService
+
   ) {
     this.paginatorIntl.nextPageLabel = this.nextPageLabel;
     this.paginatorIntl.lastPageLabel = this.lastPageLabel;
@@ -104,14 +107,20 @@ export class EvidenciasComponent implements OnInit {
   //Metodo para listar
 
   listarPoas( estado: string): void {
+    this.loadingService.show();
+
     this.archivoServicio.listarArchivosPorEstadoYFechaDesc(estado,this.user.username).subscribe(
       (data: any[]) => {
         this.listaPoas = data;
         this.dataSource.data = this.listaPoas;
         this.resultadosEncontradosporEstado = this.listaPoas.length > 0; // Actualiza la variable según si se encontraron resultados
+        this.loadingService.hide();
+
       },
       (error: any) => {
         console.error('Error al listar las evidencias:', error);
+        this.loadingService.hide();
+
         this.resultadosEncontradosporEstado = false; // Si ocurre un error, no se encontraron resultados
       }
     );
@@ -149,15 +158,20 @@ export class EvidenciasComponent implements OnInit {
 
   //Ver observaciones
   verDetalles(evidencia: any) {
+    this.loadingService.show();
     this.AprobacionEvienciaServicio.listaraporbacionEviPorArchivo(evidencia.id_archivo).subscribe(
       (data: any[]) => {
         this.listaAprobacionPoa = data;
         this.dataSource3.data = this.listaAprobacionPoa;
         this.resultadosEncontradosporObservaciones =
           this.listaAprobacionPoa.length > 0; // Actualiza la variable según si se encontraron resultados
+        this.loadingService.hide();
+
       },
       (error: any) => {
         console.error('Error al listar las observaciones:', error);
+        this.loadingService.hide();
+
         this.resultadosEncontradosporObservaciones = false; // Si ocurre un error, no se encontraron resultados
       }
     );

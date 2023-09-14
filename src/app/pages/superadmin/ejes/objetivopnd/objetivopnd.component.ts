@@ -11,6 +11,7 @@ import {Objetivopnd} from "../../../../models/objetivopnd";
 import {ObjetivopndService} from "../../../../services/objetivopnd.service";
 import {Componentes} from "../../../../models/Componentes";
 import {Eje} from "../../../../models/eje";
+import {LoadingServiceService} from "../../../../components/loading-spinner/LoadingService.service";
 
 @Component({
   selector: 'app-objetivopnd',
@@ -65,7 +66,9 @@ export class ObjetivopndComponent  implements OnInit {
   constructor(
     private paginatorIntl: MatPaginatorIntl,
     private router: Router, private fb: FormBuilder,
-    private objetivopndServicio: ObjetivopndService
+    private objetivopndServicio: ObjetivopndService,
+    private loadingService: LoadingServiceService
+
   ) {
     this.formComponentes = fb.group({
 
@@ -103,6 +106,7 @@ export class ObjetivopndComponent  implements OnInit {
 
 
   guardar() {
+    this.loadingService.show();
     this.componentes = this.formComponentes.value;
     this.componentes.eje=this.componentex;
     this.objetivopndServicio.crearobjetivopnd(this.componentes)
@@ -111,6 +115,7 @@ export class ObjetivopndComponent  implements OnInit {
           console.log('Componente creado con éxito:', response);
           this.guardadoExitoso = true;
           this.listar(this.componentex);
+          this.loadingService.hide();
           Swal.fire(
             'Exitoso',
             'Se ha completado el registro con exito',
@@ -119,6 +124,7 @@ export class ObjetivopndComponent  implements OnInit {
         },
         (error) => {
           console.error('Error al crear el Componente:', error);
+          this.loadingService.hide();
           Swal.fire(
             'Error',
             'Ha ocurrido un error',
@@ -130,6 +136,8 @@ export class ObjetivopndComponent  implements OnInit {
 
 
   eliminar(componente: any) {
+
+
     Swal.fire({
       title: 'Estas seguro de eliminar el registro?',
       showDenyButton: true,
@@ -137,10 +145,14 @@ export class ObjetivopndComponent  implements OnInit {
       denyButtonText: `Eliminar`,
     }).then((result) => {
       if (!result.isConfirmed) {
+        this.loadingService.show();
         this.objetivopndServicio.eliminarobjetivopnd(componente).subscribe(
           (response) => {
-            this.listar(this.componentex)
+            this.loadingService.hide();
+
+
             Swal.fire('Eliminado!', '', 'success')
+            this.listar(this.componentex);
           }
         );
       }
@@ -149,13 +161,17 @@ export class ObjetivopndComponent  implements OnInit {
   }
 
   listar(eje: any): void {
+    this.loadingService.show();
+
     this.objetivopndServicio.listarObjetivosPorEje(eje).subscribe(
       (data: any[]) => {
         this.listaComponentes = data;
         this.dataSource.data = this.listaComponentes;
+        this.loadingService.hide();
       },
       (error: any) => {
         console.error('Error al listar los objetosods:', error);
+        this.loadingService.hide();
       }
     );
   }
@@ -175,6 +191,7 @@ export class ObjetivopndComponent  implements OnInit {
   }
 
   actualizar() {
+    this.loadingService.show();
 
     this.componentes.nombre = this.formComponentes.value.nombre;
 
@@ -183,7 +200,12 @@ export class ObjetivopndComponent  implements OnInit {
         this.componentes = new Objetivopnd();
         this.listar(this.componentex);
         Swal.fire('Operacion exitosa!', 'El registro se actualizo con exito', 'success')
-      });
+      },
+        (error: any) => {
+          console.error('Error al listar los modeloPoas:', error);
+          this.loadingService.hide();
+
+        });
   }
 
   //verDetalles(componente: any) {
