@@ -244,6 +244,8 @@ this.actividad.devengado=devengado
 
     // Verificar si estado y observación no están vacíos
     if (!this.estado || !this.observacion) {
+      this.loadingService.hide();
+
       Swal.fire('Advertencia', 'Existen campos vacíos', 'warning');
       return;
     }

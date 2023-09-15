@@ -10,7 +10,6 @@ import Swal from 'sweetalert2';
 import { AprobacionSolicitudService } from 'src/app/services/aprobacion-solicitud.service';
 import { AprobacionSolicitud } from 'src/app/models/AprobacionSolicitud';
 import { catchError, forkJoin, of, switchMap, throwError } from 'rxjs';
-import { Persona2 } from 'src/app/models/Persona2';
 import { PersonaService } from 'src/app/services/persona.service';
 import * as pdfMake from 'pdfmake/build/pdfmake';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
@@ -18,7 +17,6 @@ import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 import { format } from 'date-fns';
 import { Style, Table } from 'pdfmake/interfaces';
 import { Margins } from 'pdfmake/interfaces';
-import * as moment from 'moment';
 import { Usuario2 } from 'src/app/models/Usuario2';
 import { LoadingServiceService } from 'src/app/components/loading-spinner/LoadingService.service';
 import { ActividadespoaService } from 'src/app/services/actividadespoa.service';
@@ -81,9 +79,9 @@ export class ListSolicitudesPresupuestoSuperadminComponent implements OnInit {
 
   public aprobarSolicitud = new AprobacionSolicitud();
   public solicitudSeleted = new SolicitudActividadPrepuesto();
-  reformaI: ReformaTraspasoI = new ReformaTraspasoI;
-  reformaD: ReformaTraspasoD = new ReformaTraspasoD;
-  
+  reformaI: ReformaTraspasoI = new ReformaTraspasoI();
+  reformaD: ReformaTraspasoD = new ReformaTraspasoD();
+
   @ViewChild(MatPaginator, { static: false }) paginator?: MatPaginator;
 
   constructor(
@@ -98,9 +96,8 @@ export class ListSolicitudesPresupuestoSuperadminComponent implements OnInit {
     private reformaIService: ReformaTraspasoIService,
     private reformaDService: ReformaTraspasoDService,
 
-
-       //importar el spinner como servicio
-       private loadingService: LoadingServiceService
+    //importar el spinner como servicio
+    private loadingService: LoadingServiceService
   ) {
     this.paginatorIntl.nextPageLabel = this.nextPageLabel;
     this.paginatorIntl.lastPageLabel = this.lastPageLabel;
@@ -132,68 +129,42 @@ export class ListSolicitudesPresupuestoSuperadminComponent implements OnInit {
           console.log(this.listaSolicitudes);
           this.dataSource.data = this.listaSolicitudes;
           this.loadingService.hide();
-
         },
         (error: any) => {
           console.error('Error al listar los poas:', error);
           this.loadingService.hide();
-
         }
       );
   }
 
-
-  tipo:boolean=false;
+  tipo: boolean = false;
 
   seleccionar(soli: SolicitudActividadPrepuesto) {
     this.solicitudSeleted = soli;
     this.estado = this.solicitudSeleted.estado;
-
-
     if (this.solicitudSeleted.actividadSolicitud !== null) {
       this.actividadSelecciona = this.solicitudSeleted.actividadSolicitud;
+    } 
+    if (this.solicitudSeleted.responsable?.id !== undefined) {
+      this.correo = this.solicitudSeleted.responsable?.persona.correo;
+      this.nombre = this.solicitudSeleted.responsable?.persona.primer_nombre + ' ' + this.solicitudSeleted.responsable?.persona.primer_apellido;
+      console.log("this.correo")
+      console.log(this.correo)
+      console.log("this.nombre")
+      console.log(this.nombre)
+    } 
+    if (
+      this.solicitudSeleted.monto_total > this.solicitudSeleted.monto_actual
+    ) {
+      this.tipo = true;
+      this.reformaI.actividad = this.actividadSelecciona;
+      this.reformaI.valor = this.solicitudSeleted.monto_total;
+      this.reformaI.fecha = this.fechaActual;
     } else {
-    
+      this.reformaD.actividad = this.actividadSelecciona;
+      this.reformaD.valor = this.solicitudSeleted.monto_total;
+      this.reformaD.fecha = this.fechaActual;
     }
-    const idResponsable = this.solicitudSeleted.responsable?.id;
-
-    if (idResponsable !== undefined) {
-      console.log('this datos');
-      console.log(idResponsable);
-
-      // Luego, puedes continuar con el resto de tu lógica aquí
-      this.serviper.getcorreo(idResponsable).subscribe(
-        (data: Persona2) => {
-          console.log('datossssssssss');
-          this.correo = data.correo;
-          this.nombre = data.primer_nombre + ' ' + data.primer_apellido;
-
-          console.log('correo =' + this.correo);
-        },
-        (error: any) => {
-          console.error('Error al listar los componentes:', error);
-        }
-      );
-    } else {
-      console.log('idResponsable es undefined');
-    }
-
-
-
-if(this.solicitudSeleted.monto_total > this.solicitudSeleted.monto_actual){
-
-  this. tipo= true;
-  this.reformaI.actividad=this.actividadSelecciona;
-  this.reformaI.valor=this.solicitudSeleted.monto_total;
-  this.reformaI.fecha= this.fechaActual
-
-}else{
-  this.reformaD.actividad=this.actividadSelecciona;
-  this.reformaD.valor=this.solicitudSeleted.monto_total;
-  this.reformaD.fecha= this.fechaActual
-}
-
-
   }
 
   buscar() {
@@ -240,92 +211,29 @@ if(this.solicitudSeleted.monto_total > this.solicitudSeleted.monto_actual){
   get isRechazado() {
     return this.estado === 'RECHAZADO';
   }
-      //Quitar el usuario destinatario, responsable, actividad
-
  
 
-  /*
-  guardar() {
-    const codificado=this.solicitudSeleted.monto_total;
-    this.loadingService.show();
-
-    // Verificar si estado y observación no están vacíos
-    if (!this.estado || !this.observacion) {
-      Swal.fire('Advertencia', 'Existen campos vacios', 'warning');
-      return;
-    }
-    this.usuariosdit.id = this.user.id;
-    this.solic.id_solicitud_presupuesto=this.solicitudSeleted.id_solicitud_presupuesto
-    this.aprobarSolicitud.estado = this.estado;
-    this.aprobarSolicitud.observacion = this.observacion;
-    this.aprobarSolicitud.solicitud = this.solic;
-    this.aprobarSolicitud.usuario = this.usuariosdit;
-    this.solic.estado = this.estado;
-    this.solic.motivo= this.solicitudSeleted.motivo;
-    this.solic.fecha_solicitud= this.solicitudSeleted.fecha_solicitud;
-    this.solic.monto_actual=this.solicitudSeleted.monto_actual;
-    this.solic.monto_total=this.solicitudSeleted.monto_total;
-    this.solic.reforma= this.solicitudSeleted.reforma;
-    this.aprobarSolicitud.fecha_aprobacion = this.fechaActual;
-
-    this
-
-
-
-    forkJoin([
-      this.aprobacionSolicitudService.crear(this.aprobarSolicitud),
-      this.solicitudPresupuestoService.actualizar(
-        this.solicitudSeleted.id_solicitud_presupuesto,
-        this.solic
-      ),
-    ]).subscribe(
-      ([aprobarResponse, archivoResponse]) => {
-        this.sendEmail();
-        this.Limpiar();
-        this.loadingService.hide();
-
-        this.listarSolicitudes(this.user.id);
-        Swal.fire(
-          'Exitoso',
-          'Se ha completado el registro con éxito',
-          'success'
-        );
-      },
-      (error) => {
-        console.error('Error al realizar alguna de las operaciones:', error);
-        this.loadingService.hide();
-
-        Swal.fire(
-          'Error',
-          'Ha ocurrido un error en una o ambas operaciones',
-          'warning'
-        );
-      }
-    );
-  }*/
-
-  usuariosdit: Usuario2 = new Usuario2;
-  solic : SolicitudActividadPrepuesto = new SolicitudActividadPrepuesto;
-  usuariosdit2: Usuario2 = new Usuario2;
-actividadSelecciona : ActividadesPoa = new ActividadesPoa;
-usuariosditDest: Usuario2 = new Usuario2;
-Resposable: Usuario2 = new Usuario2;
-
-
-
-
+  usuariosdit: Usuario2 = new Usuario2();
+  solic: SolicitudActividadPrepuesto = new SolicitudActividadPrepuesto();
+  usuariosdit2: Usuario2 = new Usuario2();
+  actividadSelecciona: ActividadesPoa = new ActividadesPoa();
+  usuariosditDest: Usuario2 = new Usuario2();
+  Resposable: Usuario2 = new Usuario2();
 
   guardar() {
     this.loadingService.show();
-    const codificado=this.solicitudSeleted.monto_total;
+    const codificado = this.solicitudSeleted.monto_total;
     // Verificar si estado y observación no están vacíos
     if (!this.estado || !this.observacion) {
+      this.loadingService.hide();
       Swal.fire('Advertencia', 'Existen campos vacios', 'warning');
       return;
+
     }
 
     this.usuariosdit.id = this.user.id;
-    this.solic.id_solicitud_presupuesto=this.solicitudSeleted.id_solicitud_presupuesto
+    this.solic.id_solicitud_presupuesto =
+    this.solicitudSeleted.id_solicitud_presupuesto;
     this.usuariosdit2.id = this.actividadSelecciona.usuario.id;
     this.usuariosditDest.id = this.solic.destinatario?.id || 0; // 0 es un valor predeterminado si es undefined
     this.Resposable.id = this.solic.responsable?.id || 0;
@@ -334,25 +242,29 @@ Resposable: Usuario2 = new Usuario2;
     this.aprobarSolicitud.solicitud = this.solic;
     this.aprobarSolicitud.usuario = this.usuariosdit;
     this.solic.estado = this.estado;
-    this.solic.motivo= this.solicitudSeleted.motivo;
-    this.solic.fecha_solicitud= this.solicitudSeleted.fecha_solicitud;
-    this.solic.monto_actual=this.solicitudSeleted.monto_actual;
-    this.solic.monto_total=this.solicitudSeleted.monto_total;
-    this.solic.reforma= this.solicitudSeleted.reforma;
+    this.solic.motivo = this.solicitudSeleted.motivo;
+    this.solic.fecha_solicitud = this.solicitudSeleted.fecha_solicitud;
+    this.solic.monto_actual = this.solicitudSeleted.monto_actual;
+    this.solic.monto_total = this.solicitudSeleted.monto_total;
+    this.solic.reforma = this.solicitudSeleted.reforma;
     this.aprobarSolicitud.fecha_aprobacion = this.fechaActual;
-    console.log("datosss")
-    console.log(this.actividadSelecciona)
-    this.actividadSelecciona.usuario=this.usuariosdit2;
-    this.actividadSelecciona.codificado=codificado;
-  
+    console.log('datosss');
+    console.log(this.actividadSelecciona);
+    this.actividadSelecciona.usuario = this.usuariosdit2;
+    this.actividadSelecciona.codificado = codificado;
 
+
+
+
+
+    
     if (this.estado === 'APROBADO') {
       // Verificar el tipo
       if (this.tipo) {
         // Realizar la operación de Reforma I
         this.reformaIService.crear(this.reformaI).subscribe(
           () => {
-            console.error('Se creó Reforma I');
+            console.log('Se creó Reforma I');
             this.actualizarActividad();
           },
           (error: any) => {
@@ -364,8 +276,10 @@ Resposable: Usuario2 = new Usuario2;
         // Realizar la operación de Reforma D
         this.reformaDService.crear(this.reformaD).subscribe(
           () => {
-            console.error('Se creó Reforma D');
+            console.log('Se creó Reforma D');
             this.actualizarActividad();
+            this.loadingService.hide();
+
           },
           (error: any) => {
             console.error('Error al crear Reforma D:', error);
@@ -378,14 +292,19 @@ Resposable: Usuario2 = new Usuario2;
       this.realizarOperacionesAprobacionSolicitud();
     }
   }
-  
+
   private actualizarActividad() {
     this.actividadServi
-      .actualizar(this.actividadSelecciona.id_actividad, this.actividadSelecciona)
+      .actualizar(
+        this.actividadSelecciona.id_actividad,
+        this.actividadSelecciona
+      )
       .subscribe(
         () => {
-          console.error('Se editó la actividad');
+          console.log('Se editó la actividad');
           this.realizarOperacionesAprobacionSolicitud();
+          this.loadingService.hide();
+
         },
         (error: any) => {
           console.error('Error al editar la actividad:', error);
@@ -393,7 +312,7 @@ Resposable: Usuario2 = new Usuario2;
         }
       );
   }
-  
+
   private realizarOperacionesAprobacionSolicitud() {
     forkJoin([
       this.aprobacionSolicitudService.crear(this.aprobarSolicitud),
@@ -407,16 +326,22 @@ Resposable: Usuario2 = new Usuario2;
         this.Limpiar();
         this.loadingService.hide();
         this.listarSolicitudes(this.user.id);
-        Swal.fire('Exitoso', 'Se ha completado el registro con éxito', 'success');
+        Swal.fire(
+          'Exitoso',
+          'Se ha completado el registro con éxito',
+          'success'
+        );
       },
       (error) => {
         console.error('Error al realizar alguna de las operaciones:', error);
         this.loadingService.hide();
-        Swal.fire('Error', 'Ha ocurrido un error en una o ambas operaciones', 'warning');
+        Swal.fire(
+          'Error',
+          'Ha ocurrido un error en una o ambas operaciones',
+          'warning'
+        );
       }
     );
-
-
   }
 
 
@@ -424,6 +349,13 @@ Resposable: Usuario2 = new Usuario2;
 
 
 
+
+
+
+
+
+
+  
   GenerarPdf(Elemento: any) {
     this.solicitudSeleted = Elemento;
 
@@ -433,8 +365,6 @@ Resposable: Usuario2 = new Usuario2;
     );
 
     const contenido = [
-  
-
       { text: 'Santa Isabel, ' + fechaSolicitud, style: 'encabezado' },
       '\n\n',
       {
@@ -484,30 +414,39 @@ Resposable: Usuario2 = new Usuario2;
         style: 'tabla',
       },
       '\n\n',
-      { text: 'Atentamente,',  absolutePosition: { x: 40, y: 650} },
+      { text: 'Atentamente,', absolutePosition: { x: 40, y: 650 } },
       '\n\n',
       {
         text:
           (this.solicitudSeleted.responsable?.persona.primer_nombre || '') +
           ' ' +
           (this.solicitudSeleted.responsable?.persona.primer_apellido || ''),
-        style: 'firma',  absolutePosition: { x: 40, y: 700},
+        style: 'firma',
+        absolutePosition: { x: 40, y: 700 },
       },
       {
         text: this.solicitudSeleted.responsable?.persona.cargo || '',
-        style: 'firma',  absolutePosition: { x: 40, y: 715 },
+        style: 'firma',
+        absolutePosition: { x: 40, y: 715 },
       },
-      { text: 'GAD MUNICIPAL SANTA ISABEL.', style: 'firma',  absolutePosition: { x: 40, y: 730}  },
-      { text: 'Calle 3 de Noviembre y 24 de Mayo | 072270412 | info@santaisabel.gob.ec',  style: 'info', absolutePosition: { x: 2, y: 780}  },
-      
+      {
+        text: 'GAD MUNICIPAL SANTA ISABEL.',
+        style: 'firma',
+        absolutePosition: { x: 40, y: 730 },
+      },
+      {
+        text: 'Calle 3 de Noviembre y 24 de Mayo | 072270412 | info@santaisabel.gob.ec',
+        style: 'info',
+        absolutePosition: { x: 2, y: 780 },
+      },
     ];
 
     const estilos: { [key: string]: Style } = {
       encabezado: { fontSize: 12, bold: true, alignment: 'right' },
       destinatario: { fontSize: 12 },
       cuerpo: { fontSize: 12 },
-      firma: { fontSize: 12, bold: true},
-      info: { fontSize:9 , margin: [20, 0, 40, 0]    },
+      firma: { fontSize: 12, bold: true },
+      info: { fontSize: 9, margin: [20, 0, 40, 0] },
 
       tabla: {
         margin: [20, 0, 40, 0] as Margins,
@@ -523,18 +462,21 @@ Resposable: Usuario2 = new Usuario2;
     };
 
     const opcionesPdf = {
-      
       pageMargins: [0, 0, 0, 0],
-      pageOrientation: 'portrait', 
+      pageOrientation: 'portrait',
     };
-  
-
 
     const documentoPdf = {
-      watermark: { text: 'SANTA ISABEL', color: 'green', opacity: 0.1, bold: false, italics: false },
+      watermark: {
+        text: 'SANTA ISABEL',
+        color: 'green',
+        opacity: 0.1,
+        bold: false,
+        italics: false,
+      },
       content: contenido,
       styles: estilos,
-      opcionesPdf
+      opcionesPdf,
     };
 
     pdfMake.createPdf(documentoPdf).open();
@@ -543,10 +485,4 @@ Resposable: Usuario2 = new Usuario2;
     //const pdf = pdfMake.createPdf(pdfDefinition);
     //const pdf = pdfMake.createPdf(documentoPdf).download(fileName);
   }
-
-
-  
-  
-
-
 }
