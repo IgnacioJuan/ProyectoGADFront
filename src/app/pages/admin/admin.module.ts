@@ -10,6 +10,7 @@ import { AprobarRechazarDetalleAdminComponent } from './aprobar-rechazar-detalle
 
 import { SharedModule } from 'src/app/shared/shared.module';
 import { ListPoasEnviadosAdminComponent } from './list-poas-enviados-admin/list-poas-enviados-admin.component';
+import { CrearResponsablesComponent } from './crear-responsables/crear-responsables.component';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import { ListPoasEnviadosAdminComponent } from './list-poas-enviados-admin/list-
     AprobarRechazarAdminComponent,
     AprobarRechazarDetalleAdminComponent,
     ListPoasEnviadosAdminComponent,
+    CrearResponsablesComponent,
 
 
 
