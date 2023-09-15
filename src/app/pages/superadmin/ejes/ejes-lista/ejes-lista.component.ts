@@ -7,6 +7,7 @@ import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms'
 import {MatTableDataSource} from "@angular/material/table";
 import {MatPaginator, MatPaginatorIntl} from "@angular/material/paginator";
 import {Router} from "@angular/router";
+import {LoadingServiceService} from "../../../../components/loading-spinner/LoadingService.service";
 
 
 @Component({
@@ -19,7 +20,7 @@ export class EjesListaComponent implements OnInit{
   guardadoExitoso: boolean = false;
   miModal!: ElementRef;
   //tabla
-  itemsPerPageLabel = 'Componentes por página';
+  itemsPerPageLabel = 'Ejes por página';
   nextPageLabel = 'Siguiente';
   lastPageLabel = 'Última';
   firstPageLabel='Primera';
@@ -58,7 +59,8 @@ export class EjesListaComponent implements OnInit{
   constructor(
     private paginatorIntl: MatPaginatorIntl,
     private router: Router, private fb: FormBuilder,
-    private ejeServicio: EjeService
+    private ejeServicio: EjeService,
+    private loadingService: LoadingServiceService
   ) {
     this.formComponentes = fb.group({
 
@@ -82,12 +84,15 @@ export class EjesListaComponent implements OnInit{
 
 
   guardar() {
+    this.loadingService.show();
+
     this.componentes = this.formComponentes.value;
     this.ejeServicio.crearejes(this.componentes)
       .subscribe(
         (response) => {
           console.log('Componente creado con éxito:', response);
           this.guardadoExitoso = true;
+          this.loadingService.hide();
           this.listar();
           Swal.fire(
             'Exitoso',
@@ -97,6 +102,7 @@ export class EjesListaComponent implements OnInit{
         },
         (error) => {
           console.error('Error al crear el Componente:', error);
+          this.loadingService.hide();
           Swal.fire(
             'Error',
             'Ha ocurrido un error',
@@ -108,15 +114,19 @@ export class EjesListaComponent implements OnInit{
 
 
   eliminar(componente: any) {
+
     Swal.fire({
       title: 'Estas seguro de eliminar el registro?',
       showDenyButton: true,
       confirmButtonText: 'Cacelar',
       denyButtonText: `Eliminar`,
     }).then((result) => {
+
       if (!result.isConfirmed) {
+        this.loadingService.show();
         this.ejeServicio.eliminareje(componente).subscribe(
           (response) => {
+            this.loadingService.hide();
             this.listar()
             Swal.fire('Eliminado!', '', 'success')
           }
@@ -127,13 +137,17 @@ export class EjesListaComponent implements OnInit{
   }
 
   listar(): void {
+    this.loadingService.show();
+
     this.ejeServicio.obtenerListaejes().subscribe(
       (data: any[]) => {
         this.listaComponentes = data;
         this.dataSource.data = this.listaComponentes;
+        this.loadingService.hide();
       },
       (error: any) => {
         console.error('Error al listar los objetosods:', error);
+        this.loadingService.hide();
       }
     );
   }
@@ -163,7 +177,7 @@ export class EjesListaComponent implements OnInit{
   }
 
   actualizar() {
-
+    this.loadingService.show();
     this.componentes.nombre = this.formComponentes.value.nombre;
 
     this.ejeServicio.actualizareje(this.componentes.id_eje, this.componentes)
@@ -171,7 +185,12 @@ export class EjesListaComponent implements OnInit{
         this.componentes = new Eje();
         this.listar();
         Swal.fire('Operacion exitosa!', 'El registro se actualizo con exito', 'success')
-      });
+      },
+        (error: any) => {
+          console.error('Error al listar los ejes:', error);
+          this.loadingService.hide();
+
+        });
   }
 
   verDetalles(componente: any) {
