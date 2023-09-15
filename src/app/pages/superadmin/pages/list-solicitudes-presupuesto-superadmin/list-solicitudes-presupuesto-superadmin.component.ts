@@ -9,7 +9,7 @@ import { EmailServiceService } from 'src/app/services/email-service.service';
 import Swal from 'sweetalert2';
 import { AprobacionSolicitudService } from 'src/app/services/aprobacion-solicitud.service';
 import { AprobacionSolicitud } from 'src/app/models/AprobacionSolicitud';
-import { forkJoin } from 'rxjs';
+import { catchError, forkJoin, of, switchMap, throwError } from 'rxjs';
 import { Persona2 } from 'src/app/models/Persona2';
 import { PersonaService } from 'src/app/services/persona.service';
 import * as pdfMake from 'pdfmake/build/pdfmake';
@@ -21,6 +21,12 @@ import { Margins } from 'pdfmake/interfaces';
 import * as moment from 'moment';
 import { Usuario2 } from 'src/app/models/Usuario2';
 import { LoadingServiceService } from 'src/app/components/loading-spinner/LoadingService.service';
+import { ActividadespoaService } from 'src/app/services/actividadespoa.service';
+import { ActividadesPoa } from 'src/app/models/ActividadesPoa';
+import { ReformaTraspasoI } from 'src/app/models/ReformaTraspasoI';
+import { ReformaTraspasoD } from 'src/app/models/ReformaTraspasoD';
+import { ReformaTraspasoIService } from 'src/app/services/reformatraspaso-i.service';
+import { ReformaTraspasoDService } from 'src/app/services/reformatraspaso-d.service';
 
 @Component({
   selector: 'app-list-solicitudes-presupuesto-superadmin',
@@ -36,6 +42,7 @@ export class ListSolicitudesPresupuestoSuperadminComponent implements OnInit {
   columnasSolicitud: string[] = [
     'responsable',
     'actividad_nombre',
+    'codificado',
     'estado',
     'fecha_solicitud',
     'evaluar',
@@ -74,7 +81,9 @@ export class ListSolicitudesPresupuestoSuperadminComponent implements OnInit {
 
   public aprobarSolicitud = new AprobacionSolicitud();
   public solicitudSeleted = new SolicitudActividadPrepuesto();
-
+  reformaI: ReformaTraspasoI = new ReformaTraspasoI;
+  reformaD: ReformaTraspasoD = new ReformaTraspasoD;
+  
   @ViewChild(MatPaginator, { static: false }) paginator?: MatPaginator;
 
   constructor(
@@ -85,6 +94,11 @@ export class ListSolicitudesPresupuestoSuperadminComponent implements OnInit {
     private emaservices: EmailServiceService,
     private aprobacionSolicitudService: AprobacionSolicitudService,
     private serviper: PersonaService,
+    private actividadServi: ActividadespoaService,
+    private reformaIService: ReformaTraspasoIService,
+    private reformaDService: ReformaTraspasoDService,
+
+
        //importar el spinner como servicio
        private loadingService: LoadingServiceService
   ) {
@@ -128,9 +142,19 @@ export class ListSolicitudesPresupuestoSuperadminComponent implements OnInit {
       );
   }
 
+
+  tipo:boolean=false;
+
   seleccionar(soli: SolicitudActividadPrepuesto) {
     this.solicitudSeleted = soli;
     this.estado = this.solicitudSeleted.estado;
+
+
+    if (this.solicitudSeleted.actividadSolicitud !== null) {
+      this.actividadSelecciona = this.solicitudSeleted.actividadSolicitud;
+    } else {
+    
+    }
     const idResponsable = this.solicitudSeleted.responsable?.id;
 
     if (idResponsable !== undefined) {
@@ -153,6 +177,23 @@ export class ListSolicitudesPresupuestoSuperadminComponent implements OnInit {
     } else {
       console.log('idResponsable es undefined');
     }
+
+
+
+if(this.solicitudSeleted.monto_total > this.solicitudSeleted.monto_actual){
+
+  this. tipo= true;
+  this.reformaI.actividad=this.actividadSelecciona;
+  this.reformaI.valor=this.solicitudSeleted.monto_total;
+  this.reformaI.fecha= this.fechaActual
+
+}else{
+  this.reformaD.actividad=this.actividadSelecciona;
+  this.reformaD.valor=this.solicitudSeleted.monto_total;
+  this.reformaD.fecha= this.fechaActual
+}
+
+
   }
 
   buscar() {
@@ -199,9 +240,13 @@ export class ListSolicitudesPresupuestoSuperadminComponent implements OnInit {
   get isRechazado() {
     return this.estado === 'RECHAZADO';
   }
-  usuariosdit: Usuario2 = new Usuario2;
-solic : SolicitudActividadPrepuesto = new SolicitudActividadPrepuesto;
+      //Quitar el usuario destinatario, responsable, actividad
+
+ 
+
+  /*
   guardar() {
+    const codificado=this.solicitudSeleted.monto_total;
     this.loadingService.show();
 
     // Verificar si estado y observación no están vacíos
@@ -213,13 +258,19 @@ solic : SolicitudActividadPrepuesto = new SolicitudActividadPrepuesto;
     this.solic.id_solicitud_presupuesto=this.solicitudSeleted.id_solicitud_presupuesto
     this.aprobarSolicitud.estado = this.estado;
     this.aprobarSolicitud.observacion = this.observacion;
-
-    //Quitar el usuario destinatario, responsable, actividad
     this.aprobarSolicitud.solicitud = this.solic;
     this.aprobarSolicitud.usuario = this.usuariosdit;
     this.solic.estado = this.estado;
+    this.solic.motivo= this.solicitudSeleted.motivo;
+    this.solic.fecha_solicitud= this.solicitudSeleted.fecha_solicitud;
+    this.solic.monto_actual=this.solicitudSeleted.monto_actual;
+    this.solic.monto_total=this.solicitudSeleted.monto_total;
+    this.solic.reforma= this.solicitudSeleted.reforma;
     this.aprobarSolicitud.fecha_aprobacion = this.fechaActual;
-    // Guardamos la aprobación y actualizamos el estado del archivo en paralelo
+
+    this
+
+
 
     forkJoin([
       this.aprobacionSolicitudService.crear(this.aprobarSolicitud),
@@ -251,12 +302,122 @@ solic : SolicitudActividadPrepuesto = new SolicitudActividadPrepuesto;
         );
       }
     );
+  }*/
+
+  usuariosdit: Usuario2 = new Usuario2;
+  solic : SolicitudActividadPrepuesto = new SolicitudActividadPrepuesto;
+  usuariosdit2: Usuario2 = new Usuario2;
+actividadSelecciona : ActividadesPoa = new ActividadesPoa;
+usuariosditDest: Usuario2 = new Usuario2;
+Resposable: Usuario2 = new Usuario2;
+
+
+
+
+
+  guardar() {
+    this.loadingService.show();
+    const codificado=this.solicitudSeleted.monto_total;
+    // Verificar si estado y observación no están vacíos
+    if (!this.estado || !this.observacion) {
+      Swal.fire('Advertencia', 'Existen campos vacios', 'warning');
+      return;
+    }
+
+    this.usuariosdit.id = this.user.id;
+    this.solic.id_solicitud_presupuesto=this.solicitudSeleted.id_solicitud_presupuesto
+    this.usuariosdit2.id = this.actividadSelecciona.usuario.id;
+    this.usuariosditDest.id = this.solic.destinatario?.id || 0; // 0 es un valor predeterminado si es undefined
+    this.Resposable.id = this.solic.responsable?.id || 0;
+    this.aprobarSolicitud.estado = this.estado;
+    this.aprobarSolicitud.observacion = this.observacion;
+    this.aprobarSolicitud.solicitud = this.solic;
+    this.aprobarSolicitud.usuario = this.usuariosdit;
+    this.solic.estado = this.estado;
+    this.solic.motivo= this.solicitudSeleted.motivo;
+    this.solic.fecha_solicitud= this.solicitudSeleted.fecha_solicitud;
+    this.solic.monto_actual=this.solicitudSeleted.monto_actual;
+    this.solic.monto_total=this.solicitudSeleted.monto_total;
+    this.solic.reforma= this.solicitudSeleted.reforma;
+    this.aprobarSolicitud.fecha_aprobacion = this.fechaActual;
+    console.log("datosss")
+    console.log(this.actividadSelecciona)
+    this.actividadSelecciona.usuario=this.usuariosdit2;
+    this.actividadSelecciona.codificado=codificado;
+  
+
+    if (this.estado === 'APROBADO') {
+      // Verificar el tipo
+      if (this.tipo) {
+        // Realizar la operación de Reforma I
+        this.reformaIService.crear(this.reformaI).subscribe(
+          () => {
+            console.error('Se creó Reforma I');
+            this.actualizarActividad();
+          },
+          (error: any) => {
+            console.error('Error al crear Reforma I:', error);
+            this.loadingService.hide();
+          }
+        );
+      } else {
+        // Realizar la operación de Reforma D
+        this.reformaDService.crear(this.reformaD).subscribe(
+          () => {
+            console.error('Se creó Reforma D');
+            this.actualizarActividad();
+          },
+          (error: any) => {
+            console.error('Error al crear Reforma D:', error);
+            this.loadingService.hide();
+          }
+        );
+      }
+    } else if (this.estado === 'RECHAZADO') {
+      // Solo realizar operaciones de aprobación y actualización de solicitud
+      this.realizarOperacionesAprobacionSolicitud();
+    }
   }
+  
+  private actualizarActividad() {
+    this.actividadServi
+      .actualizar(this.actividadSelecciona.id_actividad, this.actividadSelecciona)
+      .subscribe(
+        () => {
+          console.error('Se editó la actividad');
+          this.realizarOperacionesAprobacionSolicitud();
+        },
+        (error: any) => {
+          console.error('Error al editar la actividad:', error);
+          this.loadingService.hide();
+        }
+      );
+  }
+  
+  private realizarOperacionesAprobacionSolicitud() {
+    forkJoin([
+      this.aprobacionSolicitudService.crear(this.aprobarSolicitud),
+      this.solicitudPresupuestoService.actualizar(
+        this.solicitudSeleted.id_solicitud_presupuesto,
+        this.solic
+      ),
+    ]).subscribe(
+      ([aprobarResponse, archivoResponse]) => {
+        this.sendEmail();
+        this.Limpiar();
+        this.loadingService.hide();
+        this.listarSolicitudes(this.user.id);
+        Swal.fire('Exitoso', 'Se ha completado el registro con éxito', 'success');
+      },
+      (error) => {
+        console.error('Error al realizar alguna de las operaciones:', error);
+        this.loadingService.hide();
+        Swal.fire('Error', 'Ha ocurrido un error en una o ambas operaciones', 'warning');
+      }
+    );
 
 
-
-
-
+  }
 
 
 

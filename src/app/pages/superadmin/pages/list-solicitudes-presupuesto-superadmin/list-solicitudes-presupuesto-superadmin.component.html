@@ -42,6 +42,12 @@
                 {{ elemento.actividadSolicitud?.nombre }}
               </td>
             </ng-container>
+            <ng-container matColumnDef="codificado">
+              <th mat-header-cell *matHeaderCellDef>CODIFICADO</th>
+              <td mat-cell *matCellDef="let elemento" >
+                {{ elemento.actividadSolicitud?.codificado }}
+              </td>
+            </ng-container>
             <ng-container matColumnDef="estado">
               <th mat-header-cell *matHeaderCellDef>ESTADO</th>
               <td mat-cell *matCellDef="let elemento" >
