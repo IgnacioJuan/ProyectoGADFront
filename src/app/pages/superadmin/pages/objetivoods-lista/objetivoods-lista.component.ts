@@ -11,6 +11,7 @@ import {Router} from "@angular/router";
 import {ComponentesService} from "../../../../services/componentes.service";
 import {ObjetivoPdotService} from "../../../../services/objetivo-pdot.service";
 import Swal from "sweetalert2";
+import {LoadingServiceService} from "../../../../components/loading-spinner/LoadingService.service";
 
 @Component({
   selector: 'app-objetivoods-lista',
@@ -22,7 +23,7 @@ export class ObjetivoodsListaComponent implements OnInit {
   guardadoExitoso: boolean = false;
   miModal!: ElementRef;
   //tabla
-  itemsPerPageLabel = 'Componentes por página';
+  itemsPerPageLabel = 'Objetivos por página';
   nextPageLabel = 'Siguiente';
   lastPageLabel = 'Última';
   firstPageLabel='Primera';
@@ -62,8 +63,9 @@ export class ObjetivoodsListaComponent implements OnInit {
     private paginatorIntl: MatPaginatorIntl,
     private router: Router, private fb: FormBuilder,
     private componentesService: ComponentesService,
-    private objetivoPDOTService: ObjetivoPdotService,
-    private objetivoodsServicio: ObjetivoodsService
+    private objetivoodsServicio: ObjetivoodsService,
+    private loadingService: LoadingServiceService
+
   ) {
     this.formComponentes = fb.group({
 
@@ -87,12 +89,16 @@ export class ObjetivoodsListaComponent implements OnInit {
 
 
   guardar() {
+    this.loadingService.show();
+
     this.componentes = this.formComponentes.value;
     this.objetivoodsServicio.crearobjetivoods(this.componentes)
       .subscribe(
         (response) => {
           console.log('Componente creado con éxito:', response);
           this.guardadoExitoso = true;
+          this.loadingService.hide();
+
           this.listar();
           Swal.fire(
             'Exitoso',
@@ -102,6 +108,8 @@ export class ObjetivoodsListaComponent implements OnInit {
         },
         (error) => {
           console.error('Error al crear el Componente:', error);
+          this.loadingService.hide();
+
           Swal.fire(
             'Error',
             'Ha ocurrido un error',
@@ -113,17 +121,21 @@ export class ObjetivoodsListaComponent implements OnInit {
 
 
   eliminar(componente: any) {
+    this.loadingService.show();
     Swal.fire({
-      title: 'Estas seguro de eliminar el registro?',
+      title: '¿Estas seguro de eliminar el registro?',
       showDenyButton: true,
-      confirmButtonText: 'Cacelar',
+      confirmButtonText: 'Cancelar',
       denyButtonText: `Eliminar`,
     }).then((result) => {
       if (!result.isConfirmed) {
         this.objetivoodsServicio.eliminarobjetivoods(componente).subscribe(
           (response) => {
-            this.listar()
+            this.loadingService.hide();
+
+
             Swal.fire('Eliminado!', '', 'success')
+            this.listar();
           }
         );
       }
@@ -132,13 +144,19 @@ export class ObjetivoodsListaComponent implements OnInit {
   }
 
   listar(): void {
+    this.loadingService.show();
+
     this.objetivoodsServicio.obtenerListaobjetivoods().subscribe(
       (data: any[]) => {
         this.listaComponentes = data;
         this.dataSource.data = this.listaComponentes;
+        this.loadingService.hide();
+
       },
       (error: any) => {
         console.error('Error al listar los objetosods:', error);
+        this.loadingService.hide();
+
       }
     );
   }
@@ -159,7 +177,7 @@ export class ObjetivoodsListaComponent implements OnInit {
   }
 
   actualizar() {
-
+    this.loadingService.show();
     this.componentes.nombre = this.formComponentes.value.nombre;
     this.componentes.descripcion = this.formComponentes.value.descripcion;
     this.componentesService.actualizar(this.componentes.id_objetivo_ods, this.componentes)
@@ -167,14 +185,19 @@ export class ObjetivoodsListaComponent implements OnInit {
         this.componentes = new Objetivoods();
         this.listar();
         Swal.fire('Operacion exitosa!', 'El registro se actualizo con exito', 'success')
-      });
+      },
+        (error: any) => {
+          console.error('Error al listar los modeloPoas:', error);
+          this.loadingService.hide();
+
+        });
   }
 
   verDetalles(componente: any) {
     this.router.navigate(['/sup/flujo_Componentes/componente_objetivoPDOT'], { state: { data: componente } });
   }
 
-  
+
 
   buscar() {
     // Filtra los componentes basados en el filtro
