@@ -22,7 +22,6 @@ export class ArchivoService {
     formData.append('descripcion', descripcion);
     formData.append('valor', valor.toString());
     formData.append('id_evidencia', id_evidencia.toString());
-
     const req = new HttpRequest('POST', `${this.baserrl}/archivo/upload`, formData, {
       reportProgress: true,
      responseType: 'json'

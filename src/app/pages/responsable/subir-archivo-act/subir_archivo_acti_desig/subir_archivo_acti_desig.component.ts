@@ -16,6 +16,7 @@ import { Actividad_arch } from 'src/app/services/actividad_arch';
 import { MatPaginator } from '@angular/material/paginator';
 import { PoaService } from 'src/app/services/poa.service';
 import { LoadingServiceService } from 'src/app/components/loading-spinner/LoadingService.service';
+import { ActividadService } from 'src/app/services/actividad.service';
 @Component({
   selector: 'app-subir_archivo_acti_desig',
   templateUrl: './subir_archivo_acti_desig.component.html',
@@ -45,14 +46,14 @@ export class Subir_archivo_acti_desigComponent implements OnInit {
   @ViewChild('archivoInput') archivoInput!: ElementRef<HTMLInputElement>; // Note the "!" operator
   variable1: number = 0; // Asigna un valor predeterminado o inicializa la variable
   variable2: number = 0; // Asigna un valor predeterminado o inicializa la variable
-  valorMaximo: number=0;
-    constructor(
+  valorMaximo: number = 0;
+  constructor(
     private archivo: ArchivoService,
     public login: LoginService,
     private fb: FormBuilder,
     private router: Router,
     private poaservis: PoaService,
-    //importar el spinner como servicio
+    private actiservis: ActividadService, //importar el spinner como servicio
     private loadingService: LoadingServiceService
   ) {
     this.archivoInput = new ElementRef<HTMLInputElement>(
@@ -90,16 +91,6 @@ export class Subir_archivo_acti_desigComponent implements OnInit {
       this.router.navigate(['user-dashboard']);
       location.replace('/use/user-dashboard');
     }
-    this.variable1=this.activ.codificado;
-    console.log("v1==" + this.variable1);
-    this.variable2=this.activ.devengado;
-    console.log("v2==" + this.variable2);
-   // Calcula el valor máximo como la suma de variable1 y variable2
-   this.valorMaximo = this.variable1 - this.variable2;
-   console.log("vmax=="+this.valorMaximo)
-
-    console.log('johb iid acti>>>>' + this.activ.id_actividad);
-
     const datos = history.state.data;
     this.archi = data;
     if (this.archi == undefined) {
@@ -113,8 +104,13 @@ export class Subir_archivo_acti_desigComponent implements OnInit {
       this.user = this.login.getUser();
     });
     this.listar();
-
+    this.restrivalor();
     this.verificarFechaLimite();
+  }
+  restrivalor() {
+    this.actiservis.valor(this.activ.id_actividad).subscribe((data) => {
+      this.valorMaximo = data.valor;
+    });
   }
 
   descripcion: string = '';
@@ -131,8 +127,12 @@ export class Subir_archivo_acti_desigComponent implements OnInit {
       .subscribe(
         (event) => {
           this.descripcion = '';
-          this.valor = 0;
           this.listar();
+          this.activ.devengado = this.activ.devengado + this.valor;
+          this.restrivalor();
+          this.valor = 0;
+
+          console.log('valor =' + this.valor);
           this.loadingService.hide();
           Swal.fire({
             title: '¡Éxito!',
@@ -142,8 +142,8 @@ export class Subir_archivo_acti_desigComponent implements OnInit {
           });
         },
         (error) => {
-         console.log('Archivo subido:');
-         this.loadingService.hide();
+          console.log('Archivo subido:');
+          this.loadingService.hide();
 
           console.error('Error al subir el archivo:', error);
           Swal.fire({
@@ -172,7 +172,6 @@ export class Subir_archivo_acti_desigComponent implements OnInit {
         this.aRCHI = data;
         this.dataSource.data = data;
         this.loadingService.hide();
-
       });
   }
 
@@ -211,6 +210,7 @@ export class Subir_archivo_acti_desigComponent implements OnInit {
     this.archivo.eliminar(act).subscribe(
       (response) => {
         this.listar();
+        this.restrivalor();
       },
       (error) => {
         console.error('Error al eliminar:', error);
@@ -254,6 +254,7 @@ export class Subir_archivo_acti_desigComponent implements OnInit {
           this.formulario.reset();
           this.isEditing = false;
           this.listar();
+          this.restrivalor();
         },
         (error) => {
           console.error('Error al editar el archivo:', error);
