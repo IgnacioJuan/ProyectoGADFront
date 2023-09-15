@@ -10,13 +10,13 @@
       "
     >
       <h1 style="cursor: pointer; color: green">
-        <strong> DETALLE POA</strong>
+        <strong>POA</strong>
       </h1>
     </blockquote>
     <!-- Tarjetas -->
-    <div class="d-flex justify-content-center align-items-center flex-wrap">
+    <div class="d-flex justify-content-center align-items-center flex-wrap" *ngIf="cardsToShow.length > 0">
       <!-- Tarjetas Dinámicas -->
-      <div *ngIf="cardsToShow.length > 0">
+      
         <mat-card
           class="example-card mx-2 my-2"
           *ngFor="let card of cardsToShow"
@@ -51,15 +51,15 @@
             <!-- <mat-progress-bar mode="indeterminate"></mat-progress-bar> -->
           </mat-card-footer>
         </mat-card>
-      </div>
+      
       <!-- Mensaje cuando no hay tarjetas -->
       <div
         *ngIf="cardsToShow.length === 0"
-        class="example-card mx-2 my-2 d-flex justify-content-center align-items-center"
+        class="example-card-vacio mx-2 my-2 d-flex justify-content-center align-items-center"
       >
       <div >
         <img src="assets/img/poas.svg" alt="" style="margin-right: 10px; height: 70px; width: 70px">
-        <span style="color: #6a737b">No existen detalles pendientes</span>
+        <span style="color: #6a737b">No existen POA pendientes</span>
     </div>
       </div>
     </div>
