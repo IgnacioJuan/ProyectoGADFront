@@ -73,7 +73,12 @@ this.listar();
       this.dataSource.data = data;
       this.dataSource.data = this.acti; // Actualizar el dataSource
       this.loadingService.hide();
+    },(error:any)=>{
+
+      this.loadingService.hide();
+
     });
+
 
   }
   archivo: Archivo = new Archivo();
