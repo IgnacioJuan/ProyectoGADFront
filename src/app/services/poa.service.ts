@@ -9,6 +9,7 @@ import { PoasAdminEstadoProjection } from '../interface/PoasAdminEstado';
 import { PoaNoAprobadoProjection } from '../interface/PoaNoAprobadoProjection';
 import { PoaporUsuarioProjection } from '../interface/PoaporUsuarioProjection';
 import { PoasConActividadesPendientesProjection } from '../interface/PoasConActividadesPendientesProjection';
+import { Poa_proyec_dto } from '../interface/poa_proyec_dto';
 
 
 @Injectable({
@@ -104,5 +105,8 @@ export class PoaService {
   PoasConActividadesPendientes(): Observable<PoasConActividadesPendientesProjection> {
     return this.http.get<any>(`${baserUrl}/api/poa/PoasConActividadesP`)
   }
-
+  getPoaactiprojection(id: number): Observable<Poa_proyec_dto[]> {
+    const url = `${baserUrl}/api/poa/aactijq/${id}`;
+    return this.http.get<Poa_proyec_dto[]>(url);
+  }
  }
