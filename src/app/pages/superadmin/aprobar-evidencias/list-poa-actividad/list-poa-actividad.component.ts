@@ -63,7 +63,7 @@ export class ListPoaActividadComponent  implements OnInit {
    return `${startIndex + 1} - ${endIndex} de ${length}`;
  };
 //Columnas Tabla
- columnasUsuario: string[] = ['barrio', 'cobertura','fecha_inicio','fecha_fin','usuario', 'evidencias'];
+ columnasUsuario: string[] = [ 'localizacion','barrio', 'cobertura','fecha_inicio', 'fecha_fin', 'lineabase','evidencias'];
 
  listar(): void {
   this.loadingService.show();
