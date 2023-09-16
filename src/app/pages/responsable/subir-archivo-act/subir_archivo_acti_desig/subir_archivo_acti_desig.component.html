@@ -23,8 +23,8 @@
           <div class="mat-elevation-z8 " style="margin-bottom: 5%">
             <mat-table [dataSource]="dataSource | buscar : filterPost " class="mat-elevation-z8">
               <ng-container matColumnDef="Id">
-                <mat-header-cell *matHeaderCellDef>Id</mat-header-cell>
-                <mat-cell *matCellDef="let file">{{ file.id_archivo }}</mat-cell>
+                <mat-header-cell *matHeaderCellDef [style.display]="ocultar ? '' : 'none'">Id</mat-header-cell>
+                <mat-cell *matCellDef="let file" [style.display]="ocultar ? '' : 'none'">{{ file.id_archivo }}</mat-cell>
               </ng-container>
 
               <ng-container matColumnDef="Archivo">
