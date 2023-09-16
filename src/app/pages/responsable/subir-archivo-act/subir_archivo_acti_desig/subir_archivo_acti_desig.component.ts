@@ -81,7 +81,7 @@ export class Subir_archivo_acti_desigComponent implements OnInit {
   @ViewChild(MatPaginator)
   paginator!: MatPaginator;
 
-  ocultar=false;
+  ocultar = false;
   activ: Actividad_arch = new Actividad_arch();
   archi: Archivo = new Archivo();
 
@@ -285,14 +285,15 @@ export class Subir_archivo_acti_desigComponent implements OnInit {
   verificarFechaLimite(idActividad: number) {
     this.actiservis.getFechaFin(idActividad).subscribe(
       (data) => {
-        if (data && data.fecha_fin) { // Verifica si data y fecha_fin son definidos
+        if (data && data.fecha_fin) {
+          // Verifica si data y fecha_fin son definidos
           const fechaActual = new Date();
           const fechaFin = new Date(data.fecha_fin);
-  
+
           console.log('fecha ini >>> ' + fechaActual);
           console.log('fecha fin >>> ' + data.fecha_fin);
           console.log('fecha fin 2 >>> ' + fechaFin);
-  
+
           if (fechaActual > fechaFin) {
             this.botonDeshabilitado = true;
             this.mostrarMensaje(
@@ -300,7 +301,9 @@ export class Subir_archivo_acti_desigComponent implements OnInit {
             );
           }
         } else {
-          console.error('La fecha de finalización no está definida o la respuesta es undefined.');
+          console.error(
+            'La fecha de finalización no está definida o la respuesta es undefined.'
+          );
           // Puedes manejar este caso de acuerdo a tus necesidades.
         }
       },
@@ -329,5 +332,8 @@ export class Subir_archivo_acti_desigComponent implements OnInit {
       default:
         return {};
     }
+  }
+  veractivi() {
+    window.history.back();
   }
 }
