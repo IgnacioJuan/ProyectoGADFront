@@ -11,7 +11,7 @@ import { DetalleActividadDTO } from '../models/DetalleActividadDTO';
 import { UsuarioActividadDTO } from '../models/UsuarioActividadDTO';
 import { ActividadesPoaDTO } from '../models/ActividadesAprobPoa ';
 import { valorprojec } from '../interface/valorprojec';
-import { fechaactiProjection } from '../interface/fechaactiProjecttion';
+//import { fechaactiProjection } from '../interface/fechaactiProjecttion';
 
 @Injectable({
   providedIn: 'root'

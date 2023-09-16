@@ -36,6 +36,7 @@ export class ListaPoaComponent implements OnInit{
   public poa = new Poa();
   poas: PoaActividadProjection[] = [];
   public activ = new ActividadesPoa();
+  ocultarID: boolean = false;
 
   filterPost = '';
   filteredPoas: any[] = [];

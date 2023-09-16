@@ -78,7 +78,7 @@ export class ActividadesComponent implements OnInit {
   listaU2!: ListaActividadesUsuario[];
   spans: any[] = [];
   spans2: any[] = [];
-  modoCreacion: boolean = true;
+  ocultarID: boolean = false;
 
 
   //listarActividades

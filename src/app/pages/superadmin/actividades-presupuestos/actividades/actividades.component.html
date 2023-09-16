@@ -21,9 +21,9 @@
         <div class="mat-elevation-z8 table-responsive" style="margin-bottom: 5%">
           <table mat-table [dataSource]="dataSource">
             <ng-container matColumnDef="id_actividad">
-              <th mat-header-cell *matHeaderCellDef>ID</th>
+              <th mat-header-cell *matHeaderCellDef [style.display]="ocultarID ? '' : 'none'">ID</th>
               <td mat-cell *matCellDef="let elemento" (mouseenter)="showHint = true" (mouseleave)="showHint = false"
-                [class.show-hint]="showHint">
+                [class.show-hint]="showHint" [style.display]="ocultarID ? '' : 'none'">
                 {{ elemento.id_actividad }}
               </td>
             </ng-container>
@@ -377,9 +377,9 @@
             <div class="mat-elevation-z8">
               <table mat-table [dataSource]="listaPE | responsable : searchTerm1" class="table table-hover">
                 <ng-container matColumnDef="id_presupuesto_externo">
-                  <th mat-header-cell *matHeaderCellDef>ID</th>
+                  <th mat-header-cell *matHeaderCellDef [style.display]="ocultarID ? '' : 'none'">ID</th>
                   <td mat-cell *matCellDef="let a; let i = index" [attr.rowspan]="getRowSpan('id_presupuesto_externo', i)"
-                    [style.display]="getRowSpan('id_presupuesto_externo', i) ? '' : 'none'">
+                    [style.display]="getRowSpan('id_presupuesto_externo', i) ? '' : 'none'" [style.display]="ocultarID ? '' : 'none'">
                     {{ a.id_presupuesto_externo }}
                   </td>
                 </ng-container>
@@ -431,9 +431,9 @@
             <div class="mat-elevation-z8">
               <table mat-table [dataSource]="listaRS | responsable : searchTerm2" class="table table-hover">
                 <ng-container matColumnDef="id_ref_suplemento">
-                  <th mat-header-cell *matHeaderCellDef>ID</th>
+                  <th mat-header-cell *matHeaderCellDef [style.display]="ocultarID ? '' : 'none'">ID</th>
                   <td mat-cell *matCellDef="let e; let i = index" [attr.rowspan]="getRowSpan2('id_ref_suplemento', i)"
-                    [style.display]="getRowSpan2('id_ref_suplemento', i) ? '' : 'none'">
+                    [style.display]="getRowSpan2('id_ref_suplemento', i) ? '' : 'none'" [style.display]="ocultarID ? '' : 'none'">
                     {{ e.id_ref_suplemento }}
                   </td>
                 </ng-container>
@@ -470,10 +470,10 @@
             </div>
             <div class="mat-elevation-z8">
               <table mat-table [dataSource]="listaRTI | responsable : searchTerm3" class="table table-hover">
-                <ng-container matColumnDef="id_reftras_i">
-                  <th mat-header-cell *matHeaderCellDef>ID</th>
+                <ng-container matColumnDef="id_reftras_i" >
+                  <th mat-header-cell *matHeaderCellDef [style.display]="ocultarID ? '' : 'none'">ID</th>
                   <td mat-cell *matCellDef="let r; let i = index" [attr.rowspan]="getRowSpan3('id_reftras_i', i)"
-                    [style.display]="getRowSpan3('id_reftras_i', i) ? '' : 'none'">
+                    [style.display]="getRowSpan3('id_reftras_i', i) ? '' : 'none'" [style.display]="ocultarID ? '' : 'none'">
                     {{ r.id_reftras_i }}
                   </td>
                 </ng-container>
@@ -511,9 +511,9 @@
             <div class="mat-elevation-z8">
               <table mat-table [dataSource]="listaRTD | responsable : searchTerm4" class="table table-hover">
                 <ng-container matColumnDef="id_reftras_d">
-                  <th mat-header-cell *matHeaderCellDef>ID</th>
+                  <th mat-header-cell *matHeaderCellDef [style.display]="ocultarID ? '' : 'none'">ID</th>
                   <td mat-cell *matCellDef="let a; let i = index" [attr.rowspan]="getRowSpan4('id_reftras_d', i)"
-                    [style.display]="getRowSpan4('id_reftras_d', i) ? '' : 'none'">
+                    [style.display]="getRowSpan4('id_reftras_d', i) ? '' : 'none'" [style.display]="ocultarID ? '' : 'none'">
                     {{ a.id_reftras_d }}
                   </td>
                 </ng-container>

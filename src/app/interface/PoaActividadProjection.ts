@@ -8,6 +8,5 @@ export interface PoaActividadProjection {
     comunidad: string;
     linea_base: number;
     tipo_periodo: string;
-    cantidadActividades: number;
-    
+    cantidadActividades: number; 
 }
