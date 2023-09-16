@@ -31,6 +31,7 @@ export class EvidenciasComponent implements OnInit {
 
   //Usuario logueado
   user: any = null;
+  rol:any = null;
   //tabla
   itemsPerPageLabel = 'Evidencias por página';
   nextPageLabel = 'Siguiente';
@@ -57,15 +58,8 @@ export class EvidenciasComponent implements OnInit {
   //Columnas Tabla
   columnasObservaciones: string[] = ['observacion','estadox','fecha_aprobacion','usuario_creacion'];
   columnasUsuario: string[] = [
-    'barrio',
-    'comunidad',
-    'cobertura',
-    'fecha_inicio',
-    'estado',
-
-    'observaciones',
   ];
-  dataSource = new MatTableDataSource<Archivo>();
+  dataSource = new MatTableDataSource<any>();
   dataSource3 = new MatTableDataSource<AprobacionEvidencia>();
 
   @ViewChild('datosModalRef') datosModalRef: any;
@@ -95,6 +89,21 @@ export class EvidenciasComponent implements OnInit {
     this.user = this.login.getUser();
     console.log(this.estadoSeleccionado);
     this.listarPoas(this.estadoSeleccionado);
+    this.rol = this.login.getUserRole();
+    console.log(this.rol)
+    this.configurarColumnasUsuario();
+  }
+  
+  configurarColumnasUsuario() {
+    this.columnasUsuario = [
+      'barrio',
+      'comunidad',
+      ...(this.rol !== 'RESPONSABLE' ? ['responsable'] : []),
+      'cobertura',
+      'fecha_inicio',
+      'estado',
+      'observaciones',
+    ];
   }
 
   //Buscar
@@ -107,15 +116,19 @@ export class EvidenciasComponent implements OnInit {
   //Metodo para listar
 
   listarPoas( estado: string): void {
+    let username;
     this.loadingService.show();
+    if (this.login.getUserRole() === 'RESPONSABLE') {
+      username = this.user.username;
+    }
 
-    this.archivoServicio.listarArchivosPorEstadoYFechaDesc(estado,this.user.username).subscribe(
+    this.archivoServicio.listarArchivosPorEstadoYFechaDesc(estado, username).subscribe(
       (data: any[]) => {
         this.listaPoas = data;
-        this.dataSource.data = this.listaPoas;
+        this.dataSource.data = data;
         this.resultadosEncontradosporEstado = this.listaPoas.length > 0; // Actualiza la variable según si se encontraron resultados
         this.loadingService.hide();
-
+        console.log(data)
       },
       (error: any) => {
         console.error('Error al listar las evidencias:', error);

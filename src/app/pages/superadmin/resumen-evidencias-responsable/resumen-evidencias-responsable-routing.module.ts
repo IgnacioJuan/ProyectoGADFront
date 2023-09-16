@@ -8,7 +8,7 @@ const routes: Routes = [
     path: 'evidencias',
     component: EvidenciasComponent,
     pathMatch: 'full',
-    canActivate: [SuperGuard]
+    data: { allowedRoles: ['SUPERADMIN', 'ADMIN', 'RESPONSABLE'] } // Ajusta los roles permitidos
   },
 ];
 
