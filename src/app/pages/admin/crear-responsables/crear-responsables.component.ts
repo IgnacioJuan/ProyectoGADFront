@@ -3,7 +3,6 @@ import { UsuarioRol } from 'src/app/models/UsuarioRol';
 import { PersonaService } from 'src/app/services/persona.service';
 import { UsuarioService } from 'src/app/services/usuario.service';
 import Swal from 'sweetalert2';
-import { UserService } from 'src/app/services/user.service';
 import { Fenix } from 'src/app/models/Fenix';
 import { FenixService } from 'src/app/services/fenix.service';
 import { MatTableDataSource } from '@angular/material/table';
@@ -14,19 +13,19 @@ import { catchError, tap, throwError } from 'rxjs';
 import { Usuario2 } from 'src/app/models/Usuario2';
 import { Persona2 } from 'src/app/models/Persona2';
 import { Router } from '@angular/router';
-import { DialogoUsuariosComponent } from '../dialogo-usuarios/dialogo-usuarios.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ProgramaUsuarioDTO } from 'src/app/models/Programa';
 import { ProgramaService } from 'src/app/services/programa.service';
 
+
 let ELEMENT_DATA: Fenix[] = [];
 
 @Component({
-  selector: 'app-crear-usuarios',
-  templateUrl: './crear-usuarios.component.html',
-  styleUrls: ['./crear-usuarios.component.css'],
+  selector: 'app-crear-responsables',
+  templateUrl: './crear-responsables.component.html',
+  styleUrls: ['./crear-responsables.component.css']
 })
-export class CrearUsuariosComponent implements OnInit {
+export class CrearResponsablesComponent implements OnInit {
 
   usuarioGuardar = new Usuario2();
 
@@ -133,14 +132,6 @@ export class CrearUsuariosComponent implements OnInit {
 
   openDialog(event: MouseEvent): void {
     event.stopPropagation();
-    const dialogRef = this.dialog.open(DialogoUsuariosComponent, {
-      width: '50%',
-      disableClose: false // Asegúrate de tener esta línea
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      this.Listado();
-    });
   }
 
 
@@ -356,8 +347,6 @@ export class CrearUsuariosComponent implements OnInit {
 
   // usuarioForm es el usuario que recibo del formulario 
   Actualizar(usuarioForm: UsuarioRol) {
-    console.log(usuarioForm.usuario.programa.id_programa)
-
     if (usuarioForm.rol.rolId == 0) {
       usuarioForm.rol = this.usuarioDB.rol;
     }
@@ -437,7 +426,6 @@ export class CrearUsuariosComponent implements OnInit {
             console.log(response);
             this.usuarioDB = new UsuarioRol();
             this.usuarioEdit = new UsuarioRol();
-            console.log(response)
           });
       } else {
         Swal.fire('Se ha cancelado la operación', '', 'info')

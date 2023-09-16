@@ -7,6 +7,7 @@ import { LoginService } from 'src/app/services/login.service';
 import { Router } from '@angular/router';
 //import { ModeloService } from 'src/app/services/modelo.service';
 import { Archivo } from 'src/app/models/Archivo';
+import { LoadingServiceService } from 'src/app/components/loading-spinner/LoadingService.service';
 
 
 @Component({
@@ -35,7 +36,10 @@ export class Actividades_desigComponent implements OnInit {
     private login: LoginService,
     //private modeloService: ModeloService,
     private router: Router,
-    private serviactiv : ActividadService
+    private serviactiv : ActividadService,
+    //importar el spinner como servicio
+    private loadingService: LoadingServiceService
+
  
   ) { 
       this.isLoggedIn = this.login.isLoggedIn();
@@ -58,15 +62,24 @@ export class Actividades_desigComponent implements OnInit {
         this.user = this.login.getUser();
       }
     );
-
-    console.log("john"+this.user.id);
+this.listar();    
+    
+  }
+  listar(){
+    this.loadingService.show();
+    
     this.serviactiv.listaractireponsa(this.user.id).subscribe(data => {
       this.acti = data;
       this.dataSource.data = data;
       this.dataSource.data = this.acti; // Actualizar el dataSource
+      this.loadingService.hide();
+    },(error:any)=>{
+
+      this.loadingService.hide();
+
     });
 
-    
+
   }
   archivo: Archivo = new Archivo();
 

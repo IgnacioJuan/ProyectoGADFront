@@ -9,7 +9,7 @@ import { Archivo } from '../models/Archivo';
 import { ArchivoProjection } from '../interface/ArchivoProjection';
 import { Archivos } from '../models/Archivos';
 
-@Injectable({ 
+@Injectable({
   providedIn: 'root'
 })
 export class ArchivoService {
@@ -22,7 +22,6 @@ export class ArchivoService {
     formData.append('descripcion', descripcion);
     formData.append('valor', valor.toString());
     formData.append('id_evidencia', id_evidencia.toString());
-
     const req = new HttpRequest('POST', `${this.baserrl}/archivo/upload`, formData, {
       reportProgress: true,
      responseType: 'json'
@@ -116,8 +115,8 @@ actualizar(id: any, archi: any): Observable<any> {
   return this.http.put(`${baserUrl}/archivo/actualizar/${id}`, archi);
 }
 
-  listarArchivosPorEstadoYFechaDesc(estado: string): Observable<Archivo[]> {
-    return this.http.get<Archivo[]>(`${baserUrl}/archivo/listarPorEstadoYFechaDesc?estado=${estado}`);
+  listarArchivosPorEstadoYFechaDesc(estado: string, username: string): Observable<Archivo[]> {
+    return this.http.get<Archivo[]>(`${baserUrl}/archivo/listarPorEstadoYFechaDesc?estado=${estado}&username=${username}`);
   }
 
 
