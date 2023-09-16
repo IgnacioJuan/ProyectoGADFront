@@ -77,6 +77,15 @@ export class SidebarService {
       ]
     },
     {
+      icono: 'nav-icon fas fa-file-invoice',
+      titulo: "Evidencias",
+      submenu: [
+        { titulo: 'Estado de evidencias', url: 'sup/resumen-evidencias-responsable/evidencias', icono: 'fas fa-list-ul ' },
+
+      ]
+    },
+
+    {
       icono: 'nav-icon fas fa-solid fa-list',
       titulo: "Actividades",
       submenu: [
@@ -131,7 +140,14 @@ export class SidebarService {
         { titulo: 'Solicitud de Presupuesto', url: 'res/solicitar-presupuestos/listSolicitudes', icono: 'fas fa-list-ul ' },
 
       ]
-    }
+    },   {
+      icono: 'nav-icon fas fa-file-invoice',
+      titulo: "Evidencias",
+      submenu: [
+        { titulo: 'Estado de evidencias', url: 'sup/resumen-evidencias-responsable/evidencias', icono: 'fas fa-list-ul ' },
+
+      ]
+    },
 
   ]
 
