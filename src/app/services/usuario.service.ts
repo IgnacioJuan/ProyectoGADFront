@@ -1,5 +1,5 @@
 import { usuario } from './../models/Usuario';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, map } from 'rxjs';
 import { Usuario2 } from './../models/Usuario2';
@@ -64,6 +64,12 @@ export class UsuarioService {
         }));
       }));
   }
+  obtenerPDF(): Observable<Blob> {
+    const headers = new HttpHeaders({
+      'Accept': 'application/pdf'
+    });
 
+    return this.http.get('http://localhost:5000/usuarios/export-pdf', { headers: headers, responseType: 'blob' });
+  }
 
 }

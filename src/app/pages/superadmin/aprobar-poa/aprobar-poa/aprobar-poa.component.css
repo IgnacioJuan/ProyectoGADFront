@@ -27,21 +27,23 @@ body {
 /* Estilo para el contenedor de tarjetas */
 
 .cards-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: stretch; /* Asegura que todas las tarjetas tengan la misma altura */
+         /* Hace que el contenedor sea un contenedor flex */
+    flex-direction: column;  /* Las tarjetas se alinearán verticalmente */    /* Centra las tarjetas horizontalmente */
+    gap: 20px;               /* Espacio entre las tarjetas */
     margin-top: 2rem;
     margin-bottom: 2rem;
+    margin-right: 1rem;
+    margin-left: 1rem;
 }
 
 .example-card {
-    width: 300px; /* Ancho fijo */
+    width: 100%; /* Ancho fijo */
     height: 400px; /* Altura fija */
     overflow: auto; /* Si el contenido es demasiado, mostrará barras de desplazamiento */
     flex: 1; /* Permite que las tarjetas crezcan para ocupar el espacio disponible */
-    margin: 0 1rem;
     overflow: auto;
     display: flex;
+    margin: 2rem 0;  /* Añade un margen vertical de 1rem y horizontal de 0 */
     flex-direction: column; /* Establece la dirección principal como columna */
     box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2); /* Sombra suave */
     transition: box-shadow 0.3s ease;
