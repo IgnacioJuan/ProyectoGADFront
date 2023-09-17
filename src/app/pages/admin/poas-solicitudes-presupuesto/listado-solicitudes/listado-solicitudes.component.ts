@@ -26,12 +26,16 @@ import { ReformaTraspasoD } from 'src/app/models/ReformaTraspasoD';
 import { ReformaTraspasoIService } from 'src/app/services/reformatraspaso-i.service';
 import { ReformaTraspasoDService } from 'src/app/services/reformatraspaso-d.service';
 
+export interface group {
+  group: string;
+}
+
 @Component({
-  selector: 'app-list-solicitudes-presupuesto-superadmin',
-  templateUrl: './list-solicitudes-presupuesto-superadmin.component.html',
-  styleUrls: ['./list-solicitudes-presupuesto-superadmin.component.css'],
+  selector: 'app-listado-solicitudes',
+  templateUrl: './listado-solicitudes.component.html',
+  styleUrls: ['./listado-solicitudes.component.css']
 })
-export class ListSolicitudesPresupuestoSuperadminComponent implements OnInit {
+export class ListadoSolicitudesComponent implements OnInit {
   //Buscar
   filterPost: string = '';
   filteredComponentes: any[] = [];
@@ -43,9 +47,7 @@ export class ListSolicitudesPresupuestoSuperadminComponent implements OnInit {
     'codificado',
     'estado',
     'fecha_solicitud',
-    'evaluar',
-    'actions',
-  ];
+    'evaluar'  ];
   listaSolicitudes: SolicitudActividadPrepuesto[] = [];
   //Usuario logueado
   user: any = null;
@@ -76,6 +78,7 @@ export class ListSolicitudesPresupuestoSuperadminComponent implements OnInit {
   public observacion = '';
   nombre!: string;
   fechaActual: Date;
+  poa: any = null;
 
   public aprobarSolicitud = new AprobacionSolicitud();
   public solicitudSeleted = new SolicitudActividadPrepuesto();
@@ -113,20 +116,25 @@ export class ListSolicitudesPresupuestoSuperadminComponent implements OnInit {
   ngOnInit(): void {
     //Capturar usuario logueado
     this.user = this.login.getUser();
-    this.listarSolicitudes(this.user.id);
+      //Obtener id del poa
+      const data = history.state.data;
+      this.poa = data;
+      console.log(this.poa)
+      this.listarSolicitudes(this.user.id, this.poa.id_poa);
+      
+
   }
 
-  //Metodo para listar
-  listarSolicitudes(idSuper: number): void {
+/*
+  listarSolicitudes(idAdmin: number, idPoa: number): void {
     this.loadingService.show();
-
+  
     this.solicitudPresupuestoService
-      .listarSolicitudesSuperAdmin(idSuper)
+      .listarSolicitudesPoa(idAdmin, idPoa)
       .subscribe(
         (data: any[]) => {
           this.listaSolicitudes = data;
-          console.log('Dataa');
-          console.log(this.listaSolicitudes);
+            // Calcula cuántas filas deben fusionarse para cada "responsable"
           this.dataSource.data = this.listaSolicitudes;
           this.loadingService.hide();
         },
@@ -136,6 +144,47 @@ export class ListSolicitudesPresupuestoSuperadminComponent implements OnInit {
         }
       );
   }
+*/
+
+
+
+
+listarSolicitudes(idAdmin: number, idPoa: number): void {
+  this.loadingService.show();
+
+  this.solicitudPresupuestoService
+    .listarSolicitudesPoa(idAdmin, idPoa)
+    .subscribe(
+      (data: any[]) => {
+        this.listaSolicitudes = data;
+        console.log( this.listaSolicitudes )
+        this.dataSource.data = this.listaSolicitudes;
+        this.loadingService.hide();
+      },
+      (error: any) => {
+        console.error('Error al listar los poas:', error);
+        this.loadingService.hide();
+      }
+    );
+}
+
+
+
+getRowCount(elemento: any): number {
+  const nombreResponsable = `${elemento.responsable?.persona?.primer_nombre} ${elemento.responsable?.persona?.primer_apellido}`;
+  let rowCount = 0;
+
+  for (const solicitud of this.listaSolicitudes) {
+    const nombreSolicitud = `${solicitud.responsable?.persona?.primer_nombre} ${solicitud.responsable?.persona?.primer_apellido}`;
+    
+    if (nombreSolicitud === nombreResponsable) {
+      rowCount++;
+    }
+  }
+
+  return rowCount;
+}
+
 
   tipo: boolean = false;
 
@@ -325,7 +374,7 @@ export class ListSolicitudesPresupuestoSuperadminComponent implements OnInit {
         this.sendEmail();
         this.Limpiar();
         this.loadingService.hide();
-        this.listarSolicitudes(this.user.id);
+        this.listarSolicitudes(this.user.id, this.poa.id_poa);
         Swal.fire(
           'Exitoso',
           'Se ha completado el registro con éxito',
@@ -485,4 +534,10 @@ export class ListSolicitudesPresupuestoSuperadminComponent implements OnInit {
     //const pdf = pdfMake.createPdf(pdfDefinition);
     //const pdf = pdfMake.createPdf(documentoPdf).download(fileName);
   }
+
+
+    //Ir a poas
+    verPoas() {
+      this.router.navigate(['/adm/poas-solicitudes/listarPoasSoli']);
+    }
 }

@@ -38,6 +38,14 @@ export class SidebarService {
         { titulo: 'Listado de Poas', url: 'adm/poasEnviadosAdmin', icono: 'fas fa-cubes' },
       ]
     },
+    {
+      icono: 'nav-icon fas fa-file-invoice',
+      titulo: "Solicitud de Presupuesto",
+      submenu: [
+        { titulo: 'Listado de Solicitudes', url: 'adm/poas-solicitudes/listarPoasSoli', icono: 'fas fa-list-ul ' },
+
+      ]
+    },
   ]
 
   //LISTA DE ITEMS PARA SIDEBAR SUPERADMIN
@@ -113,16 +121,6 @@ export class SidebarService {
 
     //   ]
     // },
-
-    {
-      icono: 'nav-icon fas fa-file-invoice',
-      titulo: "Solicitud de Presupuesto",
-      submenu: [
-        { titulo: 'Listado de Solicitudes', url: 'sup/listadoSolicitudes', icono: 'fas fa-list-ul ' },
-
-      ]
-    },
-
 
 
 

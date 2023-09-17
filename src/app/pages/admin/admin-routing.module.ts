@@ -65,6 +65,10 @@ const routes: Routes = [
     path: 'poa',
     loadChildren: () => import("./poa/register-poa.module").then(m => m.RegisterPoaModule)
   },
+  {
+    path: 'poas-solicitudes',
+    loadChildren: () => import("./poas-solicitudes-presupuesto/poas-solicitudes-presupuesto.module").then(m => m.PoasSolicitudesPresupuestoModule)
+  },
 ];
 
 @NgModule({

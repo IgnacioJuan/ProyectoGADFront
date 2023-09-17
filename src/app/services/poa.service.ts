@@ -9,6 +9,7 @@ import { PoasAdminEstadoProjection } from '../interface/PoasAdminEstado';
 import { PoaNoAprobadoProjection } from '../interface/PoaNoAprobadoProjection';
 import { PoaporUsuarioProjection } from '../interface/PoaporUsuarioProjection';
 import { PoasConActividadesPendientesProjection } from '../interface/PoasConActividadesPendientesProjection';
+import { PoasSolicitudesProjection } from '../interface/PoasSolicitudesProjection';
 
 
 @Injectable({
@@ -105,4 +106,10 @@ export class PoaService {
     return this.http.get<any>(`${baserUrl}/api/poa/PoasConActividadesP`)
   }
 
+
+
+    //Listar POAS por Admin-Solicitud
+    listarPoasSolicitud(idAdmin:number): Observable<PoasSolicitudesProjection[]> {
+      return this.http.get<PoasSolicitudesProjection[]>(`${baserUrl}/api/poa/PoasConSolicitudPresupuesto/${idAdmin}`);
+    }
  }

@@ -1,9 +1,17 @@
 <body>
-    <div class="container bg-light border border-start-0 rounded-4">
-      <blockquote class="blockquote text-dark"  style="margin-top: 5%; background-color: #ffffff; border-left: 10px solid green;">
-        <h1 class="titulo"><strong> LISTADO DE SOLICITUDES</strong></h1>
-      </blockquote>
-      <div></div>
+  <div class="container bg-light border border-start-0 rounded-4">
+    <blockquote class="blockquote text-dark"  style="margin-top: 5%; background-color: #ffffff; border-left: 10px solid green;">
+      <h1 style="text-transform: uppercase" class="titulo">
+        <strong
+          ><a style="cursor: pointer" (click)=" verPoas()"
+            >LISTADO DE POAS
+          </a>
+          >
+          <a>LISTADO DE SOLICITUDES </a></strong
+        >
+      </h1>
+    </blockquote>
+    <div></div>
   
       <div class="card">
         <div class="card-body">
@@ -29,16 +37,20 @@
           style="margin-bottom: 5%"
         >
           <table mat-table [dataSource]="dataSource" >
+     
             <ng-container matColumnDef="responsable">
               <th mat-header-cell *matHeaderCellDef>RESPONSABLE</th>
-              <td mat-cell *matCellDef="let elemento">
+              <td mat-cell *matCellDef="let elemento; let i = index">
                 {{ elemento.responsable?.persona?.primer_nombre }}
                 {{ elemento.responsable?.persona?.primer_apellido }}
               </td>
             </ng-container>
+            
+
+          
             <ng-container matColumnDef="actividad_nombre">
               <th mat-header-cell *matHeaderCellDef>ACTIVIDAD</th>
-              <td mat-cell *matCellDef="let elemento">
+              <td mat-cell *matCellDef="let elemento" >
                 {{ elemento.actividadSolicitud?.nombre }}
               </td>
             </ng-container>
@@ -96,7 +108,7 @@
             </ng-container>
         
             <tr mat-header-row *matHeaderRowDef="columnasSolicitud"></tr>
-            <tr mat-row *matRowDef="let fila; columns: columnasSolicitud"></tr>
+            <tr mat-row *matRowDef="let fila; let i = index; columns: columnasSolicitud"></tr>
           </table>
           <mat-paginator
             [pageSizeOptions]="[5, 10, 20]"
