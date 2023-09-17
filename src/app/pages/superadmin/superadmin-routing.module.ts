@@ -14,8 +14,9 @@ import {
   ResumenEvidenciasResponsableModule
 } from "./resumen-evidencias-responsable/resumen-evidencias-responsable.module";
 import { ReporteEspecificoPoaComponent } from './reporte-especifico-poa/reporte-especifico-poa.component';
-import { ListSolicitudesPresupuestoSuperadminComponent } from './pages/list-solicitudes-presupuesto-superadmin/list-solicitudes-presupuesto-superadmin.component';
 import { ProyectosComponent } from './flujo-criterio/listaproyecto/listaproyecto.component';
+import {ReportePresupuestoModule} from "./reporte-presupuesto/reporte-presupuesto.module";
+import { PruebaReportMetasComponent } from './pages/prueba-report-metas/prueba-report-metas.component';
 
 
 
@@ -60,14 +61,13 @@ const routes: Routes = [
   pathMatch: 'full',
  canActivate: [SuperGuard]
 },
-{ path: 'reporteEspecificoPoa/:id', 
+{ path: 'reporteEspecificoPoa/:id',
 component: ReporteEspecificoPoaComponent ,
 pathMatch: 'full',
  canActivate: [SuperGuard]
 },
-
-{ path: 'listadoSolicitudes', 
-component: ListSolicitudesPresupuestoSuperadminComponent ,
+{ path: 'reporteMetaComponente',
+component: PruebaReportMetasComponent ,
 pathMatch: 'full',
  canActivate: [SuperGuard]
 },
@@ -93,12 +93,12 @@ pathMatch: 'full',
   path: 'flujo_Componentes',
   loadChildren: () => import("./flujo-componentes/flujo-componentes.module").then(m => m.FlujoComponentesModule)
 },
-  
+
   {
     path: 'aprobarEvidencias',
     loadChildren: () => import("./aprobar-evidencias/aprobar-evidencias.module").then(m => m.AprobarEvidenciasModule)
   },
-  
+
   {
     path: 'aprobar-actividades',
     loadChildren: () => import("./aprobar-actividades/aprobar-actividades.module").then(m => m.AprobarActividadesModule)
@@ -122,6 +122,12 @@ pathMatch: 'full',
   path: 'ejes',
   loadChildren: () => import("./ejes/ejes.module").then(m => m.EjesModule)
 },
+
+  {
+    path: 'reporte-presupuesto',
+    loadChildren: () => import("./reporte-presupuesto/reporte-presupuesto.module").then(m => m.ReportePresupuestoModule)
+  },
+
 {
   path: 'resumen-evidencias-responsable',
   loadChildren: () => import("./resumen-evidencias-responsable/resumen-evidencias-responsable.module").then(m => m.ResumenEvidenciasResponsableModule)

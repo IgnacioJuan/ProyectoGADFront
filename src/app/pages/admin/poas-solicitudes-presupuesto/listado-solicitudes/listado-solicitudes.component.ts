@@ -9,23 +9,30 @@ import { EmailServiceService } from 'src/app/services/email-service.service';
 import Swal from 'sweetalert2';
 import { AprobacionSolicitudService } from 'src/app/services/aprobacion-solicitud.service';
 import { AprobacionSolicitud } from 'src/app/models/AprobacionSolicitud';
-import { forkJoin } from 'rxjs';
-import { Persona2 } from 'src/app/models/Persona2';
-import { PersonaService } from 'src/app/services/persona.service';
+import { catchError, forkJoin, of, switchMap, throwError } from 'rxjs';
 import * as pdfMake from 'pdfmake/build/pdfmake';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 (<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
 import { format } from 'date-fns';
 import { Style, Table } from 'pdfmake/interfaces';
 import { Margins } from 'pdfmake/interfaces';
-import * as moment from 'moment';
+import { Usuario2 } from 'src/app/models/Usuario2';
+import { LoadingServiceService } from 'src/app/components/loading-spinner/LoadingService.service';
+import { ActividadespoaService } from 'src/app/services/actividadespoa.service';
+import { ActividadesPoa } from 'src/app/models/ActividadesPoa';
+import { ReformaTraspasoI } from 'src/app/models/ReformaTraspasoI';
+import { ReformaTraspasoD } from 'src/app/models/ReformaTraspasoD';
+import { ReformaTraspasoIService } from 'src/app/services/reformatraspaso-i.service';
+import { ReformaTraspasoDService } from 'src/app/services/reformatraspaso-d.service';
+
+
 
 @Component({
-  selector: 'app-list-solicitudes-presupuesto-superadmin',
-  templateUrl: './list-solicitudes-presupuesto-superadmin.component.html',
-  styleUrls: ['./list-solicitudes-presupuesto-superadmin.component.css'],
+  selector: 'app-listado-solicitudes',
+  templateUrl: './listado-solicitudes.component.html',
+  styleUrls: ['./listado-solicitudes.component.css']
 })
-export class ListSolicitudesPresupuestoSuperadminComponent implements OnInit {
+export class ListadoSolicitudesComponent implements OnInit {
   //Buscar
   filterPost: string = '';
   filteredComponentes: any[] = [];
@@ -34,11 +41,11 @@ export class ListSolicitudesPresupuestoSuperadminComponent implements OnInit {
   columnasSolicitud: string[] = [
     'responsable',
     'actividad_nombre',
+    'codificado',
+    'monto_actual',
     'estado',
     'fecha_solicitud',
-    'evaluar',
-    'actions',
-  ];
+    'evaluar'  ];
   listaSolicitudes: SolicitudActividadPrepuesto[] = [];
   //Usuario logueado
   user: any = null;
@@ -69,9 +76,12 @@ export class ListSolicitudesPresupuestoSuperadminComponent implements OnInit {
   public observacion = '';
   nombre!: string;
   fechaActual: Date;
+  poa: any = null;
 
   public aprobarSolicitud = new AprobacionSolicitud();
   public solicitudSeleted = new SolicitudActividadPrepuesto();
+  reformaI: ReformaTraspasoI = new ReformaTraspasoI();
+  reformaD: ReformaTraspasoD = new ReformaTraspasoD();
 
   @ViewChild(MatPaginator, { static: false }) paginator?: MatPaginator;
 
@@ -82,7 +92,12 @@ export class ListSolicitudesPresupuestoSuperadminComponent implements OnInit {
     private solicitudPresupuestoService: SolicitudPresupuestoService,
     private emaservices: EmailServiceService,
     private aprobacionSolicitudService: AprobacionSolicitudService,
-    private serviper: PersonaService
+    private actividadServi: ActividadespoaService,
+    private reformaIService: ReformaTraspasoIService,
+    private reformaDService: ReformaTraspasoDService,
+
+    //importar el spinner como servicio
+    private loadingService: LoadingServiceService
   ) {
     this.paginatorIntl.nextPageLabel = this.nextPageLabel;
     this.paginatorIntl.lastPageLabel = this.lastPageLabel;
@@ -98,50 +113,79 @@ export class ListSolicitudesPresupuestoSuperadminComponent implements OnInit {
   ngOnInit(): void {
     //Capturar usuario logueado
     this.user = this.login.getUser();
-    this.listarSolicitudes(this.user.id);
+      //Obtener id del poa
+      const data = history.state.data;
+      this.poa = data;
+      console.log(this.poa)
+      this.listarSolicitudes(this.user.id, this.poa.id_poa);
+      
+
   }
 
-  //Metodo para listar
-  listarSolicitudes(idSuper: number): void {
-    this.solicitudPresupuestoService
-      .listarSolicitudesSuperAdmin(idSuper)
-      .subscribe(
-        (data: any[]) => {
-          this.listaSolicitudes = data;
-          console.log('Dataa');
-          console.log(this.listaSolicitudes);
-          this.dataSource.data = this.listaSolicitudes;
-        },
-        (error: any) => {
-          console.error('Error al listar los poas:', error);
-        }
-      );
+
+listarSolicitudes(idAdmin: number, idPoa: number): void {
+  this.loadingService.show();
+  this.solicitudPresupuestoService
+    .listarSolicitudesPoa(idAdmin, idPoa)
+    .subscribe(
+      (data: any[]) => {
+        this.listaSolicitudes = data;
+        console.log( this.listaSolicitudes )
+        this.dataSource.data = this.listaSolicitudes;
+        this.loadingService.hide();
+      },
+      (error: any) => {
+        console.error('Error al listar los poas:', error);
+        this.loadingService.hide();
+      }
+    );
+}
+
+
+
+getRowCount(elemento: any): number {
+  const nombreResponsable = `${elemento.responsable?.persona?.primer_nombre} ${elemento.responsable?.persona?.primer_apellido}`;
+  let rowCount = 0;
+
+  for (const solicitud of this.listaSolicitudes) {
+    const nombreSolicitud = `${solicitud.responsable?.persona?.primer_nombre} ${solicitud.responsable?.persona?.primer_apellido}`;
+    
+    if (nombreSolicitud === nombreResponsable) {
+      rowCount++;
+    }
   }
+
+  return rowCount;
+}
+
+
+  tipo: boolean = false;
 
   seleccionar(soli: SolicitudActividadPrepuesto) {
     this.solicitudSeleted = soli;
     this.estado = this.solicitudSeleted.estado;
-    const idResponsable = this.solicitudSeleted.responsable?.id;
-
-    if (idResponsable !== undefined) {
-      console.log('this datos');
-      console.log(idResponsable);
-
-      // Luego, puedes continuar con el resto de tu lógica aquí
-      this.serviper.getcorreo(idResponsable).subscribe(
-        (data: Persona2) => {
-          console.log('datossssssssss');
-          this.correo = data.correo;
-          this.nombre = data.primer_nombre + ' ' + data.primer_apellido;
-
-          console.log('correo =' + this.correo);
-        },
-        (error: any) => {
-          console.error('Error al listar los componentes:', error);
-        }
-      );
+    if (this.solicitudSeleted.actividadSolicitud !== null) {
+      this.actividadSelecciona = this.solicitudSeleted.actividadSolicitud;
+    } 
+    if (this.solicitudSeleted.responsable?.id !== undefined) {
+      this.correo = this.solicitudSeleted.responsable?.persona.correo;
+      this.nombre = this.solicitudSeleted.responsable?.persona.primer_nombre + ' ' + this.solicitudSeleted.responsable?.persona.primer_apellido;
+      console.log("this.correo")
+      console.log(this.correo)
+      console.log("this.nombre")
+      console.log(this.nombre)
+    } 
+    if (
+      this.solicitudSeleted.monto_total > this.solicitudSeleted.monto_actual
+    ) {
+      this.tipo = true;
+      this.reformaI.actividad = this.actividadSelecciona;
+      this.reformaI.valor = this.solicitudSeleted.monto_total;
+      this.reformaI.fecha = this.fechaActual;
     } else {
-      console.log('idResponsable es undefined');
+      this.reformaD.actividad = this.actividadSelecciona;
+      this.reformaD.valor = this.solicitudSeleted.monto_total;
+      this.reformaD.fecha = this.fechaActual;
     }
   }
 
@@ -189,38 +233,121 @@ export class ListSolicitudesPresupuestoSuperadminComponent implements OnInit {
   get isRechazado() {
     return this.estado === 'RECHAZADO';
   }
+ 
+
+  usuariosdit: Usuario2 = new Usuario2();
+  solic: SolicitudActividadPrepuesto = new SolicitudActividadPrepuesto();
+  usuariosdit2: Usuario2 = new Usuario2();
+  actividadSelecciona: ActividadesPoa = new ActividadesPoa();
+  usuariosditDest: Usuario2 = new Usuario2();
+  Resposable: Usuario2 = new Usuario2();
 
   guardar() {
+    this.loadingService.show();
+    const codificado = this.solicitudSeleted.monto_total;
     // Verificar si estado y observación no están vacíos
     if (!this.estado || !this.observacion) {
+      this.loadingService.hide();
       Swal.fire('Advertencia', 'Existen campos vacios', 'warning');
       return;
+
     }
 
+    this.usuariosdit.id = this.user.id;
+    this.solic.id_solicitud_presupuesto =
+    this.solicitudSeleted.id_solicitud_presupuesto;
+    this.usuariosdit2.id = this.actividadSelecciona.usuario.id;
+    this.usuariosditDest.id = this.solic.destinatario?.id || 0; // 0 es un valor predeterminado si es undefined
+    this.Resposable.id = this.solic.responsable?.id || 0;
     this.aprobarSolicitud.estado = this.estado;
     this.aprobarSolicitud.observacion = this.observacion;
-
-    //Quitar el usuario destinatario, responsable, actividad
-    this.solicitudSeleted.actividadSolicitud = null;
-    this.solicitudSeleted.destinatario = null;
-    this.solicitudSeleted.responsable = null;
-    this.aprobarSolicitud.solicitud = this.solicitudSeleted;
-    this.aprobarSolicitud.usuario = this.user.id;
-    this.solicitudSeleted.estado = this.estado;
+    this.aprobarSolicitud.solicitud = this.solic;
+    this.aprobarSolicitud.usuario = this.usuariosdit;
+    this.solic.estado = this.estado;
+    this.solic.motivo = this.solicitudSeleted.motivo;
+    this.solic.fecha_solicitud = this.solicitudSeleted.fecha_solicitud;
+    this.solic.monto_actual = this.solicitudSeleted.monto_actual;
+    this.solic.monto_total = this.solicitudSeleted.monto_total;
+    this.solic.reforma = this.solicitudSeleted.reforma;
     this.aprobarSolicitud.fecha_aprobacion = this.fechaActual;
-    // Guardamos la aprobación y actualizamos el estado del archivo en paralelo
+    console.log('datosss');
+    console.log(this.actividadSelecciona);
+    this.actividadSelecciona.usuario = this.usuariosdit2;
+    this.actividadSelecciona.codificado = codificado;
 
+
+
+
+
+    
+    if (this.estado === 'APROBADO') {
+      // Verificar el tipo
+      if (this.tipo) {
+        // Realizar la operación de Reforma I
+        this.reformaIService.crear(this.reformaI).subscribe(
+          () => {
+            console.log('Se creó Reforma I');
+            this.actualizarActividad();
+          },
+          (error: any) => {
+            console.error('Error al crear Reforma I:', error);
+            this.loadingService.hide();
+          }
+        );
+      } else {
+        // Realizar la operación de Reforma D
+        this.reformaDService.crear(this.reformaD).subscribe(
+          () => {
+            console.log('Se creó Reforma D');
+            this.actualizarActividad();
+            this.loadingService.hide();
+
+          },
+          (error: any) => {
+            console.error('Error al crear Reforma D:', error);
+            this.loadingService.hide();
+          }
+        );
+      }
+    } else if (this.estado === 'RECHAZADO') {
+      // Solo realizar operaciones de aprobación y actualización de solicitud
+      this.realizarOperacionesAprobacionSolicitud();
+    }
+  }
+
+  private actualizarActividad() {
+    this.actividadServi
+      .actualizar(
+        this.actividadSelecciona.id_actividad,
+        this.actividadSelecciona
+      )
+      .subscribe(
+        () => {
+          console.log('Se editó la actividad');
+          this.realizarOperacionesAprobacionSolicitud();
+          this.loadingService.hide();
+
+        },
+        (error: any) => {
+          console.error('Error al editar la actividad:', error);
+          this.loadingService.hide();
+        }
+      );
+  }
+
+  private realizarOperacionesAprobacionSolicitud() {
     forkJoin([
       this.aprobacionSolicitudService.crear(this.aprobarSolicitud),
       this.solicitudPresupuestoService.actualizar(
         this.solicitudSeleted.id_solicitud_presupuesto,
-        this.solicitudSeleted
+        this.solic
       ),
     ]).subscribe(
       ([aprobarResponse, archivoResponse]) => {
         this.sendEmail();
         this.Limpiar();
-        this.listarSolicitudes(this.user.id);
+        this.loadingService.hide();
+        this.listarSolicitudes(this.user.id, this.poa.id_poa);
         Swal.fire(
           'Exitoso',
           'Se ha completado el registro con éxito',
@@ -229,6 +356,7 @@ export class ListSolicitudesPresupuestoSuperadminComponent implements OnInit {
       },
       (error) => {
         console.error('Error al realizar alguna de las operaciones:', error);
+        this.loadingService.hide();
         Swal.fire(
           'Error',
           'Ha ocurrido un error en una o ambas operaciones',
@@ -248,6 +376,8 @@ export class ListSolicitudesPresupuestoSuperadminComponent implements OnInit {
 
 
 
+
+  
   GenerarPdf(Elemento: any) {
     this.solicitudSeleted = Elemento;
 
@@ -257,8 +387,6 @@ export class ListSolicitudesPresupuestoSuperadminComponent implements OnInit {
     );
 
     const contenido = [
-  
-
       { text: 'Santa Isabel, ' + fechaSolicitud, style: 'encabezado' },
       '\n\n',
       {
@@ -308,30 +436,39 @@ export class ListSolicitudesPresupuestoSuperadminComponent implements OnInit {
         style: 'tabla',
       },
       '\n\n',
-      { text: 'Atentamente,',  absolutePosition: { x: 40, y: 650} },
+      { text: 'Atentamente,', absolutePosition: { x: 40, y: 650 } },
       '\n\n',
       {
         text:
           (this.solicitudSeleted.responsable?.persona.primer_nombre || '') +
           ' ' +
           (this.solicitudSeleted.responsable?.persona.primer_apellido || ''),
-        style: 'firma',  absolutePosition: { x: 40, y: 700},
+        style: 'firma',
+        absolutePosition: { x: 40, y: 700 },
       },
       {
         text: this.solicitudSeleted.responsable?.persona.cargo || '',
-        style: 'firma',  absolutePosition: { x: 40, y: 715 },
+        style: 'firma',
+        absolutePosition: { x: 40, y: 715 },
       },
-      { text: 'GAD MUNICIPAL SANTA ISABEL.', style: 'firma',  absolutePosition: { x: 40, y: 730}  },
-      { text: 'Calle 3 de Noviembre y 24 de Mayo | 072270412 | info@santaisabel.gob.ec',  style: 'info', absolutePosition: { x: 2, y: 780}  },
-      
+      {
+        text: 'GAD MUNICIPAL SANTA ISABEL.',
+        style: 'firma',
+        absolutePosition: { x: 40, y: 730 },
+      },
+      {
+        text: 'Calle 3 de Noviembre y 24 de Mayo | 072270412 | info@santaisabel.gob.ec',
+        style: 'info',
+        absolutePosition: { x: 2, y: 780 },
+      },
     ];
 
     const estilos: { [key: string]: Style } = {
       encabezado: { fontSize: 12, bold: true, alignment: 'right' },
       destinatario: { fontSize: 12 },
       cuerpo: { fontSize: 12 },
-      firma: { fontSize: 12, bold: true},
-      info: { fontSize:9 , margin: [20, 0, 40, 0]    },
+      firma: { fontSize: 12, bold: true },
+      info: { fontSize: 9, margin: [20, 0, 40, 0] },
 
       tabla: {
         margin: [20, 0, 40, 0] as Margins,
@@ -347,18 +484,21 @@ export class ListSolicitudesPresupuestoSuperadminComponent implements OnInit {
     };
 
     const opcionesPdf = {
-      
       pageMargins: [0, 0, 0, 0],
-      pageOrientation: 'portrait', 
+      pageOrientation: 'portrait',
     };
-  
-
 
     const documentoPdf = {
-      watermark: { text: 'SANTA ISABEL', color: 'green', opacity: 0.1, bold: false, italics: false },
+      watermark: {
+        text: 'SANTA ISABEL',
+        color: 'green',
+        opacity: 0.1,
+        bold: false,
+        italics: false,
+      },
       content: contenido,
       styles: estilos,
-      opcionesPdf
+      opcionesPdf,
     };
 
     pdfMake.createPdf(documentoPdf).open();
@@ -369,8 +509,8 @@ export class ListSolicitudesPresupuestoSuperadminComponent implements OnInit {
   }
 
 
-  
-  
-
-
+    //Ir a poas
+    verPoas() {
+      this.router.navigate(['/adm/poas-solicitudes/listarPoasSoli']);
+    }
 }

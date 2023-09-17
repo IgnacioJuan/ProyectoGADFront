@@ -131,13 +131,18 @@ export class CrearUsuariosComponent implements OnInit {
     );
   }
 
-  openDialog() {
-    const dialogRef = this.dialog.open(DialogoUsuariosComponent, { width: '100%' });
+  openDialog(event: MouseEvent): void {
+    event.stopPropagation();
+    const dialogRef = this.dialog.open(DialogoUsuariosComponent, {
+      width: '50%',
+      disableClose: false // Asegúrate de tener esta línea
+    });
 
     dialogRef.afterClosed().subscribe(result => {
       this.Listado();
     });
   }
+
 
   aplicarFiltro() {
     if (this.filterPost) {
@@ -405,13 +410,14 @@ export class CrearUsuariosComponent implements OnInit {
       usuarioForm.usuario.persona.cargo = this.usuarioDB.usuario.persona.cargo
     }
 
-
     usuarioForm.usuario.id = this.usuarioDB.usuario.id;
     usuarioForm.usuario.persona.id_persona = this.usuarioDB.usuario.persona.id_persona;
-    //usuarioForm.usuario.programa.id_programa = this.usuarioDB.usuario.programa.id_programa;
+    usuarioForm.usuario.programa.id_programa = this.usuarioDB.usuario.programa.id_programa;
+
     usuarioForm.usuarioRolId = this.usuarioDB.usuarioRolId;
     console.log(usuarioForm);
-    console.log(this.usuarioDB.usuario.programa.id_programa)
+
+
     Swal.fire({
       title: '¿Desea modificar los campos?',
       showCancelButton: true,
@@ -428,7 +434,7 @@ export class CrearUsuariosComponent implements OnInit {
               'success'
             );
             this.Listado();
-
+            console.log(response);
             this.usuarioDB = new UsuarioRol();
             this.usuarioEdit = new UsuarioRol();
             console.log(response)

@@ -2,7 +2,7 @@
   <div class="container bg-light border border-start-0 rounded-4">
     <blockquote style="margin-top: 5%; background-color: #ffffff; border-left: 10px solid green;">
       <h1 style="text-transform: uppercase" class="header-title">
-        <strong><a style="cursor: pointer" (click)=" verPoas()">LISTADO POAS
+        <strong><a style="cursor: pointer" (click)=" verPoas()">LISTA DE PROYECTOS
           </a>
           >
           <a class="header-title">ACTIVIDADES </a></strong>
@@ -26,9 +26,9 @@
         <div class="mat-elevation-z8 table-responsive" style="margin-bottom: 5%">
           <table mat-table [dataSource]="dataSource">
             <ng-container matColumnDef="id_actividad">
-              <th mat-header-cell *matHeaderCellDef>ID</th>
+              <th mat-header-cell *matHeaderCellDef [style.display]="ocultarID ? '' : 'none'">ID</th>
               <td mat-cell *matCellDef="let elemento" (mouseenter)="showHint = true" (mouseleave)="showHint = false"
-                [class.show-hint]="showHint">
+                [class.show-hint]="showHint" [style.display]="ocultarID ? '' : 'none'">
                 {{ elemento.id_actividad }}
               </td>
             </ng-container>
@@ -82,7 +82,7 @@
                   <i class="fas fa-trash-alt" style="color: red; font-size: 24px;"></i>
                 </button>
                 <button type="button" class="btn btn-sm btn-custom-yellow" data-bs-toggle="modal"
-                  data-bs-target="#materiaModal" (click)="editDatos(element)" title="Editar Datos"
+                  data-bs-target="#materiaModal" (click)="cargarDatosAlForm(element)" title="Editar Datos"
                   *ngIf="element.estado === 'RECHAZADO'">
                   <i class="fas fa-edit" style="color: yellow; font-size: 24px;"></i>
                 </button>
@@ -115,7 +115,7 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
-            <form [formGroup]="frmActividad" (ngSubmit)="guardar()" id="formulario">
+            <form [formGroup]="frmActividad" (ngSubmit)="guardarActividad()" id="formulario">
               <div>
                 <label for="nombre">Nombre:</label>
                 <input class="form-control" formControlName="nombre" type="text" id="nombre" name="nombre"
@@ -135,104 +135,71 @@
                     Debe ingresar una descripción de la actividad
                   </div>
                 </div>
+                <label for="recursos_propios">Valor Recursos Propios:</label>
+                <input class="form-control" formControlName="recursos_propios" id="recursos_propios"
+                  name="recursos_propios" style="margin-bottom: 10px" type="number" min="0" />
+                <div class="alert alert-danger" *ngIf="
+                      frmActividad.controls['recursos_propios'].invalid &&
+                      frmActividad.controls['recursos_propios'].touched
+                      ">
+                  <div *ngIf="
+                        frmActividad.controls['nombre'].hasError('required')
+                        ">
+                    Debe ingresar un valor propio
+                  </div>
+                </div>
                 <div style="display: flex; justify-content: space-between;">
                   <div style="flex: 1; margin-right: 20px;">
-                    <label for="presupuesto_referencial">Presupuesto Referencial:</label>
-                    <input class="form-control" formControlName="presupuesto_referencial" id="presupuesto_referencial"
-                      name="presupuesto_referencial" style="margin-bottom: 10px" type="number" min="0" readonly />
+                    <label for="institucion">Institución:</label>
+                    <input
+                      class="form-control"
+                      formControlName="institucion"
+                      id="institucion"
+                      name="institucion"
+                      style="margin-bottom: 10px"
+                      type="text"
+                    />
+                    <div class="alert alert-danger" *ngIf="frmActividad.get('institucion')?.hasError('required')">
+                      Debe ingresar una institución
+                    </div>
                   </div>
                   <div style="flex: 1;">
-                    <label for="recursos_propios">Valor Recursos Propios:</label>
-                    <input class="form-control" formControlName="recursos_propios" id="recursos_propios"
-                      name="recursos_propios" style="margin-bottom: 10px" type="number" min="0" />
-                    <div class="alert alert-danger" *ngIf="
-                frmActividad.controls['recursos_propios'].invalid &&
-                frmActividad.controls['recursos_propios'].touched
-                ">
-                      <div *ngIf="
-                  frmActividad.controls['nombre'].hasError('required')
-                  ">
-                        Debe ingresar un valor propio
-                      </div>
-                    </div>
+                    <label for="valorPE">Presupuesto Externo:</label>
+                    <input class="form-control" formControlName="valorPE" id="valorPE"
+                      name="valorPE" style="margin-bottom: 10px" type="number" min="0" />
                   </div>
                 </div>
-                <!--
-              <div style="display: flex; justify-content: space-between;">
-                <div style="flex: 1; margin-right: 20px;">
-                  <label for="codificado">Codificado:</label>
-                  <input class="form-control" formControlName="codificado" id="codificado" name="codificado"
-                    style="margin-bottom: 10px" type="number" min="0" value="0" readonly />
-                  <div class="alert alert-danger" *ngIf="
-                frmActividad.controls['codificado'].invalid &&
-                frmActividad.controls['codificado'].touched
-                ">
-                    <div *ngIf="
-                  frmActividad.controls['codificado'].hasError('required')
-                  ">
-                      Debe ingresar un codificado
-                    </div>
-                  </div>
-                </div>
-                <div style="flex: 1;">
-                  <label for="devengado">Devengado:</label>
-                  <input class="form-control" formControlName="devengado" id="devengado" name="devengado"
-                    style="margin-bottom: 10px" type="number" min="0" />
-                  <div class="alert alert-danger" *ngIf="
-                frmActividad.controls['devengado'].invalid &&
-                frmActividad.controls['devengado'].touched
-                ">
-                    <div *ngIf="
-                  frmActividad.controls['devengado'].hasError('required')
-                  ">
-                      Debe ingresar un devengado
-                    </div>
-                  </div>
-                </div>
-              </div>-->
-
-                <div style="display: flex; justify-content: space-between;" *ngIf="modoCreacion">
+                <div style="display: flex; justify-content: space-between;">
                   <div style="flex: 1; margin-right: 20px;">
                     <label for="valor1">{{poa.tipo_periodo}} 1</label>
                     <div style="display: flex; align-items: center;">
-                      <input class="form-control" formControlName="valor1" type="text" id="valor1" name="valor1"
-                        style="margin-bottom: 10px" appCurrencyInput type="number" min="0" />
-                      <span style="margin-left: 5px;">%</span>
+                      <mat-checkbox  formControlName="valor1" id="valor1" name="valor1"/>
                     </div>
                   </div>
-                  <div style="flex: 1; margin-right: 20px;" *ngIf="modoCreacion">
+                  <div style="flex: 1; margin-right: 20px;">
                     <label for="valor2">{{poa.tipo_periodo}} 2</label>
                     <div style="display: flex; align-items: center;">
-                      <input class="form-control" formControlName="valor2" type="text" id="valor2" name="valor2"
-                        style="margin-bottom: 10px" appCurrencyInput type="number" min="0" />
-                      <span style="margin-left: 5px;">%</span>
+                      <mat-checkbox formControlName="valor2" id="valor2" name="valor2" />
                     </div>
                   </div>
                 </div>
 
-                <div style="display: flex; justify-content: space-between;" *ngIf="modoCreacion">
+                <div style="display: flex; justify-content: space-between;">
                   <div style="flex: 1; margin-right: 20px;">
                     <label for="valor3">{{poa.tipo_periodo}} 3</label>
                     <div style="display: flex; align-items: center;">
-                      <input class="form-control" formControlName="valor3" type="text" id="valor3" name="valor3"
-                        style="margin-bottom: 10px" appCurrencyInput type="number" min="0" /><span
-                        style="margin-left: 5px;">%</span>
+                      <mat-checkbox formControlName="valor3" id="valor3" name="valor3"/>
                     </div>
                   </div>
-                  <div style="flex: 1; margin-right: 20px;" *ngIf="modoCreacion">
+                  <div style="flex: 1; margin-right: 20px;">
                     <div class="form-group" *ngIf="poa.tipo_periodo === 'TRIMESTRE'">
                       <label for="valor4">{{poa.tipo_periodo}} 4</label>
                       <div style="display: flex; align-items: center;">
-                        <input class="form-control" formControlName="valor4" type="text" id="valor4" name="valor4"
-                          style="margin-bottom: 10px" appCurrencyInput type="number" min="0" /><span
-                          style="margin-left: 5px;">%</span>
+                        <mat-checkbox formControlName="valor4" id="valor4" name="valor4"/>
                       </div>
-
                     </div>
                   </div>
                 </div>
-
-
               </div>
             </form>
             <div class="modal-footer">
@@ -344,9 +311,10 @@
             <div class="mat-elevation-z8">
               <table mat-table [dataSource]="listaU | responsable : searchTerm1" class="table table-hover">
                 <ng-container matColumnDef="id_usuario">
-                  <th mat-header-cell *matHeaderCellDef>ID</th>
+                  <th mat-header-cell *matHeaderCellDef [style.display]="ocultarID ? '' : 'none'">ID</th>
                   <td mat-cell *matCellDef="let a; let i = index" [attr.rowspan]="getRowSpan('id_usuario', i)"
-                    [style.display]="getRowSpan('id_usuario', i) ? '' : 'none'">
+                    [style.display]="getRowSpan('id_usuario', i) ? '' : 'none'"
+                    [style.display]="ocultarID ? '' : 'none'">
                     {{ a.id_usuario }}
                   </td>
                 </ng-container>
@@ -395,9 +363,10 @@
             <div class="mat-elevation-z8">
               <table mat-table [dataSource]="listaU2 | responsable : searchTerm2" class="table table-hover">
                 <ng-container matColumnDef="id_usuario">
-                  <th mat-header-cell *matHeaderCellDef>ID</th>
+                  <th mat-header-cell *matHeaderCellDef [style.display]="ocultarID ? '' : 'none'">ID</th>
                   <td mat-cell *matCellDef="let a; let i = index" [attr.rowspan]="getRowSpan2('id_usuario', i)"
-                    [style.display]="getRowSpan2('id_usuario', i) ? '' : 'none'">
+                    [style.display]="getRowSpan2('id_usuario', i) ? '' : 'none'"
+                    [style.display]="ocultarID ? '' : 'none'">
                     {{ a.id_usuario }}
                   </td>
                 </ng-container>

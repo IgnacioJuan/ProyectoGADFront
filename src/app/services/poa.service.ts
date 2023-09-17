@@ -1,3 +1,4 @@
+import { PoaporFechaRepoProjection } from './../interface/PoaporFechaRepoProjection';
 import { Injectable } from '@angular/core';
 import { map, Observable, catchError, of } from 'rxjs';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
@@ -9,7 +10,9 @@ import { PoasAdminEstadoProjection } from '../interface/PoasAdminEstado';
 import { PoaNoAprobadoProjection } from '../interface/PoaNoAprobadoProjection';
 import { PoaporUsuarioProjection } from '../interface/PoaporUsuarioProjection';
 import { PoasConActividadesPendientesProjection } from '../interface/PoasConActividadesPendientesProjection';
+import { PoasSolicitudesProjection } from '../interface/PoasSolicitudesProjection';
 import { Poa_proyec_dto } from '../interface/poa_proyec_dto';
+import { PoasIndicadoresProjection } from '../interface/PoasIndicadoresProjection';
 
 
 @Injectable({
@@ -23,7 +26,7 @@ export class PoaService {
 
     return this.http.get<PoaActividadProjection>(`${baserUrl}/api/poa/buscar/${id}`);
   }
-  
+
   public listarPoa(): Observable<PoaActividadProjection[]> {
     return this.http
       .get(`${baserUrl}/api/poa/listar`)
@@ -33,25 +36,25 @@ export class PoaService {
   buscarPoasPorIds(ids: number[]): Observable<any> {
     // Convierte la lista de IDs en una cadena separada por comas
     const idsString = ids.join(',');
-  
+
     // Configura los parámetros de la solicitud
     const params = new HttpParams().set('ids', idsString);
-  
+
     // Realiza la solicitud HTTP GET con los parámetros
     return this.http.get(`${baserUrl}/api/poa/buscarPorIds`, { params });
   }
   buscarPoasPromedio(ids: number[]): Observable<any> {
     // Convierte la lista de IDs en una cadena separada por comas
     const idsString = ids.join(',');
-  
+
     // Configura los parámetros de la solicitud
     const params = new HttpParams().set('ids', idsString);
-  
+
     // Realiza la solicitud HTTP GET con los parámetros
     return this.http.get(`${baserUrl}/api/poa/listar-promedio`, { params });
   }
-  
-  
+
+
   getPoas(): Observable<PoaActividadProjection[]> {
     return this.http.get<PoaActividadProjection[]>(`${baserUrl}/api/poa/listar`);
   }
@@ -70,18 +73,23 @@ export class PoaService {
   }
 
   obtenerDatosPoas(): Observable<PoaActividadProjection[]> {
-    return this.http.get<PoaActividadProjection[]>(`${baserUrl}/api/poa/listarPoasDeModelo`);
+    return this.http.get<PoaActividadProjection[]>(`${baserUrl}/api/poa/listarPoasProyectoDeModeloFiltroFechas`);
   }
-  listarPoasdelProyecto(id_proyecto:number, estado:string): Observable<Poa[]> {
+  listarPoasdelProyecto(id_proyecto: number, estado: string): Observable<Poa[]> {
     return this.http.get<Poa[]>(`${baserUrl}/api/poa/listardelProyecto/${id_proyecto}/${estado}`);
   }
 
 
   //Listar POAS por Admin-ESTADO 
-  listarPoasAdminEstado(idResponsable:number, estado:string): Observable<PoasAdminEstadoProjection[]> {
+  listarPoasAdminEstado(idResponsable: number, estado: string): Observable<PoasAdminEstadoProjection[]> {
     return this.http.get<PoasAdminEstadoProjection[]>(`${baserUrl}/api/poa/listarPoasAdminEstado/${idResponsable}/${estado}`);
   }
-  
+ //BuscarPoaporId
+ listarPoasPorId(idPoa:number): Observable<Poa[]> {
+  return this.http.get<Poa[]>(`${baserUrl}/api/poa/findByIdAndVisibleTrue/${idPoa}`);
+}
+
+
   getNoAprobados(): Observable<PoaNoAprobadoProjection[]> {
     return this.http.get<PoaNoAprobadoProjection[]>(`${baserUrl}/api/poa/noaprobados`);
   }
@@ -94,7 +102,7 @@ export class PoaService {
 
 
 
-  
+
   poalist(): Observable<Poa> {
     return this.http.get<any>(`${baserUrl}/api/poa/listar`)
   }
@@ -105,8 +113,35 @@ export class PoaService {
   PoasConActividadesPendientes(): Observable<PoasConActividadesPendientesProjection> {
     return this.http.get<any>(`${baserUrl}/api/poa/PoasConActividadesP`)
   }
+  listarPoaApAdm(idResponsable: number | null): Observable<PoaporFechaRepoProjection[]> {
+    let cadena = `?idResponsable=${idResponsable}`;
+    if(idResponsable === null){
+      cadena = ``;
+    }
+    return this.http.get<PoaporFechaRepoProjection[]>(`${baserUrl}/api/poa/listarPoaApAdm${cadena}`);
+
+  }
+
+
+    //Listar POAS por Admin-Solicitud
+    listarPoasSolicitud(idAdmin:number): Observable<PoasSolicitudesProjection[]> {
+      return this.http.get<PoasSolicitudesProjection[]>(`${baserUrl}/api/poa/PoasConSolicitudPresupuesto/${idAdmin}`);
+    }
+
+
+  actualizarmeta(id: any, nuevaMeta: number): Observable<any> {
+    return this.http.put(`${baserUrl}/api/poa/actualizarmeta/${id}`, nuevaMeta);
+  }
+
+ 
   getPoaactiprojection(id: number): Observable<Poa_proyec_dto[]> {
     const url = `${baserUrl}/api/poa/aactijq/${id}`;
     return this.http.get<Poa_proyec_dto[]>(url);
   }
- }
+
+
+    //Listar poas con indicadores
+    listarPoasIndicadores(): Observable<PoasIndicadoresProjection[]> {
+      return this.http.get<PoasIndicadoresProjection[]>(`${baserUrl}/api/poa/listarPoasIndicadores`);
+    }
+}

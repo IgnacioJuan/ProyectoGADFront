@@ -1,55 +1,80 @@
 <body>
-    <div class="container bg-light border border-start-0 rounded-4">
-        <!--Listado de usuarios-->
-        <blockquote
-        class="blockquote text-dark"
-        style="
-          margin-top: 5%;
-          background-color: #ffffff;
-          border-left: 10px solid green;
-        "
-      >
-        <h1 style="cursor: pointer; color: green">
-          <strong> DETALLE POA</strong>
-        </h1>
-      </blockquote>
-        <!-- Tarjetas -->
-        <div class="d-flex justify-content-center align-items-center flex-wrap">
-            <!-- Tarjetas Dinámicas -->
-            <mat-card class="example-card mx-2 my-2" *ngFor="let card of cardsToShow">
-                <div class="card-content-wrapper"> <!-- Envoltorio para el contenido de la tarjeta -->
-                    <mat-card-header>
-                        <mat-card-subtitle>{{ card.responsable }}</mat-card-subtitle>
-                        <mat-card-title>{{ card.nombre_proyecto }}</mat-card-title>
-                    </mat-card-header>
-                    <mat-card-content>
-                        <mat-divider></mat-divider>
-                        <br />                    
-                        <mat-card-subtitle>Objetivo del Proyecto: </mat-card-subtitle>
-                        <p>{{ card.objetivo_proyecto }}</p> 
-                        <mat-card-subtitle>Meta del Proyecto:  </mat-card-subtitle>
-                        <p>{{ card.meta_proyecto }}</p>
-                        <mat-card-subtitle>Localización </mat-card-subtitle>
-                        <p>{{ card.localizacion }}</p>
-                        <mat-card-subtitle>Fecha Fin Del Proyecto: </mat-card-subtitle>
-                        <p>{{ transformDate(card.fecha_fin) }}</p>                        
-                    </mat-card-content>
-                </div>
-                <mat-divider></mat-divider>
-                <mat-card-actions class="card-actions"> <!-- Clase adicional para acciones de la tarjeta -->
-                    <button mat-button (click)="redirectToDetails(card.id_poa)">Ver más detalles</button>
-                </mat-card-actions>
-                <mat-card-footer>
-                    <!-- <mat-progress-bar mode="indeterminate"></mat-progress-bar> -->
-                </mat-card-footer>
-            </mat-card>
-        </div>
-
-        <!-- Paginación -->
-        <div class="d-flex justify-content-center my-4">
-            <mat-paginator [length]="totalCards" [pageSize]="pageSize" [pageSizeOptions]="[3]" showFirstLastButtons
-                (page)="onPageChange($event)">
-            </mat-paginator>
-        </div>
+  <div class="container bg-light border border-start-0 rounded-4">
+    <!--Listado de usuarios-->
+    <blockquote class="blockquote text-dark" style="
+        margin-top: 5%;
+        background-color: #ffffff;
+        border-left: 10px solid green;
+      ">
+      <h1 style="cursor: pointer; color: green">
+        <strong>POA</strong>
+      </h1>
+    </blockquote>
+    <!-- Campo de búsqueda -->
+    <div class="search-container">
+      <mat-form-field appearance="outline" class="search-input">
+        <mat-label>Buscar</mat-label>
+        <input matInput (keyup)="applyFilter($event)" />
+      </mat-form-field>
     </div>
+
+    <!-- Tarjetas -->
+    <div class="cards-container">
+      <!-- Tarjetas Dinámicas -->
+      <ng-container *ngIf="cardsToShow.length > 0; else noCards">
+        <mat-card class="example-card" *ngFor="let card of cardsToShow">
+          <div class="card-content-wrapper">
+            <!-- Envoltorio para el contenido de la tarjeta -->
+            <mat-card-header>
+              <mat-card-subtitle>{{ card.responsable }}</mat-card-subtitle>
+              <mat-card-title>{{ card.nombre_proyecto }}</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <mat-divider></mat-divider>
+              <br />
+              <mat-card-subtitle>Objetivo del Proyecto: </mat-card-subtitle>
+              <p>{{ card.objetivo_proyecto }}</p>
+              <mat-card-subtitle>Meta del Proyecto: </mat-card-subtitle>
+              <p>{{ card.meta_proyecto }}</p>
+              <mat-card-subtitle>Localización </mat-card-subtitle>
+              <p>{{ card.localizacion }}</p>
+              <mat-card-subtitle>Fecha de Creación Del Proyecto: </mat-card-subtitle>
+              <p>
+                {{
+                card.fecha_creacion
+                ? (card.fecha_creacion | date : "dd/MM/yyyy")
+                : "Fecha no definida"
+                }}
+              </p>
+            </mat-card-content>
+          </div>
+          <mat-divider></mat-divider>
+          <mat-card-actions class="card-actions">
+            <!-- Clase adicional para acciones de la tarjeta -->
+            <button mat-button (click)="redirectToDetails(card.id_poa)">
+              Ver más detalles
+            </button>
+          </mat-card-actions>
+          <mat-card-footer>
+            <!-- <mat-progress-bar mode="indeterminate"></mat-progress-bar> -->
+          </mat-card-footer>
+        </mat-card>
+      </ng-container>
+
+      <!-- Mensaje cuando no hay tarjetas -->
+      <ng-template #noCards>
+        <div class="example-card-vacio d-flex justify-content-center align-items-center flex-column">
+          <img src="assets/img/data_not_found.png" alt="" style="margin-bottom: 10px; height: 180px; width: 180px" />
+          <span style="color: #6a737b; font-size:large ;">No existen POA pendientes</span>
+        </div>
+      </ng-template>
+    </div>
+
+    <!-- Paginación -->
+    <div class="d-flex justify-content-center my-4">
+      <mat-paginator [length]="totalCards" [pageSize]="pageSize" [pageSizeOptions]="[3]" showFirstLastButtons
+        (page)="onPageChange($event)">
+      </mat-paginator>
+    </div>
+  </div>
 </body>

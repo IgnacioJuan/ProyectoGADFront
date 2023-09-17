@@ -16,6 +16,7 @@ import { PresupuestoExternoService } from 'src/app/services/presupuestoexterno.s
 import { ReformaSuplementoService } from 'src/app/services/reformasuplemento.service';
 import { ReformaTraspasoIService } from 'src/app/services/reformatraspaso-i.service';
 import { ReformaTraspasoDService } from 'src/app/services/reformatraspaso-d.service';
+import { LoadingServiceService } from 'src/app/components/loading-spinner/LoadingService.service';
 
 @Component({
   selector: 'app-actividades',
@@ -77,6 +78,7 @@ export class ListaActividadesComponent implements OnInit {
   poa: Poa = new Poa();
   actividades: any = [];
   miModal!: ElementRef;
+  ocultarID: boolean = false;
   public actividad = new ActividadesPoa();
 
   public presupuestoexterno = new PresupuestoExterno();
@@ -114,7 +116,7 @@ export class ListaActividadesComponent implements OnInit {
 
   constructor(
     private actividadservice: ActividadespoaService, private paginatorIntl: MatPaginatorIntl,
-    private router: Router, private fb: FormBuilder, private userService: UsuarioService,
+    private router: Router, private fb: FormBuilder, private userService: UsuarioService,private loadingService: LoadingServiceService,
     private pexternoservice: PresupuestoExternoService, private rsuplementoservice: ReformaSuplementoService,
     private rtincrementoservice: ReformaTraspasoIService, private rtdecrementoservice: ReformaTraspasoDService
   ) {
@@ -160,7 +162,7 @@ export class ListaActividadesComponent implements OnInit {
 
   // VALIDACIONES
   validarFechas(): void {
-    const fechaElegida = this.frmPE.get('fecha')?.value as string;
+    /*const fechaElegida = this.frmPE.get('fecha')?.value as string;
     const fechaActual = new Date();
     const fechaElegidaDate = new Date(fechaElegida);
     
@@ -168,7 +170,7 @@ export class ListaActividadesComponent implements OnInit {
       this.frmPE.get('fecha')?.setErrors({ fechaAnterior: true });
     } else {
       this.frmPE.get('fecha')?.setErrors(null);
-    }
+    }*/
   }
   noCaracteresEspecialesValidator1() {
     return (control: any) => {
@@ -217,6 +219,7 @@ export class ListaActividadesComponent implements OnInit {
   }
   
   guardarPE() {
+    this.loadingService.show();
     this.presupuestoexterno = this.frmPE.value;
     this.presupuestoexterno.actividad = new ActividadesPoa();
     this.presupuestoexterno.actividad.id_actividad = this.selectedActividadId;
@@ -227,6 +230,7 @@ export class ListaActividadesComponent implements OnInit {
           console.log('Presupuesto Externo creado con éxito: ', response);
           this.guardadoExitoso1 = true;
           this.listar(this.poa.id_poa);
+          this.loadingService.hide();
           Swal.fire(
             'Exitoso',
             'Se ha completado el registro con exito',
@@ -245,6 +249,7 @@ export class ListaActividadesComponent implements OnInit {
   }
   //Guardar Reforma Suplemento a Actividad
   guardarRS() {
+    this.loadingService.show();
     this.reformasuplemento = this.frmRS.value;
     this.reformasuplemento.actividad = new ActividadesPoa();
     this.reformasuplemento.actividad.id_actividad = this.selectedActividadId;
@@ -254,6 +259,7 @@ export class ListaActividadesComponent implements OnInit {
           console.log('Reforma Suplemento agregada con éxito: ', response);
           this.guardadoExitoso2 = true;
           this.listar(this.poa.id_poa);
+          this.loadingService.hide();
           Swal.fire(
             'Exitoso',
             'Se ha completado el registro con exito',
@@ -272,6 +278,7 @@ export class ListaActividadesComponent implements OnInit {
   }
   //Guardar Reforma Traspaso Incremento a Actividad
   guardarRTI() {
+    this.loadingService.show();
     this.rtincremento = this.frmRTI.value;
     this.rtincremento.actividad = new ActividadesPoa();
     this.rtincremento.actividad.id_actividad = this.selectedActividadId;
@@ -280,15 +287,17 @@ export class ListaActividadesComponent implements OnInit {
         (response) => {
           console.log('Reforma Traspaso Incremento agregada con éxito: ', response);
           this.guardadoExitoso3 = true;
-          this.listar(this.poa.id_poa);
+          this.loadingService.hide();
           Swal.fire(
             'Exitoso',
             'Se ha completado el registro con exito',
             'success'
           )
+          this.listar(this.poa.id_poa);
         },
         (error) => {
           console.error('Error al agregar Reforma Traspaso Incremento; ', error);
+          this.loadingService.hide();
           Swal.fire(
             'Error',
             'Ha ocurrido un error',
@@ -300,6 +309,7 @@ export class ListaActividadesComponent implements OnInit {
 
   //Guardar Reforma Traspaso Decremento a Actividad
   guardarRTD() {
+    this.loadingService.show();
     this.rtdecremento = this.frmRTD.value;
     this.rtdecremento.actividad = new ActividadesPoa();
     this.rtdecremento.actividad.id_actividad = this.selectedActividadId;
@@ -308,15 +318,17 @@ export class ListaActividadesComponent implements OnInit {
         (response) => {
           console.log('Reforma Traspaso Decremento agregada con éxito: ', response);
           this.guardadoExitoso4 = true;
-          this.listar(this.poa.id_poa);
+          this.loadingService.hide();
           Swal.fire(
             'Exitoso',
             'Se ha completado el registro con exito',
             'success'
           )
+          this.listar(this.poa.id_poa);
         },
         (error) => {
           console.error('Error al agregar Reforma Traspaso Decremento: ', error);
+          this.loadingService.show();
           Swal.fire(
             'Error',
             'Ha ocurrido un error',

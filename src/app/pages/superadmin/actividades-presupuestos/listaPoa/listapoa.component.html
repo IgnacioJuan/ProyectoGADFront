@@ -1,7 +1,7 @@
 <body>
   <div class="container bg-light border border-start-0 rounded-4">
     <blockquote style="margin-top: 5%; background-color: #ffffff; border-left: 10px solid green;">
-      <h1 class="header-title" style="text-transform: uppercase"><strong> LISTADO POAS</strong></h1>
+      <h1 class="header-title" style="text-transform: uppercase"><strong> LISTA DE PROYECTOS</strong></h1>
     </blockquote>
     <div></div>
 
@@ -25,52 +25,28 @@
         >
           <table mat-table [dataSource]="dataSource">
             <ng-container matColumnDef="id_poa">
-              <th mat-header-cell *matHeaderCellDef>ID</th>
-              <td mat-cell *matCellDef="let elemento">
+              <th mat-header-cell *matHeaderCellDef [style.display]="ocultarID ? '' : 'none'">ID</th>
+              <td mat-cell *matCellDef="let elemento" [style.display]="ocultarID ? '' : 'none'">
                 {{ elemento.id_poa }}
               </td>
             </ng-container>
-            <ng-container matColumnDef="fecha_inicio">
-              <th mat-header-cell *matHeaderCellDef>FECHA INICIO</th>
-              <td mat-cell *matCellDef="let elemento">
-                {{ elemento.fecha_inicio | date:'yyyy-MM-dd'}}
+            <ng-container matColumnDef="id_proyecto">
+              <th mat-header-cell *matHeaderCellDef [style.display]="ocultarID ? '' : 'none'">ID PROYECTO</th>
+              <td mat-cell *matCellDef="let elemento" [style.display]="ocultarID ? '' : 'none'">
+                {{ elemento.id_proyecto }}
               </td>
             </ng-container>
-            <ng-container matColumnDef="fecha_fin">
-              <th mat-header-cell *matHeaderCellDef>FECHA FIN</th>
+            <ng-container matColumnDef="nombreProyecto">
+              <th mat-header-cell *matHeaderCellDef>Proyecto</th>
               <td mat-cell *matCellDef="let elemento">
-                {{ elemento.fecha_fin | date:'yyyy-MM-dd'}}
+                {{ elemento.nombreProyecto }}
               </td>
             </ng-container>
-            <ng-container matColumnDef="localizacion">
-              <th mat-header-cell *matHeaderCellDef>LOCALIZACION</th>
+            <ng-container matColumnDef="meta_planificada">
+              <th mat-header-cell *matHeaderCellDef>Meta Planificada</th>
               <td mat-cell *matCellDef="let elemento">
-                {{ elemento.localizacion }}
+                {{ elemento.meta_planificada }}
               </td>
-            </ng-container>
-            <ng-container matColumnDef="cobertura">
-              <th mat-header-cell *matHeaderCellDef>COBERTURA</th>
-              <td mat-cell *matCellDef="let elemento">
-                {{ elemento.cobertura }}
-              </td>
-            </ng-container>
-            <ng-container matColumnDef="barrio">
-              <th mat-header-cell *matHeaderCellDef>BARRIO</th>
-              <td mat-cell *matCellDef="let elemento">
-                {{ elemento.barrio }}
-              </td>
-            </ng-container>
-            <ng-container matColumnDef="comunidad">
-              <th mat-header-cell *matHeaderCellDef>COMUNIDAD</th>
-              <td mat-cell *matCellDef="let elemento">
-                {{ elemento.comunidad }}
-              </td>
-            </ng-container>
-              <ng-container matColumnDef="linea_base">
-                <th mat-header-cell *matHeaderCellDef>LINEA BASE</th>
-                <td mat-cell *matCellDef="let elemento" class="align-right-dollar">
-                  {{ elemento.linea_base }}
-                </td>
             </ng-container>
           <ng-container matColumnDef="tipo_periodo">
             <th mat-header-cell *matHeaderCellDef>PERIODO</th>

@@ -8,6 +8,7 @@ import { AsignacionEvidenciaComponent } from './asignacion-evidencia/asignacion-
 import { AprobarRechazarDetalleAdminComponent } from './aprobar-rechazar-detalle-admin/aprobar-rechazar-detalle-admin.component';
 import { PoaActividadComponent } from './asignacion-actividades/poa-actividad/poa-actividad.component';
 import { ListPoasEnviadosAdminComponent } from './list-poas-enviados-admin/list-poas-enviados-admin.component';
+import { CrearResponsablesComponent } from './crear-responsables/crear-responsables.component';
 
 
 const routes: Routes = [
@@ -23,6 +24,13 @@ const routes: Routes = [
   {
     path: 'asignaEvidencia',
     component: AsignacionEvidenciaComponent,
+    pathMatch: 'full',
+    canActivate: [AdminGuard]
+
+  },
+  {
+    path: 'create-responsables',
+    component: CrearResponsablesComponent,
     pathMatch: 'full',
     canActivate: [AdminGuard]
 
@@ -54,8 +62,12 @@ const routes: Routes = [
     
   },
   {
-    path: 'poa',
-    loadChildren: () => import("./poa/register-poa.module").then(m => m.RegisterPoaModule)
+    path: 'evaluar-poa',
+    loadChildren: () => import("./evaluar-poa/evaluar-poa.module").then(m => m.EvaluarPoaModule)
+  },
+  {
+    path: 'poas-solicitudes',
+    loadChildren: () => import("./poas-solicitudes-presupuesto/poas-solicitudes-presupuesto.module").then(m => m.PoasSolicitudesPresupuestoModule)
   },
 ];
 

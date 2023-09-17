@@ -112,7 +112,7 @@ export class ListActivEvidenciaComponent implements OnInit {
     return `${startIndex + 1} - ${endIndex} de ${length}`;
   };
   //Columnas tabla actividades
-  columnasUsuario: string[] = ['id_actividad', 'nombre', 'descripcion', 'responsable', 'detalle', 'evaluar', 'historial'];
+  columnasUsuario: string[] = ['id_actividad', 'nombre', 'descripcion', 'detalle', 'evaluar', 'historial'];
   columnasObservaciones: string[] = ['observacion', 'estado', 'nombre_completo', 'fecha_aprobacion'];
 
   listar(): void {
