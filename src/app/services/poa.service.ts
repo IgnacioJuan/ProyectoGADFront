@@ -106,9 +106,13 @@ export class PoaService {
   PoasConActividadesPendientes(): Observable<PoasConActividadesPendientesProjection> {
     return this.http.get<any>(`${baserUrl}/api/poa/PoasConActividadesP`)
   }
-  //Listar poas del admin con fecha
-  listarPoaApAdm(idResponsable: number): Observable<PoaporFechaRepoProjection[]> {
-    return this.http.get<PoaporFechaRepoProjection[]>(`${baserUrl}/api/poa/listarPoaApAdm/${idResponsable}`);
+  listarPoaApAdm(idResponsable: number | null): Observable<PoaporFechaRepoProjection[]> {
+    let cadena = `?idResponsable=${idResponsable}`;
+    if(idResponsable === null){
+      cadena = ``;
+    }
+    // Si idResponsable es nulo, puedes enviarlo como null o -1 (u otro valor especial) dependiendo de tu lógica
+    return this.http.get<PoaporFechaRepoProjection[]>(`${baserUrl}/api/poa/listarPoaApAdm${cadena}`);
   }
   actualizarmeta(id: any, nuevaMeta: number): Observable<any> {
     return this.http.put(`${baserUrl}/api/poa/actualizarmeta/${id}`, nuevaMeta);

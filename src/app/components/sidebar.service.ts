@@ -66,7 +66,7 @@ export class SidebarService {
       submenu: [
         //{ titulo: 'Poas Rechazados', url: 'sup/flujo-criterio/listarpoa', icono: 'fas fa-list-ul ' },
         { titulo: 'Estados', url: 'sup/flujo-criterio/listaproyecto', icono: 'fas fa-list-ul ' },
-        { titulo: 'Avance Meta', url: 'sup/evaluar-poa/poas', icono: 'fas fa-list-ul ' },
+        { titulo: 'Avance Meta', url: 'adm/evaluar-poa/poas', icono: 'fas fa-list-ul ' },
 
       ]
     },
