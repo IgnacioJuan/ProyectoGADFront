@@ -38,11 +38,11 @@
               <p>{{ card.meta_proyecto }}</p>
               <mat-card-subtitle>Localización </mat-card-subtitle>
               <p>{{ card.localizacion }}</p>
-              <mat-card-subtitle>Fecha Inicio Del Proyecto: </mat-card-subtitle>
+              <mat-card-subtitle>Fecha de Creación Del Proyecto: </mat-card-subtitle>
               <p>
                 {{
-                card.fecha_inicio
-                ? (card.fecha_inicio | date : "dd/MM/yyyy")
+                card.fecha_creacion
+                ? (card.fecha_creacion | date : "dd/MM/yyyy")
                 : "Fecha no definida"
                 }}
               </p>

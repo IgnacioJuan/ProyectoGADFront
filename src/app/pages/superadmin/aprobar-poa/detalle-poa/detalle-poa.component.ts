@@ -32,13 +32,13 @@ export class DetallePoaComponent implements OnInit {
   detallePoa: string = 'Detalle del POA \n';
 
   //POA
-  poaAprob!: AprobPoa;
+  poaAprob: AprobPoa = new AprobPoa();
 
   //Periodos por actividades
   periodosPoa!: Periodo_DTO[];
 
   //Totales del POA
-  totalesPoa!: PeriodoTotalPOA_DTO;
+  totalesPoa: PeriodoTotalPOA_DTO = new PeriodoTotalPOA_DTO();
 
   //Conteo de semestres
   nperiodo!: number;
@@ -255,19 +255,7 @@ export class DetallePoaComponent implements OnInit {
     }
     this.porcentajes = this.periodosPoa.slice(0, 3).map(periodo => totalf * (periodo.porcentaje / 100));
 }
-  /*calcularPeriodos(totalf: number){
-    //Inicializar los porcentajes
-    this.porcentajes[0]=0;
-    this.porcentajes[1]=0;
-    this.porcentajes[2]=0;
 
-    if (this.periodosPoa && this.periodosPoa.length >= 3) {
-        this.porcentajes[0]=totalf*(this.periodosPoa[0].porcentaje/100);
-        this.porcentajes[1]=totalf*(this.periodosPoa[1].porcentaje/100);
-        this.porcentajes[2]=totalf*(this.periodosPoa[2].porcentaje/100);     
-    }
-}
-*/
   showSuccessAlert() {
     Swal.fire({
       icon: 'success',
