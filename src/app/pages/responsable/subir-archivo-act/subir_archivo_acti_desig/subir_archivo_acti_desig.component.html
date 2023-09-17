@@ -3,7 +3,10 @@
     <blockquote style="margin-top: 5%; background-color: #ffffff; border-left: 10px solid green;">
 
       <div class="header-container">
-        <h1 class="header-title">LISTA DE ARCHIVOS</h1>
+        <h1 class="header-title">
+          <a style="cursor: pointer" (click)="verpro()">LISTA DE PROYECTOS</a>>
+          <a style="cursor: pointer" (click)="veractivi()">LISTA DE ACTIVIDADES </a>>
+          LISTA DE ARCHIVOS</h1>
       </div>
     </blockquote>
     <div class="card">
@@ -23,8 +26,8 @@
           <div class="mat-elevation-z8 " style="margin-bottom: 5%">
             <mat-table [dataSource]="dataSource | buscar : filterPost " class="mat-elevation-z8">
               <ng-container matColumnDef="Id">
-                <mat-header-cell *matHeaderCellDef>Id</mat-header-cell>
-                <mat-cell *matCellDef="let file">{{ file.id_archivo }}</mat-cell>
+                <mat-header-cell *matHeaderCellDef [style.display]="ocultar ? '' : 'none'">Id</mat-header-cell>
+                <mat-cell *matCellDef="let file" [style.display]="ocultar ? '' : 'none'">{{ file.id_archivo }}</mat-cell>
               </ng-container>
 
               <ng-container matColumnDef="Archivo">

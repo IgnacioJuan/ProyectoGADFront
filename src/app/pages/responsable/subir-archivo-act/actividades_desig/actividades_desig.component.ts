@@ -1,4 +1,4 @@
-import { Component, OnInit ,ViewChild} from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActividadService } from 'src/app/services/actividad.service';
 import { Actividad_arch } from 'src/app/services/actividad_arch';
 import { MatPaginator } from '@angular/material/paginator';
@@ -8,41 +8,38 @@ import { Router } from '@angular/router';
 //import { ModeloService } from 'src/app/services/modelo.service';
 import { Archivo } from 'src/app/models/Archivo';
 import { LoadingServiceService } from 'src/app/components/loading-spinner/LoadingService.service';
-
-
+import { Poa_proyec_dto } from 'src/app/interface/poa_proyec_dto';
 @Component({
   selector: 'app-actividades_desig',
   templateUrl: './actividades_desig.component.html',
-  styleUrls: ['./actividades_desig.component.css']
+  styleUrls: ['./actividades_desig.component.css'],
 })
 export class Actividades_desigComponent implements OnInit {
-  acti:Actividad_arch[]=[];
+  acti: Actividad_arch[] = [];
   isLoggedIn: boolean;
   user: any;
-   botonDeshabilitado: boolean | undefined;
+  botonDeshabilitado: boolean | undefined;
   dataSource = new MatTableDataSource<Actividad_arch>();
-   displayedColumns: string[] = [
+  displayedColumns: string[] = [
     'id_actividad',
     'nombre',
     'descripcion',
-      'codifcado',
+    'codifcado',
     'devengado',
     'presupuesto_referencial',
     'recursos_propios',
     'Subir archivo',
   ];
-  
+  ocultar=false;
   constructor(
     private login: LoginService,
     //private modeloService: ModeloService,
     private router: Router,
-    private serviactiv : ActividadService,
+    private serviactiv: ActividadService,
     //importar el spinner como servicio
     private loadingService: LoadingServiceService
-
- 
-  ) { 
-      this.isLoggedIn = this.login.isLoggedIn();
+  ) {
+    this.isLoggedIn = this.login.isLoggedIn();
     this.user = this.login.getUser();
   }
 
@@ -54,38 +51,40 @@ export class Actividades_desigComponent implements OnInit {
   }
   @ViewChild(MatPaginator)
   paginator!: MatPaginator;
-
+poaacti: Poa_proyec_dto = new Poa_proyec_dto();
   ngOnInit() {
-    this.login.loginStatusSubjec.asObservable().subscribe(
+    this.login.loginStatusSubjec.asObservable().subscribe((data) => {
+      this.isLoggedIn = this.login.isLoggedIn();
+      this.user = this.login.getUser();
+    });
+    const data = history.state.data;
+    this.poaacti = data;
+    if (this.poaacti == undefined) {
+      this.router.navigate(['user-dashboard']);
+      location.replace('/use/user-dashboard');
+    }
+console.log("poa ="+this.poaacti.id_poa)
+
+    this.getPoaActividades(this.user.id,this.poaacti.id_poa)
+  }
+  getPoaActividades(idres: number, idpoa: number): void {
+    this.serviactiv.getPoaActividades(idres, idpoa).subscribe(
       data => {
-        this.isLoggedIn = this.login.isLoggedIn();
-        this.user = this.login.getUser();
+        this.dataSource.data = data;
+      },
+      error => {
+        console.error('Error fetching data:', error);
       }
     );
-this.listar();    
-    
-  }
-  listar(){
-    this.loadingService.show();
-    
-    this.serviactiv.listaractireponsa(this.user.id).subscribe(data => {
-      this.acti = data;
-      this.dataSource.data = data;
-      this.dataSource.data = this.acti; // Actualizar el dataSource
-      this.loadingService.hide();
-    },(error:any)=>{
-
-      this.loadingService.hide();
-
-    });
-
-
   }
   archivo: Archivo = new Archivo();
 
-  
   verDetalles(archivos: any) {
-    this.router.navigate(['/res/activ/subir_archiivo'], { state: { data: archivos } });
+    this.router.navigate(['/res/activ/subir_archiivo'], {
+      state: { data: archivos },
+    });
   }
-
+  verModeloPoas() {
+    this.router.navigate(['/res/activ/poa_proyectos']);
+  }
 }
