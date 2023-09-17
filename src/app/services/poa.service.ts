@@ -10,6 +10,7 @@ import { PoasAdminEstadoProjection } from '../interface/PoasAdminEstado';
 import { PoaNoAprobadoProjection } from '../interface/PoaNoAprobadoProjection';
 import { PoaporUsuarioProjection } from '../interface/PoaporUsuarioProjection';
 import { PoasConActividadesPendientesProjection } from '../interface/PoasConActividadesPendientesProjection';
+import { PoasSolicitudesProjection } from '../interface/PoasSolicitudesProjection';
 import { Poa_proyec_dto } from '../interface/poa_proyec_dto';
 
 
@@ -82,6 +83,11 @@ export class PoaService {
   listarPoasAdminEstado(idResponsable: number, estado: string): Observable<PoasAdminEstadoProjection[]> {
     return this.http.get<PoasAdminEstadoProjection[]>(`${baserUrl}/api/poa/listarPoasAdminEstado/${idResponsable}/${estado}`);
   }
+ //BuscarPoaporId
+ listarPoasPorId(idPoa:number): Observable<Poa[]> {
+  return this.http.get<Poa[]>(`${baserUrl}/api/poa/findByIdAndVisibleTrue/${idPoa}`);
+}
+
 
   getNoAprobados(): Observable<PoaNoAprobadoProjection[]> {
     return this.http.get<PoaNoAprobadoProjection[]>(`${baserUrl}/api/poa/noaprobados`);
@@ -106,13 +112,27 @@ export class PoaService {
   PoasConActividadesPendientes(): Observable<PoasConActividadesPendientesProjection> {
     return this.http.get<any>(`${baserUrl}/api/poa/PoasConActividadesP`)
   }
-  //Listar poas del admin con fecha
-  listarPoaApAdm(idResponsable: number): Observable<PoaporFechaRepoProjection[]> {
-    return this.http.get<PoaporFechaRepoProjection[]>(`${baserUrl}/api/poa/listarPoaApAdm/${idResponsable}`);
+  listarPoaApAdm(idResponsable: number | null): Observable<PoaporFechaRepoProjection[]> {
+    let cadena = `?idResponsable=${idResponsable}`;
+    if(idResponsable === null){
+      cadena = ``;
+    }
+    return this.http.get<PoaporFechaRepoProjection[]>(`${baserUrl}/api/poa/listarPoaApAdm${cadena}`);
+
   }
+
+
+    //Listar POAS por Admin-Solicitud
+    listarPoasSolicitud(idAdmin:number): Observable<PoasSolicitudesProjection[]> {
+      return this.http.get<PoasSolicitudesProjection[]>(`${baserUrl}/api/poa/PoasConSolicitudPresupuesto/${idAdmin}`);
+    }
+
+
   actualizarmeta(id: any, nuevaMeta: number): Observable<any> {
     return this.http.put(`${baserUrl}/api/poa/actualizarmeta/${id}`, nuevaMeta);
   }
+
+ 
   getPoaactiprojection(id: number): Observable<Poa_proyec_dto[]> {
     const url = `${baserUrl}/api/poa/aactijq/${id}`;
     return this.http.get<Poa_proyec_dto[]>(url);
