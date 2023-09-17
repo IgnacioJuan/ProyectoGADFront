@@ -17,6 +17,7 @@ import {LoginService} from "../../../../services/login.service";
 import {AprobacionPoaService} from "../../../../services/aprobacion-poa.service";
 import {AprobacionEvidencia} from "../../../../models/AprobacionEvidencia";
 import {AprobacionEvidenciaService} from "../../../../services/aprobacion-evidencia.service";
+import {LoadingServiceService} from "../../../../components/loading-spinner/LoadingService.service";
 
 @Component({
   selector: 'app-evidencias',
@@ -30,8 +31,9 @@ export class EvidenciasComponent implements OnInit {
 
   //Usuario logueado
   user: any = null;
+  rol:any = null;
   //tabla
-  itemsPerPageLabel = 'Poas por página';
+  itemsPerPageLabel = 'Evidencias por página';
   nextPageLabel = 'Siguiente';
   lastPageLabel = 'Última';
   firstPageLabel = 'Primera';
@@ -54,17 +56,10 @@ export class EvidenciasComponent implements OnInit {
   };
 
   //Columnas Tabla
-  columnasObservaciones: string[] = ['observacion','estadox'];
+  columnasObservaciones: string[] = ['observacion','estadox','fecha_aprobacion','usuario_creacion'];
   columnasUsuario: string[] = [
-    'barrio',
-    'comunidad',
-    'cobertura',
-    'fecha_inicio',
-    'estado',
-
-    'observaciones',
   ];
-  dataSource = new MatTableDataSource<Archivo>();
+  dataSource = new MatTableDataSource<any>();
   dataSource3 = new MatTableDataSource<AprobacionEvidencia>();
 
   @ViewChild('datosModalRef') datosModalRef: any;
@@ -72,9 +67,11 @@ export class EvidenciasComponent implements OnInit {
 
   constructor(
     private paginatorIntl: MatPaginatorIntl,
-
+    public login: LoginService,
     private archivoServicio: ArchivoService,
-    private AprobacionEvienciaServicio: AprobacionEvidenciaService
+    private AprobacionEvienciaServicio: AprobacionEvidenciaService,
+    private loadingService: LoadingServiceService
+
   ) {
     this.paginatorIntl.nextPageLabel = this.nextPageLabel;
     this.paginatorIntl.lastPageLabel = this.lastPageLabel;
@@ -89,9 +86,24 @@ export class EvidenciasComponent implements OnInit {
   }
   ngOnInit(): void {
     //Capturar usuario logueado
-
+    this.user = this.login.getUser();
     console.log(this.estadoSeleccionado);
     this.listarPoas(this.estadoSeleccionado);
+    this.rol = this.login.getUserRole();
+    console.log(this.rol)
+    this.configurarColumnasUsuario();
+  }
+  
+  configurarColumnasUsuario() {
+    this.columnasUsuario = [
+      'barrio',
+      'comunidad',
+      ...(this.rol !== 'RESPONSABLE' ? ['responsable'] : []),
+      'cobertura',
+      'fecha_inicio',
+      'estado',
+      'observaciones',
+    ];
   }
 
   //Buscar
@@ -102,17 +114,26 @@ export class EvidenciasComponent implements OnInit {
   resultadosEncontradosporObservaciones: boolean = true;
 
   //Metodo para listar
+
   listarPoas( estado: string): void {
-    this.archivoServicio.listarArchivosPorEstadoYFechaDesc(estado).subscribe(
+    let username;
+    this.loadingService.show();
+    if (this.login.getUserRole() === 'RESPONSABLE') {
+      username = this.user.username;
+    }
+
+    this.archivoServicio.listarArchivosPorEstadoYFechaDesc(estado, username).subscribe(
       (data: any[]) => {
         this.listaPoas = data;
-        console.log('Dataa');
-        console.log(this.listaPoas);
-        this.dataSource.data = this.listaPoas;
+        this.dataSource.data = data;
         this.resultadosEncontradosporEstado = this.listaPoas.length > 0; // Actualiza la variable según si se encontraron resultados
+        this.loadingService.hide();
+        console.log(data)
       },
       (error: any) => {
         console.error('Error al listar las evidencias:', error);
+        this.loadingService.hide();
+
         this.resultadosEncontradosporEstado = false; // Si ocurre un error, no se encontraron resultados
       }
     );
@@ -150,15 +171,20 @@ export class EvidenciasComponent implements OnInit {
 
   //Ver observaciones
   verDetalles(evidencia: any) {
+    this.loadingService.show();
     this.AprobacionEvienciaServicio.listaraporbacionEviPorArchivo(evidencia.id_archivo).subscribe(
       (data: any[]) => {
         this.listaAprobacionPoa = data;
         this.dataSource3.data = this.listaAprobacionPoa;
         this.resultadosEncontradosporObservaciones =
           this.listaAprobacionPoa.length > 0; // Actualiza la variable según si se encontraron resultados
+        this.loadingService.hide();
+
       },
       (error: any) => {
         console.error('Error al listar las observaciones:', error);
+        this.loadingService.hide();
+
         this.resultadosEncontradosporObservaciones = false; // Si ocurre un error, no se encontraron resultados
       }
     );

@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, catchError, map, of } from 'rxjs';
 import baserUrl from './helper';
 import { Observacion2 } from '../models/Observaciones2';
 import { Actividades } from '../models/actividades';
@@ -10,6 +10,8 @@ import { Actividad_arch } from './actividad_arch';
 import { DetalleActividadDTO } from '../models/DetalleActividadDTO';
 import { UsuarioActividadDTO } from '../models/UsuarioActividadDTO';
 import { ActividadesPoaDTO } from '../models/ActividadesAprobPoa ';
+import { valorprojec } from '../interface/valorprojec';
+//import { fechaactiProjection } from '../interface/fechaactiProjecttion';
 
 @Injectable({
   providedIn: 'root'
@@ -107,4 +109,25 @@ export class ActividadService {
  public listaractireponsa(idres: number): Observable<Actividad_arch[]> {
   return this.http.get<Actividad_arch[]>(`${baserUrl}/api/actividades/actiresponsable/${idres}`);
 }
+public valor(idres: number): Observable<valorprojec> {
+  return this.http.get<valorprojec>(`${baserUrl}/api/actividades/valor/${idres}`);
+}
+
+getPoaActividades(idres: number, idpoa: number): Observable<Actividad_arch[]> {
+  const url = `${baserUrl}/api/actividades/poaacti/${idres}/${idpoa}`;
+  return this.http.get<Actividad_arch[]>(url);
+}
+public getFechaFin(idres: number): Observable<Actividad_arch | undefined> {
+  return this.http.get<Actividad_arch>(`${baserUrl}/api/actividades/fecha_fin/${idres}`)
+    .pipe(
+      catchError((error: any) => {
+        console.error('Error al obtener la fecha de finalización:', error);
+        return of(undefined); // Devuelve undefined en caso de error
+      })
+    );
+}
+
+
+
+
 }

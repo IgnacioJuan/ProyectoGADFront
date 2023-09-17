@@ -2,22 +2,26 @@
   <div class="container bg-light border border-start-0 rounded-4">
     <blockquote style="margin-top: 5%;background-color: #ffffff; border-left: 10px solid green; ">
       <div class="header-container">
-        <h1 class="header-title">ACIVIDADES ASIGNADAS</h1>
+        <h1 class="header-title">
+
+          
+          <a style="cursor: pointer" (click)="verModeloPoas()">LISTA DE PROYECTOS</a>>
+          <a> ACTIVIDADES ASIGNADAS
+          </a>
+        </h1>
       </div>
-   </blockquote>
-   
+    </blockquote>
     <div class="card">
- 
       <div class="card-body">
         <div class="table-responsive">
-          <div class="mat-elevation-z8"
-          style="margin-bottom: 5%">
+          <div class="mat-elevation-z8" style="margin-bottom: 5%">
             <table mat-table [dataSource]="dataSource" class="full-width-table">
 
               <!-- ID Column -->
               <ng-container matColumnDef="id_actividad">
-                <th mat-header-cell *matHeaderCellDef>ID</th>
-                <td mat-cell *matCellDef="let element">{{ element.id_actividad }}</td>
+                <th mat-header-cell *matHeaderCellDef [style.display]="ocultar ? '' : 'none'">ID</th>
+                <td mat-cell *matCellDef="let element" [style.display]="ocultar ? '' : 'none'">{{ element.id_actividad
+                  }}</td>
               </ng-container>
 
               <!-- Nombre Column -->
@@ -59,7 +63,8 @@
               <ng-container matColumnDef="Subir archivo">
                 <th mat-header-cell *matHeaderCellDef>Subir archivo</th>
                 <td mat-cell *matCellDef="let element">
-                  <button class="btn btn-primary" style="background-color: darkgreen; color: white;" role="button" (click)="verDetalles(element)">
+                  <button class="btn btn-primary" style="background-color: darkgreen; color: white;" role="button"
+                    (click)="verDetalles(element)">
                     <div class="d-flex">
                       <span class="badge">
                       </span>
