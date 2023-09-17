@@ -35,7 +35,7 @@
 }
 
 .tabla th {
-    background-color: #2260d3;
+    background-color: green;
     color: white;
 }
 
@@ -132,7 +132,7 @@ body {
 
 .button {
     padding: 10px 20px;
-    background-color: #007bff;
+    background-color: green;
     color: white;
     border: none;
     border-radius: 5px;
@@ -206,20 +206,25 @@ table {
     align-items: center;
 }
 
-#formulario {
-    display: flex;
-    flex-wrap: wrap;
-    /* Permitirá que los elementos se envuelvan a la siguiente línea */
-    max-width: 1000px;
-    /* Ajusta el ancho máximo según tus preferencias */
-    margin: 0 auto;
-    /* Centra el formulario en la página */
+
+/* section */
+.example-section {
+    margin: 12px 0;
 }
 
-/* Estilo para cada grupo de etiqueta y campo de entrada */
-.form-group {
-    flex-basis: calc(50% - 10px);
-    /* Divide en dos columnas, con un pequeño margen entre ellas */
-    margin: 5px;
-    /* Espacio entre elementos */
+.example-margin {
+    margin: 0 12px;
+}
+
+ul {
+    list-style-type: none;
+    margin-top: 4px;
+}
+
+.header-title {
+    font-size: 30px;
+    font-weight: bold;
+    color: rgb(9, 70, 9);
+    /* You can choose your preferred color */
+    text-align: left;
 }
