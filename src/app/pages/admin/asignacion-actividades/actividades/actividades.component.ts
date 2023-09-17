@@ -123,7 +123,7 @@ export class ActividadesComponent implements OnInit {
       valorPEControl.valueChanges.subscribe((valorPE) => {
         const institucionValue = institucionControl.value;
     
-        if (valorPE !== 0 && valorPE.trim() !== '') {
+        if (valorPE !== 0) {
           institucionControl.setValidators([Validators.required]);
         } else {
           institucionControl.clearValidators();
@@ -239,7 +239,7 @@ export class ActividadesComponent implements OnInit {
   }
   
   crearPeriodo(idActividad: number, porcentaje: number, referencia: number) {
-    this.poaInsertService.crearPeriodo(porcentaje, idActividad, referencia).subscribe(
+    this.poaInsertService.crearPeriodoFechas(porcentaje, idActividad, referencia).subscribe(
       (periodoResponse) => {
         console.log('Registro de período creado con éxito:', periodoResponse);
       },
@@ -270,6 +270,10 @@ export class ActividadesComponent implements OnInit {
     this.actividad = this.frmActividad.value;
     this.actividad.poa = this.poa;
     this.actividad.estado = 'PENDIENTE';
+    this.actividad.recursos_propios = this.actividad.recursos_propios;
+    this.actividad.fecha_creacion = new Date();
+    this.actividad.fecha_inicio = this.poa.fecha_inicio;
+    this.actividad.fecha_fin = this.poa.fecha_fin;
     this.actividad.presupuesto_referencial = this.actividad.recursos_propios + this.actividad.valorPE;
     
     // Valores de los checkboxes
@@ -410,63 +414,6 @@ export class ActividadesComponent implements OnInit {
             });
         });
   }*/
-  
-  actualizar1() {
-    this.loadingService.show();
-    this.actividad.nombre = this.frmActividad.value.nombre;
-    this.actividad.descripcion = this.frmActividad.value.descripcion;
-    //this.actividad.presupuesto_referencial = this.frmActividad.value.presupuesto_referencial;
-    this.actividad.recursos_propios = this.frmActividad.value.recursos_propios;
-    this.actividad.estado = 'PENDIENTE';
-  
-    //Periodos sea igual a 100
-    let suma = 0;
-    if (this.poa.tipo_periodo === 'CUATRIMESTRE') {
-      suma = Number(this.frmActividad.value.valor1) + Number(this.frmActividad.value.valor2) + Number(this.frmActividad.value.valor3);
-    } else if (this.poa.tipo_periodo === 'TRIMESTRE') {
-      suma = Number(this.frmActividad.value.valor1) + Number(this.frmActividad.value.valor2) + Number(this.frmActividad.value.valor3) + Number(this.frmActividad.value.valor4);
-    }
-    console.log("Suma total:", suma);
-    if (suma !== 100) {
-      Swal.fire('Advertencia', 'La suma de los valores de periodo debe ser igual a 100', 'warning');
-      this.loadingService.hide();
-      return;
-    }
-    // Eliminar los periodos existentes por el id de la actividad
-    this.actividadservice.eliminarPeriodosPorActividad(this.actividad.id_actividad).subscribe(
-      () => {
-        // Se crea nuevos periodos
-        if (this.poa.tipo_periodo === 'CUATRIMESTRE') {
-          this.crearPeriodo(this.actividad.id_actividad, this.frmActividad.value.valor1, 1);
-          this.crearPeriodo(this.actividad.id_actividad, this.frmActividad.value.valor2, 2);
-          this.crearPeriodo(this.actividad.id_actividad, this.frmActividad.value.valor3, 3);
-        } else if (this.poa.tipo_periodo === 'TRIMESTRE') {
-          this.crearPeriodo(this.actividad.id_actividad, this.frmActividad.value.valor1, 1);
-          this.crearPeriodo(this.actividad.id_actividad, this.frmActividad.value.valor2, 2);
-          this.crearPeriodo(this.actividad.id_actividad, this.frmActividad.value.valor3, 3);
-          this.crearPeriodo(this.actividad.id_actividad, this.frmActividad.value.valor4, 4);
-        }
-        // Actualiza la actividad
-        this.actividadservice.actualizar(this.actividad.id_actividad, this.actividad).subscribe(
-          () => {
-            this.loadingService.hide();
-            Swal.fire('Operación exitosa!', 'El registro se actualizó con éxito', 'success');
-            this.cdRef.detectChanges();
-            this.listar(this.poa.id_poa);
-          },
-          (error) => {
-            console.error('Error al actualizar la actividad:', error);
-            Swal.fire('Error', 'Ha ocurrido un error al actualizar la actividad', 'warning');
-            this.loadingService.hide();
-          }
-        );
-      },
-      (error) => {
-        console.error('Error al eliminar los periodos existentes:', error);
-        this.loadingService.hide();
-      }
-    );
-  }
 
   async actualizar() {
     this.loadingService.show();
@@ -476,7 +423,8 @@ export class ActividadesComponent implements OnInit {
     this.actividad.nombre = actividadActualizada.nombre;
     this.actividad.descripcion = actividadActualizada.descripcion;
     this.actividad.recursos_propios = actividadActualizada.recursos_propios;
-    this.actividad.estado = 'RECHAZADO';
+    this.actividad.estado = 'PENDIENTE';
+    //this.actividad.poa = this.poa;
 
     const actividadId = this.actividad.id_actividad;
   

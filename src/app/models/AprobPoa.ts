@@ -8,6 +8,7 @@ export class AprobPoa {
     area!: string;
     fecha_inicio!: Date;
     fecha_fin!: Date;
+    fecha_creacion!: Date;
     codigo!: string;
     nombre_proyecto!: string;
     descripcion_proyecto!: string;

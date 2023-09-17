@@ -259,6 +259,7 @@
                       type="submit"
                       class="btn btn-primary"
                       form="formulario"
+                      style="background-color: green"
                       *ngIf="!componentes.id_componente"
                       data-dismiss="modal"
                       data-bs-dismiss="modal"
@@ -271,6 +272,7 @@
                       *ngIf="componentes.id_componente"
                       data-dismiss="modal"
                       data-bs-dismiss="modal"
+                      style="background-color: green"
                       (click)="actualizar()"
                       [disabled]="!formComponentes.valid"
                     >
