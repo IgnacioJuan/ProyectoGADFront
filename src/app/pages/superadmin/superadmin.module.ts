@@ -25,6 +25,7 @@ import { CrearcompetenciaComponent } from './pages/crear-competencia/crear-compe
 import { ListarpoaComponent } from './flujo-criterio/listarpoa/listarpoa.component';
 import { ListarporUsuarioComponent } from './flujo-criterio/listarpoaporusuario/listarpoaporusuario.component';
 import { ProyectosComponent } from './flujo-criterio/listaproyecto/listaproyecto.component';
+import { PruebaReportMetasComponent } from './pages/prueba-report-metas/prueba-report-metas.component';
 
 
 @NgModule({
@@ -43,6 +44,7 @@ import { ProyectosComponent } from './flujo-criterio/listaproyecto/listaproyecto
     CustomDatePipe,
     ListarpoaComponent  ,
     ListarporUsuarioComponent,
+    PruebaReportMetasComponent,
   ],
   imports: [
     CommonModule,
