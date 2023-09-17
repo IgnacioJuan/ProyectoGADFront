@@ -336,4 +336,7 @@ export class Subir_archivo_acti_desigComponent implements OnInit {
   veractivi() {
     window.history.back();
   }
+verpro() {
+    this.router.navigate(['/res/activ/poa_proyectos']);
+  }
 }
