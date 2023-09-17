@@ -16,10 +16,11 @@
           ><a
             style="cursor: pointer; color: rgba(0, 128, 0, 0.822)"
             (click)="verPoas()"
-            > POA >
+          >
+            POA >
           </a>
           <a style="cursor: pointer; color: green"
-            >{{ "DETALLE POA: " + poaAprob?.nombre_proyecto || "No Definido" }}
+            >{{ "DETALLE POA: " + poaAprob.nombre_proyecto || "No Definido" }}
           </a></strong
         >
       </h1>
@@ -62,19 +63,16 @@
         </div>
         <div class="table-container">
           <div class="table-row">
-            <div class="table-cell colspan-2 centered-cell">
-              <strong>AÑO DE EJECUCIÓN DEL PROYECTO:</strong>
-              {{
-                poaAprob.fecha_inicio
-                  | date : "yyyy" || poaAprob.fecha_fin
-                  | date : "yyyy"
-              }}
-            </div>
+              <div class="table-cell colspan-2 centered-cell">
+                  <strong>AÑO DE EJECUCIÓN DEL PROYECTO:</strong>&nbsp; 
+                  {{poaAprob.fecha_inicio | date : "yyyy" }}
+                  -
+                  {{ poaAprob.fecha_fin | date : "yyyy" }}
+              </div>
           </div>
-        </div>
+      </div>
         <br />
         <br />
-        
         <div class="table-container">
           <div class="table-row">
             <div
@@ -85,7 +83,7 @@
                 <mat-label>Tipo de seguimiento</mat-label>
                 <input
                   matInput
-                  placeholder="Introduce el tipo de seguimiento"
+                  readonly
                   [value]="tipSeguimiento"
                 />
               </mat-form-field>
@@ -155,15 +153,15 @@
           </div>
 
           <div class="table-row">
-                <div class="table-cell"><strong>META PLANIFICADA:</strong></div>
-                <div class="table-cell ">
-                  {{ "$ " +  poaAprob.meta_planificada }}
-                </div>
+            <div class="table-cell"><strong>META PLANIFICADA:</strong></div>
+            <div class="table-cell">
+              {{ poaAprob.meta_planificada }}
             </div>
+          </div>
           <div class="table-row">
             <div class="table-cell"><strong>LINEA BASE:</strong></div>
             <div class="table-cell">
-              {{ "$ " + poaAprob.linea_base }}
+              {{ poaAprob.linea_base }}
             </div>
           </div>
         </div>
@@ -306,15 +304,21 @@
           <div class="table-cell">
             <strong>{{ tipSeguimiento }} 1: </strong>
           </div>
-          <div class="table-cell">$ {{porcentajes[0] | number:'1.0-2'}}</div>
+          <div class="table-cell">
+            $ {{ porcentajes[0] | number : "1.0-2" }}
+          </div>
           <div class="table-cell">
             <strong>{{ tipSeguimiento }} 2: </strong>
           </div>
-          <div class="table-cell">$ {{porcentajes[1] | number:'1.0-2'}}</div>
+          <div class="table-cell">
+            $ {{ porcentajes[1] | number : "1.0-2" }}
+          </div>
           <div class="table-cell">
             <strong>{{ tipSeguimiento }} 3:</strong>
           </div>
-          <div class="table-cell">$ {{porcentajes[2] | number:'1.0-2'}}</div>
+          <div class="table-cell">
+            $ {{ porcentajes[2] | number : "1.0-2" }}
+          </div>
           <div class="table-cell" *ngIf="tipSeguimiento === 'TRIMESTRE'">
             <strong>{{ tipSeguimiento }} 4:</strong>
           </div>
@@ -325,18 +329,22 @@
       <div class="table-container">
         <div class="table-row">
           <div class="table-cell wide-cell"><strong>TOTAL:</strong></div>
-          <div class="table-cell">$ {{totalf}}</div>
+          <div class="table-cell">$ {{ totalf }}</div>
         </div>
       </div>
-  
+
       <br />
       <br />
       <div class="table-container">
         <div class="table-row">
           <div class="table-cell"><strong>Recursos Propios:</strong></div>
-          <div class="table-cell">$ {{totalesPoa?.total_recursos_propios}}</div>
+          <div class="table-cell">
+            $ {{ totalesPoa.total_recursos_propios }}
+          </div>
           <div class="table-cell"><strong>Recursos Externos:</strong></div>
-          <div class="table-cell">$ {{totalesPoa?.total_presupuesto_externo}}</div>
+          <div class="table-cell">
+            $ {{ totalesPoa.total_presupuesto_externo }}
+          </div>
         </div>
       </div>
       <br />
