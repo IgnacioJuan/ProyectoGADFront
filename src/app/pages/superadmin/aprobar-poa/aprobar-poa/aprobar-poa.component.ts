@@ -20,18 +20,20 @@ export class AprobarPoaComponent {
   constructor(
     private router: Router,
     private poacService: PoacService,
-    private loadingService: LoadingServiceService
+    private loadingService: LoadingServiceService,
+    private datePipe: DatePipe
   ) {
     this.loadingService.show();
     this.loadData();
-    this.loadingService.hide();
+ 
   }
 
-  loadData(){
+  loadData() {
     this.poacService.getPoaAprob().subscribe((data) => {
       this.allCards = data;
       this.totalCards = this.allCards.length;
       this.updateCardsToShow();
+      this.loadingService.hide();
     });
   }
 
@@ -49,5 +51,30 @@ export class AprobarPoaComponent {
   // Modifica el método redirectToDetails para aceptar el ID del POA
   redirectToDetails(id_Poa: number) {
     this.router.navigate(['/sup/aprobacion-poa/detalle-poa', id_Poa]);
+  }
+
+  applyFilter(event: Event) {
+    const inputElement = event.target as HTMLInputElement;
+    let value = inputElement.value;
+
+    if (!value) {
+      this.updateCardsToShow(); // Si no hay valor en el input, muestra todas las tarjetas
+      return;
+    }
+
+    value = value.toLowerCase(); // Convertir el valor a minúsculas para la búsqueda
+
+    this.cardsToShow = this.allCards.filter((card) => {
+      const formattedDate = this.datePipe.transform(
+        card.fecha_inicio,
+        'dd/MM/yyyy'
+      ); // Convertir la fecha a string
+      return (
+        card.objetivo_proyecto.toLowerCase().includes(value) ||
+        card.meta_proyecto.toLowerCase().includes(value) ||
+        card.localizacion.toLowerCase().includes(value) ||
+        (formattedDate ? formattedDate.toLowerCase().includes(value) : false)
+      ); // Aplica el filtro en la fecha convertida
+    });
   }
 }

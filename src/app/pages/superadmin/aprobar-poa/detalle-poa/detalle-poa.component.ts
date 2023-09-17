@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PoacService } from 'src/app/services/poac.service';
-import { ActualizarAprobPOA, AprobPoa } from 'src/app/models/AprobPoa';
+import { CrearAprobPOA, AprobPoa } from 'src/app/models/AprobPoa';
 import { ActividadService } from 'src/app/services/actividad.service';
 import { ActividadesPoaDTO } from 'src/app/models/ActividadesAprobPoa ';
 import { MatTableDataSource } from '@angular/material/table';
@@ -90,7 +90,6 @@ export class DetallePoaComponent implements OnInit {
     //Cargar los datos del poa por el id
     this.cargarData(idParam);
     this.capturarDatosUsuarioLog();
-    this.loadingService.hide();
     }
 
   // Nuevas propiedades para la nueva  tabla
@@ -121,9 +120,11 @@ export class DetallePoaComponent implements OnInit {
           console.log(this.poaAprob);
           this.tipSeguimiento=this.poaAprob.tipo_periodo;
           this.correoRecep.push(this.poaAprob.correo_responsable);
+          this.loadingService.hide();
         },
         (error) => {
           console.error('Error al obtener datos:', error);
+          this.loadingService.hide();
         }
       );
     } else {
@@ -133,9 +134,11 @@ export class DetallePoaComponent implements OnInit {
       (data) => {
         this.totalesPoa = data;
         console.log(this.totalesPoa);
+            this.loadingService.hide();
       },
       (error) => {
         console.error('Error al obtener datos:', error);
+        this.loadingService.hide();
       }
     );
   }
@@ -187,19 +190,21 @@ export class DetallePoaComponent implements OnInit {
       });
 }
 
-  actualizarAprobacion() {
+  crearAprobacion() {
+    this.loadingService.show();
     // Verificar si el estado es "RECHAZADO" y la observación está vacía
     if (this.estado === 'RECHAZADO' && !this.observacion) {
+      this.loadingService.hide();
       Swal.fire('Advertencia', 'La observación es obligatoria ', 'warning');
       return;
     } else {
       if (this.poaAprob) {
-        const data: ActualizarAprobPOA = {
+        const data: CrearAprobPOA = {
           estado: this.estado,
           observacion: this.observacion,
         };
         this.poacService
-          .actualizarEstadoAprobacion(this.poaAprob.id_poa, data)
+          .crearEstadoAprobacion(this.poaAprob.id_poa, data)
           .subscribe((response) => {
             console.log('Estado actualizado:', response);
             this.emailService
@@ -237,6 +242,7 @@ export class DetallePoaComponent implements OnInit {
                 console.log('Email enviado:', this.correoRecep);
               });
             // Muestra el SweetAlert
+            this.loadingService.hide();
             this.showSuccessAlert();
           });
       }

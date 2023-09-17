@@ -49,13 +49,13 @@ body {
     transition: box-shadow 0.3s ease;
 }
 .example-card-vacio {
-    width: 300px; /* Ancho fijo */
+    width: 100%; /* Ancho fijo */
     height: 400px; /* Altura fija */
     overflow: auto; /* Si el contenido es demasiado, mostrará barras de desplazamiento */
     flex: 1; /* Permite que las tarjetas crezcan para ocupar el espacio disponible */
-    margin: 0 1rem;
     overflow: auto;
     display: flex;
+    margin: 2rem 0;  /* Añade un margen vertical de 1rem y horizontal de 0 */
     flex-direction: column; /* Establece la dirección principal como columna */
     box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.1); /* Sombra suave */
     transition: box-shadow 0.3s ease;
@@ -113,3 +113,15 @@ button[mat-button]:hover {
     box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.25); 
 }
 
+.search-container {
+    display: flex;
+    justify-content: center;
+    height: 46px;
+}
+
+.search-input {
+    width: 100%;
+    max-width: calc(100% - 2rem); /* Restringir el ancho máximo, teniendo en cuenta los márgenes */
+    background-color: white;
+    margin-bottom: -10px;
+}

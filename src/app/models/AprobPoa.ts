@@ -30,7 +30,7 @@ export class AprobPoa {
     cargo!: string;
 }
 
-export interface ActualizarAprobPOA {
+export interface CrearAprobPOA {
     estado: string;
     observacion: string;
 }
