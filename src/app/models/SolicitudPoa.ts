@@ -12,7 +12,7 @@ export class SolicitudPoa {
     //crear con esas especificaciones los atributos
     id_proyecto!: number;
     meta_planificada!: number;
-    coberura!: string;
+    cobertura!: string;
     barrio!: string;
     comunidad!: string;
     localizacion!: string;

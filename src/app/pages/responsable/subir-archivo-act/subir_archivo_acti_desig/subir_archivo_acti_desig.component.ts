@@ -15,6 +15,8 @@ import Swal from 'sweetalert2';
 import { Actividad_arch } from 'src/app/services/actividad_arch';
 import { MatPaginator } from '@angular/material/paginator';
 import { PoaService } from 'src/app/services/poa.service';
+import { LoadingServiceService } from 'src/app/components/loading-spinner/LoadingService.service';
+import { ActividadService } from 'src/app/services/actividad.service';
 @Component({
   selector: 'app-subir_archivo_acti_desig',
   templateUrl: './subir_archivo_acti_desig.component.html',
@@ -42,13 +44,17 @@ export class Subir_archivo_acti_desigComponent implements OnInit {
   dataSource = new MatTableDataSource<Archivo>();
   formulario: FormGroup;
   @ViewChild('archivoInput') archivoInput!: ElementRef<HTMLInputElement>; // Note the "!" operator
-
+  variable1: number = 0; // Asigna un valor predeterminado o inicializa la variable
+  variable2: number = 0; // Asigna un valor predeterminado o inicializa la variable
+  valorMaximo: number = 0;
   constructor(
     private archivo: ArchivoService,
     public login: LoginService,
     private fb: FormBuilder,
     private router: Router,
-    private poaservis: PoaService
+    private poaservis: PoaService,
+    private actiservis: ActividadService, //importar el spinner como servicio
+    private loadingService: LoadingServiceService
   ) {
     this.archivoInput = new ElementRef<HTMLInputElement>(
       document.createElement('input')
@@ -56,7 +62,7 @@ export class Subir_archivo_acti_desigComponent implements OnInit {
 
     this.formulario = this.fb.group({
       descripcion: ['', [Validators.required, Validators.maxLength(255)]],
-      valor: [0, Validators.required],
+      valor: [null, [Validators.required]],
     });
   }
   onFileChange(event: any) {
@@ -85,8 +91,6 @@ export class Subir_archivo_acti_desigComponent implements OnInit {
       this.router.navigate(['user-dashboard']);
       location.replace('/use/user-dashboard');
     }
-    console.log('johb iid acti>>>>' + this.activ.id_actividad);
-
     const datos = history.state.data;
     this.archi = data;
     if (this.archi == undefined) {
@@ -100,13 +104,19 @@ export class Subir_archivo_acti_desigComponent implements OnInit {
       this.user = this.login.getUser();
     });
     this.listar();
-
+    this.restrivalor();
     this.verificarFechaLimite();
+  }
+  restrivalor() {
+    this.actiservis.valor(this.activ.id_actividad).subscribe((data) => {
+      this.valorMaximo = data.valor;
+    });
   }
 
   descripcion: string = '';
   valor: number = 0;
   onUpload(): void {
+    this.loadingService.show();
     this.archivo
       .cargarpparagad(
         this.filearchivo,
@@ -117,9 +127,13 @@ export class Subir_archivo_acti_desigComponent implements OnInit {
       .subscribe(
         (event) => {
           this.descripcion = '';
-          this.valor = 0;
           this.listar();
-          console.log('Archivo subido:');
+          this.activ.devengado = this.activ.devengado + this.valor;
+          this.restrivalor();
+          this.valor = 0;
+
+          console.log('valor =' + this.valor);
+          this.loadingService.hide();
           Swal.fire({
             title: '¡Éxito!',
             text: 'El archivo se ha subido correctamente',
@@ -128,6 +142,9 @@ export class Subir_archivo_acti_desigComponent implements OnInit {
           });
         },
         (error) => {
+          console.log('Archivo subido:');
+          this.loadingService.hide();
+
           console.error('Error al subir el archivo:', error);
           Swal.fire({
             title: '¡Error!',
@@ -148,11 +165,13 @@ export class Subir_archivo_acti_desigComponent implements OnInit {
   }
 
   listar(): void {
+    this.loadingService.show();
     this.archivo
       .getarchivoActividad(this.activ.id_actividad)
       .subscribe((data) => {
         this.aRCHI = data;
         this.dataSource.data = data;
+        this.loadingService.hide();
       });
   }
 
@@ -191,6 +210,7 @@ export class Subir_archivo_acti_desigComponent implements OnInit {
     this.archivo.eliminar(act).subscribe(
       (response) => {
         this.listar();
+        this.restrivalor();
       },
       (error) => {
         console.error('Error al eliminar:', error);
@@ -234,6 +254,7 @@ export class Subir_archivo_acti_desigComponent implements OnInit {
           this.formulario.reset();
           this.isEditing = false;
           this.listar();
+          this.restrivalor();
         },
         (error) => {
           console.error('Error al editar el archivo:', error);

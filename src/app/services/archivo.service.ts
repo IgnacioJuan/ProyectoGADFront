@@ -2,14 +2,14 @@ import { HttpHeaders, HttpRequest } from '@angular/common/http';
 import { HttpEvent } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, catchError, throwError } from 'rxjs';
+import { Observable, catchError, empty, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
  import baserUrl from './helper';
 import { Archivo } from '../models/Archivo';
 import { ArchivoProjection } from '../interface/ArchivoProjection';
 import { Archivos } from '../models/Archivos';
 
-@Injectable({ 
+@Injectable({
   providedIn: 'root'
 })
 export class ArchivoService {
@@ -22,7 +22,6 @@ export class ArchivoService {
     formData.append('descripcion', descripcion);
     formData.append('valor', valor.toString());
     formData.append('id_evidencia', id_evidencia.toString());
-
     const req = new HttpRequest('POST', `${this.baserrl}/archivo/upload`, formData, {
       reportProgress: true,
      responseType: 'json'
@@ -116,8 +115,11 @@ actualizar(id: any, archi: any): Observable<any> {
   return this.http.put(`${baserUrl}/archivo/actualizar/${id}`, archi);
 }
 
-  listarArchivosPorEstadoYFechaDesc(estado: string): Observable<Archivo[]> {
-    return this.http.get<Archivo[]>(`${baserUrl}/archivo/listarPorEstadoYFechaDesc?estado=${estado}`);
+  listarArchivosPorEstadoYFechaDesc(estado: string, username: string): Observable<any[]> {
+    if (username === undefined) {
+      username = 'SINUSERNAME';
+    }
+    return this.http.get<any[]>(`${baserUrl}/archivo/listarPorEstadoYFechaDesc/`+estado+`/`+username);
   }
 
 

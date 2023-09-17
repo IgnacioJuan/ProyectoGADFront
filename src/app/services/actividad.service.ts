@@ -10,6 +10,7 @@ import { Actividad_arch } from './actividad_arch';
 import { DetalleActividadDTO } from '../models/DetalleActividadDTO';
 import { UsuarioActividadDTO } from '../models/UsuarioActividadDTO';
 import { ActividadesPoaDTO } from '../models/ActividadesAprobPoa ';
+import { valorprojec } from '../interface/valorprojec';
 
 @Injectable({
   providedIn: 'root'
@@ -107,4 +108,9 @@ export class ActividadService {
  public listaractireponsa(idres: number): Observable<Actividad_arch[]> {
   return this.http.get<Actividad_arch[]>(`${baserUrl}/api/actividades/actiresponsable/${idres}`);
 }
+public valor(idres: number): Observable<valorprojec> {
+  return this.http.get<valorprojec>(`${baserUrl}/api/actividades/valor/${idres}`);
+}
+
+
 }
