@@ -10,6 +10,7 @@ import { Proyecto } from 'src/app/models/Proyecto';
 import { IndicadorService } from 'src/app/services/indicador.service';
 import { ProyectoService } from 'src/app/services/proyecto.service';
 import Swal from 'sweetalert2';
+import * as XLSX from 'xlsx';
 @Component({
   selector: 'app-modelo-proyecto',
   templateUrl: './modelo-proyecto.component.html',
@@ -54,6 +55,7 @@ export class ModeloProyectoComponent {
   fechaMinima: string = "";
   fechaMax: string = "";
   selectedCodigo: string = "";
+  data: any;
   constructor(
     private proyectoservice: ProyectoService,
     private indicadorservice: IndicadorService,
@@ -83,6 +85,7 @@ export class ModeloProyectoComponent {
       indicadorControl: [''],
       competenciaControl: ['']
     });
+
     this.paginatorIntl.nextPageLabel = this.nextPageLabel;
     this.paginatorIntl.lastPageLabel = this.lastPageLabel;
     this.paginatorIntl.firstPageLabel = this.firstPageLabel;
@@ -105,7 +108,43 @@ export class ModeloProyectoComponent {
     this.listar()
   }
 
+   //optimizar
+   listar(): void {
+    this.loadingService.show();
+    this.proyectoservice.getexportarexcel(this.modelopoa.id_modelo_poa).subscribe(
+      
+      (data: any[]) => {
+        this.proyectos = data;
+        this.dataSource.data = this.proyectos;
+        this.loadingService.hide();
+        this.proyectos=this.data.objetivosods.nombre;
 
+      },
+      (error: any) => {
+        console.error('Error al listar los proyectos:', error);
+        this.loadingService.hide();
+      }
+    );
+  }
+
+  exportToExcel(): void {
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.dataSource.data);
+  
+      if (ws['!ref']) {
+      const range = XLSX.utils.decode_range(ws['!ref']);
+      range.s.r = 1; 
+      ws['!ref'] = XLSX.utils.encode_range(range);
+    }
+  
+    XLSX.utils.sheet_add_json(ws, this.dataSource.data, { skipHeader: true, origin: 'A2' });
+  
+    XLSX.utils.book_append_sheet(wb, ws, 'Tabla 1');
+  
+    XLSX.writeFile(wb, 'Proyectos.xlsx');
+  }
+
+  
 
   guardar() {
     this.loadingService.show();
@@ -169,25 +208,7 @@ export class ModeloProyectoComponent {
     })
 
   }
-  //optimizar
-  listar(): void {
-    this.loadingService.show();
-
-    this.proyectoservice.getProyectosdelModelo(this.modelopoa.id_modelo_poa).subscribe(
-      (data: any[]) => {
-        this.proyectos = data;
-        this.dataSource.data = this.proyectos;
-        this.loadingService.hide();
-
-      },
-      (error: any) => {
-        console.error('Error al listar los proyectos:', error);
-        this.loadingService.hide();
-
-      }
-    );
-  }
-
+ 
   editDatos(proyecto: Proyecto) {
     this.subcrite = proyecto;
     this.frmProyecto = new FormGroup({
