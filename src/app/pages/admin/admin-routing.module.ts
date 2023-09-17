@@ -62,8 +62,8 @@ const routes: Routes = [
     
   },
   {
-    path: 'poa',
-    loadChildren: () => import("./poa/register-poa.module").then(m => m.RegisterPoaModule)
+    path: 'evaluar-poa',
+    loadChildren: () => import("./evaluar-poa/evaluar-poa.module").then(m => m.EvaluarPoaModule)
   },
   {
     path: 'poas-solicitudes',

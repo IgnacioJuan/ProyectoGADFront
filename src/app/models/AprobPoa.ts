@@ -20,6 +20,7 @@ export class AprobPoa {
     nombre_metapdot!: string;
     meta_proyecto!: string;
     nombre_completo!: string;
+    meta_planificada!: number; 
     linea_base!: number; 
     cobertura!: string;
     localizacion!: string;
@@ -29,7 +30,7 @@ export class AprobPoa {
     cargo!: string;
 }
 
-export interface ActualizarAprobPOA {
+export interface CrearAprobPOA {
     estado: string;
     observacion: string;
 }

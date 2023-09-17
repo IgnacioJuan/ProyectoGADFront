@@ -1,0 +1,346 @@
+<body>
+  <div class="container bg-light border border-start-0 rounded-4">
+    <blockquote
+      class="blockquote text-dark"
+      style="
+        margin-top: 5%;
+        background-color: #ffffff;
+        border-left: 10px solid green;
+      "
+    >
+      <h1 class="header-title"><strong> LISTADO DE POAS</strong></h1>
+    </blockquote>
+    <div></div>
+
+    <div class="card">
+      <div class="card-body">
+        <div class="row justify-content-around">
+          <div class="col-4">
+            <div class="form-group">
+              <input
+                type="text"
+                class="form-control"
+                name="filterPost3"
+                placeholder="Buscar por nombre ..."
+                [(ngModel)]="filterPost"
+                (input)="buscar()"
+                (ngModelChange)="buscar()"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="mat-elevation-z8 table-responsive"
+          style="margin-bottom: 5%"
+        >
+          <table mat-table [dataSource]="dataSource">
+            <ng-container matColumnDef="nombre">
+              <th mat-header-cell *matHeaderCellDef>PROYECTO</th>
+              <td mat-cell *matCellDef="let elemento">
+                {{ elemento.nombre }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="barrio">
+              <th mat-header-cell *matHeaderCellDef>BARRIO</th>
+              <td mat-cell *matCellDef="let elemento">
+                {{ elemento.barrio }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="cobertura">
+              <th mat-header-cell *matHeaderCellDef>COBERTURA</th>
+              <td mat-cell *matCellDef="let elemento">
+                {{ elemento.cobertura }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="comunidad">
+              <th mat-header-cell *matHeaderCellDef>COMUNIDAD</th>
+              <td mat-cell *matCellDef="let elemento">
+                {{ elemento.comunidad }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="fecha_inicio">
+              <th mat-header-cell *matHeaderCellDef>INICIO</th>
+              <td mat-cell *matCellDef="let elemento">
+                {{ elemento.fecha_inicio | date : "dd/MM/yyyy" }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="fecha_fin">
+              <th mat-header-cell *matHeaderCellDef>FIN</th>
+              <td mat-cell *matCellDef="let elemento">
+                {{ elemento.fecha_fin | date : "dd/MM/yyyy" }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="localizacion">
+              <th mat-header-cell *matHeaderCellDef>LOCALIZACIÓN</th>
+              <td mat-cell *matCellDef="let elemento">
+                {{ elemento.localizacion }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="meta">
+              <th mat-header-cell *matHeaderCellDef>META</th>
+              <td mat-cell *matCellDef="let elemento">
+                <button
+                  class="btn btn-primary"
+                  role="button"
+                  data-bs-toggle="modal"
+                  data-bs-target="#materiaModal"
+                  (click)="addMeta(elemento)"
+                  style="background-color: green"
+                >
+                  <div class="d-flex">
+                    <span class="badge">{{
+                      elemento.cantidadObjetivoPDOT
+                    }}</span>
+                    <i class="fa fa-trophy"></i>
+                  </div>
+                </button>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="observaciones">
+              <th mat-header-cell *matHeaderCellDef>EVIDENCIAS</th>
+              <td mat-cell *matCellDef="let elemento">
+                <button
+                  class="btn btn-primary"
+                  role="button"
+                  data-bs-toggle="modal"
+                  data-bs-target="#materiaModalObservaciones"
+                  (click)="verDetalles(elemento)"
+                  style="background-color: green"
+                >
+                  <div class="d-flex">
+                    <span class="badge">{{
+                      elemento.cantidadObjetivoPDOT
+                    }}</span>
+                    <i class="fa fa-question-circle"></i>
+                  </div>
+                </button>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="columnasUsuario"></tr>
+            <tr mat-row *matRowDef="let fila; columns: columnasUsuario"></tr>
+          </table>
+          <mat-paginator
+            [pageSizeOptions]="[5, 10, 20]"
+            showFirstLastButtons
+            aria-label="Select page of periodic elements"
+            itemsPerPageLabel="Items por página:"
+            nextPageLabel="Siguiente"
+            previousPageLabel="Anterior"
+          >
+          </mat-paginator>
+          <div *ngIf="!resultadosEncontrados" class="alert alert-warning">
+            No se encontraron resultados.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="modal fade"
+      id="materiaModalObservaciones"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+          <div class="modal-header" style="background-color: #077b15">
+            <h3
+              class="modal-title"
+              style="font-family: Arial, sans-serif; color: white"
+            >
+              <i class="fa fa-info-circle"></i> ARCHIVOS/EVIDENCIAS
+            </h3>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <div class="card">
+              <div class="card-body" style="height: 100%">
+                <div
+                  class="mat-elevation-z8 table-responsive"
+                  style="margin-bottom: 5%"
+                >
+                  <table mat-table [dataSource]="dataSource3">
+                    <ng-container matColumnDef="observacion">
+                      <th mat-header-cell *matHeaderCellDef>
+                        ARCHIVOS/EVIDENCIAS
+                      </th>
+                      <td mat-cell *matCellDef="let elemento">
+                        {{
+                          elemento.observacion
+                            ? elemento.observacion
+                            : "NINGUNA"
+                        }}
+                      </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="descripcion">
+                      <th mat-header-cell *matHeaderCellDef>DESCRIPCION</th>
+                      <td mat-cell *matCellDef="let elemento">
+                        {{ elemento.descripcion }}
+                      </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="fecha">
+                      <th mat-header-cell *matHeaderCellDef>FECHA</th>
+                      <td mat-cell *matCellDef="let elemento">
+                        {{ elemento.fecha | date : "dd/MM/yyyy" }}
+                      </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="valor">
+                      <th mat-header-cell *matHeaderCellDef>VALOR</th>
+                      <td mat-cell *matCellDef="let elemento">
+                        {{ elemento.valor }}
+                      </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="enlace">
+                      <th mat-header-cell *matHeaderCellDef>ARCHIVO</th>
+                      <td mat-cell *matCellDef="let elemento">
+                        <a
+                          [href]="elemento.enlace"
+                          target="_blank"
+                          title="Descargar"
+                        >
+                          <i class="fa fa-download"></i> Descargar
+                        </a>
+                      </td>
+                    </ng-container>
+
+                    <tr
+                      mat-header-row
+                      *matHeaderRowDef="columnasObservaciones"
+                    ></tr>
+                    <tr
+                      mat-row
+                      *matRowDef="let fila; columns: columnasObservaciones"
+                    ></tr>
+                  </table>
+
+                  <div
+                    *ngIf="!resultadosEncontradosporObservaciones"
+                    class="alert alert-warning"
+                  >
+                    No se encontraron observaciones.
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button
+                class="btn btn-primary"
+                data-dismiss="modal"
+                data-bs-dismiss="modal"
+              >
+                OK
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+<div
+  class="modal fade"
+  id="materiaModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+  (hidden.bs.modal)="limpiarFormulario()"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-green">
+        <h3 class="modal-title">
+          <i class="fa fa-info-circle"></i> Actualizar Meta
+        </h3>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="frmPoa" id="formulario">
+          <div>
+            <label for="meta_alcanzar" class="meta-label"
+              >Meta Alcanzada:</label
+            >
+            <input
+              class="form-control align-top text-right"
+              formControlName="meta_alcanzar"
+              type="number"
+              id="meta_alcanzar"
+              name="meta_alcanzar"
+              style="margin-bottom: 10px"
+              min="0"
+              max="{{ poa.meta_planificada }}"
+            />
+            <mat-divider class="divider"></mat-divider>
+            <div>
+              <label for="meta_planificada">Meta Planificada:</label>
+              <input
+                formControlName="meta_planificada"
+                class="form-control align-top text-right"
+                type="number"
+                id="meta_planificada"
+                name="meta_planificada"
+                style="margin-bottom: 10px"
+                value="{{ poa.meta_planificada }}"
+                readonly
+              />
+            </div>
+            <div
+              class="alert alert-danger"
+              *ngIf="
+                frmPoa.controls['meta_alcanzar'].invalid &&
+                frmPoa.controls['meta_alcanzar'].touched
+              "
+            >
+              <div
+                *ngIf="frmPoa.controls['meta_alcanzar'].hasError('required')"
+              >
+                Debe ingresar una meta_alcanzar
+              </div>
+            </div>
+          </div>
+        </form>
+        <div class="modal-footer">
+          <button
+            type="button"
+            form="formulario"
+            class="btn btn-warning"
+            data-bs-dismiss="modal"
+          >
+            Cancelar
+          </button>
+
+          <button
+            class="btn btn-primary"
+            style="background-color: green"
+            *ngIf="poa.id_poa"
+            data-dismiss="modal"
+            data-bs-dismiss="modal"
+            (click)="actualizar()"
+            [disabled]="!frmPoa.valid "
+          >
+            Actualizar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
