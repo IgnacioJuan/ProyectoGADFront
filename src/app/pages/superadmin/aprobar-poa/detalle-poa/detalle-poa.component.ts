@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PoacService } from 'src/app/services/poac.service';
-import { ActualizarAprobPOA, AprobPoa } from 'src/app/models/AprobPoa';
+import { CrearAprobPOA, AprobPoa } from 'src/app/models/AprobPoa';
 import { ActividadService } from 'src/app/services/actividad.service';
 import { ActividadesPoaDTO } from 'src/app/models/ActividadesAprobPoa ';
 import { MatTableDataSource } from '@angular/material/table';
@@ -12,6 +12,7 @@ import { Periodo_DTO } from 'src/app/interface/Periodo_DTO';
 import { LoginService } from 'src/app/services/login.service';
 import { EmailServiceService } from 'src/app/services/email-service.service';
 import { PeriodoTotalPOA_DTO } from 'src/app/interface/PeriodoTotalPOA_DTO';
+import { LoadingServiceService } from 'src/app/components/loading-spinner/LoadingService.service';
 
 @Component({
   selector: 'app-detalle-poa',
@@ -79,8 +80,9 @@ export class DetallePoaComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private periodoService: PeriodoService,
-    public login: LoginService
-  ) {}
+    public login: LoginService,
+    private loadingService: LoadingServiceService
+  ) {this.loadingService.show();}
 
   ngOnInit(): void {
     //Parametro enviado desde el componente aprobar poa
@@ -90,11 +92,11 @@ export class DetallePoaComponent implements OnInit {
     this.capturarDatosUsuarioLog();
     }
 
-  // Nuevas propiedades para la nueva tabla
+  // Nuevas propiedades para la nueva  tabla
   dataSource = new MatTableDataSource<ActividadesPoaDTO>();
   columnasActividades: string[] = [
     'nombre_actividad',
-    'descripcion',
+    'descripcion', 
     'presupuesto_referencial',
     'recursos_propios',
     'recursos_externos',
@@ -102,9 +104,12 @@ export class DetallePoaComponent implements OnInit {
 
   //Carga de datos
   cargarData(idPoa: any) {
+    
     this.cargaDatosPoa(idPoa);
     this.cargarActividadesPoa(idPoa);
-    this.cargarPeriodosTotales(idPoa)
+    this.cargarPeriodosTotales(idPoa);
+    setTimeout(() => {}, 2000);
+   
   }
 
   cargaDatosPoa(idParam: any) {
@@ -115,9 +120,11 @@ export class DetallePoaComponent implements OnInit {
           console.log(this.poaAprob);
           this.tipSeguimiento=this.poaAprob.tipo_periodo;
           this.correoRecep.push(this.poaAprob.correo_responsable);
+          this.loadingService.hide();
         },
         (error) => {
           console.error('Error al obtener datos:', error);
+          this.loadingService.hide();
         }
       );
     } else {
@@ -127,9 +134,11 @@ export class DetallePoaComponent implements OnInit {
       (data) => {
         this.totalesPoa = data;
         console.log(this.totalesPoa);
+            this.loadingService.hide();
       },
       (error) => {
         console.error('Error al obtener datos:', error);
+        this.loadingService.hide();
       }
     );
   }
@@ -181,19 +190,21 @@ export class DetallePoaComponent implements OnInit {
       });
 }
 
-  actualizarAprobacion() {
+  crearAprobacion() {
+    this.loadingService.show();
     // Verificar si el estado es "RECHAZADO" y la observación está vacía
     if (this.estado === 'RECHAZADO' && !this.observacion) {
+      this.loadingService.hide();
       Swal.fire('Advertencia', 'La observación es obligatoria ', 'warning');
       return;
     } else {
       if (this.poaAprob) {
-        const data: ActualizarAprobPOA = {
+        const data: CrearAprobPOA = {
           estado: this.estado,
           observacion: this.observacion,
         };
         this.poacService
-          .actualizarEstadoAprobacion(this.poaAprob.id_poa, data)
+          .crearEstadoAprobacion(this.poaAprob.id_poa, data)
           .subscribe((response) => {
             console.log('Estado actualizado:', response);
             this.emailService
@@ -231,6 +242,7 @@ export class DetallePoaComponent implements OnInit {
                 console.log('Email enviado:', this.correoRecep);
               });
             // Muestra el SweetAlert
+            this.loadingService.hide();
             this.showSuccessAlert();
           });
       }

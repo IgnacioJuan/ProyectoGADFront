@@ -84,4 +84,7 @@ console.log("poa ="+this.poaacti.id_poa)
       state: { data: archivos },
     });
   }
+  verModeloPoas() {
+    this.router.navigate(['/res/activ/poa_proyectos']);
+  }
 }
