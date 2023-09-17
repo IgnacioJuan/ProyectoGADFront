@@ -58,4 +58,10 @@ export class PoaInsertService {
         return this.http.post<any>(`${baserUrl}/api/periodo/solicitud?value=${value}&id_actividad=${id_actividad}&referencia=${referencia}`, null
         );
     }
+
+    public crearPeriodoFechas(value: number, id_actividad: number, referencia: number): Observable<any> {
+        return this.http.post<any>(`${baserUrl}/api/periodo/crearPeriodo?value=${value}&id_actividad=${id_actividad}&referencia=${referencia}`, null
+        );
+    }    
+
 }

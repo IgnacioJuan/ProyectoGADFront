@@ -10,6 +10,9 @@ export class ActividadesPoa {
     codificado!: number;
     devengado!: number;
     recursos_propios!: number;
+    fecha_creacion!: Date;
+    fecha_inicio!: Date;
+    fecha_fin!: Date;
     estado!: string
     visible!: boolean;
     usuario!: Usuario2;
