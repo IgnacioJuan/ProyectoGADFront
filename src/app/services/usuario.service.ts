@@ -37,20 +37,32 @@ export class UsuarioService {
     return this.httpClient.post(`${baserUrl}/usuarios/crear/${idRol}`, usuarioObj);
   }
 
+  public createResponsable(usuarioObj: Usuario2, idRol: any) {
+    console.log(usuarioObj);
+    return this.httpClient.post(`${baserUrl}/usuarios/crearResponsable/${idRol}`, usuarioObj);
+  }
 
+  //Modificar Responsable
+  actualizarResponsable(userId: number, data: any): Observable<Usuario2> {
+    return this.http.put<Usuario2>(`${baserUrl}/usuarios/actualizar/${userId}`, data);
+  }
 
-  //Metodo para buscar
 
   obtenerUsuario(username: string): Observable<boolean> {
     const url = `${baserUrl}/usuarios/buscar/${username}`;
     return this.http.get<boolean>(url);
   }
 
+  public obtenerUsuarioResponsable(userId: number): Observable<Usuario2> {
+    return this.httpClient.get(`${baserUrl}/usuarios/obtenerUResponsable/${userId}`)
+      .pipe(map((response) => response as Usuario2));
+  }
+
+
   //@GetMapping("/listarAdminDatos")
   public listarAdminDatos(): Observable<Usuario2[]> {
     return this.httpClient.get<Usuario2[]>(`${baserUrl}/usuarios/listarAdminDatos`);
   }
-
 
   //Metodo para listar usuario combobox aprobar poa
   public getUsuariosAprobPOA(): Observable<UsuarioAprobPOA[]> {

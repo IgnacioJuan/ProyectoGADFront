@@ -16,6 +16,10 @@ import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { ProgramaUsuarioDTO } from 'src/app/models/Programa';
 import { ProgramaService } from 'src/app/services/programa.service';
+import { UsuarioResponsableDTO } from 'src/app/models/UsuarioResponsableDTO';
+import { DialogoUresponsablesComponent } from '../dialogo-uresponsables/dialogo-uresponsables.component';
+import { response } from 'express';
+import { LoadingServiceService } from 'src/app/components/loading-spinner/LoadingService.service';
 
 
 let ELEMENT_DATA: Fenix[] = [];
@@ -27,18 +31,15 @@ let ELEMENT_DATA: Fenix[] = [];
 })
 export class CrearResponsablesComponent implements OnInit {
 
-  usuarioGuardar = new Usuario2();
-
   fenix: Fenix = new Fenix();
 
   listaPersonas: Persona2[] = [];
 
-  listaUsuarios: any[] = [];
+  listaUsuarios: UsuarioResponsableDTO[] = [];
   filterPost = '';
   personaSele = new Persona2();
-  usuarioDB = new UsuarioRol(); // informacion que triago de la base 
-  usuarioEdit = new UsuarioRol(); // informacion que me envia el formulario 
-  selectedRol: any;
+  usuarioBase = new Usuario2();
+  usuarioEdit = new Usuario2();
 
   //Cambiar texto de paginación de la tabla
   itemsPerPageLabel = 'Usuarios por página';
@@ -61,23 +62,13 @@ export class CrearResponsablesComponent implements OnInit {
     return `${startIndex + 1} - ${endIndex} de ${length}`;
   };
   //
-
-  roles = [
-    { rolId: 1, rolNombre: 'ADMIN' },
-    { rolId: 2, rolNombre: 'SUPERADMIN' },
-    { rolId: 3, rolNombre: 'RESPONSABLE' },
-    //{ rolId: 4, rolNombre: 'AUTORIDAD' },
-  ];
-  programas: ProgramaUsuarioDTO[] = [];
-
   public usuario = {
     username: '',
     password: ''
   }
-  public rol = 0;
-  formulario: FormGroup;
-  dataSource2 = new MatTableDataSource<Usuario2>();
-  columnasUsuario: string[] = ['nombre', 'usuario', 'rol', 'actions'];
+
+  dataSource2 = new MatTableDataSource<UsuarioResponsableDTO>();
+  columnasUsuarioResponsable: string[] = ['primer_nombre', 'primer_apellido', 'usuario', 'programa', 'cargo', 'actions'];
   @ViewChild(MatPaginator, { static: false }) paginator?: MatPaginator;
   @ViewChild('modal') modal: any;
   constructor(
@@ -88,14 +79,9 @@ export class CrearResponsablesComponent implements OnInit {
     private formBuilder: FormBuilder,
     private paginatorIntl: MatPaginatorIntl,
     private usuariorolservice: UsuariorolService,
-    private programaService: ProgramaService
+    private loadingService: LoadingServiceService
+
   ) {
-    this.formulario = this.formBuilder.group({
-      username: { value: '', disabled: true },
-      password: ['', Validators.required],
-      rol: ['', this.validateRol],
-      programa: ['', Validators.required]
-    });
     this.paginatorIntl.nextPageLabel = this.nextPageLabel;
     this.paginatorIntl.lastPageLabel = this.lastPageLabel;
     this.paginatorIntl.firstPageLabel = this.firstPageLabel;
@@ -112,16 +98,12 @@ export class CrearResponsablesComponent implements OnInit {
   }
 
   Listado() {
-    this.programaService.listar().subscribe(data => {
-      this.programas = data;
-      console.log(this.programas);
-    });
 
     this.personaService.getPersonas().subscribe(
       listaPerso => this.listaPersonas = listaPerso
     );
 
-    this.usuariorolservice.getusuarios().subscribe(
+    this.usuariorolservice.getuResponsables().subscribe(
       (listaAsig: any[]) => {
         this.listaUsuarios = listaAsig;
         this.dataSource2.data = this.listaUsuarios;
@@ -132,8 +114,15 @@ export class CrearResponsablesComponent implements OnInit {
 
   openDialog(event: MouseEvent): void {
     event.stopPropagation();
-  }
+    const dialogRef = this.dialog.open(DialogoUresponsablesComponent, {
+      width: '50%',
+      disableClose: false
+    });
 
+    dialogRef.afterClosed().subscribe(result => {
+      this.Listado();
+    });
+  }
 
   aplicarFiltro() {
     if (this.filterPost) {
@@ -304,19 +293,8 @@ export class CrearResponsablesComponent implements OnInit {
   }
 
 
-  validateRol(control: FormControl) {
-    const selectedRol = control.value;
-    if (!selectedRol || selectedRol === 0) {
-      return {
-        required: true
-      };
-    }
-    return null;
-  }
-
-
   eliminar(element: any) {
-    const id = element.id;
+    const id = element.id_usuario_responsable;
 
     Swal.fire({
       title: 'Desea eliminarlo?',
@@ -337,74 +315,65 @@ export class CrearResponsablesComponent implements OnInit {
     });
   }
 
-  EditarUsuari(usuariossssss: any): void {
-    this.usuarioDB = usuariossssss
+
+  editarUsuari(userId: number): void {
+    if (userId) {
+      this.usuariosService.obtenerUsuarioResponsable(userId).subscribe(
+        (data) => {
+          this.usuarioBase = data;
+          console.log(this.usuarioBase);
+        });
+    }
   }
 
-  compareRoles(role1: any, role2: any): boolean {
-    return role1 && role2 ? role1.rolNombre === role2.rolNombre : role1 === role2;
-  }
+  // this.usuarioEdit es el usuario que recibo del formulario 
+  Actualizar() {
 
-  // usuarioForm es el usuario que recibo del formulario 
-  Actualizar(usuarioForm: UsuarioRol) {
-    if (usuarioForm.rol.rolId == 0) {
-      usuarioForm.rol = this.usuarioDB.rol;
+    if (this.usuarioEdit.password == "") {
+      this.usuarioEdit.password = this.usuarioBase.password
+    }
+    if (this.usuarioEdit.username == "") {
+      this.usuarioEdit.username = this.usuarioBase.username
     }
 
-    if (usuarioForm.usuario.programa == null) {
-      console.log(this.usuarioDB.usuario.programa);
-      usuarioForm.usuario.programa = this.usuarioDB.usuario.programa;
+    if (this.usuarioEdit.persona.cedula == "") {
+      this.usuarioEdit.persona.cedula = this.usuarioBase.persona.cedula
     }
 
-    if (usuarioForm.usuario.password == "") {
-      usuarioForm.usuario.password = this.usuarioDB.usuario.password
-    }
-    if (usuarioForm.usuario.username == "") {
-      usuarioForm.usuario.username = this.usuarioDB.usuario.username
+    if (this.usuarioEdit.persona.primer_nombre == "") {
+      this.usuarioEdit.persona.primer_nombre = this.usuarioBase.persona.primer_nombre
     }
 
-    if (usuarioForm.usuario.persona.cedula == "") {
-      usuarioForm.usuario.persona.cedula = this.usuarioDB.usuario.persona.cedula
+    if (this.usuarioEdit.persona.primer_apellido == "") {
+      this.usuarioEdit.persona.primer_apellido = this.usuarioBase.persona.primer_apellido
     }
 
-    if (usuarioForm.usuario.persona.primer_nombre == "") {
-      usuarioForm.usuario.persona.primer_nombre = this.usuarioDB.usuario.persona.primer_nombre
+    if (this.usuarioEdit.persona.segundo_nombre == "") {
+      this.usuarioEdit.persona.segundo_nombre = this.usuarioBase.persona.segundo_nombre
     }
 
-    if (usuarioForm.usuario.persona.primer_apellido == "") {
-      usuarioForm.usuario.persona.primer_apellido = this.usuarioDB.usuario.persona.primer_apellido
+    if (this.usuarioEdit.persona.segundo_apellido == "") {
+      this.usuarioEdit.persona.segundo_apellido = this.usuarioBase.persona.segundo_apellido
     }
 
-    if (usuarioForm.usuario.persona.segundo_nombre == "") {
-      usuarioForm.usuario.persona.segundo_nombre = this.usuarioDB.usuario.persona.segundo_nombre
+    if (this.usuarioEdit.persona.direccion == "") {
+      this.usuarioEdit.persona.direccion = this.usuarioBase.persona.direccion
     }
 
-    if (usuarioForm.usuario.persona.segundo_apellido == "") {
-      usuarioForm.usuario.persona.segundo_apellido = this.usuarioDB.usuario.persona.segundo_apellido
+    if (this.usuarioEdit.persona.correo == "") {
+      this.usuarioEdit.persona.correo = this.usuarioBase.persona.correo
     }
 
-    if (usuarioForm.usuario.persona.direccion == "") {
-      usuarioForm.usuario.persona.direccion = this.usuarioDB.usuario.persona.direccion
+    if (this.usuarioEdit.persona.celular == "") {
+      this.usuarioEdit.persona.celular = this.usuarioBase.persona.celular
     }
 
-    if (usuarioForm.usuario.persona.correo == "") {
-      usuarioForm.usuario.persona.correo = this.usuarioDB.usuario.persona.correo
+    if (this.usuarioEdit.persona.cargo == "") {
+      this.usuarioEdit.persona.cargo = this.usuarioBase.persona.cargo
     }
 
-    if (usuarioForm.usuario.persona.celular == "") {
-      usuarioForm.usuario.persona.celular = this.usuarioDB.usuario.persona.celular
-    }
-
-    if (usuarioForm.usuario.persona.cargo == "") {
-      usuarioForm.usuario.persona.cargo = this.usuarioDB.usuario.persona.cargo
-    }
-
-    usuarioForm.usuario.id = this.usuarioDB.usuario.id;
-    usuarioForm.usuario.persona.id_persona = this.usuarioDB.usuario.persona.id_persona;
-    usuarioForm.usuario.programa.id_programa = this.usuarioDB.usuario.programa.id_programa;
-
-    usuarioForm.usuarioRolId = this.usuarioDB.usuarioRolId;
-    console.log(usuarioForm);
+    this.usuarioEdit.id = this.usuarioBase.id;
+    console.log('USUARIO ACTUALIZADOOOOO:',this.usuarioEdit);
 
 
     Swal.fire({
@@ -415,7 +384,7 @@ export class CrearResponsablesComponent implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
 
-        this.usuariorolservice.actualizar(usuarioForm.usuarioRolId, usuarioForm)
+        this.usuariosService.actualizarResponsable(this.usuarioEdit.id, this.usuarioEdit)
           .subscribe((response: any) => {
             Swal.fire(
               'Usuario Modificado!',
@@ -424,8 +393,8 @@ export class CrearResponsablesComponent implements OnInit {
             );
             this.Listado();
             console.log(response);
-            this.usuarioDB = new UsuarioRol();
-            this.usuarioEdit = new UsuarioRol();
+            this.usuarioBase = new Usuario2();
+            this.usuarioEdit = new Usuario2();
           });
       } else {
         Swal.fire('Se ha cancelado la operación', '', 'info')
