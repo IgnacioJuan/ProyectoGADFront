@@ -70,10 +70,7 @@ export class AprobarPoaComponent {
         'dd/MM/yyyy'
       ); // Convertir la fecha a string
       return (
-        card.objetivo_proyecto.toLowerCase().includes(value) ||
-        card.meta_proyecto.toLowerCase().includes(value) ||
-        card.localizacion.toLowerCase().includes(value) ||
-        (formattedDate ? formattedDate.toLowerCase().includes(value) : false)
+        card.nombre_proyecto.toLowerCase().includes(value) 
       ); // Aplica el filtro en la fecha convertida
     });
   }
