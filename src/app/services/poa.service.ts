@@ -1,3 +1,4 @@
+import { PoaporFechaRepoProjection } from './../interface/PoaporFechaRepoProjection';
 import { Injectable } from '@angular/core';
 import { map, Observable, catchError, of } from 'rxjs';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
@@ -104,5 +105,11 @@ export class PoaService {
   PoasConActividadesPendientes(): Observable<PoasConActividadesPendientesProjection> {
     return this.http.get<any>(`${baserUrl}/api/poa/PoasConActividadesP`)
   }
-
+  //Listar poas del admin con fecha
+  listarPoaApAdm(idResponsable:number): Observable<PoaporFechaRepoProjection[]> {
+    return this.http.get<PoaporFechaRepoProjection[]>(`${baserUrl}/api/poa/listarPoaApAdm/${idResponsable}`);
+  }
+  actualizarmeta(id: any, nuevaMeta: number): Observable<any> {
+    return this.http.put(`${baserUrl}/api/poa/actualizarmeta/${id}`, nuevaMeta);
+  }
  }

@@ -12,14 +12,7 @@ export class SidebarService {
       titulo: "POA",
       submenu: [
         { titulo: 'Creacion', url: 'adm/poa/registrarpoa', icono: 'fas fa-check-square' },
-
-      ]
-    },
-    {
-      icono: 'nav-icon fas fa-users',
-      titulo: "Asignación",
-      submenu: [
-        { titulo: 'POA', url: 'adm/asignacion-actividades/poa-actividad', icono: 'fas fa-check-square' },
+        { titulo: 'Avance Meta', url: 'adm/evaluar-poa/poas', icono: 'fas fa-list-ul ' },
 
       ]
     },
@@ -28,6 +21,8 @@ export class SidebarService {
       titulo: "Responsables",
       submenu: [
         { titulo: 'Listado Responsables', url: 'adm/create-responsables', icono: 'fas fa-check-square' },
+        { titulo: 'Asignacion', url: 'adm/asignacion-actividades/poa-actividad', icono: 'fas fa-check-square' },
+        
 
       ]
     },
@@ -67,12 +62,11 @@ export class SidebarService {
 
     {
       icono: 'nav-icon fas fa-tasks',
-      titulo: "POA",
+      titulo: "POAS",
       submenu: [
-        { titulo: 'Poas Rechazados', url: 'sup/flujo-criterio/listarpoa', icono: 'fas fa-list-ul ' },
-        { titulo: 'Poas Asignados', url: 'sup/flujo-criterio/listaproyecto', icono: 'fas fa-list-ul ' },
-        { titulo: 'Reporte de POA', url: 'sup/reportePoa', icono: 'fas fa-list-ul ' },
-
+        //{ titulo: 'Poas Rechazados', url: 'sup/flujo-criterio/listarpoa', icono: 'fas fa-list-ul ' },
+        { titulo: 'Estados', url: 'sup/flujo-criterio/listaproyecto', icono: 'fas fa-list-ul ' },
+        { titulo: 'Avance Meta', url: 'sup/evaluar-poa/poas', icono: 'fas fa-list-ul ' },
 
       ]
     },
@@ -80,7 +74,7 @@ export class SidebarService {
       icono: 'nav-icon fas fa-file-invoice',
       titulo: "Evidencias",
       submenu: [
-        { titulo: 'Estado de evidencias', url: 'sup/resumen-evidencias-responsable/evidencias', icono: 'fas fa-list-ul ' },
+        { titulo: 'Estados', url: 'sup/resumen-evidencias-responsable/evidencias', icono: 'fas fa-list-ul ' },
 
       ]
     },
