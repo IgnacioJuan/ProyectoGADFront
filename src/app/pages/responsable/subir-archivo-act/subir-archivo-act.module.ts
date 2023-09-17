@@ -7,20 +7,20 @@ import { Actividades_desigComponent } from './actividades_desig/actividades_desi
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { SharedModule } from 'src/app/shared/shared.module';
-
+import { Poa_proyectosComponent } from './poa_proyectos/poa_proyectos.component';
 @NgModule({
   declarations: [
     Subir_archivo_acti_desigComponent,
-    Actividades_desigComponent
+    Actividades_desigComponent,
+    Poa_proyectosComponent,
   ],
-  
+
   imports: [
     CommonModule,
     SubirArchivoActRoutingModule,
     MatTableModule,
     MatPaginatorModule,
-    SharedModule 
+    SharedModule,
   ],
-  
 })
-export class SubirArchivoActModule { }
+export class SubirArchivoActModule {}

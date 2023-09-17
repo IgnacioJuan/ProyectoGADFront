@@ -4,6 +4,7 @@ export class Actividad_arch {
     id_actividad!: number;
     codificado!: number;
     devengado!: number;
+    fecha_fin:Date | undefined;
     presupuesto_referencial!:number;
     recursos_propios!:number;
     nombre!: string;

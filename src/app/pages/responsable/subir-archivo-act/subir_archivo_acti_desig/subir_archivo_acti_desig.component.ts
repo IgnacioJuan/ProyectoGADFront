@@ -81,6 +81,7 @@ export class Subir_archivo_acti_desigComponent implements OnInit {
   @ViewChild(MatPaginator)
   paginator!: MatPaginator;
 
+  ocultar = false;
   activ: Actividad_arch = new Actividad_arch();
   archi: Archivo = new Archivo();
 
@@ -105,7 +106,7 @@ export class Subir_archivo_acti_desigComponent implements OnInit {
     });
     this.listar();
     this.restrivalor();
-    this.verificarFechaLimite();
+    this.verificarFechaLimite(this.activ.id_actividad);
   }
   restrivalor() {
     this.actiservis.valor(this.activ.id_actividad).subscribe((data) => {
@@ -281,15 +282,16 @@ export class Subir_archivo_acti_desigComponent implements OnInit {
 
   //bloquear boton
   botonDeshabilitado: boolean | undefined;
-
-  verificarFechaLimite() {
-    this.poaservis.getPoas().subscribe(
+  verificarFechaLimite(idActividad: number) {
+    this.actiservis.getFechaFin(idActividad).subscribe(
       (data) => {
-        if (data && data.length > 0) {
+        if (data && data.fecha_fin) {
+          // Verifica si data y fecha_fin son definidos
           const fechaActual = new Date();
-          const fechaFin = new Date(data[0].fecha_fin); // Supongo que estás interesado en la fecha_fin del primer elemento
+          const fechaFin = new Date(data.fecha_fin);
+
           console.log('fecha ini >>> ' + fechaActual);
-          console.log('fecha fin >>> ' + data[0].fecha_fin);
+          console.log('fecha fin >>> ' + data.fecha_fin);
           console.log('fecha fin 2 >>> ' + fechaFin);
 
           if (fechaActual > fechaFin) {
@@ -299,18 +301,18 @@ export class Subir_archivo_acti_desigComponent implements OnInit {
             );
           }
         } else {
-          console.error('La lista de POAs está vacía o data es undefined.');
+          console.error(
+            'La fecha de finalización no está definida o la respuesta es undefined.'
+          );
+          // Puedes manejar este caso de acuerdo a tus necesidades.
         }
       },
       (error) => {
-        console.error('Error al obtener los datos del POA:', error);
+        console.error('Error al obtener los datos de la actividad:', error);
         // Puedes manejar el error aquí, mostrar un mensaje de error, etc.
       }
     );
   }
-
-  // Resto del código
-
   mostrarMensaje(mensaje: string) {
     Swal.fire({
       title: 'Advertencia',
@@ -330,5 +332,11 @@ export class Subir_archivo_acti_desigComponent implements OnInit {
       default:
         return {};
     }
+  }
+  veractivi() {
+    window.history.back();
+  }
+verpro() {
+    this.router.navigate(['/res/activ/poa_proyectos']);
   }
 }
