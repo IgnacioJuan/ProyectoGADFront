@@ -83,6 +83,11 @@ export class PoaService {
   listarPoasAdminEstado(idResponsable: number, estado: string): Observable<PoasAdminEstadoProjection[]> {
     return this.http.get<PoasAdminEstadoProjection[]>(`${baserUrl}/api/poa/listarPoasAdminEstado/${idResponsable}/${estado}`);
   }
+ //BuscarPoaporId
+ listarPoasPorId(idPoa:number): Observable<Poa[]> {
+  return this.http.get<Poa[]>(`${baserUrl}/api/poa/findByIdAndVisibleTrue/${idPoa}`);
+}
+
 
   getNoAprobados(): Observable<PoaNoAprobadoProjection[]> {
     return this.http.get<PoaNoAprobadoProjection[]>(`${baserUrl}/api/poa/noaprobados`);

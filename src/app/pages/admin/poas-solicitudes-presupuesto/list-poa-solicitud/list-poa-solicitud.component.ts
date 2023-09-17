@@ -30,9 +30,8 @@ constructor(
   private router: Router,
   private poaService: PoaService,
   public login: LoginService,
-
-     //importar el spinner como servicio
-     private loadingService: LoadingServiceService
+  //importar el spinner como servicio
+  private loadingService: LoadingServiceService
 ) {
 
   this.paginatorIntl.nextPageLabel = this.nextPageLabel;
@@ -102,8 +101,8 @@ listarPoasSolic(idAdmin : number): void {
 
 buscar() {
  // Filtra los componentes basados en el filtro
- this.filteredComponentes = this.listaPoas.filter((componente) =>
-   componente.localizacion.toLowerCase().includes(this.filterPost.toLowerCase())
+ this.filteredComponentes = this.listarPoas.filter((componente) =>
+   componente.nombre_proyecto.toLowerCase().includes(this.filterPost.toLowerCase())
  );
 
  // Actualiza los datos del dataSource con los resultados filtrados

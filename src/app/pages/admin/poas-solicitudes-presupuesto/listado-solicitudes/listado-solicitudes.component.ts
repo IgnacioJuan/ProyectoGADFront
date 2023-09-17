@@ -10,7 +10,6 @@ import Swal from 'sweetalert2';
 import { AprobacionSolicitudService } from 'src/app/services/aprobacion-solicitud.service';
 import { AprobacionSolicitud } from 'src/app/models/AprobacionSolicitud';
 import { catchError, forkJoin, of, switchMap, throwError } from 'rxjs';
-import { PersonaService } from 'src/app/services/persona.service';
 import * as pdfMake from 'pdfmake/build/pdfmake';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 (<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
@@ -26,9 +25,7 @@ import { ReformaTraspasoD } from 'src/app/models/ReformaTraspasoD';
 import { ReformaTraspasoIService } from 'src/app/services/reformatraspaso-i.service';
 import { ReformaTraspasoDService } from 'src/app/services/reformatraspaso-d.service';
 
-export interface group {
-  group: string;
-}
+
 
 @Component({
   selector: 'app-listado-solicitudes',
@@ -45,6 +42,7 @@ export class ListadoSolicitudesComponent implements OnInit {
     'responsable',
     'actividad_nombre',
     'codificado',
+    'monto_actual',
     'estado',
     'fecha_solicitud',
     'evaluar'  ];
@@ -94,7 +92,6 @@ export class ListadoSolicitudesComponent implements OnInit {
     private solicitudPresupuestoService: SolicitudPresupuestoService,
     private emaservices: EmailServiceService,
     private aprobacionSolicitudService: AprobacionSolicitudService,
-    private serviper: PersonaService,
     private actividadServi: ActividadespoaService,
     private reformaIService: ReformaTraspasoIService,
     private reformaDService: ReformaTraspasoDService,
@@ -125,33 +122,9 @@ export class ListadoSolicitudesComponent implements OnInit {
 
   }
 
-/*
-  listarSolicitudes(idAdmin: number, idPoa: number): void {
-    this.loadingService.show();
-  
-    this.solicitudPresupuestoService
-      .listarSolicitudesPoa(idAdmin, idPoa)
-      .subscribe(
-        (data: any[]) => {
-          this.listaSolicitudes = data;
-            // Calcula cuántas filas deben fusionarse para cada "responsable"
-          this.dataSource.data = this.listaSolicitudes;
-          this.loadingService.hide();
-        },
-        (error: any) => {
-          console.error('Error al listar los poas:', error);
-          this.loadingService.hide();
-        }
-      );
-  }
-*/
-
-
-
 
 listarSolicitudes(idAdmin: number, idPoa: number): void {
   this.loadingService.show();
-
   this.solicitudPresupuestoService
     .listarSolicitudesPoa(idAdmin, idPoa)
     .subscribe(

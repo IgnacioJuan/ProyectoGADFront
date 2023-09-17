@@ -14,6 +14,10 @@ import { SolicitudPresupuestoService } from 'src/app/services/solicitud-presupue
 import { LoadingServiceService } from 'src/app/components/loading-spinner/LoadingService.service';
 import { UsuarioRol } from 'src/app/models/UsuarioRol';
 import { UsuariorolService } from 'src/app/services/usuariorol.service';
+import { Poa_proyec_dto } from 'src/app/interface/poa_proyec_dto';
+import { PoaService } from 'src/app/services/poa.service';
+import { Poa } from 'src/app/models/Poa';
+import { Proyecto } from 'src/app/models/Proyecto';
 
 
 export class SolicitudActividad {
@@ -25,6 +29,26 @@ export class SolicitudActividad {
   monto_total: number =0;
 }
 
+
+export class Poa2 {
+  id_poa!: number;
+  estado!: string;
+  tipo_periodo!: string;
+  barrio!: string; 
+  comunidad!: string; 
+  localizacion!: string; 
+  fecha_inicio!: Date; 
+  fecha_fin!: Date; 
+  cobertura!: string;
+  linea_base!: number; 
+  meta_alcanzar!: number; 
+  meta_planificada!: number;
+  valorTotal!:number;
+  visible!: boolean;
+  usuario!:Usuario2;
+  proyecto!:Proyecto;
+
+}
 @Component({
   selector: 'app-crear-solicitud',
   templateUrl: './crear-solicitud.component.html',
@@ -34,10 +58,12 @@ export class CrearSolicitudComponent implements OnInit  {
   FormDestinatario: FormGroup;
   FormSolicitud: FormGroup;
   listaUsuarios2: UsuarioRol[] = [];
+  listaProyectos: Poa_proyec_dto[] = [];
 
   //Usuario logueado
   user: any = null;
   usuarioSeleccionado2: UsuarioRol = new UsuarioRol();
+  estadoSeleccionado: string = 'PENDIENTE';
 
   datosSolicitud: SolicitudActividad = new SolicitudActividad();
   isLinear = true; // Establece inicialmente el modo lineal como desactivado
@@ -49,6 +75,7 @@ export class CrearSolicitudComponent implements OnInit  {
   listaUsuariosOriginal: any[] = [];
   isDetalleStepEnabled: boolean = false;
   actividadSolicitudPresupuesto: SolicitudActividadPrepuesto = new SolicitudActividadPrepuesto();
+  resultadosEncontradosActividad: boolean = true;
 
   
   columnasActividades: string[] = ['nombre', 'descripcion', 'codificado', 'actions'];
@@ -57,7 +84,6 @@ export class CrearSolicitudComponent implements OnInit  {
   listaActividades: ActividadesPoa[] = [];
   dataSolicitud = new MatTableDataSource<SolicitudActividad>();
   listaActividadesSeleccionadas: any[] = [];
-  detalleActividadesSolicitud: ActividadesPoa[] = [];
   actividadSeleccionada: ActividadesPoa = new ActividadesPoa();
 
   @ViewChild(MatPaginator, { static: false }) paginator?: MatPaginator;
@@ -88,7 +114,7 @@ export class CrearSolicitudComponent implements OnInit  {
   private router: Router,
   private userService: UsuarioService,
   private userROLService: UsuariorolService,
-
+  private poaService : PoaService,
   private solicitudPresupuestoService: SolicitudPresupuestoService,
    //importar el spinner como servicio
    private loadingService: LoadingServiceService
@@ -162,28 +188,74 @@ export class CrearSolicitudComponent implements OnInit  {
   
  
 
-
-
+  poaSeleccionado: number=0
 AgregarDestinatario(){
   this.datosSolicitud.detalle=this.FormDestinatario.value.detalle}
 
   listar(idUser: number): void {
     this.loadingService.show();
-
-    this.actividadesService.listaractireponsa(idUser).subscribe(
-      (data: any[]) => {
-        this.listaActividades = data;
-        this.dataActividades.data = this.listaActividades;
+    this.poaService.getPoaactiprojection(idUser).subscribe(
+      data => {
+        this.listaProyectos = data;
         this.loadingService.hide();
-
       },
-      (error: any) => {
-        console.error('Error al listar los componentes:', error);
+      error => {
+        console.error('Error fetching data:', error);
         this.loadingService.hide();
-
       }
     );
   }
+
+listarActividadPorPoa(idUser: number, poa:number){
+
+  
+  this.actividadesService.getPoaActividades(idUser, this.poaSeleccionado).subscribe(
+    (data: any[]) => {
+      this.listaActividades = data;
+      this.dataActividades.data = this.listaActividades;
+      console.log(this.listaActividades)
+      this.loadingService.hide();
+
+    },
+    (error: any) => {
+      console.error('Error al listar las actividadades:', error);
+      this.loadingService.hide();
+
+    }
+  );
+}
+
+PoaEncontrado: any ;
+listaPoaEncontrados: Poa2[] = [];
+
+BuscarPoa(poa: number) {
+  this.poaService.listarPoasPorId(poa).subscribe(
+    (data: any[]) => {
+      this.listaPoaEncontrados = data; // Asigna la lista de Poa encontrados
+      console.log("BUSCAR POA");
+      console.log(this.listaPoaEncontrados);
+
+        this.PoaEncontrado = this.listaPoaEncontrados
+      
+      
+      console.log("BUSCAR¿¿¿¿¿¿ POA");
+      console.log(this.PoaEncontrado);
+      this.PoaEncontrado.usuario=null
+      this.PoaEncontrado.proyecto=null
+
+this.actividadSolicitudPresupuesto.poa=this.PoaEncontrado
+
+      this.loadingService.hide();
+    },
+    (error: any) => {
+      console.error('Error al buscar poa:', error);
+      this.loadingService.hide();
+    }
+  );
+}
+
+
+
 
 
   SeleccionarActividad(elemento: any): void {
@@ -203,7 +275,6 @@ AgregarDestinatario(){
     }
   
     this.listaActividadesSeleccionadas.push(this.FormSolicitud.value);
-    console.log(this.detalleActividadesSolicitud);
     console.log(this.listaActividadesSeleccionadas);
     this.dataSolicitud.data = this.listaActividadesSeleccionadas;
     this.FormSolicitud.reset();
@@ -234,7 +305,7 @@ if (this.dataSolicitud.data.length > 0) {
     this.actividadSolicitudPresupuesto.fecha_solicitud = this.fechaActual;
     this.actividadSolicitudPresupuesto.destinatario = this.usuariosdit;
     this.actividadSolicitudPresupuesto.responsable = this.user.id;
-  
+
     for (const actividadSeleccionada of this.listaActividadesSeleccionadas) {
       const solicitudActividad = new SolicitudActividadPrepuesto();
       solicitudActividad.motivo = this.actividadSolicitudPresupuesto.motivo;
@@ -245,7 +316,10 @@ if (this.dataSolicitud.data.length > 0) {
       solicitudActividad.destinatario = this.actividadSolicitudPresupuesto.destinatario;
       solicitudActividad.responsable = this.actividadSolicitudPresupuesto.responsable;
       solicitudActividad.actividadSolicitud = actividadSeleccionada; 
-  
+      solicitudActividad.poa = this.actividadSolicitudPresupuesto.poa;
+
+      console.log(solicitudActividad)
+      
       this.solicitudPresupuestoService.crear(solicitudActividad) .subscribe(
           (response) => {
             console.log('Solicitud de actividad con éxito:', response);
@@ -303,5 +377,18 @@ ListadoSolicitud(){
     isDataSolicitudNotEmpty() {
       return this.dataSolicitud.data.length > 0;
     }
+
+
+
+
+    
+    filtrarPorEstado(): void {
+
+      this.listar(this.user.id);
+      this.listarActividadPorPoa(this.user.id, this.poaSeleccionado);
+      this.BuscarPoa(this.poaSeleccionado);
+
+    }
+    
   
 }
