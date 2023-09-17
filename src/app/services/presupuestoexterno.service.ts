@@ -17,8 +17,8 @@ export class PresupuestoExternoService {
     );
   }
 
-  actualizar(id: any, pe: any): Observable<any> {
-    return this.http.put(`${baserUrl}/api/presupuestoexterno/actualizar/${id}`, pe);
+  actualizar(id: any, presupuestoExterno: any): Observable<any> {
+    return this.http.put(`${baserUrl}/api/presupuestoexterno/actualizar/${id}`, presupuestoExterno);
   }
 
   getPresupuestoEPorId(id: number): Observable<PresupuestoExterno> {
