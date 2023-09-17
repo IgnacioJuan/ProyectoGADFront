@@ -424,6 +424,7 @@ export class ActividadesComponent implements OnInit {
     this.actividad.descripcion = actividadActualizada.descripcion;
     this.actividad.recursos_propios = actividadActualizada.recursos_propios;
     this.actividad.estado = 'PENDIENTE';
+    //this.actividad.poa = this.poa;
 
     const actividadId = this.actividad.id_actividad;
   
