@@ -7,7 +7,6 @@ export interface Exportarexcel {
     meta: string;
     nombre_objetivopnd: string;
     nombre_objetivoods: string;
-    nombre_programa: string;
     nombre_indicador: string;
     nombre_metapdot: string;
     nombre_objetivopdot: string;

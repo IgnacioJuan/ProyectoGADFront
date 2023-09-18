@@ -5,12 +5,18 @@ import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { LoadingServiceService } from 'src/app/components/loading-spinner/LoadingService.service';
+import { Exportarexcel } from 'src/app/interface/Exportarexcel';
 import { ModeloPoa } from 'src/app/models/ModeloPoa';
 import { Proyecto } from 'src/app/models/Proyecto';
 import { IndicadorService } from 'src/app/services/indicador.service';
 import { ProyectoService } from 'src/app/services/proyecto.service';
 import Swal from 'sweetalert2';
 import * as XLSX from 'xlsx';
+import { Workbook } from 'exceljs';
+import * as wordwrap from 'word-wrap';
+
+import * as ExcelJS from 'exceljs';
+
 @Component({
   selector: 'app-modelo-proyecto',
   templateUrl: './modelo-proyecto.component.html',
@@ -130,20 +136,47 @@ export class ModeloProyectoComponent {
   exportToExcel(): void {
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.dataSource.data);
-  
-      if (ws['!ref']) {
-      const range = XLSX.utils.decode_range(ws['!ref']);
-      range.s.r = 1; 
-      ws['!ref'] = XLSX.utils.encode_range(range);
-    }
-  
-    XLSX.utils.sheet_add_json(ws, this.dataSource.data, { skipHeader: true, origin: 'A2' });
-  
-    XLSX.utils.book_append_sheet(wb, ws, 'Tabla 1');
-  
-    XLSX.writeFile(wb, 'Proyectos.xlsx');
-  }
 
+    // Ajustar el ancho de las columnas basado en el contenido
+    const columnWidths: number[] = [];
+    this.dataSource.data.forEach((rowData: any) => {
+        let columnIndex = 0;
+        for (const key in rowData) {
+            if (rowData.hasOwnProperty(key)) {
+                const cellValue = rowData[key];
+                const cellText = cellValue ? cellValue.toString() : '';
+                const cellTextLength = cellText.length;
+                if (!columnWidths[columnIndex] || cellTextLength > columnWidths[columnIndex]) {
+                    columnWidths[columnIndex] = cellTextLength;
+                }
+                columnIndex++;
+            }
+        }
+    });
+
+    // Aplicar el ancho calculado a las columnas en la hoja de trabajo
+    columnWidths.forEach((width, colIndex) => {
+        if (width) {
+            const colLetter = XLSX.utils.encode_col(colIndex); // Obtener la letra de la columna (A, B, C, ...)
+            ws['!cols'] = ws['!cols'] || [];
+            ws['!cols'][colIndex] = { wch: width + 1 }; // Agregar un margen adicional
+        }
+    });
+
+    if (ws['!ref']) {
+        const range = XLSX.utils.decode_range(ws['!ref']);
+        range.s.r = 1;
+        ws['!ref'] = XLSX.utils.encode_range(range);
+    }
+
+    XLSX.utils.sheet_add_json(ws, this.dataSource.data, { skipHeader: true, origin: 'A2' });
+
+    XLSX.utils.book_append_sheet(wb, ws, 'Tabla 1');
+
+    XLSX.writeFile(wb, 'Proyectos.xlsx');
+}
+
+  
   
 
   guardar() {

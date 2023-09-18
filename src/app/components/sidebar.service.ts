@@ -59,8 +59,6 @@ export class SidebarService {
         { titulo: 'Objetivos PND', url: 'sup/ejes/ejestabla', icono: 'fas fa-list-ul ' },
         { titulo: 'Competencia', url: 'sup/crearcompe', icono: 'fas fa-list-ul ' },
         { titulo: 'ODS', url: 'sup/objetivoods-lista', icono: 'fas fa-list-ul ' },
-        { titulo: 'Proyectos model', url: 'sup/flujo-modelo/exportar-excel', icono: 'fas fa-list-ul ' },
-
 
 
       ]
