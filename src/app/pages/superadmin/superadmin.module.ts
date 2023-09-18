@@ -26,7 +26,6 @@ import { ListarpoaComponent } from './flujo-criterio/listarpoa/listarpoa.compone
 import { ListarporUsuarioComponent } from './flujo-criterio/listarpoaporusuario/listarpoaporusuario.component';
 import { ProyectosComponent } from './flujo-criterio/listaproyecto/listaproyecto.component';
 
-
 @NgModule({
   declarations: [
     CrearUsuariosComponent,

@@ -66,7 +66,6 @@ pathMatch: 'full',
  canActivate: [SuperGuard]
 },
 
-
 {
   path: 'objetivoods-lista',
   component: ObjetivoodsListaComponent,
