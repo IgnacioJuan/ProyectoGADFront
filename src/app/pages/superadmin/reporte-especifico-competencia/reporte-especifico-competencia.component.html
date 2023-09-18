@@ -1,0 +1,58 @@
+<body>
+  <div class="container bg-light border border-start-0 rounded-4">
+    <div class="barChart-container">
+      <!-- Sección de la tabla -->
+      <div class="table-section">
+        <mat-table [dataSource]="tableData">
+          <!-- Columna de Año -->
+          <ng-container matColumnDef="year">
+            <mat-header-cell *matHeaderCellDef> Año </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{ element.year }} </mat-cell>
+          </ng-container>
+
+          <!-- Columna de Series A -->
+          <ng-container matColumnDef="seriesA">
+            <mat-header-cell *matHeaderCellDef> Series A </mat-header-cell>
+            <mat-cell *matCellDef="let element">
+              {{ element.seriesA }}
+            </mat-cell>
+          </ng-container>
+
+          <!-- Columna de Series B -->
+          <ng-container matColumnDef="seriesB">
+            <mat-header-cell *matHeaderCellDef> Series B </mat-header-cell>
+            <mat-cell *matCellDef="let element">
+              {{ element.seriesB }}
+            </mat-cell>
+          </ng-container>
+
+          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+        </mat-table>
+      </div>
+
+      <!-- Sección del gráfico -->
+      <div class="chart-section">
+        <canvas
+          baseChart
+          class="chart"
+          [data]="barChartData"
+          [options]="barChartOptions"
+          [plugins]="barChartPlugins"
+          [type]="barChartType"
+          (chartHover)="chartHovered($event)"
+          (chartClick)="chartClicked($event)"
+        >
+        </canvas>
+        <button
+          mat-button
+          mat-raised-button
+          color="primary"
+          (click)="randomize()"
+        >
+          Update
+        </button>
+      </div>
+    </div>
+  </div>
+</body>
