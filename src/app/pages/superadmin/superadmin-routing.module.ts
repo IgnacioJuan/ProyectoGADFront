@@ -16,7 +16,6 @@ import {
 import { ReporteEspecificoPoaComponent } from './reporte-especifico-poa/reporte-especifico-poa.component';
 import { ProyectosComponent } from './flujo-criterio/listaproyecto/listaproyecto.component';
 import {ReportePresupuestoModule} from "./reporte-presupuesto/reporte-presupuesto.module";
-import { PruebaReportMetasComponent } from './pages/prueba-report-metas/prueba-report-metas.component';
 
 
 
@@ -63,11 +62,6 @@ const routes: Routes = [
 },
 { path: 'reporteEspecificoPoa/:id',
 component: ReporteEspecificoPoaComponent ,
-pathMatch: 'full',
- canActivate: [SuperGuard]
-},
-{ path: 'reporteMetaComponente',
-component: PruebaReportMetasComponent ,
 pathMatch: 'full',
  canActivate: [SuperGuard]
 },

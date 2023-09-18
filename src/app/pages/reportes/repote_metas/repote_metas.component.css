@@ -1,41 +1,25 @@
-/* Estilo para la barra de porcentaje vertical */
-.barra {
-  width: 90px; /* Ancho de la barra vertical (ajusta según sea necesario) */
-  height: 300px; /* Altura total de la barra (ajusta según sea necesario) */
-  background-color: #f0f0f0; /* Color de fondo de la barra */
-  position: relative;
+.semaforo {
+  display: flex;
+  align-items: center;
 }
+.semaforo div {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin-right: 10px; 
+  margin-left: 15px;
 
-/* Estilo para los segmentos de la barra */
-.verde,
-.amarillo,
+}
 .rojo {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
+  background-color: red;
 }
-
-.verde {
-  background-color: #00cc00; /* Color verde */
-  height: 80%; /* Altura del segmento verde */
-}
-
 .amarillo {
-  background-color: #cccc00; /* Color amarillo */
-  height: 11%; /* Altura del segmento amarillo */
+  background-color: yellow;
+}
+.verde {
+  background-color: green;
 }
 
-.rojo {
-  background-color: #cc0000; /* Color rojo */
-  height: 9%; /* Altura del segmento rojo */
-}
-
-/* Estilo para el texto del porcentaje */
-.barra span {
-  position: absolute;
-  z-index: 1;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  color: white; /* Color del texto del porcentaje */
+.titulo {
+  color: green !important;
 }
