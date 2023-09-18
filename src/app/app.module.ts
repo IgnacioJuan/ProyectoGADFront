@@ -14,6 +14,7 @@ import { FormsModule } from "@angular/forms";
 import { CustomDatePipe } from './pages/superadmin/reporteavancepoa/reporteavancepoa.component';
 import { LoadingSpinnerComponent } from './components/loading-spinner/loading-spinner.component';
 
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -32,7 +33,6 @@ import { LoadingSpinnerComponent } from './components/loading-spinner/loading-sp
     //
     SharedModule
   ],
-
   providers: [authInterceptorProviders],
   bootstrap: [AppComponent]
 })
