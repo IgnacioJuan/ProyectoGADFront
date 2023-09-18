@@ -7,6 +7,7 @@ import { ActividadespoaService } from 'src/app/services/actividadespoa.service';
 import { Archivos } from 'src/app/models/Archivos';
 import { LoginService } from 'src/app/services/login.service';
 import { Poa } from 'src/app/models/Poa';
+import { LoadingServiceService } from 'src/app/components/loading-spinner/LoadingService.service';
 @Component({
   selector: 'app-list-activ-evidencia',
   templateUrl: './list-activ-evidencia.component.html',
@@ -32,7 +33,8 @@ export class ListActivEvidenciaComponent implements OnInit {
     private router: Router,
     private actividadService: ActividadespoaService,
     public login: LoginService,
-
+    //importar el spinner como servicio
+    private loadingService: LoadingServiceService
   ) {
 
     this.paginatorIntl.nextPageLabel = this.nextPageLabel;
@@ -52,7 +54,7 @@ export class ListActivEvidenciaComponent implements OnInit {
     //Obtener id del poa
     const data = history.state.data;
     this.poa = data;
-    console.log(this.poa);
+  
     if (this.poa == undefined) {
       this.router.navigate(['user-dashboard']);
       location.replace('/use/user-dashboard');
@@ -93,18 +95,24 @@ export class ListActivEvidenciaComponent implements OnInit {
     return `${startIndex + 1} - ${endIndex} de ${length}`;
   };
 //Columnas tabla actividades
-  columnasUsuario: string[] = ['id_actividad', 'nombre', 'descripcion', 'evidencias'];
+  columnasUsuario: string[] = [ 'nombre', 'descripcion','codificado', 'devengado', 'evidencias'];
 
   listar(idPoa: number): void {
+    this.loadingService.show();
+
     this.actividadService.getActividadesPoa(idPoa).subscribe(
       (data: any[]) => {
         this.listaActividades = data;
         console.log("Dataa")
         console.log(this.listaActividades)
         this.dataSource.data = this.listaActividades;
+        this.loadingService.hide();
+
       },
       (error: any) => {
-        console.error('Error al listar los objetivos:', error);
+        console.error('Error al listar las actividades:', error);
+        this.loadingService.hide();
+
       }
     );
   }

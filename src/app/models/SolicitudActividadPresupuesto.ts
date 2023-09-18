@@ -1,4 +1,5 @@
 import { ActividadesPoa } from "./ActividadesPoa";
+import { Poa } from "./Poa";
 import { Usuario2 } from "./Usuario2";
 
 export class SolicitudActividadPrepuesto {
@@ -13,5 +14,5 @@ export class SolicitudActividadPrepuesto {
     responsable: Usuario2 | null = null;
     estado: string ="";
     visible: boolean=true;
-
+    poa: Poa| null = null;
   }
