@@ -1,0 +1,95 @@
+#calc {
+  font-family: myFirstFont;
+  font-size: 250%;
+  text-align: right;
+  background-color: inherit;
+  border: none;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 10px;
+}
+
+body {
+  font: 1em/1.618 Inter, sans-serif;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 100vh;
+  padding: 30px;
+
+  color: green;
+  /* background:
+    url(https://4.bp.blogspot.com/-8PTwrvmNixg/VHyHEPihSaI/AAAAAAAAAQk/VoUn7UzeIXY/s1600/received_m_mid_1396320661091_ed0c7a21685199ba23_5.jpg
+) center / cover no-repeat fixed; */
+}
+
+.icon-inverted {
+  transform: scaleY(-1);
+}
+
+.titulo {
+  color: green !important;
+}
+
+.custom-select {
+  width: 400px; /* Ancho deseado */
+  font-size: 14px; /* Tamaño de fuente deseado */
+}
+.mat-option:first-child {
+  color: rgba(212, 188, 55, 0.5); /* Color de fuente opaco deseado */
+}
+.header-title {
+  font-size: 30px;
+  font-weight: bold;
+  color:rgb(9, 70, 9); /* You can choose your preferred color */
+  text-align: left;
+}
+
+.align-right-dollar {
+  text-align: right; /* Alinear a la derecha */
+}
+
+.align-right-dollar::before {
+  content: "$"; /* Agregar el símbolo de dólar antes del contenido */
+  margin-right: 5px; /* Espacio entre el símbolo de dólar y el número */
+}
+.acciones-header {
+  min-width: 200px; /* Ajusta el ancho según tus necesidades */
+}
+
+/* Estilo para las celdas de datos */
+.acciones-cell {
+  min-width: 200px; /* Ajusta el ancho según tus necesidades */
+  /* Añade cualquier otro estilo adicional si es necesario */
+}
+.acciones-cellNombre {
+  min-width: 400px;
+}
+
+.show-hint::before {
+  content: "Haga clic sobre una fila para ver los tipos de presupuestos de esta actividad";
+  position: absolute;
+  top: 25%;
+  left: 45%;
+  transform: translateX(-50%);
+  padding: 0.5em;
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  white-space: nowrap;
+  display: block;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.2s, visibility 0.2s;
+}
+
+.show-hint:hover::before {
+  visibility: visible;
+  opacity: 1;
+}
+.mat-row:hover {
+  background-color: #f5f5f5; /* Cambia el color de fondo al pasar el mouse */
+  cursor: pointer; /* Cambia el cursor al pasar el mouse a pointer */
+}

@@ -91,9 +91,10 @@ export class SidebarService {
       icono: 'nav-icon fas fa-solid fa-list',
       titulo: "Actividades",
       submenu: [
-        { titulo: 'Presupuestos', url: 'sup/actividades-presupuestos/tabla-poas', icono: 'fas fa-list-ul ' },
+        { titulo: 'Financiamiento', url: 'sup/actividades-presupuestos/tabla-poas', icono: 'fas fa-list-ul ' },
         { titulo: 'Evidencias Rechazadas', url: 'sup/archivos-rechazados/Actividades_Evi_Rechazados', icono: 'fas fa-list-ul ' },
         { titulo: 'Lista de Actividades', url: 'sup/usuario-actividades/listar-actividades', icono: 'fas fa-list-ul ' },
+        { titulo: 'Presupuesto Ejecutado', url: 'adm/presup-ejecut/tabla-poas', icono: 'fas fa-list-ul ' },
 
       ]
     },

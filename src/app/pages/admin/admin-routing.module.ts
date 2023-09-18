@@ -69,6 +69,10 @@ const routes: Routes = [
     path: 'poas-solicitudes',
     loadChildren: () => import("./poas-solicitudes-presupuesto/poas-solicitudes-presupuesto.module").then(m => m.PoasSolicitudesPresupuestoModule)
   },
+  {
+    path: 'presup-ejecut',
+    loadChildren: () => import("./presup-ejecut/presupuesto-ejecutado.module").then(m => m.PresupuestoEjecutadoModule)
+  },
 ];
 
 @NgModule({
