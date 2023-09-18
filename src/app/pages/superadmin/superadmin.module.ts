@@ -44,7 +44,6 @@ import { ReporteEspecificoCompetenciaComponent } from './reporte-especifico-comp
     CustomDatePipe,
     ListarpoaComponent  ,
     ListarporUsuarioComponent,
-    ListSolicitudesPresupuestoSuperadminComponent,
     ReporteEspecificoCompetenciaComponent,
 
   ],
