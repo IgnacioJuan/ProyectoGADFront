@@ -16,10 +16,10 @@
           ><a
             style="cursor: pointer; color: rgba(0, 128, 0, 0.822)"
             (click)="verPoas()"
-            >DETALLE POA >
+            > POA >
           </a>
           <a style="cursor: pointer; color: green"
-            >{{ poaAprob?.nombre_proyecto || "No Definido" }}
+            >{{ "DETALLE POA: " + poaAprob?.nombre_proyecto || "No Definido" }}
           </a></strong
         >
       </h1>
@@ -92,7 +92,6 @@
             </div>
           </div>
         </div>
-        -->
         <div class="table-container">
           <div class="table-row">
             <div class="table-cell">
@@ -155,17 +154,16 @@
             </div>
           </div>
 
-          <!--<div class="table-row">
+          <div class="table-row">
                 <div class="table-cell"><strong>META PLANIFICADA:</strong></div>
                 <div class="table-cell ">
-                    <input class="form-control" type="text" id="meta" name="meta"
-                        style="width: 100%; margin-bottom: 10px" appCurrencyInput />
+                  {{ "$ " +  poaAprob.meta_planificada }}
                 </div>
-            </div>-->
+            </div>
           <div class="table-row">
             <div class="table-cell"><strong>LINEA BASE:</strong></div>
             <div class="table-cell">
-              {{ poaAprob.linea_base }}
+              {{ "$ " + poaAprob.linea_base }}
             </div>
           </div>
         </div>
@@ -441,7 +439,7 @@
             form="formulario"
             data-dismiss="modal"
             data-bs-dismiss="modal"
-            (click)="actualizarAprobacion()"
+            (click)="crearAprobacion()"
             [disabled]="!estado"
           >
             Agregar

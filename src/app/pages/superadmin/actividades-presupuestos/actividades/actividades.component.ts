@@ -78,6 +78,7 @@ export class ListaActividadesComponent implements OnInit {
   poa: Poa = new Poa();
   actividades: any = [];
   miModal!: ElementRef;
+  ocultarID: boolean = false;
   public actividad = new ActividadesPoa();
 
   public presupuestoexterno = new PresupuestoExterno();
