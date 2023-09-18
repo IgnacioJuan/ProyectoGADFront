@@ -16,6 +16,7 @@ import {
 import { ReporteEspecificoPoaComponent } from './reporte-especifico-poa/reporte-especifico-poa.component';
 import { ProyectosComponent } from './flujo-criterio/listaproyecto/listaproyecto.component';
 import {ReportePresupuestoModule} from "./reporte-presupuesto/reporte-presupuesto.module";
+import { ReporteEspecificoCompetenciaComponent } from './reporte-especifico-competencia/reporte-especifico-competencia.component';
 
 
 
@@ -65,7 +66,12 @@ component: ReporteEspecificoPoaComponent ,
 pathMatch: 'full',
  canActivate: [SuperGuard]
 },
-
+{
+  path: 'reporteEspecificoCompetencia',
+  component: ReporteEspecificoCompetenciaComponent,
+  pathMatch: 'full',
+ canActivate: [SuperGuard]
+},
 
 {
   path: 'objetivoods-lista',

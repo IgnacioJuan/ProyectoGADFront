@@ -4,6 +4,7 @@ import { Observable, map } from 'rxjs';
 import baserUrl from './helper';
 import { Periodo_DTO } from '../interface/Periodo_DTO';
 import { PeriodoTotalPOA_DTO } from '../interface/PeriodoTotalPOA_DTO';
+import { presupuestPeriodoProjection } from '../interface/presupuestPeriodoProjection';
 
 @Injectable({
   providedIn: 'root',
@@ -21,6 +22,9 @@ export class PeriodoService {
   public getTotalesPoa(idPoa: number): Observable<PeriodoTotalPOA_DTO> {
     return this.http.get(`${baserUrl}/api/periodo/totalespoa/${idPoa}`)
       .pipe(map((response) => response as PeriodoTotalPOA_DTO));
+  }
+  public presupuestoGeneral(id_actividad: number): Observable<presupuestPeriodoProjection> {
+    return this.http.get<presupuestPeriodoProjection>(`${baserUrl}/api/periodo/presupuestoGeneral/?idActividad=${id_actividad}`)
   }
 
 }

@@ -45,6 +45,11 @@ const routes: Routes = [
     path: 'pagenotfoud',
     component: PageNotFoundComponent
   },
+
+  {
+    path: 'repor',
+    loadChildren: () => import("./pages/reportes/reportes.module").then(m => m.ReportesModule)  },
+  
   
 ];
 

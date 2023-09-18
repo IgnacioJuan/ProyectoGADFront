@@ -41,9 +41,10 @@ import { FiltrarEvidenciasPorIDPipe } from '../pages/admin/aprobar-rechazar-admi
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { MatSortModule } from '@angular/material/sort';
 import { LoadingSpinnerComponent } from '../components/loading-spinner/loading-spinner.component';
+import { SafePipe } from './safe.pipe';
 @NgModule({
   declarations: [BuscarPipe,BuscarUsuarioPipe,PageNotFoundComponent,
-    FiltrarEvidenciasPorIDPipe, ResponsablePipe,LoadingSpinnerComponent
+    FiltrarEvidenciasPorIDPipe, ResponsablePipe,LoadingSpinnerComponent,SafePipe
   ],
   imports: [
     CommonModule,
@@ -81,6 +82,7 @@ import { LoadingSpinnerComponent } from '../components/loading-spinner/loading-s
     MatTooltipModule,
     NgxSpinnerModule,
     MatSortModule,
+
   ],
   exports: [
     BuscarPipe,
@@ -125,6 +127,7 @@ import { LoadingSpinnerComponent } from '../components/loading-spinner/loading-s
     LoadingSpinnerComponent,
     MatProgressBarModule,
     NgIf,
+    SafePipe,
   ],
 })
 export class SharedModule { }
