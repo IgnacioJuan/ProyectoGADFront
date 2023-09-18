@@ -44,7 +44,7 @@ export class UsuarioService {
 
   //Modificar Responsable
   actualizarResponsable(userId: number, data: any): Observable<Usuario2> {
-    return this.http.put<Usuario2>(`${baserUrl}/usuarios/actualizar/${userId}`, data);
+    return this.http.put<Usuario2>(`${baserUrl}/usuarios/actualizarResponsable/${userId}`, data);
   }
 
 
