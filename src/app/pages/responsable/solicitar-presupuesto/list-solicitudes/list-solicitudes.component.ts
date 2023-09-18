@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
+import { LoadingServiceService } from 'src/app/components/loading-spinner/LoadingService.service';
 import { SolicitudesPresupuestoProjection } from 'src/app/interface/SolicitudesPresupuestos.Projection';
 import { LoginService } from 'src/app/services/login.service';
 import { SolicitudPresupuestoService } from 'src/app/services/solicitud-presupuesto.service';
@@ -56,6 +57,8 @@ export class ListSolicitudesComponent implements OnInit {
     public login: LoginService,
     private router: Router,
     private solicitudPresupuestoService: SolicitudPresupuestoService,
+      //importar el spinner como servicio
+      private loadingService: LoadingServiceService
 
 
   ) {
@@ -83,17 +86,23 @@ export class ListSolicitudesComponent implements OnInit {
 
 //Metodo para listar
 listarSolicitudes(idResponsable: number, estado: string): void {
+  this.loadingService.show();
+
   this.solicitudPresupuestoService.listarSolicitudesResponsableEstado(idResponsable, estado).subscribe(
     (data: any[]) => {
       this.listaSolicitudes = data;
       console.log('Dataa');
       console.log(this.listaSolicitudes);
       this.dataSource.data = this.listaSolicitudes;
-      this.resultadosEncontradosporEstado = this.listaSolicitudes.length > 0; // Actualiza la variable según si se encontraron resultados
+      this.resultadosEncontradosporEstado = this.listaSolicitudes.length > 0;
+      this.loadingService.hide();
+
     },
     (error: any) => {
       console.error('Error al listar los poas:', error);
-      this.resultadosEncontradosporEstado = false; // Si ocurre un error, no se encontraron resultados
+      this.resultadosEncontradosporEstado = false;
+      this.loadingService.hide();
+
     }
   );
 }
