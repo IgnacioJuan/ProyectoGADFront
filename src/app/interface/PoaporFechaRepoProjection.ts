@@ -10,4 +10,5 @@ export interface PoaporFechaRepoProjection{
     localizacion: string;
     meta_alcanzar: string;
     meta_planificada: string;
+    tipo_periodo: string;
 }

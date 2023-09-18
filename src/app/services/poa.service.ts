@@ -12,6 +12,7 @@ import { PoaporUsuarioProjection } from '../interface/PoaporUsuarioProjection';
 import { PoasConActividadesPendientesProjection } from '../interface/PoasConActividadesPendientesProjection';
 import { PoasSolicitudesProjection } from '../interface/PoasSolicitudesProjection';
 import { Poa_proyec_dto } from '../interface/poa_proyec_dto';
+import { PoasIndicadoresProjection } from '../interface/PoasIndicadoresProjection';
 
 
 @Injectable({
@@ -137,4 +138,10 @@ export class PoaService {
     const url = `${baserUrl}/api/poa/aactijq/${id}`;
     return this.http.get<Poa_proyec_dto[]>(url);
   }
+
+
+    //Listar poas con indicadores
+    listarPoasIndicadores(): Observable<PoasIndicadoresProjection[]> {
+      return this.http.get<PoasIndicadoresProjection[]>(`${baserUrl}/api/poa/listarPoasIndicadores`);
+    }
 }
