@@ -1,18 +1,18 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { PoacService } from 'src/app/services/poac.service';
-import { CrearAprobPOA, AprobPoa } from 'src/app/models/AprobPoa';
-import { ActividadService } from 'src/app/services/actividad.service';
-import { ActividadesPoaDTO } from 'src/app/models/ActividadesAprobPoa ';
 import { MatTableDataSource } from '@angular/material/table';
-import Swal from 'sweetalert2';
-import { PeriodoService } from 'src/app/services/periodo.service';
-import { Periodo_DTO } from 'src/app/interface/Periodo_DTO';
-import { LoginService } from 'src/app/services/login.service';
-import { EmailServiceService } from 'src/app/services/email-service.service';
-import { PeriodoTotalPOA_DTO } from 'src/app/interface/PeriodoTotalPOA_DTO';
+import { ActivatedRoute, Router } from '@angular/router';
 import { LoadingServiceService } from 'src/app/components/loading-spinner/LoadingService.service';
+import { PeriodoTotalPOA_DTO } from 'src/app/interface/PeriodoTotalPOA_DTO';
+import { Periodo_DTO } from 'src/app/interface/Periodo_DTO';
+import { ActividadesPoaDTO } from 'src/app/models/ActividadesAprobPoa ';
+import { AprobPoa } from 'src/app/models/AprobPoa';
+import { ActividadService } from 'src/app/services/actividad.service';
+import { EmailServiceService } from 'src/app/services/email-service.service';
+import { LoginService } from 'src/app/services/login.service';
+import { PeriodoService } from 'src/app/services/periodo.service';
+import { PoacService } from 'src/app/services/poac.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-detalle-poa',
@@ -51,13 +51,13 @@ export class DetallePoaComponent implements OnInit {
   trexternos!: number;
 
   //Total del periodo
-  totalf: number=0;
+  totalf: number = 0;
 
   //valores periodo
-  valores: number[]=[];
+  valores: number[] = [];
 
   //Porcentajes
-  porcentajes: number[]=[];
+  porcentajes: number[] = [];
 
   @ViewChild('evaluarPOAModal') evaluarPOAModal: any;
 
@@ -82,7 +82,7 @@ export class DetallePoaComponent implements OnInit {
     private periodoService: PeriodoService,
     public login: LoginService,
     private loadingService: LoadingServiceService
-  ) {this.loadingService.show();}
+  ) { this.loadingService.show(); }
 
   ngOnInit(): void {
     //Parametro enviado desde el componente aprobar poa
@@ -90,13 +90,13 @@ export class DetallePoaComponent implements OnInit {
     //Cargar los datos del poa por el id
     this.cargarData(idParam);
     this.capturarDatosUsuarioLog();
-    }
+  }
 
   // Nuevas propiedades para la nueva  tabla
   dataSource = new MatTableDataSource<ActividadesPoaDTO>();
   columnasActividades: string[] = [
     'nombre_actividad',
-    'descripcion', 
+    'descripcion',
     'presupuesto_referencial',
     'recursos_propios',
     'recursos_externos',
@@ -104,12 +104,12 @@ export class DetallePoaComponent implements OnInit {
 
   //Carga de datos
   cargarData(idPoa: any) {
-    
+
     this.cargaDatosPoa(idPoa);
     this.cargarActividadesPoa(idPoa);
     this.cargarPeriodosTotales(idPoa);
-    setTimeout(() => {}, 2000);
-   
+    setTimeout(() => { }, 2000);
+
   }
 
   cargaDatosPoa(idParam: any) {
@@ -118,7 +118,7 @@ export class DetallePoaComponent implements OnInit {
         (data) => {
           this.poaAprob = data;
           console.log(this.poaAprob);
-          this.tipSeguimiento=this.poaAprob.tipo_periodo;
+          this.tipSeguimiento = this.poaAprob.tipo_periodo;
           this.correoRecep.push(this.poaAprob.correo_responsable);
           this.loadingService.hide();
         },
@@ -134,7 +134,7 @@ export class DetallePoaComponent implements OnInit {
       (data) => {
         this.totalesPoa = data;
         console.log(this.totalesPoa);
-            this.loadingService.hide();
+        this.loadingService.hide();
       },
       (error) => {
         console.error('Error al obtener datos:', error);
@@ -143,7 +143,7 @@ export class DetallePoaComponent implements OnInit {
     );
   }
 
-  
+
   cargarActividadesPoa(idParam: any) {
     this.actService
       .obtenerDetalleActividadesAprob(idParam)
@@ -163,13 +163,13 @@ export class DetallePoaComponent implements OnInit {
         this.valores[1] = totals[1];
         this.totalf = this.valores[0] + this.valores[1];
         console.log(this.totalf);
-        
+
         this.calcularPeriodos(this.totalf);
 
         console.log('Total recursos propios:', this.valores[0]);
         console.log('Total recursos externos:', this.valores[1]);
       });
-}
+  }
 
   capturarDatosUsuarioLog() {
     this.isLoggedIn = this.login.isLoggedIn();
@@ -186,75 +186,128 @@ export class DetallePoaComponent implements OnInit {
       .subscribe((data) => {
         console.log(data);
         this.periodosPoa = data;
-        this.calcularPeriodos(this.totalf); 
+        this.calcularPeriodos(this.totalf);
       });
-}
-
-  crearAprobacion() {
-    this.loadingService.show();
-    // Verificar si el estado es "RECHAZADO" y la observación está vacía
-    if (this.estado === 'RECHAZADO' && !this.observacion) {
-      this.loadingService.hide();
-      Swal.fire('Advertencia', 'La observación es obligatoria ', 'warning');
-      return;
-    } else {
-      if (this.poaAprob) {
-        const data: CrearAprobPOA = {
-          estado: this.estado,
-          observacion: this.observacion,
-        };
-        this.poacService
-          .crearEstadoAprobacion(this.poaAprob.id_poa, data)
-          .subscribe((response) => {
-            console.log('Estado actualizado:', response);
-            this.emailService
-              .sendEmail(
-                this.correoRecep,
-                this.subject,
-                this.message +
-                  this.estado +
-                  '\n' +
-                  this.detallePoa +
-                  'DENOMINACION DEL PROGRAMA PROYECTO: ' +
-                  this.poaAprob.nombre_proyecto +
-                  '\n' +
-                  'DESCRIPCION DEL PROGRAMA PROYECTO: ' +
-                  (this.poaAprob.descripcion_proyecto || 'No definido') +
-                  '\n' +
-                  'AREA: ' +
-                  (this.poaAprob.area || 'No definido') +
-                  '\n' +
-                  'SUPERVISOR: ' +
-                  this.user.persona.primer_nombre +
-                  '  ' +
-                  this.user.persona.primer_apellido +
-                  '\n' +
-                  'AÑO DE EJECUCIÓN DEL PROYECTO: ' +
-                  this.poaAprob.fecha_inicio +
-                  ' - ' +
-                  this.poaAprob.fecha_fin +
-                  '\n' +
-                  '\nObservación:\n ' +
-                  this.observacion
-              )
-              .subscribe((responseEmail) => {
-                console.log('Email enviado:', responseEmail);
-                console.log('Email enviado:', this.correoRecep);
-              });
-            // Muestra el SweetAlert
-            this.loadingService.hide();
-            this.showSuccessAlert();
-          });
-      }
-    }
   }
 
-  calcularPeriodos(totalf: number){
+  crearAprobacion() {
+    // this.loadingService.show();
+    // Verificar si el estado es "RECHAZADO" y la observación está vacía
+    //mensaje para confirma si desea guardar
+    // if(this.poacService.existProject(this.)){
+    // }
+    if (this.estado === 'APROBADO') {
+      Swal.fire({
+        title: '¿Está seguro de aprobar el POA?',
+        text: 'Se actualizará el estado del POA',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Si, aprobar',
+        cancelButtonText: 'No, cancelar',
+      }).then((result) => {
+        if (result.value) {
+          // this.crearAprobacionPoa();
+          this.showSuccessAlert();
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+          Swal.fire(
+            'Cancelado',
+            'El estado del POA no ha sido actualizado',
+            'error'
+          );
+        }
+      });
+    } else if (this.estado === 'RECHAZADO') {
+      Swal.fire({
+        title: '¿Está seguro de rechazar el POA?',
+        text: 'Se actualizará el estado del POA',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Si, rechazar',
+        cancelButtonText: 'No, cancelar',
+      }).then((result) => {
+        if (result.value) {
+          `          // this.crearAprobacionPoa();
+          this.showSuccessAlert();`
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+          Swal.fire(
+            'Cancelado',
+            'El estado del POA no ha sido actualizado',
+            'error'
+          );
+        }
+      });
+    } else {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Seleccione una opción',
+      });
+      this.loadingService.hide();
+    }
+
+
+    // if (this.estado === 'RECHAZADO' && !this.observacion) {
+    //   this.loadingService.hide();
+    //   Swal.fire('Advertencia', 'La observación es obligatoria ', 'warning');
+    //   return;
+    // } else {
+    //   if (this.poaAprob) {
+    //     const data: CrearAprobPOA = {
+    //       estado: this.estado,
+    //       observacion: this.observacion,
+    //     };
+    //     this.poacService
+    //       .crearEstadoAprobacion(this.poaAprob.id_poa, data)
+    //       .subscribe((response) => {
+    //         console.log('Estado actualizado:', response);
+    //         this.emailService
+    //           .sendEmail(
+    //             this.correoRecep,
+    //             this.subject,
+    //             this.message +
+    //               this.estado +
+    //               '\n' +
+    //               this.detallePoa +
+    //               'DENOMINACION DEL PROGRAMA PROYECTO: ' +
+    //               this.poaAprob.nombre_proyecto +
+    //               '\n' +
+    //               'DESCRIPCION DEL PROGRAMA PROYECTO: ' +
+    //               (this.poaAprob.descripcion_proyecto || 'No definido') +
+    //               '\n' +
+    //               'AREA: ' +
+    //               (this.poaAprob.area || 'No definido') +
+    //               '\n' +
+    //               'SUPERVISOR: ' +
+    //               this.user.persona.primer_nombre +
+    //               '  ' +
+    //               this.user.persona.primer_apellido +
+    //               '\n' +
+    //               'AÑO DE EJECUCIÓN DEL PROYECTO: ' +
+    //               this.poaAprob.fecha_inicio +
+    //               ' - ' +
+    //               this.poaAprob.fecha_fin +
+    //               '\n' +
+    //               '\nObservación:\n ' +
+    //               this.observacion
+    //           )
+    //           .subscribe((responseEmail) => {
+    //             console.log('Email enviado:', responseEmail);
+    //             console.log('Email enviado:', this.correoRecep);
+    //           });
+    //         // Muestra el SweetAlert
+    //         this.loadingService.hide();
+    //         this.showSuccessAlert();
+    //       });
+    //   }
+    // }
+  }
+
+  calcularPeriodos(totalf: number) {
     if (!this.periodosPoa || this.periodosPoa.length < 3) {
-        return; 
+      return;
     }
     this.porcentajes = this.periodosPoa.slice(0, 3).map(periodo => totalf * (periodo.porcentaje / 100));
-}
+  }
 
   showSuccessAlert() {
     Swal.fire({
@@ -265,7 +318,7 @@ export class DetallePoaComponent implements OnInit {
     }).then((result) => {
       // Cierra el modal de ng-bootstrap cuando el SweetAlert se cierra
       if (result.isConfirmed) {
-        setTimeout(() => {}, 1000);
+        setTimeout(() => { }, 1000);
         this.router.navigate(['/sup/aprobacion-poa/lista-aprobar-poa']);
       }
     });
