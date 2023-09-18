@@ -27,7 +27,6 @@ import { ListarporUsuarioComponent } from './flujo-criterio/listarpoaporusuario/
 import { ProyectosComponent } from './flujo-criterio/listaproyecto/listaproyecto.component';
 import { ReporteEspecificoCompetenciaComponent } from './reporte-especifico-competencia/reporte-especifico-competencia.component';
 
-
 @NgModule({
   declarations: [
     CrearUsuariosComponent,
