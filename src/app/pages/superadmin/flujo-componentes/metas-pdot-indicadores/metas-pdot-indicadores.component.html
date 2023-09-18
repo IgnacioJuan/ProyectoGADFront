@@ -281,8 +281,8 @@
                       *ngIf="!indicad.id_indicador"
                       data-dismiss="modal"
                       data-bs-dismiss="modal"
-                      [disabled]=" !formIndicador.valid
-                      "
+                      [disabled]=" !formIndicador.valid "
+                      style="background-color: green"
                     >
                       Agregar
                     </button>
@@ -293,6 +293,8 @@
                       data-bs-dismiss="modal"
                       (click)="actualizar()"
                       [disabled]="!formIndicador.valid"
+                      style="background-color: green"
+
                     >
                       Actualizar
                     </button>

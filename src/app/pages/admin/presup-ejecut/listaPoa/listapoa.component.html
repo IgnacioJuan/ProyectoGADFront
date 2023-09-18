@@ -1,0 +1,85 @@
+<body>
+  <div class="container bg-light border border-start-0 rounded-4">
+    <blockquote style="margin-top: 5%; background-color: #ffffff; border-left: 10px solid green;">
+      <h1 class="header-title" style="text-transform: uppercase"><strong> LISTA DE PROYECTOS</strong></h1>
+    </blockquote>
+    <div></div>
+
+    <div class="card">
+      <div class="card-body">
+        <div class="form-group">
+          <input
+            type="text"
+            class="form-control"
+            name="filterPost3"
+            placeholder="Buscar..."
+            [(ngModel)]="filterPost"
+            (input)="aplicarFiltro()"
+          />
+        </div>
+        <br />
+        <br />
+        <div
+          class="mat-elevation-z8 table-responsive"
+          style="margin-bottom: 5%"
+        >
+          <table mat-table [dataSource]="dataSource">
+            <ng-container matColumnDef="id_poa">
+              <th mat-header-cell *matHeaderCellDef [style.display]="ocultarID ? '' : 'none'">ID</th>
+              <td mat-cell *matCellDef="let elemento" [style.display]="ocultarID ? '' : 'none'">
+                {{ elemento.id_poa }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="nombreProyecto">
+              <th mat-header-cell *matHeaderCellDef>Proyecto</th>
+              <td mat-cell *matCellDef="let elemento">
+                {{ elemento.nombre }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="meta_planificada">
+              <th mat-header-cell *matHeaderCellDef>Meta Planificada</th>
+              <td mat-cell *matCellDef="let elemento">
+                {{ elemento.meta_planificada }}
+              </td>
+            </ng-container>
+          <ng-container matColumnDef="tipo_periodo">
+            <th mat-header-cell *matHeaderCellDef>PERIODO</th>
+            <td mat-cell *matCellDef="let elemento">
+              {{ elemento.tipo_periodo }}
+            </td>
+        </ng-container>
+            <ng-container matColumnDef="cantidadActividades">
+              <th mat-header-cell *matHeaderCellDef>ACTIVIDADES</th>
+              <td mat-cell *matCellDef="let elemento">
+                <button
+                class="btn btn-md btn-custom-green"
+                  role="button"
+                  (click)="verActividades(elemento)"
+                >
+                  <div class="d-flex">
+                    <span class="badge">{{
+                      elemento.cantidadActividades
+                    }}</span>
+                    <i class="fa fa-folder-open" style="color: green; font-size: 28px;"></i>
+                  </div>
+                </button>
+              </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="columnasPoa"></tr>
+            <tr mat-row *matRowDef="let fila; columns: columnasPoa"></tr>
+          </table>
+          <mat-paginator
+            [pageSizeOptions]="[5, 10, 20]"
+            showFirstLastButtons
+            aria-label="Select page of periodic elements"
+            itemsPerPageLabel="Items por página:"
+            nextPageLabel="Siguiente"
+            previousPageLabel="Anterior"
+          >
+          </mat-paginator>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+

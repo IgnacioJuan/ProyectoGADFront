@@ -11,6 +11,13 @@ import { UsuarioService } from 'src/app/services/usuario.service';
 import { SolicitudActividadPrepuesto } from 'src/app/models/SolicitudActividadPresupuesto';
 import Swal from 'sweetalert2';
 import { SolicitudPresupuestoService } from 'src/app/services/solicitud-presupuesto.service';
+import { LoadingServiceService } from 'src/app/components/loading-spinner/LoadingService.service';
+import { UsuarioRol } from 'src/app/models/UsuarioRol';
+import { UsuariorolService } from 'src/app/services/usuariorol.service';
+import { Poa_proyec_dto } from 'src/app/interface/poa_proyec_dto';
+import { PoaService } from 'src/app/services/poa.service';
+import { Poa } from 'src/app/models/Poa';
+import { Proyecto } from 'src/app/models/Proyecto';
 
 
 export class SolicitudActividad {
@@ -22,6 +29,26 @@ export class SolicitudActividad {
   monto_total: number =0;
 }
 
+
+export class Poa2 {
+  id_poa!: number;
+  estado!: string;
+  tipo_periodo!: string;
+  barrio!: string; 
+  comunidad!: string; 
+  localizacion!: string; 
+  fecha_inicio!: Date; 
+  fecha_fin!: Date; 
+  cobertura!: string;
+  linea_base!: number; 
+  meta_alcanzar!: number; 
+  meta_planificada!: number;
+  valorTotal!:number;
+  visible!: boolean;
+  usuario!:Usuario2;
+  proyecto!:Proyecto;
+
+}
 @Component({
   selector: 'app-crear-solicitud',
   templateUrl: './crear-solicitud.component.html',
@@ -30,10 +57,14 @@ export class SolicitudActividad {
 export class CrearSolicitudComponent implements OnInit  {
   FormDestinatario: FormGroup;
   FormSolicitud: FormGroup;
-  listaUsuarios: Usuario2[] = [];
+  listaUsuarios2: UsuarioRol[] = [];
+  listaProyectos: Poa_proyec_dto[] = [];
+
   //Usuario logueado
   user: any = null;
-  usuarioSeleccionado: Usuario2 = new Usuario2();
+  usuarioSeleccionado2: UsuarioRol = new UsuarioRol();
+  estadoSeleccionado: string = 'PENDIENTE';
+
   datosSolicitud: SolicitudActividad = new SolicitudActividad();
   isLinear = true; // Establece inicialmente el modo lineal como desactivado
   fechaActual: Date;
@@ -44,6 +75,7 @@ export class CrearSolicitudComponent implements OnInit  {
   listaUsuariosOriginal: any[] = [];
   isDetalleStepEnabled: boolean = false;
   actividadSolicitudPresupuesto: SolicitudActividadPrepuesto = new SolicitudActividadPrepuesto();
+  resultadosEncontradosActividad: boolean = true;
 
   
   columnasActividades: string[] = ['nombre', 'descripcion', 'codificado', 'actions'];
@@ -52,7 +84,6 @@ export class CrearSolicitudComponent implements OnInit  {
   listaActividades: ActividadesPoa[] = [];
   dataSolicitud = new MatTableDataSource<SolicitudActividad>();
   listaActividadesSeleccionadas: any[] = [];
-  detalleActividadesSolicitud: ActividadesPoa[] = [];
   actividadSeleccionada: ActividadesPoa = new ActividadesPoa();
 
   @ViewChild(MatPaginator, { static: false }) paginator?: MatPaginator;
@@ -82,7 +113,11 @@ export class CrearSolicitudComponent implements OnInit  {
   public login: LoginService,
   private router: Router,
   private userService: UsuarioService,
+  private userROLService: UsuariorolService,
+  private poaService : PoaService,
   private solicitudPresupuestoService: SolicitudPresupuestoService,
+   //importar el spinner como servicio
+   private loadingService: LoadingServiceService
 
 ) {
   this.paginatorIntl.nextPageLabel = this.nextPageLabel;
@@ -124,10 +159,12 @@ export class CrearSolicitudComponent implements OnInit  {
 
 
   cargarUsuarios() {
-    this.userService.getUsuariosList().subscribe(
-      (data: Usuario2[]) => {
-        this.listaUsuarios = data;
-        this.listaUsuariosOriginal = this.listaUsuarios.slice();
+    this.userROLService.ListarSuperAdmin().subscribe(
+      (data: UsuarioRol[]) => {
+        this.listaUsuarios2=data;
+        this.listaUsuariosOriginal = this.listaUsuarios2.slice();
+
+        console.log(data)
       },
       (error: any) => {
         console.error('Error al cargar usuarios:', error);
@@ -139,32 +176,86 @@ export class CrearSolicitudComponent implements OnInit  {
  
 
   SeleccionarUsuario(elemento: any): void {
-    this.usuarioSeleccionado=elemento
+    this.usuarioSeleccionado2=elemento
     this.FormDestinatario.patchValue({
-      cedula: elemento.persona.cedula,
-      nombre: elemento.persona.primer_nombre,
-      cargo: elemento.persona.cargo,
-      correo: elemento.persona.correo
-    });}
+      cedula: elemento.usuario.persona.cedula,
+      nombre: elemento.usuario.persona.primer_nombre,
+      cargo: elemento.usuario.persona.cargo,
+      correo: elemento.usuario.persona.correo
+    });
+  this.LimpiarBuscador();
+  }
   
  
 
-
-
+  poaSeleccionado: number=0
 AgregarDestinatario(){
   this.datosSolicitud.detalle=this.FormDestinatario.value.detalle}
 
   listar(idUser: number): void {
-    this.actividadesService.listaractireponsa(idUser).subscribe(
-      (data: any[]) => {
-        this.listaActividades = data;
-        this.dataActividades.data = this.listaActividades;
+    this.loadingService.show();
+    this.poaService.getPoaactiprojection(idUser).subscribe(
+      data => {
+        this.listaProyectos = data;
+        this.loadingService.hide();
       },
-      (error: any) => {
-        console.error('Error al listar los componentes:', error);
+      error => {
+        console.error('Error fetching data:', error);
+        this.loadingService.hide();
       }
     );
   }
+
+listarActividadPorPoa(idUser: number, poa:number){
+
+  
+  this.actividadesService.getPoaActividades(idUser, this.poaSeleccionado).subscribe(
+    (data: any[]) => {
+      this.listaActividades = data;
+      this.dataActividades.data = this.listaActividades;
+      console.log(this.listaActividades)
+      this.loadingService.hide();
+
+    },
+    (error: any) => {
+      console.error('Error al listar las actividadades:', error);
+      this.loadingService.hide();
+
+    }
+  );
+}
+
+PoaEncontrado: any ;
+listaPoaEncontrados: Poa2[] = [];
+
+BuscarPoa(poa: number) {
+  this.poaService.listarPoasPorId(poa).subscribe(
+    (data: any[]) => {
+      this.listaPoaEncontrados = data; // Asigna la lista de Poa encontrados
+      console.log("BUSCAR POA");
+      console.log(this.listaPoaEncontrados);
+
+        this.PoaEncontrado = this.listaPoaEncontrados
+      
+      
+      console.log("BUSCAR¿¿¿¿¿¿ POA");
+      console.log(this.PoaEncontrado);
+      this.PoaEncontrado.usuario=null
+      this.PoaEncontrado.proyecto=null
+
+this.actividadSolicitudPresupuesto.poa=this.PoaEncontrado
+
+      this.loadingService.hide();
+    },
+    (error: any) => {
+      console.error('Error al buscar poa:', error);
+      this.loadingService.hide();
+    }
+  );
+}
+
+
+
 
 
   SeleccionarActividad(elemento: any): void {
@@ -184,7 +275,6 @@ AgregarDestinatario(){
     }
   
     this.listaActividadesSeleccionadas.push(this.FormSolicitud.value);
-    console.log(this.detalleActividadesSolicitud);
     console.log(this.listaActividadesSeleccionadas);
     this.dataSolicitud.data = this.listaActividadesSeleccionadas;
     this.FormSolicitud.reset();
@@ -208,12 +298,14 @@ if (this.dataSolicitud.data.length > 0) {
 
 
   guardar() {
-    this.usuariosdit.id = this.usuarioSeleccionado.id;
+    this.loadingService.show();
+
+    this.usuariosdit.id = this.usuarioSeleccionado2.usuario.id;
     this.actividadSolicitudPresupuesto.motivo = this.datosSolicitud.detalle;
     this.actividadSolicitudPresupuesto.fecha_solicitud = this.fechaActual;
     this.actividadSolicitudPresupuesto.destinatario = this.usuariosdit;
     this.actividadSolicitudPresupuesto.responsable = this.user.id;
-  
+
     for (const actividadSeleccionada of this.listaActividadesSeleccionadas) {
       const solicitudActividad = new SolicitudActividadPrepuesto();
       solicitudActividad.motivo = this.actividadSolicitudPresupuesto.motivo;
@@ -224,10 +316,15 @@ if (this.dataSolicitud.data.length > 0) {
       solicitudActividad.destinatario = this.actividadSolicitudPresupuesto.destinatario;
       solicitudActividad.responsable = this.actividadSolicitudPresupuesto.responsable;
       solicitudActividad.actividadSolicitud = actividadSeleccionada; 
-  
+      solicitudActividad.poa = this.actividadSolicitudPresupuesto.poa;
+
+      console.log(solicitudActividad)
+      
       this.solicitudPresupuestoService.crear(solicitudActividad) .subscribe(
           (response) => {
             console.log('Solicitud de actividad con éxito:', response);
+            this.loadingService.hide();
+
             Swal.fire(
               'Exitoso',
               'Se ha completado el registro con éxito',
@@ -239,6 +336,8 @@ if (this.dataSolicitud.data.length > 0) {
           },
           (error) => {
             console.error('Error al crear la solicitud de actividad:', error);
+            this.loadingService.hide();
+
             Swal.fire(
               'Error',
               'Ha ocurrido un error',
@@ -261,19 +360,35 @@ if (this.dataSolicitud.data.length > 0) {
     
   }
   
-
+LimpiarBuscador(){
+  this.filterPost="";
+  this.buscar();
+}
 ListadoSolicitud(){
   this.router.navigate(['/res/solicitar-presupuestos/listSolicitudes']);}
 
   buscar() {
     this.filteredComponentes = this.listaUsuariosOriginal.filter((componente) =>
-      componente.persona.primer_nombre.toLowerCase().includes(this.filterPost.toLowerCase()) || componente.persona.cedula.toLowerCase().includes(this.filterPost.toLowerCase())
+      componente.usuario.persona.primer_nombre.toLowerCase().includes(this.filterPost.toLowerCase()) || componente.usuario.persona.cedula.toLowerCase().includes(this.filterPost.toLowerCase())
     );
-    this.listaUsuarios = this.filteredComponentes;
+    this.listaUsuarios2 = this.filteredComponentes;
     this.resultadosEncontrados = this.filteredComponentes.length > 0; }
     
     isDataSolicitudNotEmpty() {
       return this.dataSolicitud.data.length > 0;
     }
+
+
+
+
+    
+    filtrarPorEstado(): void {
+
+      this.listar(this.user.id);
+      this.listarActividadPorPoa(this.user.id, this.poaSeleccionado);
+      this.BuscarPoa(this.poaSeleccionado);
+
+    }
+    
   
 }

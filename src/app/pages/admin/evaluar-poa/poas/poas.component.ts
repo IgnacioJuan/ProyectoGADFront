@@ -111,7 +111,11 @@ export class PoasComponent {
   listarPoas(): void {
     this.loadingService.show();
 
-    this.poaService.listarPoaApAdm(this.user.id).subscribe(
+    let id:number | null = this.user.id;
+    if (this.login.getUserRole() === 'SUPERADMIN') {
+      id=null;
+    }
+    this.poaService.listarPoaApAdm(id).subscribe(
       (data: any[]) => {
         this.loadingService.hide();
 
