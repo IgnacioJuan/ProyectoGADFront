@@ -13,7 +13,7 @@ export class SidebarService {
       submenu: [
         { titulo: 'Creacion', url: 'adm/poa/registrarpoa', icono: 'fas fa-check-square' },
         { titulo: 'Avance Meta', url: 'adm/evaluar-poa/poas', icono: 'fas fa-list-ul ' },
-
+        { titulo: 'Presupuesto Ejecutado', url: 'adm/presup-ejecut/tabla-poas', icono: 'fas fa-list-ul ' },
       ]
     },
     {

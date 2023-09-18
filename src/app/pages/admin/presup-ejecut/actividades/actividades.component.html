@@ -157,7 +157,7 @@
               </td>
             </ng-container>
             <ng-container matColumnDef="actions">
-              <th mat-header-cell *matHeaderCellDef class="acciones-header">ACCIONES</th>
+              <th mat-header-cell *matHeaderCellDef class="acciones-header">PERIODOS</th>
               <td mat-cell *matCellDef="let element" class="acciones-cell">
                 <button
                   class="btn btn-primary"
@@ -169,7 +169,7 @@
                 >
                   <div class="d-flex">
                     <span class="badge"></span>
-                    <i class="fa fa-question-circle"></i>
+                    <i class="far fa-calendar-alt"></i>
                   </div>
                 </button>
                 
@@ -231,32 +231,33 @@
 
                     <ng-container matColumnDef="referencia">
                       <th mat-header-cell *matHeaderCellDef>NRO</th>
-                      <td mat-cell *matCellDef="let elemento">
+                      <td mat-cell *matCellDef="let elemento; let i = index" [class.ultimo-elemento]="esUltimoElemento(i)">
                         {{ elemento.referencia }}
                       </td>
                     </ng-container>
 
                     <ng-container matColumnDef="porcentaje">
                       <th mat-header-cell *matHeaderCellDef class="text-right">%</th>
-                      <td mat-cell *matCellDef="let elemento" class="text-right" >
+                      <td mat-cell *matCellDef="let elemento; let i = index" [class.ultimo-elemento]="esUltimoElemento(i)" class="text-right" >
                         {{ elemento.porcentaje }} %
                       </td>
                     </ng-container>
 
                     <ng-container matColumnDef="inversion">
                       <th mat-header-cell *matHeaderCellDef class="text-right">INVERSIÓN</th>
-                      <td mat-cell *matCellDef="let elemento" class="align-right-dollar">
+                      <td mat-cell *matCellDef="let elemento; let i = index" [class.ultimo-elemento]="esUltimoElemento(i)" class="align-right-dollar">
                         {{ elemento.inversion }}
                       </td>
                     </ng-container>
 
                     <ng-container matColumnDef="ejecucion">
-                      <th mat-header-cell *matHeaderCellDef class="text-right">EJECUCIÓN</th>
-                      <td mat-cell *matCellDef="let elemento" class="align-right-dollar">
+                      <th mat-header-cell *matHeaderCellDef class="text-right">EJECUTADO</th>
+                      <td mat-cell *matCellDef="let elemento; let i = index" [class.ultimo-elemento]="esUltimoElemento(i)" class="align-right-dollar">
                         {{ elemento.ejecucion }}
                       </td>
                     </ng-container>
-
+                   
+                  
                     <tr
                       mat-header-row
                       *matHeaderRowDef="columnasObservaciones"
@@ -266,7 +267,7 @@
                       *matRowDef="let fila; columns: columnasObservaciones"
                     ></tr>
                   </table>
-
+                  
                   <div
                     *ngIf="!resultadosEncontradosporObservaciones"
                     class="alert alert-warning"

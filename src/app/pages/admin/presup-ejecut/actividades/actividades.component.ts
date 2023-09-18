@@ -134,7 +134,16 @@ export class ListaActividadesComponent implements OnInit {
     this.periodoService.presupuestoGeneral(actividad.id_actividad).subscribe(
       (data: any) => {
         this.listaPeriodos = data;
-        this.dataSource3.data = data;
+  
+        // Calcula los totales
+        const totales = this.calcularTotales(this.listaPeriodos);
+  
+        // Agrega los totales al final del arreglo
+        this.listaPeriodos.push(totales);
+  
+        // Asigna el arreglo con los totales a dataSource3
+        this.dataSource3.data = this.listaPeriodos;
+  
         this.resultadosEncontradosporObservaciones =
           this.listaPeriodos.length > 0; // Actualiza la variable según si se encontraron resultados
       },
@@ -144,5 +153,29 @@ export class ListaActividadesComponent implements OnInit {
       }
     );
   }
-
+  
+  // Función para calcular los totales
+  calcularTotales(listaPeriodos: any[]): any {
+    const totales = {
+      // Define aquí las propiedades de los totales y sus valores iniciales
+      referencia: 'Totales',
+      porcentaje: 0,
+      inversion: 0,
+      ejecucion: 0,
+    };
+  
+    for (const periodo of listaPeriodos) {
+      // Realiza las operaciones de suma para cada propiedad
+      totales.porcentaje += periodo.porcentaje;
+      totales.inversion += periodo.inversion;
+      totales.ejecucion += periodo.ejecucion;
+    }
+  
+    // Puedes realizar otras operaciones necesarias aquí
+  
+    return totales;
+  }
+  esUltimoElemento(index: number): boolean {
+    return index === this.listaPeriodos.length - 1;
+  }
 }
