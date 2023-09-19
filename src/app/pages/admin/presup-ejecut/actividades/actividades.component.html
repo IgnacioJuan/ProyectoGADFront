@@ -17,6 +17,7 @@
         >
       </h1>
     </blockquote>
+    <h1>{{ poa.nombre }}</h1>
     <div class="card">
       <div class="card-body">
         <div role="search" id="buscar">
@@ -30,25 +31,15 @@
               (input)="aplicarFiltro()"
             />
           </div>
-          <br />
-          <br />
         </div>
         <div
           class="mat-elevation-z8 table-responsive"
-          style="margin-bottom: 5%"
+          style="margin-bottom: 1%"
         >
           <table mat-table [dataSource]="dataSource">
             <ng-container matColumnDef="id_actividad">
-              <th
-                mat-header-cell
-                *matHeaderCellDef
-              >
-                ID
-              </th>
-              <td
-                mat-cell
-                *matCellDef="let elemento"
-              >
+              <th mat-header-cell *matHeaderCellDef>ID</th>
+              <td mat-cell *matCellDef="let elemento">
                 {{ elemento.id_actividad }}
               </td>
             </ng-container>
@@ -63,16 +54,8 @@
               </td>
             </ng-container>
             <ng-container matColumnDef="descripcion">
-              <th
-                mat-header-cell
-                *matHeaderCellDef
-              >
-                DESCRIPCIÓN
-              </th>
-              <td
-                mat-cell
-                *matCellDef="let elemento"
-              >
+              <th mat-header-cell *matHeaderCellDef>DESCRIPCIÓN</th>
+              <td mat-cell *matCellDef="let elemento">
                 {{ elemento.descripcion }}
               </td>
             </ng-container>
@@ -157,7 +140,9 @@
               </td>
             </ng-container>
             <ng-container matColumnDef="actions">
-              <th mat-header-cell *matHeaderCellDef class="acciones-header">PERIODOS</th>
+              <th mat-header-cell *matHeaderCellDef class="acciones-header">
+                PERIODOS
+              </th>
               <td mat-cell *matCellDef="let element" class="acciones-cell">
                 <button
                   class="btn btn-primary"
@@ -172,14 +157,10 @@
                     <i class="far fa-calendar-alt"></i>
                   </div>
                 </button>
-                
               </td>
             </ng-container>
             <tr mat-header-row *matHeaderRowDef="columnasUsuario"></tr>
-            <tr
-              mat-row
-              *matRowDef="let fila; columns: columnasUsuario"
-            ></tr>
+            <tr mat-row *matRowDef="let fila; columns: columnasUsuario"></tr>
           </table>
           <mat-paginator
             [pageSizeOptions]="[5, 10, 20]"
@@ -192,101 +173,191 @@
           </mat-paginator>
         </div>
       </div>
+      <h2 style="margin-left: 1%;">Resumen {{poa.tipo_periodo}}</h2>
+
+      <div class="card-body" style="height: 100%">
+        <div
+          class="mat-elevation-z8 table-responsive"
+          style="margin-bottom: 1%"
+        >
+          <table mat-table [dataSource]="periodotot">
+            <ng-container matColumnDef="referencia">
+              <th mat-header-cell *matHeaderCellDef>NRO</th>
+              <td
+                mat-cell
+                *matCellDef="let elemento; let i = index"
+                [class.ultimo-elemento]="esUltimoElemento2(i)"
+              >
+                {{ elemento.referencia }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="fechai">
+              <th mat-header-cell *matHeaderCellDef >FECHAS</th>
+              <td
+                mat-cell
+                *matCellDef="let elemento; let i = index"
+                [class.ultimo-elemento]="esUltimoElemento2(i)"
+               
+              >
+              {{ elemento.periodoInicio | date:'dd/MM/yyyy' }} - {{ elemento.periodoFin | date:'dd/MM/yyyy' }}
+            </td>
+            </ng-container>
+
+            <ng-container matColumnDef="inversion">
+              <th mat-header-cell *matHeaderCellDef class="text-right">
+                INVERSIÓN
+              </th>
+              <td
+                mat-cell
+                *matCellDef="let elemento; let i = index"
+                [class.ultimo-elemento]="esUltimoElemento2(i)"
+                class="align-right-dollar"
+              >
+                {{ elemento.inversion }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="ejecucion">
+              <th mat-header-cell *matHeaderCellDef class="text-right">
+                EJECUTADO
+              </th>
+              <td
+                mat-cell
+                *matCellDef="let elemento; let i = index"
+                [class.ultimo-elemento]="esUltimoElemento2(i)"
+                class="align-right-dollar"
+              >
+                {{ elemento.ejecucion }}
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="columnasperiodotot"></tr>
+            <tr
+              mat-row
+              *matRowDef="let fila; columns: columnasperiodotot"
+            ></tr>
+          </table>
+
+        </div>
+      </div>
     </div>
   </div>
 </body>
 
-
 <div
-      class="modal fade"
-      id="materiaModalObservaciones"
-      tabindex="-1"
-      aria-labelledby="exampleModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header" style="background-color: #077b15">
-            <h3
-              class="modal-title"
-              style="font-family: Arial, sans-serif; color: white"
+  class="modal fade"
+  id="materiaModalObservaciones"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header" style="background-color: #077b15">
+        <h3
+          class="modal-title"
+          style="font-family: Arial, sans-serif; color: white"
+        >
+          <i class="fa fa-info-circle"></i> {{ poa.tipo_periodo }}
+        </h3>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div class="card">
+          <div class="card-body" style="height: 100%">
+            <div
+              class="mat-elevation-z8 table-responsive"
+              style="margin-bottom: 5%"
             >
-              <i class="fa fa-info-circle"></i> {{poa.tipo_periodo}}
-            </h3>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
-          </div>
-          <div class="modal-body">
-            <div class="card">
-              <div class="card-body" style="height: 100%">
-                <div
-                  class="mat-elevation-z8 table-responsive"
-                  style="margin-bottom: 5%"
-                >
-                  <table mat-table [dataSource]="dataSource3">
-
-                    <ng-container matColumnDef="referencia">
-                      <th mat-header-cell *matHeaderCellDef>NRO</th>
-                      <td mat-cell *matCellDef="let elemento; let i = index" [class.ultimo-elemento]="esUltimoElemento(i)">
-                        {{ elemento.referencia }}
-                      </td>
-                    </ng-container>
-
-                    <ng-container matColumnDef="porcentaje">
-                      <th mat-header-cell *matHeaderCellDef class="text-right">%</th>
-                      <td mat-cell *matCellDef="let elemento; let i = index" [class.ultimo-elemento]="esUltimoElemento(i)" class="text-right" >
-                        {{ elemento.porcentaje }} %
-                      </td>
-                    </ng-container>
-
-                    <ng-container matColumnDef="inversion">
-                      <th mat-header-cell *matHeaderCellDef class="text-right">INVERSIÓN</th>
-                      <td mat-cell *matCellDef="let elemento; let i = index" [class.ultimo-elemento]="esUltimoElemento(i)" class="align-right-dollar">
-                        {{ elemento.inversion }}
-                      </td>
-                    </ng-container>
-
-                    <ng-container matColumnDef="ejecucion">
-                      <th mat-header-cell *matHeaderCellDef class="text-right">EJECUTADO</th>
-                      <td mat-cell *matCellDef="let elemento; let i = index" [class.ultimo-elemento]="esUltimoElemento(i)" class="align-right-dollar">
-                        {{ elemento.ejecucion }}
-                      </td>
-                    </ng-container>
-                   
-                  
-                    <tr
-                      mat-header-row
-                      *matHeaderRowDef="columnasObservaciones"
-                    ></tr>
-                    <tr
-                      mat-row
-                      *matRowDef="let fila; columns: columnasObservaciones"
-                    ></tr>
-                  </table>
-                  
-                  <div
-                    *ngIf="!resultadosEncontradosporObservaciones"
-                    class="alert alert-warning"
+              <table mat-table [dataSource]="dataSource3">
+                <ng-container matColumnDef="referencia">
+                  <th mat-header-cell *matHeaderCellDef>NRO</th>
+                  <td
+                    mat-cell
+                    *matCellDef="let elemento; let i = index"
+                    [class.ultimo-elemento]="esUltimoElemento(i)"
                   >
-                    No se encontraron observaciones.
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="modal-footer">
-              <button
-                class="btn btn-primary"
-                data-dismiss="modal"
-                data-bs-dismiss="modal"
+                    {{ elemento.referencia }}
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="porcentaje">
+                  <th mat-header-cell *matHeaderCellDef class="text-right">
+                    %
+                  </th>
+                  <td
+                    mat-cell
+                    *matCellDef="let elemento; let i = index"
+                    [class.ultimo-elemento]="esUltimoElemento(i)"
+                    class="text-right"
+                  >
+                    {{ elemento.porcentaje }} %
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="inversion">
+                  <th mat-header-cell *matHeaderCellDef class="text-right">
+                    INVERSIÓN
+                  </th>
+                  <td
+                    mat-cell
+                    *matCellDef="let elemento; let i = index"
+                    [class.ultimo-elemento]="esUltimoElemento(i)"
+                    class="align-right-dollar"
+                  >
+                    {{ elemento.inversion }}
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="ejecucion">
+                  <th mat-header-cell *matHeaderCellDef class="text-right">
+                    EJECUTADO
+                  </th>
+                  <td
+                    mat-cell
+                    *matCellDef="let elemento; let i = index"
+                    [class.ultimo-elemento]="esUltimoElemento(i)"
+                    class="align-right-dollar"
+                  >
+                    {{ elemento.ejecucion }}
+                  </td>
+                </ng-container>
+
+                <tr
+                  mat-header-row
+                  *matHeaderRowDef="columnasObservaciones"
+                ></tr>
+                <tr
+                  mat-row
+                  *matRowDef="let fila; columns: columnasObservaciones"
+                ></tr>
+              </table>
+
+              <div
+                *ngIf="!resultadosEncontradosporObservaciones"
+                class="alert alert-warning"
               >
-                OK
-              </button>
+                No se encontraron observaciones.
+              </div>
             </div>
           </div>
         </div>
+        <div class="modal-footer">
+          <button
+            class="btn btn-primary"
+            data-dismiss="modal"
+            data-bs-dismiss="modal"
+          >
+            OK
+          </button>
+        </div>
       </div>
     </div>
+  </div>
+</div>
