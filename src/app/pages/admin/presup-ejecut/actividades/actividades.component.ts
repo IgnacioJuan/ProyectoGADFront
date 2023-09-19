@@ -19,6 +19,7 @@ import { ReformaTraspasoDService } from 'src/app/services/reformatraspaso-d.serv
 import { LoadingServiceService } from 'src/app/components/loading-spinner/LoadingService.service';
 import { PeriodoService } from 'src/app/services/periodo.service';
 import { presupuestPeriodoProjection } from 'src/app/interface/presupuestPeriodoProjection';
+import { totalPresupuestoGeneralProjection } from 'src/app/interface/totalPresupuestoGeneralProjection';
 
 @Component({
   selector: 'app-actividades',
@@ -68,6 +69,7 @@ export class ListaActividadesComponent implements OnInit {
 
   columnasUsuario: string[] = ['id_actividad', 'nombre', 'presupuesto_referencial', 'recursos_propios', 'codificado', 'devengado', 'actions'];
 
+  columnasperiodotot: string[] = ['referencia', 'fechai','inversion', 'ejecucion'];
 
   @ViewChild('datosModalRef') datosModalRef: any;
   @ViewChild(MatPaginator, { static: false }) paginator?: MatPaginator;
@@ -106,8 +108,7 @@ export class ListaActividadesComponent implements OnInit {
     this.dataSource.data = [];
     this.actividadservice.getActividadesPoa2(poaId).subscribe(
       (data: any[]) => {
-        this.loadingService.hide();
-
+        this.verDetalless()
         this.actividades = data;
         this.dataSource.data = data;
         console.log(data)
@@ -131,6 +132,9 @@ export class ListaActividadesComponent implements OnInit {
   }
 
   listaPeriodos: presupuestPeriodoProjection[] = [];
+  listaPeriodostotal: totalPresupuestoGeneralProjection[] = [];
+
+  periodotot= new MatTableDataSource<totalPresupuestoGeneralProjection>();
   dataSource3 = new MatTableDataSource<presupuestPeriodoProjection>();
   resultadosEncontradosporObservaciones: boolean = true;
 
@@ -151,7 +155,7 @@ export class ListaActividadesComponent implements OnInit {
   
         // Asigna el arreglo con los totales a dataSource3
         this.dataSource3.data = this.listaPeriodos;
-  
+        
         this.resultadosEncontradosporObservaciones =
           this.listaPeriodos.length > 0; // Actualiza la variable según si se encontraron resultados
       },
@@ -188,6 +192,52 @@ export class ListaActividadesComponent implements OnInit {
   esUltimoElemento(index: number): boolean {
     return index === this.listaPeriodos.length - 1;
   }
-
+  esUltimoElemento2(index: number): boolean {
+    return index === this.listaPeriodostotal.length - 1;
+  }
+  verDetalless() {
   
+    this.periodoService.totalPresupuestoGeneral(this.poa.id_poa).subscribe(
+      (data: any) => { // Observa que ahora esperamos un arreglo de TotalPresupuestoGeneralProjection
+        this.listaPeriodostotal = data;
+        this.loadingService.hide();
+  
+        // Calcula los totales
+        const totales = this.calcularTotaless(this.listaPeriodostotal);
+  
+        // Agrega los totales al final del arreglo
+        this.listaPeriodostotal.push(totales);
+  
+        // Asigna el arreglo con los totales a dataSource3
+        this.periodotot.data = this.listaPeriodostotal;
+        console.log(this.periodotot.data)
+        this.resultadosEncontradosporObservaciones =
+          this.listaPeriodostotal.length > 0; // Actualiza la variable según si se encontraron resultados
+      },
+      (error: any) => {
+        this.loadingService.hide();
+  
+        console.error('Error al listar las observaciones:', error);
+        this.resultadosEncontradosporObservaciones = false; // Si ocurre un error, no se encontraron resultados
+      }
+    );
+  }
+  
+  // Modifica el método calcularTotales para usar la interfaz
+  calcularTotaless(listaPeriodostotal: any[]): any {
+    const totales = {
+      referencia: 'Totales',
+      periodoInicio: '',
+      periodoFin: 'Totales',
+      inversion: 0,
+      ejecucion: 0,
+    };
+  
+    for (const periodo of listaPeriodostotal) {
+      totales.inversion += periodo.inversion;
+      totales.ejecucion += periodo.ejecucion;
+    }
+  
+    return totales;
+  }
 }
