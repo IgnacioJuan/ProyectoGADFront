@@ -24,12 +24,11 @@ export class ReporteEspecificoCompetenciaComponent {
 
   ngAfterViewInit() {
     this.tableData.paginator = this.paginator || null;
-
   }
-  @ViewChild(MatPaginator, { static: false }) paginator?: MatPaginator;
 
+  @ViewChild(MatPaginator, { static: false }) paginator?: MatPaginator;
   //tabla
-  itemsPerPageLabel = 'Metas PDOT por página';
+  itemsPerPageLabel = 'Monto Competencia por página';
   nextPageLabel = 'Siguiente';
   lastPageLabel = 'Última';
   firstPageLabel = 'Primera';
@@ -51,7 +50,6 @@ export class ReporteEspecificoCompetenciaComponent {
 
   public barChartOptions: ChartConfiguration['options'] = {
     responsive: true,
-    // We use these empty structures as placeholders for dynamic theming.
     scales: {
       x: {},
       y: {
@@ -72,10 +70,11 @@ export class ReporteEspecificoCompetenciaComponent {
   public barChartPlugins = [DataLabelsPlugin];
 
   public barChartData: ChartData<'bar'> = {
-    labels: ['2006', '2007', '2008', '2009', '2010', '2011', '2012'],
+    labels: ['ejemplo', 'ejemplo1', 'ejemplo2', 'ejemplo3', 'ejemplo4', 'ejemplo5', 'ejemplo6', 'ejmplo', 'ejemplo1', 'ejemplo2', 'ejemplo3', 'ejemplo4', 'ejemplo5', 'ejemplo6'],
     datasets: [
-      { data: [65, 59, 80, 81, 56, 55, 40], label: 'Series A' },
-      { data: [28, 48, 40, 19, 86, 27, 90], label: 'Series B' },
+      { data: [89, 59, 80, 81, 56, 55, 40], label: 'Series A' },
+      { data: [66, 48, 40, 19, 86, 27, 90], label: 'Series B' },
+      { data: [28, 48, 70, 19, 86, 8, 90], label: 'Porcentaje' }
     ],
   };
 
@@ -117,7 +116,7 @@ export class ReporteEspecificoCompetenciaComponent {
   // Datos para la tabla
   tableData = new MatTableDataSource(this.prepareTableData());
   // Columnas a mostrar
-  displayedColumns: string[] = ['year', 'seriesA', 'seriesB', 'actions'];
+  displayedColumns: string[] = ['year', 'seriesA', 'seriesB', 'porcentaje'];
 
   prepareTableData() {
     const data = [];
@@ -126,11 +125,23 @@ export class ReporteEspecificoCompetenciaComponent {
         data.push({
           year: this.barChartData.labels[i],
           seriesA: this.barChartData.datasets[0].data[i],
-          seriesB: this.barChartData.datasets[1].data[i]
+          seriesB: this.barChartData.datasets[1].data[i],
+          porcentaje: this.barChartData.datasets[2].data[i]
         });
       }
     }
     return data;
   }
 
+  getColorClass(porcentaje: number): string {
+    if (porcentaje < 70.0) {
+      return 'rojo';
+    } else if (porcentaje >= 70.0 && porcentaje <= 84.9) {
+      return 'amarillo';
+    } else if (porcentaje >= 85) {
+      return 'verde';
+    } else {
+      return '';
+    }
+  }
 }
