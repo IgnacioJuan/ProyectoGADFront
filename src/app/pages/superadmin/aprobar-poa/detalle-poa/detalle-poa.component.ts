@@ -6,7 +6,7 @@ import { LoadingServiceService } from 'src/app/components/loading-spinner/Loadin
 import { PeriodoTotalPOA_DTO } from 'src/app/interface/PeriodoTotalPOA_DTO';
 import { Periodo_DTO } from 'src/app/interface/Periodo_DTO';
 import { ActividadesPoaDTO } from 'src/app/models/ActividadesAprobPoa ';
-import { AprobPoa } from 'src/app/models/AprobPoa';
+import { AprobPoa, CrearAprobPOA } from 'src/app/models/AprobPoa';
 import { ActividadService } from 'src/app/services/actividad.service';
 import { EmailServiceService } from 'src/app/services/email-service.service';
 import { LoginService } from 'src/app/services/login.service';
@@ -194,112 +194,130 @@ export class DetallePoaComponent implements OnInit {
     // this.loadingService.show();
     // Verificar si el estado es "RECHAZADO" y la observación está vacía
     //mensaje para confirma si desea guardar
-    // if(this.poacService.existProject(this.)){
-    // }
-    if (this.estado === 'APROBADO') {
-      Swal.fire({
-        title: '¿Está seguro de aprobar el POA?',
-        text: 'Se actualizará el estado del POA',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Si, aprobar',
-        cancelButtonText: 'No, cancelar',
-      }).then((result) => {
-        if (result.value) {
-          // this.crearAprobacionPoa();
-          this.showSuccessAlert();
-        } else if (result.dismiss === Swal.DismissReason.cancel) {
-          Swal.fire(
-            'Cancelado',
-            'El estado del POA no ha sido actualizado',
-            'error'
-          );
-        }
-      });
-    } else if (this.estado === 'RECHAZADO') {
-      Swal.fire({
-        title: '¿Está seguro de rechazar el POA?',
-        text: 'Se actualizará el estado del POA',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Si, rechazar',
-        cancelButtonText: 'No, cancelar',
-      }).then((result) => {
-        if (result.value) {
-          `          // this.crearAprobacionPoa();
-          this.showSuccessAlert();`
-        } else if (result.dismiss === Swal.DismissReason.cancel) {
-          Swal.fire(
-            'Cancelado',
-            'El estado del POA no ha sido actualizado',
-            'error'
-          );
-        }
-      });
-    } else {
-      Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: 'Seleccione una opción',
-      });
+
+
+    if (this.estado === 'RECHAZADO' && !this.observacion) {
       this.loadingService.hide();
+      Swal.fire('Advertencia', 'La observación es obligatoria ', 'warning');
+      return;
+    } else {
+      if (this.poaAprob) {
+        const data: CrearAprobPOA = {
+          estado: this.estado,
+          observacion: this.observacion,
+        };
+
+        if (this.estado === 'APROBADO') {
+          if (this.poacService.existProject(this.poaAprob.id_proyecto)) {
+            Swal.fire({
+              title: '¿Está seguro de aprobar el POA?',
+              text: 'Se Finalizara el POA anterior',
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonText: 'Si, aprobar',
+              cancelButtonText: 'No, cancelar',
+            }).then((result) => {
+              if (result.value) {
+                // this.crearAprobacionPoa();
+                this.poacService
+                  .crearEstadoAprobacion(this.poaAprob.id_poa, data)
+                  .subscribe((response) => {
+                    console.log('Estado actualizado:', response);
+                    this.emailService
+                      .sendEmail(
+                        this.correoRecep,
+                        this.subject,
+                        this.message +
+                        this.estado +
+                        '\n' +
+                        this.detallePoa +
+                        'DENOMINACION DEL PROGRAMA PROYECTO: ' +
+                        this.poaAprob.nombre_proyecto +
+                        '\n' +
+                        'DESCRIPCION DEL PROGRAMA PROYECTO: ' +
+                        (this.poaAprob.descripcion_proyecto || 'No definido') +
+                        '\n' +
+                        'AREA: ' +
+                        (this.poaAprob.area || 'No definido') +
+                        '\n' +
+                        'SUPERVISOR: ' +
+                        this.user.persona.primer_nombre +
+                        '  ' +
+                        this.user.persona.primer_apellido +
+                        '\n' +
+                        'AÑO DE EJECUCIÓN DEL PROYECTO: ' +
+                        this.poaAprob.fecha_inicio +
+                        ' - ' +
+                        this.poaAprob.fecha_fin +
+                        '\n' +
+                        '\nObservación:\n ' +
+                        this.observacion
+                      )
+                      .subscribe((responseEmail) => {
+                        console.log('Email enviado:', responseEmail);
+                        console.log('Email enviado:', this.correoRecep);
+                      });
+                    // Muestra el SweetAlert
+                    this.loadingService.hide();
+                    this.showSuccessAlert();
+                  });
+                console.log("Poa finalizado con exito");
+                this.showSuccessAlert();
+              } else if (result.dismiss === Swal.DismissReason.cancel) {
+                console.log("Poa no finalizado");
+              }
+            });
+          }
+        } else {
+          this.poacService
+            .crearEstadoAprobacion(this.poaAprob.id_poa, data)
+            .subscribe((response) => {
+              console.log('Estado actualizado:', response);
+              this.emailService
+                .sendEmail(
+                  this.correoRecep,
+                  this.subject,
+                  this.message +
+                  this.estado +
+                  '\n' +
+                  this.detallePoa +
+                  'DENOMINACION DEL PROGRAMA PROYECTO: ' +
+                  this.poaAprob.nombre_proyecto +
+                  '\n' +
+                  'DESCRIPCION DEL PROGRAMA PROYECTO: ' +
+                  (this.poaAprob.descripcion_proyecto || 'No definido') +
+                  '\n' +
+                  'AREA: ' +
+                  (this.poaAprob.area || 'No definido') +
+                  '\n' +
+                  'SUPERVISOR: ' +
+                  this.user.persona.primer_nombre +
+                  '  ' +
+                  this.user.persona.primer_apellido +
+                  '\n' +
+                  'AÑO DE EJECUCIÓN DEL PROYECTO: ' +
+                  this.poaAprob.fecha_inicio +
+                  ' - ' +
+                  this.poaAprob.fecha_fin +
+                  '\n' +
+                  '\nObservación:\n ' +
+                  this.observacion
+                )
+                .subscribe((responseEmail) => {
+                  console.log('Email enviado:', responseEmail);
+                  console.log('Email enviado:', this.correoRecep);
+                });
+              // Muestra el SweetAlert
+              this.loadingService.hide();
+              this.showSuccessAlert();
+            });
+        }
+
+
+
+
+      }
     }
-
-
-    // if (this.estado === 'RECHAZADO' && !this.observacion) {
-    //   this.loadingService.hide();
-    //   Swal.fire('Advertencia', 'La observación es obligatoria ', 'warning');
-    //   return;
-    // } else {
-    //   if (this.poaAprob) {
-    //     const data: CrearAprobPOA = {
-    //       estado: this.estado,
-    //       observacion: this.observacion,
-    //     };
-    //     this.poacService
-    //       .crearEstadoAprobacion(this.poaAprob.id_poa, data)
-    //       .subscribe((response) => {
-    //         console.log('Estado actualizado:', response);
-    //         this.emailService
-    //           .sendEmail(
-    //             this.correoRecep,
-    //             this.subject,
-    //             this.message +
-    //               this.estado +
-    //               '\n' +
-    //               this.detallePoa +
-    //               'DENOMINACION DEL PROGRAMA PROYECTO: ' +
-    //               this.poaAprob.nombre_proyecto +
-    //               '\n' +
-    //               'DESCRIPCION DEL PROGRAMA PROYECTO: ' +
-    //               (this.poaAprob.descripcion_proyecto || 'No definido') +
-    //               '\n' +
-    //               'AREA: ' +
-    //               (this.poaAprob.area || 'No definido') +
-    //               '\n' +
-    //               'SUPERVISOR: ' +
-    //               this.user.persona.primer_nombre +
-    //               '  ' +
-    //               this.user.persona.primer_apellido +
-    //               '\n' +
-    //               'AÑO DE EJECUCIÓN DEL PROYECTO: ' +
-    //               this.poaAprob.fecha_inicio +
-    //               ' - ' +
-    //               this.poaAprob.fecha_fin +
-    //               '\n' +
-    //               '\nObservación:\n ' +
-    //               this.observacion
-    //           )
-    //           .subscribe((responseEmail) => {
-    //             console.log('Email enviado:', responseEmail);
-    //             console.log('Email enviado:', this.correoRecep);
-    //           });
-    //         // Muestra el SweetAlert
-    //         this.loadingService.hide();
-    //         this.showSuccessAlert();
-    //       });
-    //   }
-    // }
   }
 
   calcularPeriodos(totalf: number) {
