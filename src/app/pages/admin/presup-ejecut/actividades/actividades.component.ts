@@ -50,7 +50,7 @@ export class ListaActividadesComponent implements OnInit {
     return `${startIndex + 1} - ${endIndex} de ${length}`;
   };
   //
-  poa: Poa = new Poa();
+  poa: any;
   actividades: any = [];
   miModal!: ElementRef;
   ocultarID: boolean = false;
@@ -98,18 +98,23 @@ export class ListaActividadesComponent implements OnInit {
 
   //PETICIONES | RUTAS
   verPoas() {
-    this.router.navigate(['/sup/actividades-presupuestos/tabla-poas']);
+    this.router.navigate(['/adm/presup-ejecut/tabla-poas']);
   }
 
   listar(poaId: number): void {
+    this.loadingService.show();
     this.dataSource.data = [];
     this.actividadservice.getActividadesPoa2(poaId).subscribe(
       (data: any[]) => {
+        this.loadingService.hide();
+
         this.actividades = data;
         this.dataSource.data = data;
         console.log(data)
       },
       (error: any) => {
+        this.loadingService.hide();
+
         console.error('Error al listar las actividades:', error);
       }
     );
@@ -131,10 +136,13 @@ export class ListaActividadesComponent implements OnInit {
 
   //Ver observaciones
   verDetalles(actividad: any) {
+    this.loadingService.show();
+
     this.periodoService.presupuestoGeneral(actividad.id_actividad).subscribe(
       (data: any) => {
         this.listaPeriodos = data;
-  
+        this.loadingService.hide();
+
         // Calcula los totales
         const totales = this.calcularTotales(this.listaPeriodos);
   
@@ -148,6 +156,8 @@ export class ListaActividadesComponent implements OnInit {
           this.listaPeriodos.length > 0; // Actualiza la variable según si se encontraron resultados
       },
       (error: any) => {
+        this.loadingService.hide();
+
         console.error('Error al listar las observaciones:', error);
         this.resultadosEncontradosporObservaciones = false; // Si ocurre un error, no se encontraron resultados
       }
@@ -178,4 +188,6 @@ export class ListaActividadesComponent implements OnInit {
   esUltimoElemento(index: number): boolean {
     return index === this.listaPeriodos.length - 1;
   }
+
+  
 }
