@@ -4,6 +4,8 @@ import { BaseChartDirective } from 'ng2-charts';
 import DataLabelsPlugin from 'chartjs-plugin-datalabels';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
+import { CompetenciaService } from 'src/app/services/competencia.service';
+import { ReportICompetencia } from 'src/app/models/ReportICompetencia';
 
 @Component({
   selector: 'app-reporte-especifico-competencia',
@@ -11,15 +13,18 @@ import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
   styleUrls: ['./reporte-especifico-competencia.component.css']
 })
 export class ReporteEspecificoCompetenciaComponent {
+  rCompentencias!: ReportICompetencia[];
 
   constructor(
-    private paginatorIntl: MatPaginatorIntl) {
+    private paginatorIntl: MatPaginatorIntl,
+        private competenciaService: CompetenciaService) {
     this.paginatorIntl.nextPageLabel = this.nextPageLabel;
     this.paginatorIntl.lastPageLabel = this.lastPageLabel;
     this.paginatorIntl.firstPageLabel = this.firstPageLabel;
     this.paginatorIntl.previousPageLabel = this.previousPageLabel;
     this.paginatorIntl.itemsPerPageLabel = this.itemsPerPageLabel;
     this.paginatorIntl.getRangeLabel = this.rango;
+    this.cargarDataRICompetencias();
   }
 
   ngAfterViewInit() {
@@ -144,4 +149,10 @@ export class ReporteEspecificoCompetenciaComponent {
       return '';
     }
   }
+  cargarDataRICompetencias() {
+    this.competenciaService.obtenerReportesICompetencias().subscribe((data) => {
+     this.rCompentencias = data;
+     console.log('Data:', this.rCompentencias);
+   });
+ }
 }

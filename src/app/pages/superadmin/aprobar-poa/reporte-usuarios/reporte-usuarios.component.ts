@@ -1,9 +1,6 @@
 import { Component } from '@angular/core';
 import { UsuarioService } from 'src/app/services/usuario.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { ReportICompetencia } from 'src/app/models/ReportICompetencia';
-import { CompetenciaService } from 'src/app/services/competencia.service';
-
 @Component({
   selector: 'app-reporte-usuarios',
   templateUrl: './reporte-usuarios.component.html',
@@ -11,15 +8,14 @@ import { CompetenciaService } from 'src/app/services/competencia.service';
 })
 export class ReporteUsuariosComponent {
   pdfUrl!: SafeResourceUrl;
-  rCompentencias!: ReportICompetencia[];
+  
 
   constructor(
     private usuarioService: UsuarioService,
-    private competenciaService: CompetenciaService,
     private sanitizer: DomSanitizer
   ) {
     this.cargarPDF();
-    this.cargarDataRICompetencias();
+    
   }
 
   cargarPDF() {
@@ -28,12 +24,6 @@ export class ReporteUsuariosComponent {
       const unsafeUrl = URL.createObjectURL(blob);
       console.log('Unsafe URL:', unsafeUrl);
       this.pdfUrl = this.sanitizer.bypassSecurityTrustResourceUrl(unsafeUrl);
-    });
-  }
-  cargarDataRICompetencias() {
-     this.competenciaService.obtenerReportesICompetencias().subscribe((data) => {
-      this.rCompentencias = data;
-      console.log('Data:', this.rCompentencias);
     });
   }
 }
