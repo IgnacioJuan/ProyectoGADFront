@@ -3,6 +3,7 @@ import { map, Observable, catchError, of, throwError } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import baserUrl from './helper';
 import { Competencia } from '../models/Competencia';
+import { ReportICompetencia } from '../models/ReportICompetencia';
 
 
 @Injectable({
@@ -49,6 +50,11 @@ export class CompetenciaService {
 
   obtenerCompetenciaPorNombre(nombre: string): Observable<Competencia[]> {
     return this.http.get<Competencia[]>(`${this.apiUrl}/buscarcompetencianombre/${nombre}`)
+      .pipe(catchError(this.handleError));
+  }
+
+  obtenerReportesICompetencias(): Observable<ReportICompetencia[]> {
+    return this.http.get<ReportICompetencia[]>(`${baserUrl}/api/competencia/reporteicompetencias`)
       .pipe(catchError(this.handleError));
   }
 
