@@ -6,5 +6,6 @@ export class Notificacion{
     mensaje:string="";
     visto:boolean= false;
     usuario:number=0;
-
+    url: string = "";
+    idactividad: number=0;
 }
