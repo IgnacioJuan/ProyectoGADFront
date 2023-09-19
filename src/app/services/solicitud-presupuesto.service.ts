@@ -31,8 +31,9 @@ export class SolicitudPresupuestoService {
   listarSolicitudesResponsableEstado(idResponsable:number, estado:string): Observable<SolicitudesPresupuestoProjection[]> {
     return this.http.get<SolicitudesPresupuestoProjection[]>(`${baserUrl}/api/solicitudpresupuesto/listarSolicitudesResponsableEstado/${idResponsable}/${estado}`);
   }
-    //Listar Solicitudes por Superadmin 
-    listarSolicitudesSuperAdmin(idSuper:number): Observable<SolicitudActividadPrepuesto[]> {
-      return this.http.get<SolicitudActividadPrepuesto[]>(`${baserUrl}/api/solicitudpresupuesto/listarSolicitudesSuperAdmin/${idSuper}`);
-    }
+ 
+   //Listar Solicitudes por Poa
+  listarSolicitudesPoa(idAdmin:number,idPoa:number): Observable<SolicitudActividadPrepuesto[]> {
+   return this.http.get<SolicitudActividadPrepuesto[]>(`${baserUrl}/api/solicitudpresupuesto/listarSolicitudAdminPoa/${idAdmin}/${idPoa}`);
+  }
 }

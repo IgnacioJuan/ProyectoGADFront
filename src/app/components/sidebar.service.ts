@@ -13,7 +13,7 @@ export class SidebarService {
       submenu: [
         { titulo: 'Creacion', url: 'adm/poa/registrarpoa', icono: 'fas fa-check-square' },
         { titulo: 'Avance Meta', url: 'adm/evaluar-poa/poas', icono: 'fas fa-list-ul ' },
-
+        { titulo: 'Presupuesto Ejecutado', url: 'adm/presup-ejecut/tabla-poas', icono: 'fas fa-list-ul ' },
       ]
     },
     {
@@ -31,6 +31,14 @@ export class SidebarService {
       titulo: "Poas Enviados",
       submenu: [
         { titulo: 'Listado de Poas', url: 'adm/poasEnviadosAdmin', icono: 'fas fa-cubes' },
+      ]
+    },
+    {
+      icono: 'nav-icon fas fa-file-invoice',
+      titulo: "Solicitud de Presupuesto",
+      submenu: [
+        { titulo: 'Listado de Solicitudes', url: 'adm/poas-solicitudes/listarPoasSoli', icono: 'fas fa-list-ul ' },
+
       ]
     },
   ]
@@ -66,7 +74,7 @@ export class SidebarService {
       submenu: [
         //{ titulo: 'Poas Rechazados', url: 'sup/flujo-criterio/listarpoa', icono: 'fas fa-list-ul ' },
         { titulo: 'Estados', url: 'sup/flujo-criterio/listaproyecto', icono: 'fas fa-list-ul ' },
-        { titulo: 'Avance Meta', url: 'sup/evaluar-poa/poas', icono: 'fas fa-list-ul ' },
+        { titulo: 'Avance Meta', url: 'adm/evaluar-poa/poas', icono: 'fas fa-list-ul ' },
 
       ]
     },
@@ -83,9 +91,10 @@ export class SidebarService {
       icono: 'nav-icon fas fa-solid fa-list',
       titulo: "Actividades",
       submenu: [
-        { titulo: 'Presupuestos', url: 'sup/actividades-presupuestos/tabla-poas', icono: 'fas fa-list-ul ' },
+        { titulo: 'Financiamiento', url: 'sup/actividades-presupuestos/tabla-poas', icono: 'fas fa-list-ul ' },
         { titulo: 'Evidencias Rechazadas', url: 'sup/archivos-rechazados/Actividades_Evi_Rechazados', icono: 'fas fa-list-ul ' },
         { titulo: 'Lista de Actividades', url: 'sup/usuario-actividades/listar-actividades', icono: 'fas fa-list-ul ' },
+        { titulo: 'Presupuesto Ejecutado', url: 'adm/presup-ejecut/tabla-poas', icono: 'fas fa-list-ul ' },
 
       ]
     },
@@ -113,6 +122,15 @@ export class SidebarService {
       titulo: "Solicitud de Presupuesto",
       submenu: [
         { titulo: 'Listado de Solicitudes', url: 'sup/listadoSolicitudes', icono: 'fas fa-list-ul ' },
+
+      ]
+    },
+
+    {
+      icono: 'nav-icon fas fa-file-invoice',
+      titulo: "Reporte",
+      submenu: [
+        { titulo: 'Metas', url: 'repor/reporte_metas', icono: 'fas fa-list-ul ' },
 
       ]
     },

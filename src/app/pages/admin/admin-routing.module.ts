@@ -9,10 +9,11 @@ import { AprobarRechazarDetalleAdminComponent } from './aprobar-rechazar-detalle
 import { PoaActividadComponent } from './asignacion-actividades/poa-actividad/poa-actividad.component';
 import { ListPoasEnviadosAdminComponent } from './list-poas-enviados-admin/list-poas-enviados-admin.component';
 import { CrearResponsablesComponent } from './crear-responsables/crear-responsables.component';
+import { DialogoUresponsablesComponent } from './dialogo-uresponsables/dialogo-uresponsables.component';
 
 
 const routes: Routes = [
-  
+
   {
     path: 'apruebaAdmin',
     component: AprobarRechazarAdminComponent,
@@ -31,6 +32,13 @@ const routes: Routes = [
   {
     path: 'create-responsables',
     component: CrearResponsablesComponent,
+    pathMatch: 'full',
+    canActivate: [AdminGuard]
+
+  },
+  {
+    path: 'crearRes',
+    component: DialogoUresponsablesComponent,
     pathMatch: 'full',
     canActivate: [AdminGuard]
 
@@ -55,15 +63,23 @@ const routes: Routes = [
 
     path: 'poa',
     loadChildren: () => import("./poa/register-poa.module").then(m => m.RegisterPoaModule)
-  },{
+  }, {
 
     path: 'asignacion-actividades',
     loadChildren: () => import("./asignacion-actividades/asignacion-actividades.module").then(m => m.AsignacionActividadesModule)
-    
+
   },
   {
     path: 'evaluar-poa',
     loadChildren: () => import("./evaluar-poa/evaluar-poa.module").then(m => m.EvaluarPoaModule)
+  },
+  {
+    path: 'poas-solicitudes',
+    loadChildren: () => import("./poas-solicitudes-presupuesto/poas-solicitudes-presupuesto.module").then(m => m.PoasSolicitudesPresupuestoModule)
+  },
+  {
+    path: 'presup-ejecut',
+    loadChildren: () => import("./presup-ejecut/presupuesto-ejecutado.module").then(m => m.PresupuestoEjecutadoModule)
   },
 ];
 

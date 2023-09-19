@@ -1,0 +1,122 @@
+<blockquote class="blockquote text-dark"
+    style="margin-top: 2%; background-color: #ffffff; border-left: 10px solid green;">
+    <h1 style="cursor: pointer; color: green; "><strong>Nuevo Usuario</strong></h1>
+</blockquote>
+<mat-dialog-content #dialogContainer>
+    <mat-stepper [linear]="isLinear" #stepper>
+        <mat-step [stepControl]="firstFormGroup">
+            <form [formGroup]="firstFormGroup" style="width: 100%;">
+                <ng-template matStepLabel>Datos Personales</ng-template>
+                <div class="flex-container">
+                    <mat-form-field>
+                        <mat-label>Cédula</mat-label>
+                        <input matInput placeholder="" formControlName="cedula" />
+                        <mat-error *ngIf="firstFormGroup.get('cedula')?.hasError('cedulaInvalida')">
+                            La cédula es inválida.
+                        </mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-label>Cargo</mat-label>
+                        <input matInput placeholder="" formControlName="cargo" />
+                        <mat-error *ngIf="firstFormGroup.get('cargo')?.hasError('cargoInvalido')">
+                            El cargo es inválido.
+                        </mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-label>Primer Nombre</mat-label>
+                        <input matInput placeholder="" formControlName="primer_nombre" />
+                        <mat-error *ngIf="firstFormGroup.get('primer_nombre')?.hasError('nombreApellidoInvalido')">
+                            El nombre es inválido.
+                        </mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-label>Segundo Nombre</mat-label>
+                        <input matInput placeholder="" formControlName="segundo_nombre" />
+                        <mat-error *ngIf="firstFormGroup.get('segundo_nombre')?.hasError('nombreApellidoInvalido')">
+                            El nombre es inválido.
+                        </mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-label>Primer Apellido</mat-label>
+                        <input matInput placeholder="" formControlName="primer_apellido" />
+                        <mat-error *ngIf="firstFormGroup.get('primer_apellido')?.hasError('nombreApellidoInvalido')">
+                            El apellido es inválido.
+                        </mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-label>Segundo Apellido</mat-label>
+                        <input matInput placeholder="" formControlName="segundo_apellido" />
+                        <mat-error *ngIf="firstFormGroup.get('segundo_apellido')?.hasError('nombreApellidoInvalido')">
+                            El apellido es inválido.
+                        </mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-label>Email</mat-label>
+                        <input matInput placeholder="" formControlName="correo" />
+                        <mat-error *ngIf="firstFormGroup.get('correo')?.hasError('email')">
+                            El email es inválido.
+                        </mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-label>Dirección</mat-label>
+                        <input matInput placeholder="" formControlName="direccion" />
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-label>Celular</mat-label>
+                        <input matInput placeholder="" formControlName="celular" />
+                        <mat-error *ngIf="firstFormGroup.get('celular')?.hasError('celularInvalido')">
+                            El número de celular es inválido.
+                        </mat-error>
+                    </mat-form-field>
+
+                </div>
+                <div class="button-container">
+                    <button mat-raised-button class="rounded-button" (click)="stepper.next()"><mat-icon
+                            class="custom-colorSiguiente">arrow_forward</mat-icon>
+                        Siguiente</button>
+                    <button mat-raised-button class="rounded-button" (click)="resetForm()"><mat-icon
+                            class="custom-colorBorrar">delete</mat-icon>
+                        Borrar</button>
+                    <button mat-raised-button class="rounded-button custom-red-button" (click)="cerrarDialogo()">
+                        <mat-icon>cancel</mat-icon> Cancelar
+                    </button>
+                </div>
+            </form>
+        </mat-step>
+        <mat-step [stepControl]="secondFormGroup">
+            <form [formGroup]="secondFormGroup" style="width: 100%;">
+                <ng-template matStepLabel>Datos Usuario</ng-template>
+                <div class="flex-container">
+                    <mat-form-field>
+                        <mat-label>Usuario</mat-label>
+                        <input matInput placeholder="" formControlName="username" />
+                    </mat-form-field>
+                    <mat-form-field>
+                        <mat-label>Contraseña</mat-label>
+                        <input matInput type="password" placeholder="" formControlName="password" />
+                    </mat-form-field>
+                </div>
+                <div class=" button-container">
+                    <button mat-raised-button class="rounded-button" (click)="stepper.previous()"><mat-icon
+                            class="custom-colorRegresar">arrow_back</mat-icon> Regresar</button>
+                    <button mat-raised-button class="rounded-button" (click)="resetForm2()"><mat-icon
+                            class="custom-colorBorrar">delete</mat-icon>
+                        Borrar</button>
+                    <button mat-raised-button class="rounded-button" (click)="guardarUsuario()"><mat-icon
+                            class="custom-colorGuardar">save</mat-icon> Guardar</button>
+                    <button mat-raised-button class="rounded-button custom-red-button" (click)="cerrarDialogo()">
+                        <mat-icon>cancel</mat-icon> Cancelar
+                    </button>
+                </div>
+            </form>
+        </mat-step>
+    </mat-stepper>
+</mat-dialog-content>
