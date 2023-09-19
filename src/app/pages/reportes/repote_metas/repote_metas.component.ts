@@ -162,27 +162,56 @@ content.push({ text: `Generado por: ${this.user.persona.primer_nombre} ${this.us
   dataRows.forEach((dataRow) => {
     const rowData: { text: string; }[] = [];
     const dataCells = dataRow.querySelectorAll('td'); // Celdas de datos
-    dataCells.forEach((dataCell) => {
-      rowData.push({ text: dataCell.textContent!.trim() });
+    dataCells.forEach((dataCell, index) => {
+      const cellText = dataCell.textContent!.trim();
+      const cellStyle: { style?: string } = {}; // Objeto para almacenar estilos adicionales
+
+      if (index === 7) { // Reemplaza PORCENTAJE_PCM_COLUMN_INDEX con el índice de la columna "% PCM"
+        // Obtén el valor del porcentaje y conviértelo a número
+        const porcentajePCM = parseFloat(cellText.replace('%', '').trim());
+
+        // Asigna la clase de estilo según el rango de porcentaje
+        if (porcentajePCM >= 85) {
+          cellStyle.style = 'sem-verde'; // Estilo verde para porcentaje >= 85
+        } else if (porcentajePCM >= 70) {
+          cellStyle.style = 'sem-amarillo'; // Estilo amarillo para porcentaje >= 70 y < 85
+        } else {
+          cellStyle.style = 'sem-rojo'; // Estilo rojo para porcentaje < 70
+        }
+      }
+
+      rowData.push({ text: cellText, ...cellStyle });
     });
     tableData.push(rowData);
-  });
-
+  });   
+  
   // Agrega los datos de la tabla al contenido del informe
   content.push({
     table: {
       headerRows: 1,
       body: tableData,
+      // Ajusta el ancho de la tabla en relación con la página
+    layout: 'lightHorizontalLines', // Otra opción es 'fullWidth'
     },
     style: 'tabla',
   });
 
   // Agrega el semáforo (tal como lo tenías)
-  content.push({ text: 'Semáforo de Cumplimiento', style: 'subtitulo' });
-  content.push({ text: 'Cumplida: 85% y el 100%', style: 'sem-verde' });
-  content.push({ text: 'Parcialmente cumplida: 70% y el 84,9%', style: 'sem-amarillo' });
-  content.push({ text: 'Incumplida: 0 a 69,9%', style: 'sem-rojo' });
-
+  content.push(
+    {
+      text: 'Semáforo de Cumplimiento',
+      style: 'text',
+      fontSize: 14,
+      bold: true,
+      color: [0, 128, 0],  // Verde en formato RGB   
+    },
+    {
+      text: [
+        { text: 'Cumplida: 85% y el 100%', style: 'sem-verde' },
+        { text: ' Parcialmente cumplida: 70% y el 84,9%', style: 'sem-amarillo' },
+        { text: ' Incumplida: 0 a 69,9%', style: 'sem-rojo' },
+      ],
+    });
   // Define los estilos del documento (tal como lo tenías)
   const styles = {
 
@@ -191,6 +220,7 @@ content.push({ text: `Generado por: ${this.user.persona.primer_nombre} ${this.us
       fontSize: 24,
       bold: true,
       alignment: 'center',
+      color: [0, 128, 0],  // Verde en formato RGB
     },
     subtitulo: {
       fontSize: 18,
@@ -199,11 +229,15 @@ content.push({ text: `Generado por: ${this.user.persona.primer_nombre} ${this.us
     },
     tabla: {
       margin: [0, 10, 0, 10],
+      fontSize: 10, // Reduzco el tamaño de fuente para hacer la tabla más pequeña
+
     },
     'tabla-encabezado': {
       fillColor: '#72B6FF',
       bold: true,
       color: '#FFFFFF',
+      fontSize: 10, // Reduzco el tamaño de fuente para hacer la tabla más pequeña
+
     },
     'sem-verde': {
       color: 'green',
@@ -220,7 +254,10 @@ content.push({ text: `Generado por: ${this.user.persona.primer_nombre} ${this.us
   const documentDefinition: any = {
     content,
     styles,
-    pageOrientation: 'landscape', // Cambia a 'landscape' si deseas orientación horizontal
+    pageOrientation: 'portrait', // Cambia a 'landscape' si deseas orientación horizontal
+      // Establece los márgenes de la página para ajustar el ancho de la tabla
+  pageMargins: [40, 40, 40, 40], // Márgenes superior, derecho, inferior e izquierdo
+
   };
 
   // Genera el PDF y descárgalo
