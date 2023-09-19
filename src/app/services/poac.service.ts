@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { Observable, map } from 'rxjs';
-import baserUrl from './helper';
 import { AprobPoa, CrearAprobPOA } from '../models/AprobPoa';
+import baserUrl from './helper';
 
 
 @Injectable({
@@ -25,5 +25,9 @@ export class PoacService {
   // Método para actualizar el estado de aprobación del POA
   public crearEstadoAprobacion(id_poa: number, datap: CrearAprobPOA): Observable<AprobPoa> {
     return this.httpClient.post<AprobPoa>(`${baserUrl}/api/aprobacionpoa/crearnestadoaprob/${id_poa}`, datap);
+  }
+
+  public existProject(id_proyecto: number): Observable<any> {
+    return this.http.get<boolean>(`${baserUrl}/api/proyecto/existProject?id_proyecto=${id_proyecto}`);
   }
 }
