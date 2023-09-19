@@ -1,57 +1,76 @@
 <body>
   <div class="container bg-light border border-start-0 rounded-4">
-    <div class="barChart-container">
-      <!-- Sección de la tabla -->
-      <div class="table-section">
-        <mat-table [dataSource]="tableData">
-          <!-- Columna de Año -->
-          <ng-container matColumnDef="year">
-            <mat-header-cell *matHeaderCellDef> Año </mat-header-cell>
-            <mat-cell *matCellDef="let element"> {{ element.year }} </mat-cell>
-          </ng-container>
+    <blockquote class="blockquote text-dark"
+      style="margin-top: 5%; background-color: #ffffff; border-left: 10px solid green;">
+      <h1 style="text-transform: uppercase" class="titulo">
+        <strong>
+          <a>MONTO DE INVERSIÓN POR COMPETENCIA</a></strong>
+      </h1>
+    </blockquote>
 
-          <!-- Columna de Series A -->
-          <ng-container matColumnDef="seriesA">
-            <mat-header-cell *matHeaderCellDef> Series A </mat-header-cell>
-            <mat-cell *matCellDef="let element">
-              {{ element.seriesA }}
-            </mat-cell>
-          </ng-container>
-
-          <!-- Columna de Series B -->
-          <ng-container matColumnDef="seriesB">
-            <mat-header-cell *matHeaderCellDef> Series B </mat-header-cell>
-            <mat-cell *matCellDef="let element">
-              {{ element.seriesB }}
-            </mat-cell>
-          </ng-container>
-
-          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-          <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
-        </mat-table>
+    <div class="container mt-4">
+      <div class="card">
+        <div class="card-body">
+          <div class="semaforo">
+            <div class="verde"></div><span>Cumplida: 85% y el 100%</span>
+            <div class="amarillo"></div><span>Parcialmente cumplida: 70% y el 84,9%</span>
+            <div class="rojo"></div><span>Incumplida: 0 a 69,9%</span>
+          </div>
+        </div>
       </div>
+    </div>
+    <div class="card">
+      <div class="card-body">
+        <div class="barChart-container">
+          <!-- Sección del gráfico -->
+          <div class="chart-section">
+            <canvas baseChart class="chart" [data]="barChartData" [options]="barChartOptions"
+              [plugins]="barChartPlugins" [type]="barChartType" (chartHover)="chartHovered($event)"
+              (chartClick)="chartClicked($event)">
+            </canvas>
+            <button mat-button mat-raised-button color="primary" (click)="randomize()">
+              Update
+            </button>
+          </div>
 
-      <!-- Sección del gráfico -->
-      <div class="chart-section">
-        <canvas
-          baseChart
-          class="chart"
-          [data]="barChartData"
-          [options]="barChartOptions"
-          [plugins]="barChartPlugins"
-          [type]="barChartType"
-          (chartHover)="chartHovered($event)"
-          (chartClick)="chartClicked($event)"
-        >
-        </canvas>
-        <button
-          mat-button
-          mat-raised-button
-          color="primary"
-          (click)="randomize()"
-        >
-          Update
-        </button>
+          <!-- Sección de la tabla -->
+          <div class="table-section">
+
+
+            <mat-table [dataSource]="tableData">
+
+              <ng-container matColumnDef="year">
+                <mat-header-cell *matHeaderCellDef> COMPETENCIA </mat-header-cell>
+                <mat-cell *matCellDef="let element"></mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="seriesA">
+                <mat-header-cell *matHeaderCellDef> MONTO CODIFICADO </mat-header-cell>
+                <mat-cell *matCellDef="let element">
+                </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="seriesB">
+                <mat-header-cell *matHeaderCellDef> MONTO DEVENGADO </mat-header-cell>
+                <mat-cell *matCellDef="let element">
+                </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="actions">
+                <mat-header-cell *matHeaderCellDef> % EJECUCIÓN </mat-header-cell>
+                <mat-cell *matCellDef="let element">
+                </mat-cell>
+              </ng-container>
+
+              <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+              <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+            </mat-table>
+            <mat-paginator [pageSizeOptions]="[5]" showFirstLastButtons
+              aria-label="Select page of periodic elements" itemsPerPageLabel="Items por página:"
+              nextPageLabel="Siguiente" previousPageLabel="Anterior">
+            </mat-paginator>
+          </div>
+        </div>
       </div>
     </div>
   </div>

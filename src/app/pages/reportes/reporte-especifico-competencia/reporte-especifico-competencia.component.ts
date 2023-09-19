@@ -3,6 +3,7 @@ import { ChartConfiguration, ChartData, ChartEvent, ChartType } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
 import DataLabelsPlugin from 'chartjs-plugin-datalabels';
 import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-reporte-especifico-competencia',
@@ -10,6 +11,42 @@ import { MatTableDataSource } from '@angular/material/table';
   styleUrls: ['./reporte-especifico-competencia.component.css']
 })
 export class ReporteEspecificoCompetenciaComponent {
+
+  constructor(
+    private paginatorIntl: MatPaginatorIntl) {
+    this.paginatorIntl.nextPageLabel = this.nextPageLabel;
+    this.paginatorIntl.lastPageLabel = this.lastPageLabel;
+    this.paginatorIntl.firstPageLabel = this.firstPageLabel;
+    this.paginatorIntl.previousPageLabel = this.previousPageLabel;
+    this.paginatorIntl.itemsPerPageLabel = this.itemsPerPageLabel;
+    this.paginatorIntl.getRangeLabel = this.rango;
+  }
+
+  ngAfterViewInit() {
+    this.tableData.paginator = this.paginator || null;
+
+  }
+  @ViewChild(MatPaginator, { static: false }) paginator?: MatPaginator;
+
+  //tabla
+  itemsPerPageLabel = 'Metas PDOT por página';
+  nextPageLabel = 'Siguiente';
+  lastPageLabel = 'Última';
+  firstPageLabel = 'Primera';
+  previousPageLabel = 'Anterior';
+  rango: any = (page: number, pageSize: number, length: number) => {
+    if (length == 0 || pageSize == 0) {
+      return `0 de ${length}`;
+    }
+
+    length = Math.max(length, 0);
+    const startIndex = page * pageSize;
+    const endIndex =
+      startIndex < length
+        ? Math.min(startIndex + pageSize, length)
+        : startIndex + pageSize;
+    return `${startIndex + 1} - ${endIndex} de ${length}`;
+  };
   @ViewChild(BaseChartDirective) chart: BaseChartDirective | undefined;
 
   public barChartOptions: ChartConfiguration['options'] = {
@@ -64,7 +101,7 @@ export class ReporteEspecificoCompetenciaComponent {
   }
 
   public randomize(): void {
-  
+
     this.barChartData.datasets[0].data = [
       Math.round(Math.random() * 100),
       59,
@@ -77,12 +114,12 @@ export class ReporteEspecificoCompetenciaComponent {
 
     this.chart?.update();
   }
-   // Datos para la tabla
-   tableData = new MatTableDataSource(this.prepareTableData());
-   // Columnas a mostrar
-   displayedColumns: string[] = ['year', 'seriesA', 'seriesB'];
- 
-   prepareTableData() {
+  // Datos para la tabla
+  tableData = new MatTableDataSource(this.prepareTableData());
+  // Columnas a mostrar
+  displayedColumns: string[] = ['year', 'seriesA', 'seriesB', 'actions'];
+
+  prepareTableData() {
     const data = [];
     if (this.barChartData.labels && this.barChartData.datasets) {
       for (let i = 0; i < this.barChartData.labels.length; i++) {
@@ -95,5 +132,5 @@ export class ReporteEspecificoCompetenciaComponent {
     }
     return data;
   }
-  
+
 }
