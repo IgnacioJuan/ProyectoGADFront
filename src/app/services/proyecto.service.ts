@@ -3,6 +3,7 @@ import { Proyecto } from '../models/Proyecto';
 import { map, Observable } from 'rxjs';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import baserUrl from './helper';
+import {ReporteProyecto} from "../interface/reporte-proyecto";
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +19,7 @@ export class ProyectoService {
 
     return this.http.get<Proyecto>(`${baserUrl}/api/proyecto/buscar/${id}`);
   }
-// No borar sirve para bsucar el proyecto del poa 
+// No borar sirve para bsucar el proyecto del poa
 
 buscarProyectosPorIds(ids: number[]): Observable<any> {
   // Convierte la lista de IDs en una cadena separada por comas
@@ -56,7 +57,7 @@ buscarProyectosPorIds(ids: number[]): Observable<any> {
 
   }
 
- 
+
   //Listas para crear el proyecto en el flujo proyecto
   getPNDOptions(): Observable<any[]> {
     return this.http.get<any[]>(`${baserUrl}/api/objetivopnd/listar`);
@@ -72,5 +73,9 @@ buscarProyectosPorIds(ids: number[]): Observable<any> {
   }
   getCompetenciaOptions(): Observable<any[]> {
     return this.http.get<any[]>(`${baserUrl}/api/competencia/listar`);
+  }
+
+  obtenerReportePresupuesto(): Observable<any[]> {
+    return this.http.get<ReporteProyecto[]>(`${baserUrl}/api/proyecto/reporte`);
   }
 }
