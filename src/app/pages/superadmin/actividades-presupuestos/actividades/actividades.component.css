@@ -64,6 +64,9 @@ body {
   min-width: 200px; /* Ajusta el ancho según tus necesidades */
   /* Añade cualquier otro estilo adicional si es necesario */
 }
+.acciones-cellNombre {
+  min-width: 400px;
+}
 
 .show-hint::before {
   content: "Haga clic sobre una fila para ver los tipos de presupuestos de esta actividad";

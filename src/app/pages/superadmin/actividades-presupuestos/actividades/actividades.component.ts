@@ -78,6 +78,7 @@ export class ListaActividadesComponent implements OnInit {
   poa: Poa = new Poa();
   actividades: any = [];
   miModal!: ElementRef;
+  ocultarID: boolean = false;
   public actividad = new ActividadesPoa();
 
   public presupuestoexterno = new PresupuestoExterno();
@@ -161,7 +162,7 @@ export class ListaActividadesComponent implements OnInit {
 
   // VALIDACIONES
   validarFechas(): void {
-    const fechaElegida = this.frmPE.get('fecha')?.value as string;
+    /*const fechaElegida = this.frmPE.get('fecha')?.value as string;
     const fechaActual = new Date();
     const fechaElegidaDate = new Date(fechaElegida);
     
@@ -169,7 +170,7 @@ export class ListaActividadesComponent implements OnInit {
       this.frmPE.get('fecha')?.setErrors({ fechaAnterior: true });
     } else {
       this.frmPE.get('fecha')?.setErrors(null);
-    }
+    }*/
   }
   noCaracteresEspecialesValidator1() {
     return (control: any) => {

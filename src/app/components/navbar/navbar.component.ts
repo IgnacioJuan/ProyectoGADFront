@@ -20,6 +20,8 @@ export class NavbarComponent implements OnInit {
   user: any = null;
   noti = new Notificacion();
   notificaciones: Notificacion[] = [];
+  notificaciones2: Notificacion[] = [];
+  idactividad:any;
 
   constructor(public login: LoginService, private notificationService: NotificacionService, private dialog: MatDialog, private rout: Router) {
     this.rol = this.login.getUserRole();
@@ -34,10 +36,39 @@ export class NavbarComponent implements OnInit {
         this.user = this.login.getUser();
       }
     );
-    this.listarnot(this.user.id);
+    this.listarnoti(this.user.id);
   }
 
-  listarnot(id: any) {
+  listarnoti(id: any) {
+    console.log("id ver " + id);
+    // Cargar notificaciones propias por id
+    this.notificationService.getNotificaciones(id).subscribe(
+      (dataPropias: Notificacion[]) => {
+        this.notificaciones = dataPropias;
+        this.numNotificacionesSinLeer = this.notificaciones.filter(n => !n.visto).length;
+        // Verifica si es ADMIN o SUPERADMIN
+        if (this.rol == "ADMIN" || this.rol == "SUPERADMIN" || this.rol == "RESPONSABLE") {
+          // Cargar notificaciones del rol ADMIN
+          this.notificationService.allnotificacion(this.rol).subscribe(
+            (dataRol: Notificacion[]) => {
+              this.notificaciones = this.notificaciones.concat(dataRol);
+              this.numNotificacionesSinLeer += dataRol.filter(n => !n.visto).length;
+              // Ordenar las notificaciones por fecha (de más reciente a más antigua)
+              this.notificaciones.sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime());
+            },
+            (errorRol: any) => {
+              console.error('No se pudieron listar las notificaciones por rol');
+            }
+          );
+        }
+      },
+      (errorPropias: any) => {
+        console.error('No se pudieron listar las notificaciones propias');
+      }
+    );
+  }
+
+  /*listarnot(id: any) {
     if (this.rol == "ADMIN" || this.rol == "SUPERADMIN") {
       // Cargar notificaciones del rol ADMIN
       this.notificationService.allnotificacion(this.rol).subscribe(
@@ -70,8 +101,18 @@ export class NavbarComponent implements OnInit {
         }
       );
     }
-  }
+  }*/
 
+  ir(noti:any){
+    noti.url;
+    if(noti.idactividad!=0){
+      console.log("id ev"+noti.idactividad);
+      localStorage.setItem("eviden",noti.idactividad)
+      this.rout.navigate([noti.url]);
+    }  else {
+      this.rout.navigate([noti.url]);
+    }
+  }
 
   public logout() {
     this.login.logout();

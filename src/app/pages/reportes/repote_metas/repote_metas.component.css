@@ -1,0 +1,49 @@
+.semaforo {
+  display: flex;
+  align-items: center;
+}
+.semaforo div {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin-right: 10px; 
+  margin-left: 15px;
+
+}
+.rojo {
+  background-color: red;
+}
+.amarillo {
+  background-color: yellow;
+}
+.verde {
+  background-color: #008000;
+}
+
+.titulo {
+  color: #008000 !important;
+}
+
+
+.btn-primary{
+  background-color: green;
+
+}
+
+
+.pdf-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Ajusta según tus necesidades */
+  padding: 2rem;
+}
+
+.pdf-viewer {
+  width: 100%; /* Ajusta según tus necesidades */
+  height: 100%; /* Ajusta según tus necesidades */
+  margin-top: 0; /* Elimina el margen superior */
+  margin-bottom: 0; /* Elimina el margen inferior */
+  border: 1px solid #ccc;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}

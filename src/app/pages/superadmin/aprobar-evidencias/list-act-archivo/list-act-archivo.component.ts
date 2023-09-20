@@ -9,18 +9,22 @@ import { MatTableDataSource } from '@angular/material/table';
 import { AprobacionEvidenciaService } from 'src/app/services/aprobacion-evidencia.service';
 import { AprobacionEvidencia } from 'src/app/models/AprobacionEvidencia';
 import Swal from 'sweetalert2';
-import { forkJoin } from 'rxjs';
+import { forkJoin, of, throwError } from 'rxjs';
 import { Poa } from 'src/app/models/Poa';
 import { AprobacionEvidenciaProjection } from 'src/app/interface/AprobacionEvidenciaProjection';
-
+import { catchError, concatMap, switchMap } from 'rxjs/operators';
 import { EmailServiceService } from 'src/app/services/email-service.service';
 import { PersonaService } from 'src/app/services/persona.service';
 import { Persona2 } from 'src/app/models/Persona2';
-
+import { LoadingServiceService } from 'src/app/components/loading-spinner/LoadingService.service';
+import { ActividadespoaService } from 'src/app/services/actividadespoa.service';
+import { Usuario2 } from 'src/app/models/Usuario2';
+import { Notificacion } from 'src/app/models/Notificacion';
+import { NotificacionService } from 'src/app/services/notificacion.service';
 @Component({
   selector: 'app-list-act-archivo',
   templateUrl: './list-act-archivo.component.html',
-  styleUrls: ['./list-act-archivo.component.css']
+  styleUrls: ['./list-act-archivo.component.css'],
 })
 export class ListActArchivoComponent implements OnInit {
   listaArchivos: Archivos[] = [];
@@ -31,19 +35,23 @@ export class ListActArchivoComponent implements OnInit {
   //Objeto poa
   poa: Poa = new Poa();
   //Variable para estado
-  public correo = "";
-  public estado = "";
-  public observacion = "";
+  public correo = '';
+  public estado = '';
+  public observacion = '';
 
   //Usuario logueado
   user: any = null;
   //Objeto actividad
   actividad: ActividadesPoa = new ActividadesPoa();
+  //Para notificaciones
+  noti = new Notificacion();
 
   //Buscar
-  filterPost: string = "";
+  filterPost: string = '';
   filteredComponentes: any[] = [];
   resultadosEncontrados: boolean = true;
+  resultadosEncontradosEvidencias: boolean = true;
+
   isLoggedIn = false;
   nombre!: string;
   fechaActual: Date;
@@ -55,10 +63,12 @@ export class ListActArchivoComponent implements OnInit {
     private aprobarEvidenciaService: AprobacionEvidenciaService,
     public login: LoginService,
     private emaservices: EmailServiceService,
-    private serviper: PersonaService
-
+    private serviper: PersonaService,
+    private actividadServi: ActividadespoaService,
+    private notificationService: NotificacionService,
+    //importar el spinner como servicio
+    private loadingService: LoadingServiceService
   ) {
-
     this.paginatorIntl.nextPageLabel = this.nextPageLabel;
     this.paginatorIntl.lastPageLabel = this.lastPageLabel;
     this.paginatorIntl.firstPageLabel = this.firstPageLabel;
@@ -66,8 +76,7 @@ export class ListActArchivoComponent implements OnInit {
     this.paginatorIntl.itemsPerPageLabel = this.itemsPerPageLabel;
     this.paginatorIntl.getRangeLabel = this.rango;
     this.fechaActual = new Date();
-
-}
+  }
   ngAfterViewInit() {
     this.dataSource2.paginator = this.paginator || null;
   }
@@ -77,11 +86,10 @@ export class ListActArchivoComponent implements OnInit {
     const data = history.state.data;
     this.actividad = data;
     this.poa = history.state.poa;
-    console.log(this.poa)
 
     //Capturar usuario logueado
     this.user = this.login.getUser();
-    console.log(this.user)
+    console.log(this.user);
     this.listar(this.actividad.id_actividad);
   }
   //Tabla para listado de archivos
@@ -110,59 +118,89 @@ export class ListActArchivoComponent implements OnInit {
     return `${startIndex + 1} - ${endIndex} de ${length}`;
   };
 
-  columnasArchivos: string[] = ['nombre', 'descripcion', 'estado', 'enlace', 'fecha', 'evaluar', 'verDetalles'];
-  columnasObservaciones: string[] = ['observacion', 'estado', 'nombre_completo', 'fecha_aprobacion'];
+  columnasArchivos: string[] = [
+    'nombre',
+    'descripcion',
+    'estado',
+    'enlace',
+    'valor',
+    'fecha',
+    'evaluar',
+  ];
+  columnasObservaciones: string[] = [
+    'observacion',
+    'estado',
+    'nombre_completo',
+    'fecha_aprobacion',
+  ];
 
-
+  nombreEvi = "";
+  nombreActividad!: any;
+  responsable = "";
   seleccionar(archi: Archivos) {
-    this.archivoSeleted = archi
+    this.archivoSeleted = archi;
+    this.nombreEvi = archi.nombre;
+    this.nombreActividad = archi.actividad?.nombre;
+    this.responsable = archi.actividad?.usuario.persona.primer_nombre+" "+archi.actividad?.usuario.persona.primer_apellido;
+    console.log("EVIDENCIA: "+this.nombreEvi+"ACTIVIDAD: "+this.nombreActividad+"RESPONSABLE: "+this.responsable);
     this.estado = this.archivoSeleted.estado;
-    //Quitar el usuario 
+    //Quitar el usuario
     this.archivoSeleted.actividad = null;
   }
 
   listar(activ: number) {
+    this.loadingService.show();
+
     this.archivoService.listarArchivosPorActividad(activ).subscribe(
       (data: any[]) => {
         this.listaArchivos = data;
         this.dataSource2.data = this.listaArchivos;
+        this.resultadosEncontradosEvidencias = this.listaArchivos.length > 0;
+        console.log('archivos');
+        console.log(this.listaArchivos);
+        this.loadingService.hide();
       },
       (error: any) => {
-        console.error('Error al listar los componentes:', error);
+        console.error('Error al listar las evidencias:', error);
+        this.loadingService.hide();
       }
-      
     );
     this.serviper.getcorreo(activ).subscribe(
       (data: Persona2) => {
- this.correo= data.correo
- this.nombre= data.primer_nombre+ " "+data.primer_apellido;
+        this.correo = data.correo;
+        this.nombre = data.primer_nombre + ' ' + data.primer_apellido;
 
-console.log(" correo ="+this.correo)
-},
+        console.log(' correo =' + this.correo);
+      },
       (error: any) => {
-        console.error('Error al listar los componentes:', error);
+        console.error('Error al listar el correo:', error);
       }
-    ); 
+    );
   }
 
+  //Metodo para Rechazar y Aprobar
+  Rechazar() {
+    this.estado = 'RECHAZADO';
+    this.notificarRechazo();
+    this.notificarRechazoUser();
+    this.notificarRechazoResp();
+  }
+  Aprobar() {
+    this.estado = 'APROBADO';
+    this.notificarAprobacion();
+    this.notificarAprobacionUser();
+    this.notificarAprobacionResp();
+  }
 
-//Metodo para Rechazar y Aprobar
-Rechazar(){
-this.estado="RECHAZADO"
-}
-Aprobar(){
-  this.estado="APROBADO"
+  Limpiar() {
+    this.estado = '';
+    this.observacion = '';
+  }
 
-}
-
-Limpiar(){
-this.estado="";
- this.observacion="";
-}
-
-
-
+  /*
 guardar() {
+  this.loadingService.show();
+  const devengado=this.actividad.devengado-this.archivoSeleted.valor; 
   // Verificar si estado y observación no están vacíos
   if (!this.estado || !this.observacion) {
  
@@ -173,22 +211,23 @@ guardar() {
     );
     return;
   }
-
   this.aprobarEvi.estado = this.estado;
   this.aprobarEvi.observacion = this.observacion;
   this.aprobarEvi.evidencia = this.archivoSeleted
-  this.aprobarEvi.visible = true;
   this.aprobarEvi.usuario = this.user.id;
   this.archivoSeleted.estado= this.estado;
   this.aprobarEvi.fecha_aprobacion=this.fechaActual
-
+this.actividad.devengado=devengado
   // Guardamos la aprobación y actualizamos el estado del archivo en paralelo
   forkJoin([
     this.aprobarEvidenciaService.crear(this.aprobarEvi),
-    this.archivoService.actualizar(this.archivoSeleted.id_archivo, this.archivoSeleted)
+    this.archivoService.actualizar(this.archivoSeleted.id_archivo, this.archivoSeleted),
+    this.actividadServi.actualizar(this.actividad.id_actividad, this.actividad)
   ])
     .subscribe(
       ([aprobarResponse, archivoResponse]) => {
+        this.loadingService.hide();
+
         this.sendEmail();
         this.Limpiar();
         this.listar(this.actividad.id_actividad);
@@ -200,6 +239,8 @@ guardar() {
       },
       (error) => {
         console.error('Error al realizar alguna de las operaciones:', error);
+        this.loadingService.hide();
+
         Swal.fire(
           'Error',
           'Ha ocurrido un error en una o ambas operaciones',
@@ -207,7 +248,116 @@ guardar() {
         );
       }
     );
-}
+}*/
+
+  usuariosdit: Usuario2 = new Usuario2();
+  usuariosdit2: Usuario2 = new Usuario2();
+
+  guardar() {
+    this.loadingService.show();
+    this.usuariosdit.id = this.user.id;
+    this.usuariosdit2.id = this.actividad.usuario.id;
+    const devengado = this.actividad.codificado - this.archivoSeleted.valor;
+
+    // Verificar si estado y observación no están vacíos
+    if (!this.estado || !this.observacion) {
+      this.loadingService.hide();
+
+      Swal.fire('Advertencia', 'Existen campos vacíos', 'warning');
+      return;
+    }
+
+    this.aprobarEvi.estado = this.estado;
+    this.aprobarEvi.observacion = this.observacion;
+    this.aprobarEvi.evidencia = this.archivoSeleted;
+    this.aprobarEvi.visible = true;
+    this.aprobarEvi.usuario = this.usuariosdit;
+    this.archivoSeleted.estado = this.estado;
+    this.aprobarEvi.fecha_aprobacion = this.fechaActual;
+    this.actividad.devengado = devengado;
+    this.actividad.usuario = this.usuariosdit2;
+
+    // Primero, define un observable que emita un valor nulo si el estado es "RECHAZADO"
+    const updateActividad$ =
+      this.estado === 'APROBADO'
+        ? this.actividadServi
+            .actualizar(this.actividad.id_actividad, this.actividad)
+            .pipe(
+              catchError((error) => {
+                this.loadingService.hide();
+                console.error('Error al actualizar la actividad:', error);
+                Swal.fire(
+                  'Error',
+                  'Ha ocurrido un error al actualizar la actividad',
+                  'error'
+                );
+                return throwError(error);
+              })
+            )
+        : of(null);
+
+    // Continuamos con las demás operaciones después de actualizar la actividad
+    updateActividad$
+      .pipe(
+        switchMap((actividadResponse) => {
+          const operations = [
+            this.aprobarEvidenciaService.crear(this.aprobarEvi).pipe(
+              catchError((error) => {
+                this.loadingService.hide();
+                console.error('Error al crear la aprobación:', error);
+                Swal.fire(
+                  'Error',
+                  'Ha ocurrido un error al crear la aprobación',
+                  'error'
+                );
+                return throwError(error);
+              })
+            ),
+            this.archivoService
+              .actualizar(this.archivoSeleted.id_archivo, this.archivoSeleted)
+              .pipe(
+                catchError((error) => {
+                  this.loadingService.hide();
+                  console.error('Error al actualizar el archivo:', error);
+                  Swal.fire(
+                    'Error',
+                    'Ha ocurrido un error al actualizar el archivo',
+                    'error'
+                  );
+                  return throwError(error);
+                })
+              ),
+          ];
+
+          return forkJoin(operations);
+        })
+      )
+      .subscribe(
+        (results) => {
+          if (results !== null) {
+            // Todas las operaciones se ejecutaron con éxito
+            this.loadingService.hide();
+            this.sendEmail();
+            this.Limpiar();
+            this.listar(this.actividad.id_actividad);
+            Swal.fire(
+              'Exitoso',
+              'Se ha completado el registro con éxito',
+              'success'
+            );
+          }
+        },
+        (error) => {
+          console.error('Error al realizar alguna de las operaciones:', error);
+          this.loadingService.hide();
+          Swal.fire(
+            'Error',
+            'Ha ocurrido un error en una o ambas operaciones',
+            'error'
+          );
+        }
+      );
+  }
 
   buscar() {
     // Filtra los componentes basados en el filtro
@@ -222,11 +372,15 @@ guardar() {
 
   //Ir a actividades
   verActividades() {
-    this.router.navigate(['/sup/aprobarEvidencias/listActividadAprobar'], { state: { data: this.poa } });
+    this.router.navigate(['/sup/aprobarEvidencias/listActividadAprobar'], {
+      state: { data: this.poa },
+    });
   }
   //Ir a POAS
   verPoas() {
-    this.router.navigate(['/sup/aprobarEvidencias/listPoaAprobarEvidenciaSuper']);
+    this.router.navigate([
+      '/sup/aprobarEvidencias/listPoaAprobarEvidenciaSuper',
+    ]);
   }
 
   //Cambiar colores de la tabkla
@@ -246,15 +400,17 @@ guardar() {
   //Ver observaciones
   verDetalles(archiv: any) {
     this.archivoSeleted.nombre = archiv.nombre;
-    this.aprobarEvidenciaService.listaraporbacionEviPorArchivo(archiv.id_archivo).subscribe(
-      (data: any[]) => {
-        this.listaAprobacionEvi = data;
-        this.dataSource3.data = this.listaAprobacionEvi;
-      },
-      (error: any) => {
-        console.error('Error al listar las observaciones:', error);
-      }
-    );
+    this.aprobarEvidenciaService
+      .listaraporbacionEviPorArchivo(archiv.id_archivo)
+      .subscribe(
+        (data: any[]) => {
+          this.listaAprobacionEvi = data;
+          this.dataSource3.data = this.listaAprobacionEvi;
+        },
+        (error: any) => {
+          console.error('Error al listar las observaciones:', error);
+        }
+      );
   }
 
   /// envio de correo john
@@ -263,15 +419,14 @@ guardar() {
     const subject = this.estado;
     const message = this.observacion;
 
-    this.emaservices.sendEmail(toUser, subject, message)
-      .subscribe(
-        response => {
-          console.log('Correo electrónico enviado con éxito:', response);
-        },
-        error => {
-          console.error('Error al enviar el correo electrónico:', error);
-        }
-      );
+    this.emaservices.sendEmail(toUser, subject, message).subscribe(
+      (response) => {
+        console.log('Correo electrónico enviado con éxito:', response);
+      },
+      (error) => {
+        console.error('Error al enviar el correo electrónico:', error);
+      }
+    );
   }
   get isAprobado() {
     return this.estado === 'APROBADO';
@@ -281,5 +436,157 @@ guardar() {
     return this.estado === 'RECHAZADO';
   }
 
+  //NOTIFICACIONES
+  //rechazos
+  notificarRechazo() {
+    this.noti.fecha = new Date();
+    this.noti.rol = 'ADMIN';
+    this.noti.mensaje =
+    this.user?.persona?.primer_nombre +
+    ' ' +
+    this.user?.persona?.primer_apellido +
+    ' ha rechazado la evidencia '+ this.nombreEvi 
+    +' de la actividad '+ this.nombreActividad +
+    ' de ' +
+    this.responsable;
+    this.noti.url = "/sup/resumen-evidencias-responsable/evidencias";
+    this.noti.usuario = 0;
+    this.notificationService.crear(this.noti).subscribe(
+      (data: Notificacion) => {
+        this.noti = data;
+        console.log('Notificacion guardada');
+      },
+      (error: any) => {
+        console.error('No se pudo guardar la notificación', error);
+      }
+    );
+  }
+
+  notificarRechazoUser() {
+    this.noti.fecha = new Date();
+    this.noti.rol = '';
+    this.noti.mensaje =
+    this.user?.persona?.primer_nombre +
+    ' ' +
+    this.user?.persona?.primer_apellido +
+    ' ha rechazado tu evidencia '+ this.nombreEvi 
+    +' de la actividad '+ this.nombreActividad;
+    this.noti.visto = false;
+    this.noti.url = "/sup/resumen-evidencias-responsable/evidencias";
+    this.noti.usuario = 3;
+    this.notificationService.crear(this.noti).subscribe(
+      (data: Notificacion) => {
+        this.noti = data;
+        console.log('Notificacion guardada');
+      },
+      (error: any) => {
+        console.error('No se pudo guardar la notificación', error);
+      }
+    );
+  }
+
+  notificarRechazoResp() {
+    this.noti.fecha = new Date();
+    this.noti.rol = 'RESPONSABLE';
+    const nombres = localStorage.getItem('nombres');
+    console.log("Nombres usuario "+nombres );
+    this.noti.mensaje =
+    this.user?.persona?.primer_nombre +
+    ' ' +
+    this.user?.persona?.primer_apellido +
+    ' ha rechazado la evidencia '+ this.nombreEvi 
+    +' de la actividad '+ this.nombreActividad +
+    ' de ' +
+    this.responsable;
+    this.noti.url = "/sup/resumen-evidencias-responsable/evidencias";
+    this.noti.visto = false;
+    this.noti.usuario = 0;
+
+    this.notificationService.crear(this.noti).subscribe(
+      (data: Notificacion) => {
+        this.noti = data;
+        console.log('Notificacion guardada');
+      },
+      (error: any) => {
+        console.error('No se pudo guardar la notificación', error);
+      }
+    );
+  }
+
+//aceptar
+notificarAprobacion() {
+  this.noti.fecha = new Date();
+  this.noti.rol = 'ADMIN';
+  this.noti.mensaje =
+    this.user?.persona?.primer_nombre +
+    ' ' +
+    this.user?.persona?.primer_apellido +
+    ' ha aprobado la evidencia '+ this.nombreEvi 
+    +' de la actividad '+ this.nombreActividad +
+    ' de ' +
+    this.responsable;
+  this.noti.usuario = 0;
+  this.noti.url = "/sup/resumen-evidencias-responsable/evidencias";
+  this.noti.idactividad=0;
+  this.notificationService.crear(this.noti).subscribe(
+    (data: Notificacion) => {
+      this.noti = data;
+      console.log('Notificacion guardada');
+    },
+    (error: any) => {
+      console.error('No se pudo guardar la notificación', error);
+    }
+  );
+}
+
+notificarAprobacionUser() {
+  this.noti.fecha = new Date();
+  this.noti.rol = '';
+  this.noti.mensaje =
+    this.user?.persona?.primer_nombre +
+    ' ' +
+    this.user?.persona?.primer_apellido +
+    ' ha aprobado tu evidencia '+ this.nombreEvi 
+    +' de la actividad '+ this.nombreActividad;
+  this.noti.visto = false;
+  this.noti.usuario = 3;
+  this.noti.url = "/sup/resumen-evidencias-responsable/evidencias";
+  this.noti.idactividad=0;
+  this.notificationService.crear(this.noti).subscribe(
+    (data: Notificacion) => {
+      this.noti = data;
+      console.log('Notificacion guardada');
+    },
+    (error: any) => {
+      console.error('No se pudo guardar la notificación', error);
+    }
+  );
+}
+
+notificarAprobacionResp() {
+  this.noti.fecha = new Date();
+  this.noti.rol = 'RESPONSABLE';
+  this.noti.mensaje =
+    this.user?.persona?.primer_nombre +
+    ' ' +
+    this.user?.persona?.primer_apellido +
+    ' ha aprobado la evidencia '+ this.nombreEvi 
+    +' de la actividad '+ this.nombreActividad +
+    ' de ' +
+    this.responsable;
+  this.noti.visto = false;
+  this.noti.usuario = 0;
+  this.noti.url = "/sup/resumen-evidencias-responsable/evidencias";
+  this.noti.idactividad=0;
+  this.notificationService.crear(this.noti).subscribe(
+    (data: Notificacion) => {
+      this.noti = data;
+      console.log('Notificacion guardada');
+    },
+    (error: any) => {
+      console.error('No se pudo guardar la notificación', error);
+    }
+  );
+}
 
 }

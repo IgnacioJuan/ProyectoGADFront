@@ -1,0 +1,363 @@
+<body>
+  <div class="container bg-light border border-start-0 rounded-4">
+    <blockquote
+      style="
+        margin-top: 5%;
+        background-color: #ffffff;
+        border-left: 10px solid green;
+      "
+    >
+      <h1 style="text-transform: uppercase" class="header-title">
+        <strong
+          ><a style="cursor: pointer" (click)="verPoas()"
+            >LISTA DE PROYECTOS
+          </a>
+          >
+          <a class="header-title">ACTIVIDADES </a></strong
+        >
+      </h1>
+    </blockquote>
+    <h1>{{ poa.nombre }}</h1>
+    <div class="card">
+      <div class="card-body">
+        <div role="search" id="buscar">
+          <div class="form-group">
+            <input
+              type="text"
+              class="form-control"
+              name="filterPost3"
+              placeholder="Buscar..."
+              [(ngModel)]="filterPost"
+              (input)="aplicarFiltro()"
+            />
+          </div>
+        </div>
+        <div
+          class="mat-elevation-z8 table-responsive"
+          style="margin-bottom: 1%"
+        >
+          <table mat-table [dataSource]="dataSource">
+            <ng-container matColumnDef="id_actividad">
+              <th mat-header-cell *matHeaderCellDef>ID</th>
+              <td mat-cell *matCellDef="let elemento">
+                {{ elemento.id_actividad }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="nombre">
+              <th mat-header-cell *matHeaderCellDef>NOMBRE</th>
+              <td
+                mat-cell
+                *matCellDef="let elemento"
+                class="acciones-cellNombre"
+              >
+                {{ elemento.nombre }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="descripcion">
+              <th mat-header-cell *matHeaderCellDef>DESCRIPCIÓN</th>
+              <td mat-cell *matCellDef="let elemento">
+                {{ elemento.descripcion }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="presupuesto_referencial">
+              <th mat-header-cell *matHeaderCellDef>P.REFERENCIAL</th>
+              <td
+                mat-cell
+                *matCellDef="let elemento"
+                class="align-right-dollar"
+              >
+                {{ elemento.presupuesto_referencial }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="recursos_propios">
+              <th mat-header-cell *matHeaderCellDef>R.PROPIOS</th>
+              <td
+                mat-cell
+                *matCellDef="let elemento"
+                class="align-right-dollar"
+              >
+                {{ elemento.recursos_propios }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="codificado">
+              <th mat-header-cell *matHeaderCellDef>CODIFICADO</th>
+              <td
+                mat-cell
+                *matCellDef="let elemento"
+                class="align-right-dollar"
+              >
+                {{ elemento.codificado }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="devengado">
+              <th mat-header-cell *matHeaderCellDef>DEVENGADO</th>
+              <td
+                mat-cell
+                *matCellDef="let elemento"
+                class="align-right-dollar"
+              >
+                {{ elemento.devengado }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="totalpresupuestoEterno">
+              <th mat-header-cell *matHeaderCellDef>P.EXRTERNO</th>
+              <td
+                mat-cell
+                *matCellDef="let elemento"
+                class="align-right-dollar"
+              >
+                {{ elemento.totalpresupuestoEterno }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="totalreformaSuplemento">
+              <th mat-header-cell *matHeaderCellDef>SUPLEMENTO</th>
+              <td
+                mat-cell
+                *matCellDef="let elemento"
+                class="align-right-dollar"
+              >
+                {{ elemento.totalreformaSuplemento }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="totalreformaTIncremento">
+              <th mat-header-cell *matHeaderCellDef>INCREMENTO</th>
+              <td
+                mat-cell
+                *matCellDef="let elemento"
+                class="align-right-dollar"
+              >
+                {{ elemento.totalreformaTIncremento }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="totalreformaTDecremento">
+              <th mat-header-cell *matHeaderCellDef>DECREMENTO</th>
+              <td
+                mat-cell
+                *matCellDef="let elemento"
+                class="align-right-dollar"
+              >
+                {{ elemento.totalreformaTDecremento }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef class="acciones-header">
+                PERIODOS
+              </th>
+              <td mat-cell *matCellDef="let element" class="acciones-cell">
+                <button
+                  class="btn btn-primary"
+                  role="button"
+                  data-bs-toggle="modal"
+                  data-bs-target="#materiaModalObservaciones"
+                  (click)="verDetalles(element)"
+                  style="background-color: green"
+                >
+                  <div class="d-flex">
+                    <span class="badge"></span>
+                    <i class="far fa-calendar-alt"></i>
+                  </div>
+                </button>
+              </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="columnasUsuario"></tr>
+            <tr mat-row *matRowDef="let fila; columns: columnasUsuario"></tr>
+          </table>
+          <mat-paginator
+            [pageSizeOptions]="[5, 10, 20]"
+            showFirstLastButtons
+            aria-label="Seleccione"
+            itemsPerPageLabel="Items por página:"
+            nextPageLabel="Siguiente"
+            previousPageLabel="Anterior"
+          >
+          </mat-paginator>
+        </div>
+      </div>
+      <h2 style="margin-left: 1%;">Resumen {{poa.tipo_periodo}}</h2>
+
+      <div class="card-body" style="height: 100%">
+        <div
+          class="mat-elevation-z8 table-responsive"
+          style="margin-bottom: 1%"
+        >
+          <table mat-table [dataSource]="periodotot">
+            <ng-container matColumnDef="referencia">
+              <th mat-header-cell *matHeaderCellDef>NRO</th>
+              <td
+                mat-cell
+                *matCellDef="let elemento; let i = index"
+                [class.ultimo-elemento]="esUltimoElemento2(i)"
+              >
+                {{ elemento.referencia }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="fechai">
+              <th mat-header-cell *matHeaderCellDef >FECHAS</th>
+              <td
+                mat-cell
+                *matCellDef="let elemento; let i = index"
+                [class.ultimo-elemento]="esUltimoElemento2(i)"
+               
+              >
+              {{ elemento.periodoInicio | date:'dd/MM/yyyy' }} - {{ elemento.periodoFin | date:'dd/MM/yyyy' }}
+            </td>
+            </ng-container>
+
+            <ng-container matColumnDef="inversion">
+              <th mat-header-cell *matHeaderCellDef class="text-right">
+                INVERSIÓN
+              </th>
+              <td
+                mat-cell
+                *matCellDef="let elemento; let i = index"
+                [class.ultimo-elemento]="esUltimoElemento2(i)"
+                class="align-right-dollar"
+              >
+                {{ elemento.inversion }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="ejecucion">
+              <th mat-header-cell *matHeaderCellDef class="text-right">
+                EJECUTADO
+              </th>
+              <td
+                mat-cell
+                *matCellDef="let elemento; let i = index"
+                [class.ultimo-elemento]="esUltimoElemento2(i)"
+                class="align-right-dollar"
+              >
+                {{ elemento.ejecucion }}
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="columnasperiodotot"></tr>
+            <tr
+              mat-row
+              *matRowDef="let fila; columns: columnasperiodotot"
+            ></tr>
+          </table>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+<div
+  class="modal fade"
+  id="materiaModalObservaciones"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header" style="background-color: #077b15">
+        <h3
+          class="modal-title"
+          style="font-family: Arial, sans-serif; color: white"
+        >
+          <i class="fa fa-info-circle"></i> {{ poa.tipo_periodo }}
+        </h3>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div class="card">
+          <div class="card-body" style="height: 100%">
+            <div
+              class="mat-elevation-z8 table-responsive"
+              style="margin-bottom: 5%"
+            >
+              <table mat-table [dataSource]="dataSource3">
+                <ng-container matColumnDef="referencia">
+                  <th mat-header-cell *matHeaderCellDef>NRO</th>
+                  <td
+                    mat-cell
+                    *matCellDef="let elemento; let i = index"
+                    [class.ultimo-elemento]="esUltimoElemento(i)"
+                  >
+                    {{ elemento.referencia }}
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="porcentaje">
+                  <th mat-header-cell *matHeaderCellDef class="text-right">
+                    %
+                  </th>
+                  <td
+                    mat-cell
+                    *matCellDef="let elemento; let i = index"
+                    [class.ultimo-elemento]="esUltimoElemento(i)"
+                    class="text-right"
+                  >
+                    {{ elemento.porcentaje }} %
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="inversion">
+                  <th mat-header-cell *matHeaderCellDef class="text-right">
+                    INVERSIÓN
+                  </th>
+                  <td
+                    mat-cell
+                    *matCellDef="let elemento; let i = index"
+                    [class.ultimo-elemento]="esUltimoElemento(i)"
+                    class="align-right-dollar"
+                  >
+                    {{ elemento.inversion }}
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="ejecucion">
+                  <th mat-header-cell *matHeaderCellDef class="text-right">
+                    EJECUTADO
+                  </th>
+                  <td
+                    mat-cell
+                    *matCellDef="let elemento; let i = index"
+                    [class.ultimo-elemento]="esUltimoElemento(i)"
+                    class="align-right-dollar"
+                  >
+                    {{ elemento.ejecucion }}
+                  </td>
+                </ng-container>
+
+                <tr
+                  mat-header-row
+                  *matHeaderRowDef="columnasObservaciones"
+                ></tr>
+                <tr
+                  mat-row
+                  *matRowDef="let fila; columns: columnasObservaciones"
+                ></tr>
+              </table>
+
+              <div
+                *ngIf="!resultadosEncontradosporObservaciones"
+                class="alert alert-warning"
+              >
+                No se encontraron observaciones.
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button
+            class="btn btn-primary"
+            data-dismiss="modal"
+            data-bs-dismiss="modal"
+          >
+            OK
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

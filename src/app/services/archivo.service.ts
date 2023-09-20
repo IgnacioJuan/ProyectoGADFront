@@ -8,6 +8,7 @@ import { environment } from 'src/environments/environment';
 import { Archivo } from '../models/Archivo';
 import { ArchivoProjection } from '../interface/ArchivoProjection';
 import { Archivos } from '../models/Archivos';
+import { ArchivoPoaProjection } from '../interface/ArchivoPoaProjection';
 
 @Injectable({
   providedIn: 'root'
@@ -122,6 +123,9 @@ actualizar(id: any, archi: any): Observable<any> {
     return this.http.get<any[]>(`${baserUrl}/archivo/listarPorEstadoYFechaDesc/`+estado+`/`+username);
   }
 
-
+  public listarArchivosdelPoa(id_poa: number): Observable<ArchivoPoaProjection[]> {
+    return this.http.get<ArchivoPoaProjection[]>(`${baserUrl}/archivo/listarArchivosdelPoa/${id_poa}`);
+  }
+  
 
 }
