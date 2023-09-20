@@ -7,9 +7,11 @@ import { PeriodoTotalPOA_DTO } from 'src/app/interface/PeriodoTotalPOA_DTO';
 import { Periodo_DTO } from 'src/app/interface/Periodo_DTO';
 import { ActividadesPoaDTO } from 'src/app/models/ActividadesAprobPoa ';
 import { AprobPoa, CrearAprobPOA } from 'src/app/models/AprobPoa';
+import { Notificacion } from 'src/app/models/Notificacion';
 import { ActividadService } from 'src/app/services/actividad.service';
 import { EmailServiceService } from 'src/app/services/email-service.service';
 import { LoginService } from 'src/app/services/login.service';
+import { NotificacionService } from 'src/app/services/notificacion.service';
 import { PeriodoService } from 'src/app/services/periodo.service';
 import { PoacService } from 'src/app/services/poac.service';
 import Swal from 'sweetalert2';
@@ -81,7 +83,8 @@ export class DetallePoaComponent implements OnInit {
     private router: Router,
     private periodoService: PeriodoService,
     public login: LoginService,
-    private loadingService: LoadingServiceService
+    private loadingService: LoadingServiceService,
+    private notificationService: NotificacionService,
   ) { this.loadingService.show(); }
 
   ngOnInit(): void {
@@ -208,23 +211,115 @@ export class DetallePoaComponent implements OnInit {
         };
 
         if (this.estado === 'APROBADO') {
-          Swal.fire({
-            title: '¿Está seguro de aprobar el POA?',
-            text: 'Se Finalizara el POA anterior',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Si, aprobar',
-            cancelButtonText: 'No, cancelar',
-          }).then((result) => {
-            if (result.value) {
-              this.resultadoSolicitud();
-            } else if (result.dismiss === Swal.DismissReason.cancel) {
-              console.log("Poa no finalizado");
-            }
-          });
+          if (this.poacService.existProject(this.poaAprob.id_proyecto)) {
+            Swal.fire({
+              title: '¿Está seguro de aprobar el POA?',
+              text: 'Se Finalizara el POA anterior',
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonText: 'Si, aprobar',
+              cancelButtonText: 'No, cancelar',
+            }).then((result) => {
+              if (result.value) {
+                // this.crearAprobacionPoa();
+                this.poacService
+                  .crearEstadoAprobacion(this.poaAprob.id_poa, data)
+                  .subscribe((response) => {
+                    console.log('Estado actualizado:', response);
+                    this.emailService
+                      .sendEmail(
+                        this.correoRecep,
+                        this.subject,
+                        this.message +
+                        this.estado +
+                        '\n' +
+                        this.detallePoa +
+                        'DENOMINACION DEL PROGRAMA PROYECTO: ' +
+                        this.poaAprob.nombre_proyecto +
+                        '\n' +
+                        'DESCRIPCION DEL PROGRAMA PROYECTO: ' +
+                        (this.poaAprob.descripcion_proyecto || 'No definido') +
+                        '\n' +
+                        'AREA: ' +
+                        (this.poaAprob.area || 'No definido') +
+                        '\n' +
+                        'SUPERVISOR: ' +
+                        this.user.persona.primer_nombre +
+                        '  ' +
+                        this.user.persona.primer_apellido +
+                        '\n' +
+                        'AÑO DE EJECUCIÓN DEL PROYECTO: ' +
+                        this.poaAprob.fecha_inicio +
+                        ' - ' +
+                        this.poaAprob.fecha_fin +
+                        '\n' +
+                        '\nObservación:\n ' +
+                        this.observacion
+                      )
+                      .subscribe((responseEmail) => {
+                        console.log('Email enviado:', responseEmail);
+                        console.log('Email enviado:', this.correoRecep);
+                        this.notificarAprobacion();
+                        this.notificarAprobacionAdmin();
+                        this.notificarAprobacionUser();
+                      });
+                    // Muestra el SweetAlert
+                    this.loadingService.hide();
+                    this.showSuccessAlert();
+                  });
+                console.log("Poa finalizado con exito");
+                this.showSuccessAlert();
+              } else if (result.dismiss === Swal.DismissReason.cancel) {
+                console.log("Poa no finalizado");
+              }
+            });
+          }
         } else {
-          this.resultadoSolicitud();
-          console.log("rechazado con exito");
+          this.poacService
+            .crearEstadoAprobacion(this.poaAprob.id_poa, data)
+            .subscribe((response) => {
+              console.log('Estado actualizado:', response);
+              this.emailService
+                .sendEmail(
+                  this.correoRecep,
+                  this.subject,
+                  this.message +
+                  this.estado +
+                  '\n' +
+                  this.detallePoa +
+                  'DENOMINACION DEL PROGRAMA PROYECTO: ' +
+                  this.poaAprob.nombre_proyecto +
+                  '\n' +
+                  'DESCRIPCION DEL PROGRAMA PROYECTO: ' +
+                  (this.poaAprob.descripcion_proyecto || 'No definido') +
+                  '\n' +
+                  'AREA: ' +
+                  (this.poaAprob.area || 'No definido') +
+                  '\n' +
+                  'SUPERVISOR: ' +
+                  this.user.persona.primer_nombre +
+                  '  ' +
+                  this.user.persona.primer_apellido +
+                  '\n' +
+                  'AÑO DE EJECUCIÓN DEL PROYECTO: ' +
+                  this.poaAprob.fecha_inicio +
+                  ' - ' +
+                  this.poaAprob.fecha_fin +
+                  '\n' +
+                  '\nObservación:\n ' +
+                  this.observacion
+                )
+                .subscribe((responseEmail) => {
+                  console.log('Email enviado:', responseEmail);
+                  console.log('Email enviado:', this.correoRecep);
+                  this.notificarRechazo();
+                  this.notificarRechazoAdmin();
+                  this.notificarRechazoUser();
+                });
+              // Muestra el SweetAlert
+              this.loadingService.hide();
+              this.showSuccessAlert();
+            });
         }
       }
     }
@@ -314,5 +409,164 @@ export class DetallePoaComponent implements OnInit {
   Aprobar() {
     this.estado = 'APROBADO';
   }
+
+  noti = new Notificacion();
+
+  //NOTIFICACIONES
+  //rechazos
+  notificarRechazo() {
+    this.noti.fecha = new Date();
+    this.noti.rol = 'SUPERADMIN';
+    //const nombres = localStorage.getItem('nombres');
+    this.noti.mensaje =
+    this.user?.persona?.primer_nombre +
+    ' ' +
+    this.user?.persona?.primer_apellido +
+    ' ha aprobado el poa para el proyecto: ' +
+    this.poaAprob.nombre_proyecto +
+    ' de ' +
+    this.poaAprob.responsable;
+    this.noti.usuario = 0;
+
+    this.notificationService.crear(this.noti).subscribe(
+      (data: Notificacion) => {
+        this.noti = data;
+        console.log('Notificacion guardada');
+      },
+      (error: any) => {
+        console.error('No se pudo guardar la notificación', error);
+      }
+    );
+  }
+
+  notificarRechazoUser() {
+    this.noti.fecha = new Date();
+    this.noti.rol = '';
+    this.noti.mensaje =
+    this.user?.persona?.primer_nombre +
+    ' ' +
+    this.user?.persona?.primer_apellido +
+    ' ha aprobado tu poa para el proyecto:  ' 
+    +this.poaAprob.nombre_proyecto;
+    this.noti.visto = false;
+    const idUsuarioString = localStorage.getItem('idUsuario');
+    const idUsuario = Number(idUsuarioString);
+    this.noti.usuario = idUsuario;
+    this.notificationService.crear(this.noti).subscribe(
+      (data: Notificacion) => {
+        this.noti = data;
+        console.log('Notificacion guardada');
+      },
+      (error: any) => {
+        console.error('No se pudo guardar la notificación', error);
+      }
+    );
+  }
+
+  notificarRechazoAdmin() {
+    this.noti.fecha = new Date();
+    this.noti.rol = 'ADMIN';
+    const nombres = localStorage.getItem('nombres');
+    console.log("Nombres usuario "+nombres );
+    this.noti.mensaje =
+    this.user?.persona?.primer_nombre +
+    ' ' +
+    this.user?.persona?.primer_apellido +
+    ' ha rechazado el poa para el proyecto: ' +
+    this.poaAprob.nombre_proyecto +
+    ' de ' +
+    this.poaAprob.responsable;
+    this.noti.visto = false;
+    this.noti.usuario = 0;
+
+    this.notificationService.crear(this.noti).subscribe(
+      (data: Notificacion) => {
+        this.noti = data;
+        console.log('Notificacion guardada');
+      },
+      (error: any) => {
+        console.error('No se pudo guardar la notificación', error);
+      }
+    );
+  }
+
+//aceptar
+notificarAprobacion() {
+  this.noti.fecha = new Date();
+  this.noti.rol = 'SUPERADMIN';
+  //const nombres = localStorage.getItem('nombres');
+  this.noti.mensaje =
+    this.user?.persona?.primer_nombre +
+    ' ' +
+    this.user?.persona?.primer_apellido +
+    ' ha aprobado el poa para el proyecto: ' +
+    this.poaAprob.nombre_proyecto +
+    ' de ' +
+    this.poaAprob.responsable;
+  this.noti.usuario = 0;
+  this.noti.url="/sup/flujo-criterio/listaproyecto";
+  this.noti.idactividad=0;
+  this.notificationService.crear(this.noti).subscribe(
+    (data: Notificacion) => {
+      this.noti = data;
+      console.log('Notificacion guardada');
+    },
+    (error: any) => {
+      console.error('No se pudo guardar la notificación', error);
+    }
+  );
+}
+
+notificarAprobacionUser() {
+  this.noti.fecha = new Date();
+  this.noti.rol = '';
+  this.noti.mensaje =
+    this.user?.persona?.primer_nombre +
+    ' ' +
+    this.user?.persona?.primer_apellido +
+    ' ha aprobado tu poa para el proyecto:  ' 
+    +this.poaAprob.nombre_proyecto;
+  this.noti.visto = false;
+  const idUsuarioString = localStorage.getItem('idUsuario');
+  const idUsuario = Number(idUsuarioString);
+  this.noti.usuario = idUsuario;
+  this.noti.url="/adm/poasEnviadosAdmin";
+this.noti.idactividad=0;
+  this.notificationService.crear(this.noti).subscribe(
+    (data: Notificacion) => {
+      this.noti = data;
+      console.log('Notificacion guardada');
+    },
+    (error: any) => {
+      console.error('No se pudo guardar la notificación', error);
+    }
+  );
+}
+
+notificarAprobacionAdmin() {
+  this.noti.fecha = new Date();
+  this.noti.rol = 'ADMIN';
+  this.noti.mensaje =
+    this.user?.persona?.primer_nombre +
+    ' ' +
+    this.user?.persona?.primer_apellido +
+    ' ha aprobado el poa para el proyecto: ' +
+    this.poaAprob.nombre_proyecto +
+    ' de ' +
+    this.poaAprob.responsable;
+  this.noti.visto = false;
+  this.noti.usuario = 0;
+  this.noti.url="/adm/poasEnviadosAdmin";
+  this.noti.idactividad=0;
+  this.notificationService.crear(this.noti).subscribe(
+    (data: Notificacion) => {
+      this.noti = data;
+      console.log('Notificacion guardada');
+    },
+    (error: any) => {
+      console.error('No se pudo guardar la notificación', error);
+    }
+  );
+}
 
 }
