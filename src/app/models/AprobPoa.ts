@@ -1,4 +1,3 @@
-import { usuario } from "./Usuario";
 
 export class AprobPoa {
     id_poa!: number;
@@ -21,14 +20,15 @@ export class AprobPoa {
     nombre_metapdot!: string;
     meta_proyecto!: string;
     nombre_completo!: string;
-    meta_planificada!: number; 
-    linea_base!: number; 
+    meta_planificada!: number;
+    linea_base!: number;
     cobertura!: string;
     localizacion!: string;
     barrio!: string;
     comunidad!: string;
     tipo_periodo!: string;
     cargo!: string;
+    id_proyecto!: number;
 }
 
 export interface CrearAprobPOA {

@@ -1,8 +1,10 @@
 <body>
     <div class="container bg-light border border-start-0 rounded-4">
-        <blockquote class="blockquote text-dark" style="margin-top: 5%">
-            <h1><strong> GOBIERNO AUTONOMO DESCENTRALIZADO MUNICIPAL DEL CANTON SANTA ISABEL</strong></h1>
-            <h1><strong>REGISTRO DE PLAN OPERATIVO ANUAL</strong></h1>
+        <blockquote style="margin-top: 5%; background-color: #ffffff; border-left: 10px solid green;">
+            <h1 style="text-transform: uppercase" class="header-title"><strong> GOBIERNO AUTONOMO DESCENTRALIZADO
+                    MUNICIPAL DEL CANTON SANTA ISABEL</strong></h1>
+            <h1 style="text-transform: uppercase" class="header-title"><strong>REGISTRO DE PLAN OPERATIVO ANUAL</strong>
+            </h1>
         </blockquote>
         <div></div>
         <div class="card">
@@ -42,8 +44,8 @@
                                 <mat-label>Tipo de seguimiento</mat-label>
                                 <mat-select [(value)]="selectedPeriod">
                                     <mat-option></mat-option>
-                                    <mat-option [value]="option.value" *ngFor="let option of periodo">{{
-                                        option.value}}</mat-option>
+                                    <mat-option [value]="option.value" *ngFor="let option of periodo">{{ option.value
+                                        }}</mat-option>
                                 </mat-select>
                             </mat-form-field>
                         </div>
@@ -171,25 +173,19 @@
                 <div class="table-container">
                     <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
 
-                        <!--- Note that these columns can be defined in any order.
-                              The actual rendered columns are set as a property on the row definition" -->
-
-                        <!-- Position Column -->
-
-                        <!-- Name Column -->
                         <ng-container matColumnDef="nombre">
                             <th mat-header-cell *matHeaderCellDef class="centered"> Actividades </th>
                             <td mat-cell *matCellDef="let element" class="wide-content-cell"> {{element.nombre}} </td>
                         </ng-container>
 
-                        <!-- Weight Column -->
+
                         <ng-container matColumnDef="presupuesto_referencial">
                             <th mat-header-cell *matHeaderCellDef class="centered"> Presupuesto Referencial </th>
                             <td mat-cell *matCellDef="let element" class="text-align-left wide-rest-cell">
-                                {{element.presupuesto_referencial}} </td>
+                                ${{element.presupuesto_referencial | number:'1.2-2' }} </td>
                         </ng-container>
 
-                        <!-- Symbol Column -->
+
                         <ng-container matColumnDef="inversion">
                             <th mat-header-cell *matHeaderCellDef class="centered"> Ejecucion e Inversion </th>
                             <td mat-cell *matCellDef="let element; let i=index" class="  centered">
@@ -217,9 +213,9 @@
                 <div class="table-container">
                     <div class="table-row">
                         <div class="table-cell"><strong>Recursos Propios:</strong></div>
-                        <div class="table-cell ">${{recursosPropios}}</div>
+                        <div class="table-cell ">${{recursosPropios | number:'1.2-2' }}</div>
                         <div class="table-cell"><strong>Recursos Externos:</strong></div>
-                        <div class="table-cell ">${{recursosExternos}}</div>
+                        <div class="table-cell ">${{recursosExternos | number:'1.2-2' }}</div>
                     </div>
                 </div>
                 <br />
@@ -227,19 +223,19 @@
                 <div class="table-container">
                     <div class="table-row">
                         <div class="table-cell wide-cell"><strong>{{selectedPeriod}} 1:</strong></div>
-                        <div class="table-cell ">${{valueUno}}</div>
+                        <div class="table-cell ">${{valueUno | number:'1.2-2' }}</div>
                     </div>
                 </div>
                 <div class="table-container">
                     <div class="table-row">
                         <div class="table-cell wide-cell"><strong>{{selectedPeriod}} 2:</strong></div>
-                        <div class="table-cell ">${{valueDos}}</div>
+                        <div class="table-cell ">${{valueDos | number:'1.2-2' }}</div>
                     </div>
                 </div>
                 <div class="table-container">
                     <div class="table-row">
                         <div class="table-cell wide-cell"><strong>{{selectedPeriod}} 3:</strong></div>
-                        <div class="table-cell ">${{valueTres}}</div>
+                        <div class="table-cell ">${{valueTres | number:'1.2-2' }}</div>
                     </div>
                 </div>
                 <div class="table-container">
@@ -248,13 +244,14 @@
                             <strong>{{selectedPeriod}}
                                 4:</strong>
                         </div>
-                        <div class="table-cell " *ngIf="selectedPeriod === 'TRIMESTRE'">${{valueCuatro}}</div>
+                        <div class="table-cell " *ngIf="selectedPeriod === 'TRIMESTRE'">${{valueCuatro | number:'1.2-2'
+                            }}</div>
                     </div>
                 </div>
                 <div class="table-container ">
                     <div class="table-row">
                         <div class="table-cell wide-cell"><strong>TOTAL:</strong></div>
-                        <div class="table-cell">${{totalActividades}}</div>
+                        <div class="table-cell">${{totalActividades | number:'1.2-2' }}</div>
                     </div>
                 </div>
 
@@ -264,11 +261,12 @@
                     <div class="table-row">
                         <div class="table-cell"><strong>Nombre funcionario:</strong></div>
                         <div class="table-cell ">
-                            {{projectSelect.nombre_completo_persona}}
+                            {{persona.primer_nombre}} {{persona.segundo_nombre}} {{persona.primer_apellido}}
+                            {{persona.segundo_apellido}}
                         </div>
                         <div class="table-cell"><strong>Cargo:</strong></div>
                         <div class="table-cell ">
-                            {{projectSelect.cargo}}
+                            {{persona.cargo}}
                         </div>
                         <div class="table-cell"><strong>Fecha de emisión:</strong></div>
                         <div class="table-cell ">
@@ -278,13 +276,13 @@
                 </div>
                 <br />
                 <br />
-                <!-- boton para enviar solicitud -->
+
                 <button class="button" (click)="solicitud()">Enviar Solicitud</button>
             </div>
         </div>
     </div>
 
-    <!-- modal para cualquier dilaogo -->
+
     <div class="modal fade" id="materiaModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
         (hidden.bs.modal)="limpiarFormulario()">
         <div class="modal-dialog">
@@ -308,55 +306,45 @@
                                 </div>
                             </div>
                         </div>
-
                         <div class="form-group">
-                            <label for="observacion">Observacion:</label>
-                            <input class="form-control" formControlName="observacion" type="text" id="observacion"
-                                name="observacion" style="margin-bottom: 10px" />
+                            <label for="observacion">Descripción:</label>
+                            <textarea class="form-control" formControlName="observacion" id="observacion"
+                                name="observacion" style="margin-bottom: 10px"></textarea>
                         </div>
 
-                        <!-- Generar ahora para ingresar valores monetarios-->
+
                         <div class="form-group">
                             <label for="recursos_propios">Recursos Propios:</label>
                             <input class="form-control" formControlName="recursos_propios" type="text"
                                 id="recursos_propios" name="recursos_propios" style="margin-bottom: 10px"
                                 appCurrencyInput autocomplete="off" />
                         </div>
-                        <!-- now ctreate for input Presupesto externo -->
                         <div class="form-group">
                             <label for="recursos_externos">Recursos Externos:</label>
                             <input class="form-control" formControlName="recursos_externos" type="text"
                                 id="recursos_externos" name="recursos_externos" style="margin-bottom: 10px"
                                 appCurrencyInput autocomplete="off" />
                         </div>
-                        <!-- now create for input Institucion_beneficiaria -->
+
                         <div class="form-group">
                             <label for="institucion_beneficiaria">Institucion Beneficiaria:</label>
                             <input class="form-control" formControlName="institucion_beneficiaria" type="text"
                                 id="institucion_beneficiaria" name="institucion_beneficiaria"
                                 style="margin-bottom: 10px" />
                         </div>
-                        <div class="form-group">
-                            <label for="valor_uno">{{selectedPeriod}} 1</label>
-                            <input class="form-control" formControlName="valor_uno" type="text" id="valor_uno"
-                                name="valor_uno" style="margin-bottom: 10px" appCurrencyInput />
-                        </div>
-                        <div class="form-group">
-                            <label for="valor_dos">{{selectedPeriod}} 2</label>
-                            <input class="form-control" formControlName="valor_dos" type="text" id="valor_dos"
-                                name="valor_dos" style="margin-bottom: 10px" appCurrencyInput />
-                        </div>
-                        <div class="form-group">
-                            <label for="valor_tres">{{selectedPeriod}} 3</label>
-                            <input class="form-control" formControlName="valor_tres" type="text" id="valor_tres"
-                                name="valor_tres" style="margin-bottom: 10px" appCurrencyInput />
-                        </div>
-                        <div class="form-group" *ngIf="selectedPeriod === 'TRIMESTRE'">
-                            <label for="valor_cuatro">{{selectedPeriod}} 4</label>
-                            <input class="form-control" formControlName="valor_cuatro" type="text" id="valor_cuatro"
-                                name="valor_cuatro" style="margin-bottom: 10px" appCurrencyInput />
-                        </div>
                     </form>
+                    <section class="example-section">
+                        <span class="example-list-section">
+                            <ul>
+                                <li *ngFor="let subtask of getSubtasks(); let last = last">
+                                    <mat-checkbox [(ngModel)]="subtask.completed" color="#077b15"
+                                        (ngModelChange)="updateAllComplete()">
+                                        {{selectedPeriod}} {{subtask.position}}:
+                                    </mat-checkbox>
+                                </li>
+                            </ul>
+                        </span>
+                    </section>
                     <div class="modal-footer">
                         <button type="button" form="formulario" class="btn btn-warning" data-bs-dismiss="modal">
                             Cancelar
@@ -374,6 +362,6 @@
             </div>
         </div>
     </div>
-    <!-- button con la opcion enviar solicitus -->
+
 
 </body>

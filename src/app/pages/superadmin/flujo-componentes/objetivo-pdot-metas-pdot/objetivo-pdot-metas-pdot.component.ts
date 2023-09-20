@@ -70,7 +70,7 @@ constructor(private paginatorIntl: MatPaginatorIntl,
 ) {
   this.formMeta = fb.group({
     nombre: ['', Validators.required],
-    descripcion: ['', [Validators.required]],
+    descripcion: [''],
     meta_final: ['', Validators.required],
     linea_base: ['', Validators.required],
 
