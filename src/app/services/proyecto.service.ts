@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Proyecto } from '../models/Proyecto';
 import baserUrl from './helper';
+import {ReporteProyecto} from "../interface/reporte-proyecto";
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +20,7 @@ export class ProyectoService {
     return this.http.get<Proyecto>(`${baserUrl}/api/proyecto/buscar/${id}`);
   }
   // No borar sirve para bsucar el proyecto del poa 
+// No borar sirve para bsucar el proyecto del poa
 
   buscarProyectosPorIds(ids: number[]): Observable<any> {
     // Convierte la lista de IDs en una cadena separada por comas
@@ -77,4 +79,7 @@ export class ProyectoService {
 
 
   //CREA UN SERVICIO PARA VERIFICAR SI EXISTE UN PROYECTO RUTA 'http://localhost:5000/api/proyecto/existProject?id_proyecto=1'
+  obtenerReportePresupuesto(): Observable<any[]> {
+    return this.http.get<ReporteProyecto[]>(`${baserUrl}/api/proyecto/reporte`);
+  }
 }
