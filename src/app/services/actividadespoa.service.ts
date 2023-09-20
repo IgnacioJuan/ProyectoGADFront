@@ -28,6 +28,12 @@ export class ActividadespoaService {
     return this.http.put(`${baserUrl}/api/actividades/actualizar/${id}`, acti);
   }
 
+  
+
+  actualizarDevengado(id: any, acti: any): Observable<any> {
+    return this.http.put(`${baserUrl}/api/actividades/actualizarDevengado/${id}`, acti);
+  }
+
   actualizarPeriodosActividad(id: any, periodo: any): Observable<any> {
     return this.http.put(`${baserUrl}/api/periodo/actualizar/${id}`, periodo);
   }

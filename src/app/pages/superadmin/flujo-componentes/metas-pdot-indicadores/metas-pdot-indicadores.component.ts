@@ -140,8 +140,12 @@ eliminar(indicador: any) {
     denyButtonText: `Eliminar`,
   }).then((result) => {
     if (!result.isConfirmed) {
+      this.loadingService.show();
+
       this.indicadorService.eliminar(indicador.id_indicador, indicador).subscribe(
         (response: any) => {
+                this.loadingService.hide();
+
           this.listar(this.metaPDOT.id_meta_pdot)
           Swal.fire('Eliminado!', '', 'success')  } ); }})
 }

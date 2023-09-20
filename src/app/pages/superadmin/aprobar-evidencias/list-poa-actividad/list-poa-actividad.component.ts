@@ -5,6 +5,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { PoaService } from 'src/app/services/poa.service';
 import { LoadingServiceService } from 'src/app/components/loading-spinner/LoadingService.service';
+import { PoaActividadProjection } from 'src/app/interface/PoaActividadProjection';
 @Component({
   selector: 'app-list-poa-actividad',
   templateUrl: './list-poa-actividad.component.html',
@@ -12,7 +13,7 @@ import { LoadingServiceService } from 'src/app/components/loading-spinner/Loadin
 })
 export class ListPoaActividadComponent  implements OnInit {
 //Listar Poas
-  listaPoas: Poa[] = [];
+  listaPoas: PoaActividadProjection[] = [];
  //Buscar
  filterPost: string = "";
  filteredComponentes: any[] = [];
@@ -40,7 +41,7 @@ export class ListPoaActividadComponent  implements OnInit {
  ngOnInit(): void {
    this.listar();
  }
- dataSource = new MatTableDataSource<Poa>();
+ dataSource = new MatTableDataSource<PoaActividadProjection>();
  @ViewChild(MatPaginator, { static: false }) paginator?: MatPaginator;
 
  //tabla
@@ -86,7 +87,7 @@ export class ListPoaActividadComponent  implements OnInit {
  buscar() {
   // Filtra los componentes basados en el filtro
   this.filteredComponentes = this.listaPoas.filter((componente) =>
-    componente.localizacion.toLowerCase().includes(this.filterPost.toLowerCase())
+    componente.nombreProyecto.toLowerCase().includes(this.filterPost.toLowerCase())
   );
 
   // Actualiza los datos del dataSource con los resultados filtrados
