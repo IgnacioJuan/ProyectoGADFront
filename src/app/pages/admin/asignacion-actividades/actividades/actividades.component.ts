@@ -597,74 +597,51 @@ export class ActividadesComponent implements OnInit {
   //METODO QUE FUNCIONA CON LA SELECCION EN LA TABLA DE USUARIOS
   guardarResponsable(usuarioSeleccionado: any) {
     console.log('Usuario seleccionado:', usuarioSeleccionado);
-    // this.loadingService.show();
-    this.actividadservice.actualizarResponsable(this.idActividadSeleccionada, usuarioSeleccionado).subscribe(
-      (data: any) => {
-        console.log('funciona');
-      });
-    // this.actividadservice.getActividadPorId(this.idActividadSeleccionada)
-    //   .subscribe(
-    //     (actividadToUpdate: ActividadesPoa) => {
-
-    //       )
-    // console.log('Actividad a actualizar:', actividadToUpdate);
-    // const actividadActualizada = { ...actividadToUpdate };
-    // actividadActualizada.usuario = usuarioSeleccionado;
-    // actividadActualizada.poa.usuario = new Usuario2();
-    // this.actividadservice.actualizar(this.idActividadSeleccionada, actividadActualizada)
-    //   .subscribe(
-    //     () => {
-    //       // Registro en la tabla asignaciones_usuarios
-    //       const asignacion = new AsignacionUsuario();
-    //       asignacion.usuario = usuarioSeleccionado;
-    //       asignacion.actividad = new ActividadesPoa();
-    //       asignacion.actividad.id_actividad = actividadToUpdate.id_actividad;
-    //       asignacion.fecha_asignacion = new Date();
-    //       this.asignacionservice.crear(asignacion)
-    //         .subscribe(
-    //           () => {
-    //             this.loadingService.hide();
-    //             Swal.fire(
-    //               'Exitoso',
-    //               'Se ha asignado el responsable con éxito',
-    //               'success'
-    //             );
-    //             this.cdRef.detectChanges();
-    //             this.listar(this.poa.id_poa);
-    //           },
-    //           (error) => {
-    //             console.error('Error al crear la asignación de responsable:', error);
-    //             this.loadingService.hide();
-    //             Swal.fire(
-    //               'Error',
-    //               'Ha ocurrido un error al crear la asignación de responsable',
-    //               'warning'
-    //             );
-    //           }
-    //         );
-    //     },
-    //     (error) => {
-    //       console.error('Error al actualizar el responsable:', error);
-    //       this.loadingService.hide();
-    //       Swal.fire(
-    //         'Error',
-    //         'Ha ocurrido un error al actualizar el responsable',
-    //         'warning'
-    //       );
-    //     }
-    //   );
-    // },
-    //   (error: any) => {
-    //     console.error('Error al obtener la actividad:', error);
-    //     this.loadingService.hide();
-    //     Swal.fire(
-    //       'Error',
-    //       'Ha ocurrido un error al obtener la actividad',
-    //       'warning'
-    //     );
-    //   }
-    // );
-    // this.loadingService.hide();
+    this.loadingService.show();
+    this.actividadservice.actualizarResponsable(this.idActividadSeleccionada, usuarioSeleccionado)
+    .subscribe(
+      () => {
+      //Registro en la tabla asignaciones_usuarios
+      const asignacion = new AsignacionUsuario();
+      asignacion.usuario = usuarioSeleccionado;
+      asignacion.actividad = new ActividadesPoa();
+      asignacion.actividad.id_actividad = this.idActividadSeleccionada;
+      asignacion.fecha_asignacion = new Date();
+      this.asignacionservice.crear(asignacion)
+      .subscribe(
+      () => {
+        this.loadingService.hide();
+        Swal.fire(
+         'Exitoso',
+         'Se ha asignado el responsable con éxito',
+         'success'
+        );
+        this.cdRef.detectChanges();
+        this.listar(this.poa.id_poa);
+      },
+      (error) => {
+      console.error('Error al crear la asignación de responsable:', error);
+      this.loadingService.hide();
+      Swal.fire(
+        'Error',
+        'Ha ocurrido un error al crear la asignación de responsable',
+        'warning'
+      );
+      }
+      );
+      },
+      (error) => {
+      console.error('Error al actualizar el responsable:', error);
+      this.loadingService.hide();
+      Swal.fire(
+        'Error',
+        'Ha ocurrido un error al actualizar el responsable',
+        'warning'
+      );
+      }
+      );
+      this.loadingService.hide();
+    
   }
 
   // FILTROS DE BUSQUEDA
