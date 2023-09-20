@@ -321,12 +321,55 @@ export class DetallePoaComponent implements OnInit {
               this.showSuccessAlert();
             });
         }
-
-
-
-
       }
     }
+  }
+
+
+  resultadoSolicitud() {
+    this.poacService
+      .aprobarPoa(this.poaAprob.id_poa, this.user.id, this.observacion, this.estado)
+      .subscribe((response) => {
+        console.log('Estado actualizado:', response);
+        this.emailService
+          .sendEmail(
+            this.correoRecep,
+            this.subject,
+            this.message +
+            this.estado +
+            '\n' +
+            this.detallePoa +
+            'DENOMINACION DEL PROGRAMA PROYECTO: ' +
+            this.poaAprob.nombre_proyecto +
+            '\n' +
+            'DESCRIPCION DEL PROGRAMA PROYECTO: ' +
+            (this.poaAprob.descripcion_proyecto || 'No definido') +
+            '\n' +
+            'AREA: ' +
+            (this.poaAprob.area || 'No definido') +
+            '\n' +
+            'SUPERVISOR: ' +
+            this.user.persona.primer_nombre +
+            '  ' +
+            this.user.persona.primer_apellido +
+            '\n' +
+            'AÑO DE EJECUCIÓN DEL PROYECTO: ' +
+            this.poaAprob.fecha_inicio +
+            ' - ' +
+            this.poaAprob.fecha_fin +
+            '\n' +
+            '\nObservación:\n ' +
+            this.observacion
+          )
+          .subscribe((responseEmail) => {
+            console.log('Email enviado:', responseEmail);
+            console.log('Email enviado:', this.correoRecep);
+          });
+        // Muestra el SweetAlert
+        this.loadingService.hide();
+      });
+    console.log("Poa finalizado con exito");
+    this.showSuccessAlert();
   }
 
   calcularPeriodos(totalf: number) {

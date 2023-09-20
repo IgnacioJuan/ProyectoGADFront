@@ -144,4 +144,12 @@ export class PoaService {
     listarPoasIndicadores(): Observable<PoasIndicadoresProjection[]> {
       return this.http.get<PoasIndicadoresProjection[]>(`${baserUrl}/api/poa/listarPoasIndicadores`);
     }
+
+     //Generar reporte
+    GenerarReporte(): Observable<Blob> {
+      const headers = new HttpHeaders({
+        'Accept': 'application/pdf'
+      });
+      return this.http.get(`${baserUrl}/api/poa/Metas-export-pdf`, { headers: headers, responseType: 'blob' });
+    }
 }

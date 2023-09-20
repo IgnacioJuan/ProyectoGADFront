@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { UsuarioService } from 'src/app/services/usuario.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-
 @Component({
   selector: 'app-reporte-usuarios',
   templateUrl: './reporte-usuarios.component.html',
@@ -9,12 +8,14 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 })
 export class ReporteUsuariosComponent {
   pdfUrl!: SafeResourceUrl;
+  
 
   constructor(
     private usuarioService: UsuarioService,
     private sanitizer: DomSanitizer
   ) {
     this.cargarPDF();
+    
   }
 
   cargarPDF() {
