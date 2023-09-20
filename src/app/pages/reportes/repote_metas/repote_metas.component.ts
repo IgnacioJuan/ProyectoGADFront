@@ -11,6 +11,7 @@ import { LoginService } from 'src/app/services/login.service';
 
 import * as pdfMake from 'pdfmake/build/pdfmake';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 (<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
 @Component({
@@ -27,13 +28,17 @@ export class Repote_metasComponent implements OnInit {
 listaPoasIndicadores: PoasIndicadoresProjection[] = [];
 isLoggedIn: boolean;
   user: any;
+
+  pdfUrl!: SafeResourceUrl;
+
   constructor( 
        private paginatorIntl: MatPaginatorIntl,
-    private metaPDOTService: MetasPdotService,
        //importar el spinner como servicio
        private loadingService: LoadingServiceService,
        private poasService: PoaService,
-       private login: LoginService
+       private login: LoginService,
+       private sanitizer: DomSanitizer
+
        
 ) {
   this.paginatorIntl.nextPageLabel = this.nextPageLabel;
@@ -227,5 +232,12 @@ content.push({ text: `Generado por: ${this.user.persona.primer_nombre} ${this.us
   pdfMake.createPdf(documentDefinition).download('informe_metas.pdf');
 }
 
-
+cargarPDF() {
+  this.poasService.GenerarReporte().subscribe((data) => {
+    const blob = new Blob([data], { type: 'application/pdf' });
+    const unsafeUrl = URL.createObjectURL(blob);
+    console.log('Unsafe URL:', unsafeUrl);
+    this.pdfUrl = this.sanitizer.bypassSecurityTrustResourceUrl(unsafeUrl);
+  });
+}
 }
