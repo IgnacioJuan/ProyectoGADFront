@@ -125,15 +125,6 @@ export class SidebarService {
 
     {
       icono: 'nav-icon fas fa-file-invoice',
-      titulo: "Solicitud de Presupuesto",
-      submenu: [
-        { titulo: 'Listado de Solicitudes', url: 'sup/listadoSolicitudes', icono: 'fas fa-list-ul ' },
-
-      ]
-    },
-
-    {
-      icono: 'nav-icon fas fa-file-invoice',
       titulo: "Reporte",
       submenu: [
         { titulo: 'Metas', url: 'repor/reporte_metas', icono: 'fas fa-list-ul ' },

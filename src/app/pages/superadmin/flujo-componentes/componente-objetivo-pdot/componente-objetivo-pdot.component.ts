@@ -64,7 +64,7 @@ constructor(
 ) {
   this.formObjetivoPdot = fb.group({
     nombre: ['', Validators.required],
-    descripcion: ['', [Validators.required]]
+    descripcion: ['']
   });
   this.paginatorIntl.nextPageLabel = this.nextPageLabel;
   this.paginatorIntl.lastPageLabel = this.lastPageLabel;
