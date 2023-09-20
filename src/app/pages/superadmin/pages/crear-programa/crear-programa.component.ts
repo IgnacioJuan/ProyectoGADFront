@@ -6,6 +6,7 @@ import Swal from 'sweetalert2';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 import { Programa } from 'src/app/models/Programa';
+import { LoadingServiceService } from 'src/app/components/loading-spinner/LoadingService.service';
 
 @Component({
   selector: 'app-crear-programa',
@@ -50,7 +51,9 @@ export class CrearComponent implements OnInit {
 
   constructor(
     private programaservice: ProgramaService,private paginatorIntl: MatPaginatorIntl,
-    private router: Router, private fb: FormBuilder
+    private router: Router, private fb: FormBuilder,
+    private loadingService: LoadingServiceService
+
   ) {
     this.frmCriterio = fb.group({
       nombre: ['', Validators.required],
@@ -72,12 +75,16 @@ export class CrearComponent implements OnInit {
   }
 
   guardar() {
+    this.loadingService.show();
+
     this.progra = this.frmCriterio.value;
     this.programaservice.crear(this.progra)
       .subscribe(
         (response) => {
           console.log('Programa creado con éxito:', response);
           this.guardadoExitoso = true;
+          this.loadingService.hide();
+
           this.listar();
           Swal.fire(
             'Exitoso',
@@ -87,6 +94,8 @@ export class CrearComponent implements OnInit {
         },
         (error) => {
           console.error('Error al crear el programa:', error);
+          this.loadingService.hide();
+
           Swal.fire(
             'Error',
             'Ha ocurrido un error',
@@ -118,13 +127,19 @@ export class CrearComponent implements OnInit {
   }
 
   listar(): void {
+    this.loadingService.show();
+
     this.programaservice.listar().subscribe(
       (data: any[]) => {
         this.programas = data;
         this.dataSource.data = this.programas;
+        this.loadingService.hide();
+
       },
       (error: any) => {
         console.error('Error al listar los programas:', error);
+        this.loadingService.hide();
+
       }
     );
   }
@@ -144,6 +159,8 @@ export class CrearComponent implements OnInit {
   }
 
   actualizar() {
+    this.loadingService.show();
+
     this.progra.nombre = this.frmCriterio.value.nombre;
     this.progra.descripcion = this.frmCriterio.value.descripcion;
     this.programaservice.actualizar(this.progra.id_programa, this.progra)
@@ -151,7 +168,13 @@ export class CrearComponent implements OnInit {
         this.progra = new Programa();
         this.listar();
         Swal.fire('Operacion exitosa!', 'El registro se actualizo con exito', 'success')
+      },
+      (error: any) => {
+        console.error('Error al listar los programas:', error);
+        this.loadingService.hide();
+
       });
+
   }
 
   aplicarFiltro() {
