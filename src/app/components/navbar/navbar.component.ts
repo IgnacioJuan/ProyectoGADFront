@@ -47,7 +47,7 @@ export class NavbarComponent implements OnInit {
         this.notificaciones = dataPropias;
         this.numNotificacionesSinLeer = this.notificaciones.filter(n => !n.visto).length;
         // Verifica si es ADMIN o SUPERADMIN
-        if (this.rol == "ADMIN" || this.rol == "SUPERADMIN") {
+        if (this.rol == "ADMIN" || this.rol == "SUPERADMIN" || this.rol == "RESPONSABLE") {
           // Cargar notificaciones del rol ADMIN
           this.notificationService.allnotificacion(this.rol).subscribe(
             (dataRol: Notificacion[]) => {

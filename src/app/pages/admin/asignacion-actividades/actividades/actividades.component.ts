@@ -152,7 +152,7 @@ export class ActividadesComponent implements OnInit {
     const tipoPeriodo = data.tipo_periodo;
     console.log('Tipo de período:', tipoPeriodo);
     this.listar(this.poa.id_poa);
-    this.Listado();
+    this.Listado(this.poa.id_poa);
     this.actividadservice.obtenerActividades().subscribe((data: ActividadesPoa[]) => {
       this.act = data;
     });
@@ -549,11 +549,10 @@ export class ActividadesComponent implements OnInit {
     });
     this.actividad = new ActividadesPoa();
   }
-
   // LISTA USUARIOS TABLA
   listaUsuarios: any[] = [];
-  Listado() {
-    this.usuariorolservice.getusuariosResponsable().subscribe(
+  Listado(poaId: number): void {
+    this.usuariorolservice.getusuariosResponsable(poaId).subscribe(
       (listaAsig: any[]) => {
         this.listaUsuarios = listaAsig;
         this.dataSource3.data = this.listaUsuarios;
