@@ -110,6 +110,7 @@ export class ListPoasEnviadosAdminComponent implements OnInit {
       }
     );
   }
+  busquedaRealizada: boolean = false;
 
   //Metodo para buscar
   buscar() {
@@ -121,10 +122,16 @@ export class ListPoasEnviadosAdminComponent implements OnInit {
     this.dataSource.data = this.filteredComponentes;
     // Verifica si se encontraron resultados
     this.resultadosEncontrados = this.filteredComponentes.length > 0;
+    this.busquedaRealizada = true;
+
   }
 
   filtrarPorEstado(): void {
     this.listarPoas(this.user.id, this.estadoSeleccionado);
+    if (this.busquedaRealizada) {
+      this.resultadosEncontrados = true; 
+    }
+
   }
 
   //Cambiar colores de la tabkla

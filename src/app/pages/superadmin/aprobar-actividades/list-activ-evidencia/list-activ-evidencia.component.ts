@@ -13,6 +13,8 @@ import { AprobacionActividad } from 'src/app/models/AprobacionActividad';
 import { Usuario2 } from 'src/app/models/Usuario2';
 import { AprobacionporActividadProjection } from 'src/app/interface/AprobacionporActividadProjection';
 import { LoadingServiceService } from 'src/app/components/loading-spinner/LoadingService.service';
+import { Notificacion } from 'src/app/models/Notificacion';
+import { NotificacionService } from 'src/app/services/notificacion.service';
 @Component({
   selector: 'app-list-activ-evidencia',
   templateUrl: './list-activ-evidencia.component.html',
@@ -39,6 +41,8 @@ export class ListActivEvidenciaComponent implements OnInit {
   isLoggedIn = false;
   //Objeto poa
   poa: Poa = new Poa();
+  //Para notificaciones
+  noti = new Notificacion();
 
   //Buscar
   filterPost: string = "";
@@ -51,6 +55,7 @@ export class ListActivEvidenciaComponent implements OnInit {
     private actividadService: ActividadespoaService,
     private aprobacionActvidadService: AprobacionActividadService,
     public login: LoginService,
+    private notificationService: NotificacionService,
     //importar el spinner como servicio
     private loadingService: LoadingServiceService
   ) {
@@ -71,6 +76,7 @@ export class ListActivEvidenciaComponent implements OnInit {
     //Obtener id del poa
     const data = history.state.data;
     this.poa = data;
+    console.log(this.poa);
     if (this.poa == undefined) {
       this.router.navigate(['user-dashboard']);
       location.replace('/use/user-dashboard');
@@ -136,7 +142,6 @@ export class ListActivEvidenciaComponent implements OnInit {
 
 
   guardar() {
-
     // Verificar si el estado es "RECHAZADO" y la observación está vacía
     if (this.estado === 'RECHAZADO' && !this.observacion) {
       Swal.fire(
@@ -184,9 +189,13 @@ export class ListActivEvidenciaComponent implements OnInit {
       );
   }
 
-
-  seleccionar(archi: Archivos) {
-    this.actividadSelected = archi
+  nombreAct = "";
+  userResp: any;
+  seleccionar(archi: any) {
+    this.actividadSelected = archi;
+    this.userResp = this.poa.usuario;
+    this.nombreAct = archi.nombre_actividad;
+    console.log("ACTIVIDAD: "+" "+this.nombreAct+" "+"RESPONSABLE: "+this.userResp);
     this.estado = this.actividadSelected.estado;
     //Quitar el usuario 
     this.actividadSelected.actividad = null;
@@ -241,10 +250,16 @@ export class ListActivEvidenciaComponent implements OnInit {
   }
 
   Rechazar() {
-    this.estado = "RECHAZADO"
+    this.estado = "RECHAZADO";
+    this.notificarRechazo();
+    this.notificarRechazoUser();
+    this.notificarRechazoAdmin();
   }
   Aprobar() {
-    this.estado = "APROBADO"
+    this.estado = "APROBADO";
+    this.notificarAprobacion();
+    this.notificarAprobacionUser();
+    this.notificarAprobacionAdmin();
 
   }
   Limpiar() {
@@ -254,4 +269,152 @@ export class ListActivEvidenciaComponent implements OnInit {
   limpiarObservacion() {
     this.observacionsSource = new MatTableDataSource<AprobacionporActividadProjection>();
   }
+
+  //NOTIFICACIONES
+  //rechazos
+  notificarRechazo() {
+    this.noti.fecha = new Date();
+    this.noti.rol = 'SUPERADMIN';
+    this.noti.mensaje =
+    this.user?.persona?.primer_nombre +
+    ' ' +
+    this.user?.persona?.primer_apellido +
+    ' ha rechazado la actividad '+ this.nombreAct +
+    ' de ' +
+    this.userResp;
+    this.noti.usuario = 0;
+    this.notificationService.crear(this.noti).subscribe(
+      (data: Notificacion) => {
+        this.noti = data;
+        console.log('Notificacion guardada');
+      },
+      (error: any) => {
+        console.error('No se pudo guardar la notificación', error);
+      }
+    );
+  }
+
+  notificarRechazoUser() {
+    this.noti.fecha = new Date();
+    this.noti.rol = '';
+    this.noti.mensaje =
+    this.user?.persona?.primer_nombre +
+    ' ' +
+    this.user?.persona?.primer_apellido +
+    ' ha rechazado tu actividad '+ this.nombreAct;
+    this.noti.visto = false;
+    this.noti.url = "/adm/asignacion-actividades/poa-actividad";
+    const idUsuarioString = localStorage.getItem('idUsuario');
+    const idUsuario = Number(idUsuarioString);
+    this.noti.usuario = idUsuario;
+    this.notificationService.crear(this.noti).subscribe(
+      (data: Notificacion) => {
+        this.noti = data;
+        console.log('Notificacion guardada');
+      },
+      (error: any) => {
+        console.error('No se pudo guardar la notificación', error);
+      }
+    );
+  }
+
+  notificarRechazoAdmin() {
+    this.noti.fecha = new Date();
+    this.noti.rol = 'ADMIN';
+    this.noti.mensaje =
+    this.user?.persona?.primer_nombre +
+    ' ' +
+    this.user?.persona?.primer_apellido +
+    ' ha rechazado la actividad '+ this.nombreAct +
+    ' de ' +
+    this.userResp;
+    this.noti.url = "/adm/asignacion-actividades/poa-actividad";
+    this.noti.visto = false;
+    this.noti.usuario = 0;
+
+    this.notificationService.crear(this.noti).subscribe(
+      (data: Notificacion) => {
+        this.noti = data;
+        console.log('Notificacion guardada');
+      },
+      (error: any) => {
+        console.error('No se pudo guardar la notificación', error);
+      }
+    );
+  }
+
+//aceptar
+notificarAprobacion() {
+  this.noti.fecha = new Date();
+  this.noti.rol = 'SUPERADMIN';
+  this.noti.mensaje =
+    this.user?.persona?.primer_nombre +
+    ' ' +
+    this.user?.persona?.primer_apellido +
+    ' ha aprobado la actividad '+ this.nombreAct +
+    ' de ' +
+    this.userResp;
+  this.noti.usuario = 0;
+  //this.noti.url="/sup/flujo-criterio/listaproyecto";
+  this.noti.idactividad=0;
+  this.notificationService.crear(this.noti).subscribe(
+    (data: Notificacion) => {
+      this.noti = data;
+      console.log('Notificacion guardada');
+    },
+    (error: any) => {
+      console.error('No se pudo guardar la notificación', error);
+    }
+  );
+}
+
+notificarAprobacionUser() {
+  this.noti.fecha = new Date();
+  this.noti.rol = '';
+  this.noti.mensaje =
+    this.user?.persona?.primer_nombre +
+    ' ' +
+    this.user?.persona?.primer_apellido +
+    ' ha aprobado tu actividad '+ this.nombreAct;
+  this.noti.visto = false;
+  const idUsuarioString = localStorage.getItem('idUsuario');
+  const idUsuario = Number(idUsuarioString);
+  this.noti.usuario = idUsuario;
+  this.noti.url="/adm/asignacion-actividades/poa-actividad";
+  this.noti.idactividad=0;
+  this.notificationService.crear(this.noti).subscribe(
+    (data: Notificacion) => {
+      this.noti = data;
+      console.log('Notificacion guardada');
+    },
+    (error: any) => {
+      console.error('No se pudo guardar la notificación', error);
+    }
+  );
+}
+
+notificarAprobacionAdmin() {
+  this.noti.fecha = new Date();
+  this.noti.rol = 'ADMIN';
+  this.noti.mensaje =
+    this.user?.persona?.primer_nombre +
+    ' ' +
+    this.user?.persona?.primer_apellido +
+    ' ha aprobado la actividad '+ this.nombreAct +
+    ' de ' +
+    this.userResp;
+  this.noti.visto = false;
+  this.noti.usuario = 0;
+  this.noti.url="/adm/asignacion-actividades/poa-actividad";
+  this.noti.idactividad=0;
+  this.notificationService.crear(this.noti).subscribe(
+    (data: Notificacion) => {
+      this.noti = data;
+      console.log('Notificacion guardada');
+    },
+    (error: any) => {
+      console.error('No se pudo guardar la notificación', error);
+    }
+  );
+}
 }

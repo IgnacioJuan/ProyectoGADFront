@@ -1,3 +1,4 @@
+import { Proyecto } from "./Proyecto";
 import { Usuario2 } from "./Usuario2";
 
 export class Poa {
@@ -16,5 +17,6 @@ export class Poa {
     valorTotal!:number;
     visible!: boolean;
     usuario!:Usuario2;
+    proyecto!: Proyecto;
 }
 

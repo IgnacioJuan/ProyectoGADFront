@@ -85,6 +85,10 @@
   /*.modal {
     z-index: 1000;
   }*/
+
+  ::ng-deep .cdk-overlay-container{
+    z-index:2000;
+  }
   
 
 

@@ -174,69 +174,6 @@ export class ActividadesComponent implements OnInit {
     );
   }
 
-  guardar() {
-    this.loadingService.show();
-    this.actividad = this.frmActividad.value;
-    this.actividad.poa = this.poa;
-    this.actividad.estado = 'PENDIENTE';
-    this.actividad.presupuesto_referencial = this.actividad.recursos_propios + this.actividad.valorPE;
-    // Validación de suma
-    let suma = 0;
-    if (this.poa.tipo_periodo === 'CUATRIMESTRE') {
-      suma = Number(this.actividad.valor1) + Number(this.actividad.valor2) + Number(this.actividad.valor3);
-    } else if (this.poa.tipo_periodo === 'TRIMESTRE') {
-      suma = Number(this.actividad.valor1) + Number(this.actividad.valor2) + Number(this.actividad.valor3) + Number(this.actividad.valor4);
-    }
-    console.log("Suma total:", suma);
-    if (suma !== 100) {
-      Swal.fire('Advertencia', 'La suma de los valores de periodo debe 100', 'warning');
-      this.loadingService.hide();
-      return;
-    }
-    this.actividadservice.crear(this.actividad).subscribe(
-      (response) => {
-        console.log('Actividad creada con éxito:', response);
-        const idActividad = response.id_actividad;
-
-        if (this.poa.tipo_periodo === 'CUATRIMESTRE') {
-          this.crearPeriodo(idActividad, this.actividad.valor1, 1);
-          this.crearPeriodo(idActividad, this.actividad.valor2, 2);
-          this.crearPeriodo(idActividad, this.actividad.valor3, 3);
-        } else if (this.poa.tipo_periodo === 'TRIMESTRE') {
-          this.crearPeriodo(idActividad, this.actividad.valor1, 1);
-          this.crearPeriodo(idActividad, this.actividad.valor2, 2);
-          this.crearPeriodo(idActividad, this.actividad.valor3, 3);
-          this.crearPeriodo(idActividad, this.actividad.valor4, 4);
-        }
-
-        //Crear Presupuesto externo
-        const presupuestoExterno = new PresupuestoExterno();
-        presupuestoExterno.nombre_institucion = this.actividad.institucion;
-        presupuestoExterno.valor = this.actividad.valorPE;
-        presupuestoExterno.observacion = '';
-        presupuestoExterno.fecha = new Date();
-        presupuestoExterno.actividad.id_actividad = idActividad;
-
-        this.pexternoservice.crear(presupuestoExterno).subscribe(
-          (presupuestoResponse) => {
-            console.log('Presupuesto externo creado con éxito:', presupuestoResponse);
-            this.guardadoExitoso = true;
-            this.crearAprobacion(response);
-            this.loadingService.hide();
-            Swal.fire('Exitoso', 'Se ha completado el registro con éxito', 'success');
-            this.cdRef.detectChanges();
-            this.listar(this.poa.id_poa);
-          }
-        );
-      },
-      (error) => {
-        console.error('Error al crear la actividad:', error);
-        Swal.fire('Error', 'Ha ocurrido un error', 'warning');
-        this.loadingService.hide();
-      }
-    );
-  }
-
   crearPeriodo(idActividad: number, porcentaje: number, referencia: number) {
     this.poaInsertService.crearPeriodoFechas(porcentaje, idActividad, referencia).subscribe(
       (periodoResponse) => {
@@ -423,7 +360,7 @@ export class ActividadesComponent implements OnInit {
     this.actividad.descripcion = actividadActualizada.descripcion;
     this.actividad.recursos_propios = actividadActualizada.recursos_propios;
     this.actividad.estado = 'PENDIENTE';
-    //this.actividad.poa = this.poa;
+    this.actividad.poa = this.poa;
 
     const actividadId = this.actividad.id_actividad;
 
@@ -597,74 +534,51 @@ export class ActividadesComponent implements OnInit {
   //METODO QUE FUNCIONA CON LA SELECCION EN LA TABLA DE USUARIOS
   guardarResponsable(usuarioSeleccionado: any) {
     console.log('Usuario seleccionado:', usuarioSeleccionado);
-    // this.loadingService.show();
-    this.actividadservice.actualizarResponsable(this.idActividadSeleccionada, usuarioSeleccionado).subscribe(
-      (data: any) => {
-        console.log('funciona');
-      });
-    // this.actividadservice.getActividadPorId(this.idActividadSeleccionada)
-    //   .subscribe(
-    //     (actividadToUpdate: ActividadesPoa) => {
-
-    //       )
-    // console.log('Actividad a actualizar:', actividadToUpdate);
-    // const actividadActualizada = { ...actividadToUpdate };
-    // actividadActualizada.usuario = usuarioSeleccionado;
-    // actividadActualizada.poa.usuario = new Usuario2();
-    // this.actividadservice.actualizar(this.idActividadSeleccionada, actividadActualizada)
-    //   .subscribe(
-    //     () => {
-    //       // Registro en la tabla asignaciones_usuarios
-    //       const asignacion = new AsignacionUsuario();
-    //       asignacion.usuario = usuarioSeleccionado;
-    //       asignacion.actividad = new ActividadesPoa();
-    //       asignacion.actividad.id_actividad = actividadToUpdate.id_actividad;
-    //       asignacion.fecha_asignacion = new Date();
-    //       this.asignacionservice.crear(asignacion)
-    //         .subscribe(
-    //           () => {
-    //             this.loadingService.hide();
-    //             Swal.fire(
-    //               'Exitoso',
-    //               'Se ha asignado el responsable con éxito',
-    //               'success'
-    //             );
-    //             this.cdRef.detectChanges();
-    //             this.listar(this.poa.id_poa);
-    //           },
-    //           (error) => {
-    //             console.error('Error al crear la asignación de responsable:', error);
-    //             this.loadingService.hide();
-    //             Swal.fire(
-    //               'Error',
-    //               'Ha ocurrido un error al crear la asignación de responsable',
-    //               'warning'
-    //             );
-    //           }
-    //         );
-    //     },
-    //     (error) => {
-    //       console.error('Error al actualizar el responsable:', error);
-    //       this.loadingService.hide();
-    //       Swal.fire(
-    //         'Error',
-    //         'Ha ocurrido un error al actualizar el responsable',
-    //         'warning'
-    //       );
-    //     }
-    //   );
-    // },
-    //   (error: any) => {
-    //     console.error('Error al obtener la actividad:', error);
-    //     this.loadingService.hide();
-    //     Swal.fire(
-    //       'Error',
-    //       'Ha ocurrido un error al obtener la actividad',
-    //       'warning'
-    //     );
-    //   }
-    // );
-    // this.loadingService.hide();
+    this.loadingService.show();
+    this.actividadservice.actualizarResponsable(this.idActividadSeleccionada, usuarioSeleccionado)
+    .subscribe(
+      () => {
+      //Registro en la tabla asignaciones_usuarios
+      const asignacion = new AsignacionUsuario();
+      asignacion.usuario = usuarioSeleccionado;
+      asignacion.actividad = new ActividadesPoa();
+      asignacion.actividad.id_actividad = this.idActividadSeleccionada;
+      asignacion.fecha_asignacion = new Date();
+      this.asignacionservice.crear(asignacion)
+      .subscribe(
+      () => {
+        this.loadingService.hide();
+        Swal.fire(
+         'Exitoso',
+         'Se ha asignado el responsable con éxito',
+         'success'
+        );
+        this.cdRef.detectChanges();
+        this.listar(this.poa.id_poa);
+      },
+      (error) => {
+      console.error('Error al crear la asignación de responsable:', error);
+      this.loadingService.hide();
+      Swal.fire(
+        'Error',
+        'Ha ocurrido un error al crear la asignación de responsable',
+        'warning'
+      );
+      }
+      );
+      },
+      (error) => {
+      console.error('Error al actualizar el responsable:', error);
+      this.loadingService.hide();
+      Swal.fire(
+        'Error',
+        'Ha ocurrido un error al actualizar el responsable',
+        'warning'
+      );
+      }
+      );
+      this.loadingService.hide();
+    
   }
 
   // FILTROS DE BUSQUEDA

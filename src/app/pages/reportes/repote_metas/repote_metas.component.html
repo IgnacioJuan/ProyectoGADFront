@@ -9,9 +9,11 @@
     </blockquote>
     <div class="card">
       <div class="card-body">
-        <button   (click)="generarInformeTotal()" class="btn btn-primary">
-          <i class="fas fa-print"></i> Generar Informe PDF
-        </button>
+      <!-- Button trigger modal -->
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" (click)="cargarPDF()">
+        <i class="fas fa-print"></i>  Generar Informe PDF
+      </button>
+
         <br />
         <br />
         <div class="mat-elevation-z8 table-responsive" style="margin-bottom: 5%">
@@ -84,6 +86,29 @@
         </div>
       </div>
     </div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+        <div class="pdf-container">
+          <iframe [src]="pdfUrl" frameborder="0" class="pdf-viewer"></iframe>
+        </div>
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary"   data-dismiss="modal">OK</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
     <div class="container mt-5">
       <div class="card">
         <div class="card-body">
