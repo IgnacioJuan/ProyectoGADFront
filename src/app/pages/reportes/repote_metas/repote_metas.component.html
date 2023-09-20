@@ -9,7 +9,9 @@
     </blockquote>
     <div class="card">
       <div class="card-body">
-
+        <button   (click)="generarInformeTotal()" class="btn btn-primary">
+          <i class="fas fa-print"></i> Generar Informe PDF
+        </button>
         <br />
         <br />
         <div class="mat-elevation-z8 table-responsive" style="margin-bottom: 5%">
@@ -28,6 +30,14 @@
               </td>
             </ng-container>
 
+
+
+            <ng-container matColumnDef="linea_base">
+              <th mat-header-cell *matHeaderCellDef>LINEA BASE</th>
+              <td mat-cell *matCellDef="let elemento">
+                {{ elemento.linea_base }}
+              </td>
+            </ng-container>
 
             <ng-container matColumnDef="meta_alcanzar">
               <th mat-header-cell *matHeaderCellDef>META ALCANZAR</th>
