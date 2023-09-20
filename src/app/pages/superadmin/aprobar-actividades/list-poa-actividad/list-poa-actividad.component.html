@@ -6,8 +6,13 @@
         </strong></h1>
       </blockquote>
       <div></div>
-  
-      <div class="card">
+      <div *ngIf="dataSource.data.length === 0">
+        <div class="example-card-vacio d-flex justify-content-center align-items-center flex-column">
+          <img src="assets/img/data_not_found.png" alt="" style="margin-bottom: 10px; height: 180px; width: 180px" />
+          <span style="color: #6a737b; font-size:large ;">No existen Poas con actividades Pendintes</span>
+        </div>
+      </div>
+      <div class="card" *ngIf="dataSource.data.length > 0">
         <div class="card-body">
           <input
           type="text"
