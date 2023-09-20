@@ -208,116 +208,73 @@ export class DetallePoaComponent implements OnInit {
         };
 
         if (this.estado === 'APROBADO') {
-          if (this.poacService.existProject(this.poaAprob.id_proyecto)) {
-            Swal.fire({
-              title: '¿Está seguro de aprobar el POA?',
-              text: 'Se Finalizara el POA anterior',
-              icon: 'warning',
-              showCancelButton: true,
-              confirmButtonText: 'Si, aprobar',
-              cancelButtonText: 'No, cancelar',
-            }).then((result) => {
-              if (result.value) {
-                // this.crearAprobacionPoa();
-                this.poacService
-                  .crearEstadoAprobacion(this.poaAprob.id_poa, data)
-                  .subscribe((response) => {
-                    console.log('Estado actualizado:', response);
-                    this.emailService
-                      .sendEmail(
-                        this.correoRecep,
-                        this.subject,
-                        this.message +
-                        this.estado +
-                        '\n' +
-                        this.detallePoa +
-                        'DENOMINACION DEL PROGRAMA PROYECTO: ' +
-                        this.poaAprob.nombre_proyecto +
-                        '\n' +
-                        'DESCRIPCION DEL PROGRAMA PROYECTO: ' +
-                        (this.poaAprob.descripcion_proyecto || 'No definido') +
-                        '\n' +
-                        'AREA: ' +
-                        (this.poaAprob.area || 'No definido') +
-                        '\n' +
-                        'SUPERVISOR: ' +
-                        this.user.persona.primer_nombre +
-                        '  ' +
-                        this.user.persona.primer_apellido +
-                        '\n' +
-                        'AÑO DE EJECUCIÓN DEL PROYECTO: ' +
-                        this.poaAprob.fecha_inicio +
-                        ' - ' +
-                        this.poaAprob.fecha_fin +
-                        '\n' +
-                        '\nObservación:\n ' +
-                        this.observacion
-                      )
-                      .subscribe((responseEmail) => {
-                        console.log('Email enviado:', responseEmail);
-                        console.log('Email enviado:', this.correoRecep);
-                      });
-                    // Muestra el SweetAlert
-                    this.loadingService.hide();
-                    this.showSuccessAlert();
-                  });
-                console.log("Poa finalizado con exito");
-                this.showSuccessAlert();
-              } else if (result.dismiss === Swal.DismissReason.cancel) {
-                console.log("Poa no finalizado");
-              }
-            });
-          }
+          Swal.fire({
+            title: '¿Está seguro de aprobar el POA?',
+            text: 'Se Finalizara el POA anterior',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Si, aprobar',
+            cancelButtonText: 'No, cancelar',
+          }).then((result) => {
+            if (result.value) {
+              this.resultadoSolicitud();
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+              console.log("Poa no finalizado");
+            }
+          });
         } else {
-          this.poacService
-            .crearEstadoAprobacion(this.poaAprob.id_poa, data)
-            .subscribe((response) => {
-              console.log('Estado actualizado:', response);
-              this.emailService
-                .sendEmail(
-                  this.correoRecep,
-                  this.subject,
-                  this.message +
-                  this.estado +
-                  '\n' +
-                  this.detallePoa +
-                  'DENOMINACION DEL PROGRAMA PROYECTO: ' +
-                  this.poaAprob.nombre_proyecto +
-                  '\n' +
-                  'DESCRIPCION DEL PROGRAMA PROYECTO: ' +
-                  (this.poaAprob.descripcion_proyecto || 'No definido') +
-                  '\n' +
-                  'AREA: ' +
-                  (this.poaAprob.area || 'No definido') +
-                  '\n' +
-                  'SUPERVISOR: ' +
-                  this.user.persona.primer_nombre +
-                  '  ' +
-                  this.user.persona.primer_apellido +
-                  '\n' +
-                  'AÑO DE EJECUCIÓN DEL PROYECTO: ' +
-                  this.poaAprob.fecha_inicio +
-                  ' - ' +
-                  this.poaAprob.fecha_fin +
-                  '\n' +
-                  '\nObservación:\n ' +
-                  this.observacion
-                )
-                .subscribe((responseEmail) => {
-                  console.log('Email enviado:', responseEmail);
-                  console.log('Email enviado:', this.correoRecep);
-                });
-              // Muestra el SweetAlert
-              this.loadingService.hide();
-              this.showSuccessAlert();
-            });
+          this.resultadoSolicitud();
+          console.log("rechazado con exito");
         }
-
-
-
-
       }
     }
+  }
+
+
+  resultadoSolicitud() {
+    this.poacService
+      .aprobarPoa(this.poaAprob.id_poa, this.user.id, this.observacion, this.estado)
+      .subscribe((response) => {
+        console.log('Estado actualizado:', response);
+        this.emailService
+          .sendEmail(
+            this.correoRecep,
+            this.subject,
+            this.message +
+            this.estado +
+            '\n' +
+            this.detallePoa +
+            'DENOMINACION DEL PROGRAMA PROYECTO: ' +
+            this.poaAprob.nombre_proyecto +
+            '\n' +
+            'DESCRIPCION DEL PROGRAMA PROYECTO: ' +
+            (this.poaAprob.descripcion_proyecto || 'No definido') +
+            '\n' +
+            'AREA: ' +
+            (this.poaAprob.area || 'No definido') +
+            '\n' +
+            'SUPERVISOR: ' +
+            this.user.persona.primer_nombre +
+            '  ' +
+            this.user.persona.primer_apellido +
+            '\n' +
+            'AÑO DE EJECUCIÓN DEL PROYECTO: ' +
+            this.poaAprob.fecha_inicio +
+            ' - ' +
+            this.poaAprob.fecha_fin +
+            '\n' +
+            '\nObservación:\n ' +
+            this.observacion
+          )
+          .subscribe((responseEmail) => {
+            console.log('Email enviado:', responseEmail);
+            console.log('Email enviado:', this.correoRecep);
+          });
+        // Muestra el SweetAlert
+        this.loadingService.hide();
+      });
+    console.log("Poa finalizado con exito");
+    this.showSuccessAlert();
   }
 
   calcularPeriodos(totalf: number) {
