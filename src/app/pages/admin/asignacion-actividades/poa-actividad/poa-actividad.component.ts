@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
+import { LoadingServiceService } from 'src/app/components/loading-spinner/LoadingService.service';
 import { PoaActividadProjection } from 'src/app/interface/PoaActividadProjection';
 import { ActividadesPoa } from 'src/app/models/ActividadesPoa';
 import { Poa } from 'src/app/models/Poa';
@@ -50,8 +51,9 @@ export class PoaActividadComponent implements OnInit{
   constructor(
     private poaservice: PoaService,private paginatorIntl: MatPaginatorIntl,
     private router: Router, private fb: FormBuilder,
-    
+    private loadingService: LoadingServiceService
   ) {
+    this.loadingService.show();
     this.paginatorIntl.nextPageLabel = this.nextPageLabel;
     this.paginatorIntl.lastPageLabel = this.lastPageLabel;
     this.paginatorIntl.firstPageLabel=this.firstPageLabel;
@@ -72,9 +74,11 @@ export class PoaActividadComponent implements OnInit{
       (data: any[]) => {
         this.poas = data;
         this.dataSource.data = this.poas;
+        this.loadingService.hide();
       },
       (error: any) => {
         console.error('Error al listar poas:', error);
+        this.loadingService.hide();
       }
     );
   }

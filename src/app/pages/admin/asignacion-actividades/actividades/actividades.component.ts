@@ -103,6 +103,7 @@ export class ActividadesComponent implements OnInit {
     private usuariorolservice: UsuariorolService, private asignacionservice: AsignacionUsuarioService,
     private poaInsertService: PoaInsertService, private route: ActivatedRoute, private loadingService: LoadingServiceService
   ) {
+    this.loadingService.show();
     this.frmActividad = fb.group({
       nombre: ['', Validators.required],
       descripcion: ['', Validators.required],
@@ -167,9 +168,11 @@ export class ActividadesComponent implements OnInit {
       (data: any[]) => {
         this.actividades = data;
         this.dataSource.data = this.actividades;
+        this.loadingService.hide();
       },
       (error: any) => {
         console.error('Error al listar las actividades:', error);
+        this.loadingService.hide();
       }
     );
   }
@@ -274,6 +277,7 @@ export class ActividadesComponent implements OnInit {
   }
 
   cargarDatosAlForm(activ: ActividadesPoa) {
+    this.loadingService.show();
     this.actividad = activ;
     const dynamicControls: DynamicControls = {
       nombre: new FormControl(this.actividad.nombre),
@@ -296,14 +300,17 @@ export class ActividadesComponent implements OnInit {
             });
             // Llena el formulario
             this.frmActividad = new FormGroup(dynamicControls);
+            this.loadingService.hide();
           },
           (error) => {
             console.error('Error al obtener los periodos de la actividad:', error);
+            this.loadingService.hide();
           }
         );
       },
       (error) => {
         console.error('Error al obtener los presupuestos externos:', error);
+        this.loadingService.hide();
       }
     );
   }
@@ -413,7 +420,7 @@ export class ActividadesComponent implements OnInit {
               () => {
                 this.loadingService.hide();
                 Swal.fire('Operación exitosa!', 'El registro se actualizó con éxito', 'success');
-                this.cdRef.detectChanges();
+                //this.cdRef.detectChanges();
                 this.listar(this.poa.id_poa);
               },
               (error) => {
@@ -434,7 +441,7 @@ export class ActividadesComponent implements OnInit {
               () => {
                 this.loadingService.hide();
                 Swal.fire('Operación exitosa!', 'El registro se actualizó con éxito', 'success');
-                this.cdRef.detectChanges();
+                //this.cdRef.detectChanges();
                 this.listar(this.poa.id_poa);
               },
               (error) => {
@@ -476,7 +483,7 @@ export class ActividadesComponent implements OnInit {
         );
       }
     })
-
+    this.loadingService.hide();
   }
   limpiarFormulario() {
     this.frmActividad.reset({
@@ -553,7 +560,7 @@ export class ActividadesComponent implements OnInit {
          'Se ha asignado el responsable con éxito',
          'success'
         );
-        this.cdRef.detectChanges();
+        //this.cdRef.detectChanges();
         this.listar(this.poa.id_poa);
       },
       (error) => {
@@ -578,7 +585,6 @@ export class ActividadesComponent implements OnInit {
       }
       );
       this.loadingService.hide();
-    
   }
 
   // FILTROS DE BUSQUEDA

@@ -120,6 +120,7 @@ export class ListaActividadesComponent implements OnInit {
     private pexternoservice: PresupuestoExternoService, private rsuplementoservice: ReformaSuplementoService,
     private rtincrementoservice: ReformaTraspasoIService, private rtdecrementoservice: ReformaTraspasoDService
   ) {
+    this.loadingService.show();
     this.frmPE = fb.group({
       nombre_institucion: ['', [Validators.required, this.noCaracteresEspecialesValidator()]],
       valor: ['', Validators.required],
@@ -206,9 +207,11 @@ export class ListaActividadesComponent implements OnInit {
       (data: any[]) => {
         this.actividades = data;
         this.dataSource.data = this.actividades;
+        this.loadingService.hide();
       },
       (error: any) => {
         console.error('Error al listar las actividades:', error);
+        this.loadingService.hide();
       }
     );
   }
