@@ -16,8 +16,8 @@ export class UsuariorolService {
     return this.http.get<UsuarioRol[]>(`${baserUrl}/api/usuariorol/listarv`);
   }
 
-  getusuariosResponsable(): Observable<any[]> {
-    return this.http.get<UsuarioRol[]>(`${baserUrl}/api/usuariorol/listarUsuariosResponsables`);
+  getusuariosResponsable(poaId: number): Observable<any[]> {
+    return this.http.get<UsuarioRol[]>(`${baserUrl}/api/usuariorol/listarUsuariosResponsables/${poaId}`);
   }
 
   actualizar(id: any, crite: any): Observable<any> {
