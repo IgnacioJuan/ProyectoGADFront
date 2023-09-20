@@ -41,6 +41,14 @@ export class SidebarService {
 
       ]
     },
+    {
+      icono: 'nav-icon fas fa-solid  fa-check',
+      titulo: "Evaluación",
+      submenu: [
+        { titulo: 'Aprobación de Evidencias', url: 'sup/aprobarEvidencias/listPoaAprobarEvidenciaSuper', icono: 'fas fa-file-contract' }
+
+      ]
+    },
   ]
 
   //LISTA DE ITEMS PARA SIDEBAR SUPERADMIN
@@ -104,8 +112,6 @@ export class SidebarService {
       submenu: [
         { titulo: 'Aprobación de POAS', url: 'sup/aprobacion-poa/lista-aprobar-poa', icono: 'fas fa-list-ul ' },
         { titulo: 'Aprobación de Actividades', url: 'sup/aprobar-actividades/poa-actividad', icono: 'fas fa-list-ul ' },
-        { titulo: 'Aprobación de Evidencias', url: 'sup/aprobarEvidencias/listPoaAprobarEvidenciaSuper', icono: 'fas fa-file-contract' }
-
       ]
     },
     // {
