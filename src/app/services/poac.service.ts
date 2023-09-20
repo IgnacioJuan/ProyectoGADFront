@@ -30,4 +30,9 @@ export class PoacService {
   public existProject(id_proyecto: number): Observable<any> {
     return this.http.get<boolean>(`${baserUrl}/api/proyecto/existProject?id_proyecto=${id_proyecto}`);
   }
+
+
+  public aprobarPoa(idPoa: number, idUsuario: number, observacion: string, estado: string): Observable<any> {
+    return this.http.post<AprobPoa>(`${baserUrl}/api/aprobacionpoa/AprobarSolicitud?estado=${estado}&idPoa=${idPoa}&idUsuario=${idUsuario}&observacion=${observacion}`, null);
+  }
 }
