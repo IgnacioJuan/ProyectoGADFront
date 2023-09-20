@@ -22,7 +22,7 @@ export class SidebarService {
       submenu: [
         { titulo: 'Listado Responsables', url: 'adm/create-responsables', icono: 'fas fa-check-square' },
         { titulo: 'Asignacion', url: 'adm/asignacion-actividades/poa-actividad', icono: 'fas fa-check-square' },
-        
+
 
       ]
     },
@@ -38,6 +38,14 @@ export class SidebarService {
       titulo: "Solicitud de Presupuesto",
       submenu: [
         { titulo: 'Listado de Solicitudes', url: 'adm/poas-solicitudes/listarPoasSoli', icono: 'fas fa-list-ul ' },
+
+      ]
+    },
+    {
+      icono: 'nav-icon fas fa-solid  fa-check',
+      titulo: "Evaluación",
+      submenu: [
+        { titulo: 'Aprobación de Evidencias', url: 'sup/aprobarEvidencias/listPoaAprobarEvidenciaSuper', icono: 'fas fa-file-contract' }
 
       ]
     },
@@ -104,8 +112,6 @@ export class SidebarService {
       submenu: [
         { titulo: 'Aprobación de POAS', url: 'sup/aprobacion-poa/lista-aprobar-poa', icono: 'fas fa-list-ul ' },
         { titulo: 'Aprobación de Actividades', url: 'sup/aprobar-actividades/poa-actividad', icono: 'fas fa-list-ul ' },
-        { titulo: 'Aprobación de Evidencias', url: 'sup/aprobarEvidencias/listPoaAprobarEvidenciaSuper', icono: 'fas fa-file-contract' }
-
       ]
     },
     // {
@@ -131,7 +137,7 @@ export class SidebarService {
       titulo: "Reporte",
       submenu: [
         { titulo: 'Metas', url: 'repor/reporte_metas', icono: 'fas fa-list-ul ' },
-
+        { titulo: 'Competencia', url: 'repor/reporteEspecificoCompetencia', icono: 'fas fa-list-ul ' }
       ]
     },
 
@@ -152,7 +158,7 @@ export class SidebarService {
         { titulo: 'Solicitud de Presupuesto', url: 'res/solicitar-presupuestos/listSolicitudes', icono: 'fas fa-list-ul ' },
 
       ]
-    },   {
+    }, {
       icono: 'nav-icon fas fa-file-invoice',
       titulo: "Evidencias",
       submenu: [
