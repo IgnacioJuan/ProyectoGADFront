@@ -19,6 +19,8 @@ import { Persona2 } from 'src/app/models/Persona2';
 import { LoadingServiceService } from 'src/app/components/loading-spinner/LoadingService.service';
 import { ActividadespoaService } from 'src/app/services/actividadespoa.service';
 import { Usuario2 } from 'src/app/models/Usuario2';
+import { Notificacion } from 'src/app/models/Notificacion';
+import { NotificacionService } from 'src/app/services/notificacion.service';
 @Component({
   selector: 'app-list-act-archivo',
   templateUrl: './list-act-archivo.component.html',
@@ -41,6 +43,8 @@ export class ListActArchivoComponent implements OnInit {
   user: any = null;
   //Objeto actividad
   actividad: ActividadesPoa = new ActividadesPoa();
+  //Para notificaciones
+  noti = new Notificacion();
 
   //Buscar
   filterPost: string = '';
@@ -61,7 +65,7 @@ export class ListActArchivoComponent implements OnInit {
     private emaservices: EmailServiceService,
     private serviper: PersonaService,
     private actividadServi: ActividadespoaService,
-
+    private notificationService: NotificacionService,
     //importar el spinner como servicio
     private loadingService: LoadingServiceService
   ) {
@@ -130,8 +134,15 @@ export class ListActArchivoComponent implements OnInit {
     'fecha_aprobacion',
   ];
 
+  nombreEvi = "";
+  nombreActividad!: any;
+  responsable = "";
   seleccionar(archi: Archivos) {
     this.archivoSeleted = archi;
+    this.nombreEvi = archi.nombre;
+    this.nombreActividad = archi.actividad?.nombre;
+    this.responsable = archi.actividad?.usuario.persona.primer_nombre+" "+archi.actividad?.usuario.persona.primer_apellido;
+    console.log("EVIDENCIA: "+this.nombreEvi+"ACTIVIDAD: "+this.nombreActividad+"RESPONSABLE: "+this.responsable);
     this.estado = this.archivoSeleted.estado;
     //Quitar el usuario
     this.archivoSeleted.actividad = null;
@@ -170,9 +181,15 @@ export class ListActArchivoComponent implements OnInit {
   //Metodo para Rechazar y Aprobar
   Rechazar() {
     this.estado = 'RECHAZADO';
+    this.notificarRechazo();
+    this.notificarRechazoUser();
+    this.notificarRechazoResp();
   }
   Aprobar() {
     this.estado = 'APROBADO';
+    this.notificarAprobacion();
+    this.notificarAprobacionUser();
+    this.notificarAprobacionResp();
   }
 
   Limpiar() {
@@ -418,4 +435,158 @@ this.actividad.devengado=devengado
   get isRechazado() {
     return this.estado === 'RECHAZADO';
   }
+
+  //NOTIFICACIONES
+  //rechazos
+  notificarRechazo() {
+    this.noti.fecha = new Date();
+    this.noti.rol = 'ADMIN';
+    this.noti.mensaje =
+    this.user?.persona?.primer_nombre +
+    ' ' +
+    this.user?.persona?.primer_apellido +
+    ' ha rechazado la evidencia '+ this.nombreEvi 
+    +' de la actividad '+ this.nombreActividad +
+    ' de ' +
+    this.responsable;
+    this.noti.url = "/sup/resumen-evidencias-responsable/evidencias";
+    this.noti.usuario = 0;
+    this.notificationService.crear(this.noti).subscribe(
+      (data: Notificacion) => {
+        this.noti = data;
+        console.log('Notificacion guardada');
+      },
+      (error: any) => {
+        console.error('No se pudo guardar la notificación', error);
+      }
+    );
+  }
+
+  notificarRechazoUser() {
+    this.noti.fecha = new Date();
+    this.noti.rol = '';
+    this.noti.mensaje =
+    this.user?.persona?.primer_nombre +
+    ' ' +
+    this.user?.persona?.primer_apellido +
+    ' ha rechazado tu evidencia '+ this.nombreEvi 
+    +' de la actividad '+ this.nombreActividad;
+    this.noti.visto = false;
+    this.noti.url = "/sup/resumen-evidencias-responsable/evidencias";
+    this.noti.usuario = 3;
+    this.notificationService.crear(this.noti).subscribe(
+      (data: Notificacion) => {
+        this.noti = data;
+        console.log('Notificacion guardada');
+      },
+      (error: any) => {
+        console.error('No se pudo guardar la notificación', error);
+      }
+    );
+  }
+
+  notificarRechazoResp() {
+    this.noti.fecha = new Date();
+    this.noti.rol = 'RESPONSABLE';
+    const nombres = localStorage.getItem('nombres');
+    console.log("Nombres usuario "+nombres );
+    this.noti.mensaje =
+    this.user?.persona?.primer_nombre +
+    ' ' +
+    this.user?.persona?.primer_apellido +
+    ' ha rechazado la evidencia '+ this.nombreEvi 
+    +' de la actividad '+ this.nombreActividad +
+    ' de ' +
+    this.responsable;
+    this.noti.url = "/sup/resumen-evidencias-responsable/evidencias";
+    this.noti.visto = false;
+    this.noti.usuario = 0;
+
+    this.notificationService.crear(this.noti).subscribe(
+      (data: Notificacion) => {
+        this.noti = data;
+        console.log('Notificacion guardada');
+      },
+      (error: any) => {
+        console.error('No se pudo guardar la notificación', error);
+      }
+    );
+  }
+
+//aceptar
+notificarAprobacion() {
+  this.noti.fecha = new Date();
+  this.noti.rol = 'ADMIN';
+  this.noti.mensaje =
+    this.user?.persona?.primer_nombre +
+    ' ' +
+    this.user?.persona?.primer_apellido +
+    ' ha aprobado la evidencia '+ this.nombreEvi 
+    +' de la actividad '+ this.nombreActividad +
+    ' de ' +
+    this.responsable;
+  this.noti.usuario = 0;
+  this.noti.url = "/sup/resumen-evidencias-responsable/evidencias";
+  this.noti.idactividad=0;
+  this.notificationService.crear(this.noti).subscribe(
+    (data: Notificacion) => {
+      this.noti = data;
+      console.log('Notificacion guardada');
+    },
+    (error: any) => {
+      console.error('No se pudo guardar la notificación', error);
+    }
+  );
+}
+
+notificarAprobacionUser() {
+  this.noti.fecha = new Date();
+  this.noti.rol = '';
+  this.noti.mensaje =
+    this.user?.persona?.primer_nombre +
+    ' ' +
+    this.user?.persona?.primer_apellido +
+    ' ha aprobado tu evidencia '+ this.nombreEvi 
+    +' de la actividad '+ this.nombreActividad;
+  this.noti.visto = false;
+  this.noti.usuario = 3;
+  this.noti.url = "/sup/resumen-evidencias-responsable/evidencias";
+  this.noti.idactividad=0;
+  this.notificationService.crear(this.noti).subscribe(
+    (data: Notificacion) => {
+      this.noti = data;
+      console.log('Notificacion guardada');
+    },
+    (error: any) => {
+      console.error('No se pudo guardar la notificación', error);
+    }
+  );
+}
+
+notificarAprobacionResp() {
+  this.noti.fecha = new Date();
+  this.noti.rol = 'RESPONSABLE';
+  this.noti.mensaje =
+    this.user?.persona?.primer_nombre +
+    ' ' +
+    this.user?.persona?.primer_apellido +
+    ' ha aprobado la evidencia '+ this.nombreEvi 
+    +' de la actividad '+ this.nombreActividad +
+    ' de ' +
+    this.responsable;
+  this.noti.visto = false;
+  this.noti.usuario = 0;
+  this.noti.url = "/sup/resumen-evidencias-responsable/evidencias";
+  this.noti.idactividad=0;
+  this.notificationService.crear(this.noti).subscribe(
+    (data: Notificacion) => {
+      this.noti = data;
+      console.log('Notificacion guardada');
+    },
+    (error: any) => {
+      console.error('No se pudo guardar la notificación', error);
+    }
+  );
+}
+
 }
