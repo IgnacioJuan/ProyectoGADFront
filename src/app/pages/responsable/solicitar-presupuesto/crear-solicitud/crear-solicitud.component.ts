@@ -382,7 +382,7 @@ ListadoSolicitud(){
 
 
     
-    filtrarPorEstado(): void {
+    filtrarPorProyecto(): void {
 
       this.listar(this.user.id);
       this.listarActividadPorPoa(this.user.id, this.poaSeleccionado);

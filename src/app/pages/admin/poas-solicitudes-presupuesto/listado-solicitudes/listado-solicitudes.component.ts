@@ -257,7 +257,7 @@ getRowCount(elemento: any): number {
     this.solic.id_solicitud_presupuesto =
     this.solicitudSeleted.id_solicitud_presupuesto;
     this.usuariosdit2.id = this.actividadSelecciona.usuario.id;
-    this.usuariosditDest.id = this.solic.destinatario?.id || 0; // 0 es un valor predeterminado si es undefined
+    this.usuariosditDest.id = this.solic.destinatario?.id || 0; 
     this.Resposable.id = this.solic.responsable?.id || 0;
     this.aprobarSolicitud.estado = this.estado;
     this.aprobarSolicitud.observacion = this.observacion;

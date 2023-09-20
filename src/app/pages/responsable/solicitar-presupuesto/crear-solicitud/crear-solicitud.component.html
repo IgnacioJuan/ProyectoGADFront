@@ -113,28 +113,15 @@
               <div class="col-sm-6 mb-3 mb-sm-0">
                 <div class="card">
                   <div class="card-body">
-                    <div class="row justify-content-around">
-                      <div class="col-4">
-                        <h3>
-                          <p><strong>Seleccione un proyecto:</strong></p>
-                        </h3>
-                        
-                      </div>
-                      <div class="col-4">
-                        <div class="d-flex align-items-center">
-                            <span style="margin-right: 10px;"><i class="fa fa-filter" style="font-size: 30px;"></i></span>
-                            <div class="flex-grow-1">
-                              <select class="form-select" aria-label="Default select example" [(ngModel)]="poaSeleccionado" (ngModelChange)="filtrarPorEstado()">
-                                <option selected disabled>Filtro:</option>
-                                <option *ngFor="let proyecto of listaProyectos" [value]="proyecto.id_poa">{{ proyecto.nombre_proyecto }}</option>
-                              </select>
-                              
-                                  
-   
-                            </div>
-                        </div>
-                    </div>
-                    </div>
+                      <mat-form-field class="select-proyecto">
+                        <mat-label>Seleccione un proyecto:</mat-label>
+                        <mat-select [(ngModel)]="poaSeleccionado" (ngModelChange)="filtrarPorProyecto()">
+                          <mat-option *ngFor="let proyecto of listaProyectos" [value]="proyecto.id_poa">
+                            {{ proyecto.nombre_proyecto }}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    
                      <br>
 
                     <div  class="mat-elevation-z8 table-responsive" style="margin-bottom: 5%" >
