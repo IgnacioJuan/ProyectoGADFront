@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ChartConfiguration, ChartData, ChartEvent, ChartType } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
 import DataLabelsPlugin from 'chartjs-plugin-datalabels';
@@ -6,24 +6,29 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 import { CompetenciaService } from 'src/app/services/competencia.service';
 import { ReportICompetencia } from 'src/app/models/ReportICompetencia';
+import { LoadingServiceService } from 'src/app/components/loading-spinner/LoadingService.service';
 
 @Component({
   selector: 'app-reporte-especifico-competencia',
   templateUrl: './reporte-especifico-competencia.component.html',
   styleUrls: ['./reporte-especifico-competencia.component.css']
 })
-export class ReporteEspecificoCompetenciaComponent {
+export class ReporteEspecificoCompetenciaComponent implements OnInit {
   rCompentencias!: ReportICompetencia[];
+  resultadosEncontradosporEstado: boolean = true;
 
   constructor(
-    private paginatorIntl: MatPaginatorIntl,
-        private competenciaService: CompetenciaService) {
+    private paginatorIntl: MatPaginatorIntl, private loadingService: LoadingServiceService,
+    private competenciaService: CompetenciaService) {
     this.paginatorIntl.nextPageLabel = this.nextPageLabel;
     this.paginatorIntl.lastPageLabel = this.lastPageLabel;
     this.paginatorIntl.firstPageLabel = this.firstPageLabel;
     this.paginatorIntl.previousPageLabel = this.previousPageLabel;
     this.paginatorIntl.itemsPerPageLabel = this.itemsPerPageLabel;
     this.paginatorIntl.getRangeLabel = this.rango;
+    this.cargarDataRICompetencias();
+  }
+  ngOnInit(): void {
     this.cargarDataRICompetencias();
   }
 
@@ -51,6 +56,7 @@ export class ReporteEspecificoCompetenciaComponent {
         : startIndex + pageSize;
     return `${startIndex + 1} - ${endIndex} de ${length}`;
   };
+
   @ViewChild(BaseChartDirective) chart: BaseChartDirective | undefined;
 
   public barChartOptions: ChartConfiguration['options'] = {
@@ -119,9 +125,10 @@ export class ReporteEspecificoCompetenciaComponent {
     this.chart?.update();
   }
   // Datos para la tabla
-  tableData = new MatTableDataSource(this.prepareTableData());
+  tableData = new MatTableDataSource<ReportICompetencia>();
   // Columnas a mostrar
-  displayedColumns: string[] = ['year', 'seriesA', 'seriesB', 'porcentaje'];
+  displayedColumns: string[] = ['nombre', 'codificado', 'devengado', 'porc_ejecucion'];
+  footerColumns = ['footer', 'footerCodificado', 'footerDevengado','footerPorent'];
 
   prepareTableData() {
     const data = [];
@@ -149,10 +156,43 @@ export class ReporteEspecificoCompetenciaComponent {
       return '';
     }
   }
+
+  getTotalCodificado() {
+    return this.tableData.data.map((t: any) => t.codificado).reduce((acc: number, value: number) => acc + value, 0);
+  }
+
+  getTotalDevengado() {
+    return this.tableData.data.map((t: any) => t.devengado).reduce((acc: number, value: number) => acc + value, 0);
+  }
+
+  getExecutionPercentage(): number {
+    const totalCodificado = this.getTotalCodificado();
+    const totalDevengado = this.getTotalDevengado();
+  
+    if (totalCodificado === 0) {
+      return 0; // Avoid division by zero
+    }
+  
+    return (totalDevengado / totalCodificado) * 100;
+  }
+  
+
+
+
   cargarDataRICompetencias() {
-    this.competenciaService.obtenerReportesICompetencias().subscribe((data) => {
-     this.rCompentencias = data;
-     console.log('Data:', this.rCompentencias);
-   });
- }
+    this.loadingService.show();
+    this.competenciaService.obtenerReportesICompetencias().subscribe((data: ReportICompetencia[]) => {
+      this.rCompentencias = data;
+      console.log('Data:', this.rCompentencias);
+      this.tableData.data = this.rCompentencias;
+      this.resultadosEncontradosporEstado = this.rCompentencias.length > 0; // Actualiza la variable según si se encontraron resultados
+      this.loadingService.hide();
+    },
+      (error: ReportICompetencia) => {
+        console.error('Error al listar las competencias:', error);
+        this.loadingService.hide();
+        this.resultadosEncontradosporEstado = false; // Si ocurre un error, no se encontraron resultados
+      }
+    );
+  }
 }
