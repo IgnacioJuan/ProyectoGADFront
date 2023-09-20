@@ -16,7 +16,6 @@ import { Workbook } from 'exceljs';
 import * as wordwrap from 'word-wrap';
 
 import * as ExcelJS from 'exceljs';
-
 @Component({
   selector: 'app-modelo-proyecto',
   templateUrl: './modelo-proyecto.component.html',
@@ -44,6 +43,8 @@ export class ModeloProyectoComponent {
         : startIndex + pageSize;
     return `${startIndex + 1} - ${endIndex} de ${length}`;
   };
+
+  
   //
   modelopoa: ModeloPoa = new ModeloPoa();
   proyectos: any[] = [];
@@ -52,8 +53,10 @@ export class ModeloProyectoComponent {
   public subcrite = new Proyecto();
 
   filterPost = '';
-  dataSource = new MatTableDataSource<Proyecto>();
+  dataSource = new MatTableDataSource<Exportarexcel>();
   columnasUsuario: string[] = ['id_proyecto', 'nombre', 'codigo', 'objetivo', 'meta', 'poa', 'actions'];
+
+  columnaexportar: string[] = [ 'codigo', 'nombre_objetivoods', 'nombre_objetivopnd','nombre_objetivopdot','nombre_metapdot','nombre_indicador','nombre','objetivo','meta', 'nombre_competencia'];
 
   @ViewChild('datosModalRef') datosModalRef: any;
   @ViewChild(MatPaginator, { static: false }) paginator?: MatPaginator;
@@ -68,7 +71,8 @@ export class ModeloProyectoComponent {
     private paginatorIntl: MatPaginatorIntl,
     private router: Router,
     private fb: FormBuilder,
-    private loadingService: LoadingServiceService
+    private loadingService: LoadingServiceService,
+    
 
   ) {
     this.frmProyecto = fb.group({
@@ -123,7 +127,6 @@ export class ModeloProyectoComponent {
         this.proyectos = data;
         this.dataSource.data = this.proyectos;
         this.loadingService.hide();
-        this.proyectos=this.data.objetivosods.nombre;
 
       },
       (error: any) => {
@@ -133,51 +136,75 @@ export class ModeloProyectoComponent {
     );
   }
 
-  exportToExcel(): void {
+
+  exportarr(): void {
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.dataSource.data);
+    const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(
+      document.getElementById('materiaModaExcel')
+    );
+ 
+    XLSX.utils.book_append_sheet(wb, ws, 'Tabla 1');
+  
+    XLSX.writeFile(wb, 'Proyectos.xlsx');
+  }
+  
+  
 
-    // Ajustar el ancho de las columnas basado en el contenido
-    const columnWidths: number[] = [];
-    this.dataSource.data.forEach((rowData: any) => {
-        let columnIndex = 0;
-        for (const key in rowData) {
-            if (rowData.hasOwnProperty(key)) {
-                const cellValue = rowData[key];
-                const cellText = cellValue ? cellValue.toString() : '';
-                const cellTextLength = cellText.length;
-                if (!columnWidths[columnIndex] || cellTextLength > columnWidths[columnIndex]) {
-                    columnWidths[columnIndex] = cellTextLength;
-                }
-                columnIndex++;
-            }
-        }
-    });
-
+  exportar(): void {
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(
+      document.getElementById('materiaModaExcel')
+    );
+  
+    // Obtener los datos de la tabla HTML
+    const tableData = XLSX.utils.sheet_to_json(ws, { header: 1 });
+  
+    // Insertar un encabezado adicional
+    tableData.unshift(['Hola']); // Agrega un array con "Hola" como primer elemento
+  
+    // Calcular el ancho de las columnas
+    const columnWidths: number[] = this.calcularAnchoColumnas(tableData);
+  
     // Aplicar el ancho calculado a las columnas en la hoja de trabajo
     columnWidths.forEach((width, colIndex) => {
-        if (width) {
-            const colLetter = XLSX.utils.encode_col(colIndex); // Obtener la letra de la columna (A, B, C, ...)
-            ws['!cols'] = ws['!cols'] || [];
-            ws['!cols'][colIndex] = { wch: width + 1 }; // Agregar un margen adicional
-        }
+      if (width) {
+        const colLetter = XLSX.utils.encode_col(colIndex);
+        ws['!cols'] = ws['!cols'] || [];
+        ws['!cols'][colIndex] = { wch: width };
+      }
     });
-
-    if (ws['!ref']) {
-        const range = XLSX.utils.decode_range(ws['!ref']);
-        range.s.r = 1;
-        ws['!ref'] = XLSX.utils.encode_range(range);
-    }
-
-    XLSX.utils.sheet_add_json(ws, this.dataSource.data, { skipHeader: true, origin: 'A2' });
-
+  
     XLSX.utils.book_append_sheet(wb, ws, 'Tabla 1');
-
+  
     XLSX.writeFile(wb, 'Proyectos.xlsx');
-}
+  }
+  
+  // Función para calcular el ancho de las columnas
+  private calcularAnchoColumnas(data: any[]): number[] {
+    const columnWidths: number[] = [];
+  
+    data.forEach((rowData: any) => {
+      let columnIndex = 0;
+  
+      for (const key in rowData) {
+        if (rowData.hasOwnProperty(key)) {
+          const cellValue = rowData[key];
+          const cellText = cellValue ? cellValue.toString() : '';
+          const cellTextLength = cellText.length;
+  
+          if (!columnWidths[columnIndex] || cellTextLength > columnWidths[columnIndex]) {
+            columnWidths[columnIndex] = cellTextLength;
+          }
+  
+          columnIndex++;
+        }
+      }
+    });
+  
+    return columnWidths;
+  }
+  
 
-  
-  
 
   guardar() {
     this.loadingService.show();
