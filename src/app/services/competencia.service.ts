@@ -58,4 +58,12 @@ export class CompetenciaService {
       .pipe(catchError(this.handleError));
   }
 
+  obtenerPDF(): Observable<Blob> {
+    const headers = new HttpHeaders({
+      'Accept': 'application/pdf'
+    });
+
+    return this.http.get('http://localhost:5000/usuarios/export-pdf', { headers: headers, responseType: 'blob' });
+  }
+
 }

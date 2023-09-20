@@ -6,18 +6,24 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 import { CompetenciaService } from 'src/app/services/competencia.service';
 import { ReportICompetencia } from 'src/app/models/ReportICompetencia';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-reporte-especifico-competencia',
   templateUrl: './reporte-especifico-competencia.component.html',
-  styleUrls: ['./reporte-especifico-competencia.component.css']
+  styleUrls: ['./reporte-especifico-competencia.component.css'],
 })
 export class ReporteEspecificoCompetenciaComponent {
   rCompentencias!: ReportICompetencia[];
+  pdfUrl!: SafeResourceUrl;
 
   constructor(
     private paginatorIntl: MatPaginatorIntl,
-        private competenciaService: CompetenciaService) {
+    private competenciaService: CompetenciaService,
+    private sanitizer: DomSanitizer,
+    private router: Router
+  ) {
     this.paginatorIntl.nextPageLabel = this.nextPageLabel;
     this.paginatorIntl.lastPageLabel = this.lastPageLabel;
     this.paginatorIntl.firstPageLabel = this.firstPageLabel;
@@ -75,11 +81,26 @@ export class ReporteEspecificoCompetenciaComponent {
   public barChartPlugins = [DataLabelsPlugin];
 
   public barChartData: ChartData<'bar'> = {
-    labels: ['ejemplo', 'ejemplo1', 'ejemplo2', 'ejemplo3', 'ejemplo4', 'ejemplo5', 'ejemplo6', 'ejmplo', 'ejemplo1', 'ejemplo2', 'ejemplo3', 'ejemplo4', 'ejemplo5', 'ejemplo6'],
+    labels: [
+      'ejemplo',
+      'ejemplo1',
+      'ejemplo2',
+      'ejemplo3',
+      'ejemplo4',
+      'ejemplo5',
+      'ejemplo6',
+      'ejmplo',
+      'ejemplo1',
+      'ejemplo2',
+      'ejemplo3',
+      'ejemplo4',
+      'ejemplo5',
+      'ejemplo6',
+    ],
     datasets: [
       { data: [89, 59, 80, 81, 56, 55, 40], label: 'Series A' },
       { data: [66, 48, 40, 19, 86, 27, 90], label: 'Series B' },
-      { data: [28, 48, 70, 19, 86, 8, 90], label: 'Porcentaje' }
+      { data: [28, 48, 70, 19, 86, 8, 90], label: 'Porcentaje' },
     ],
   };
 
@@ -105,7 +126,6 @@ export class ReporteEspecificoCompetenciaComponent {
   }
 
   public randomize(): void {
-
     this.barChartData.datasets[0].data = [
       Math.round(Math.random() * 100),
       59,
@@ -131,7 +151,7 @@ export class ReporteEspecificoCompetenciaComponent {
           year: this.barChartData.labels[i],
           seriesA: this.barChartData.datasets[0].data[i],
           seriesB: this.barChartData.datasets[1].data[i],
-          porcentaje: this.barChartData.datasets[2].data[i]
+          porcentaje: this.barChartData.datasets[2].data[i],
         });
       }
     }
@@ -151,8 +171,19 @@ export class ReporteEspecificoCompetenciaComponent {
   }
   cargarDataRICompetencias() {
     this.competenciaService.obtenerReportesICompetencias().subscribe((data) => {
-     this.rCompentencias = data;
-     console.log('Data:', this.rCompentencias);
-   });
- }
+      this.rCompentencias = data;
+      console.log('Data:', this.rCompentencias);
+    });
+  }
+  cargarPDF() {
+    this.competenciaService.obtenerPDF().subscribe((data) => {
+      const blob = new Blob([data], { type: 'application/pdf' });
+      const unsafeUrl = URL.createObjectURL(blob);
+      console.log('Unsafe URL:', unsafeUrl);
+      this.pdfUrl = this.sanitizer.bypassSecurityTrustResourceUrl(unsafeUrl);
+    });
+  }
+  redirectToPDF() {
+    window.open('http://localhost:5000/api/competencia/export-pdf', '_blank');
+  }
 }
