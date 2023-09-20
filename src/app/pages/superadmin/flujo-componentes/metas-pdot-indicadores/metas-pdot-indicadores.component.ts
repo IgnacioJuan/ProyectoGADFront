@@ -73,7 +73,7 @@ constructor(private indicadorservice: IndicadorService,private paginatorIntl: Ma
 ) {
   this.formIndicador = fb.group({
     nombre: ['', Validators.required],
-    descripcion: ['', [Validators.required]],
+    descripcion: [''],
     tipo_evaluacion: ['', [Validators.required]]
   });
   this.paginatorIntl.nextPageLabel = this.nextPageLabel;
