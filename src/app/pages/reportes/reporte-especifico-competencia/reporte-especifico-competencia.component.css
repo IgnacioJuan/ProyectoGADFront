@@ -38,8 +38,6 @@ body {
   flex: 1;
   /* Ocupa la mitad del espacio disponible */
   padding: 1rem;
-  border-left: #224;
-  border-right: #224;
 }
 
 .chart-section {

@@ -12,9 +12,9 @@
       <div class="card">
         <div class="card-body">
           <div class="semaforo">
-            <div class="verde"></div><span>Cumplida: 85% y el 100%</span>
-            <div class="amarillo"></div><span>Parcialmente cumplida: 70% y el 84,9%</span>
-            <div class="rojo"></div><span>Incumplida: 0 a 69,9%</span>
+            <div class="verde"></div><span><strong>Cumplida:</strong> 85% y el 100%</span>
+            <div class="amarillo"></div><span><strong>Parcialmente cumplida:</strong> 70% y el 84,9%</span>
+            <div class="rojo"></div><span><strong>Incumplida:</strong> 0 a 69,9%</span>
             <div></div>
             <div></div>
             <div></div>
@@ -40,41 +40,72 @@
     <div class="card">
       <div class="card-body">
         <!-- Sección de la tabla -->
-        <div class="table-section">
+        <div class="table-section table-responsive">
           <mat-table [dataSource]="tableData">
 
-            <ng-container matColumnDef="year">
+            <ng-container matColumnDef="nombre">
               <mat-header-cell *matHeaderCellDef> COMPETENCIA </mat-header-cell>
-              <mat-cell *matCellDef="let element">{{ element.year }}</mat-cell>
+              <mat-cell *matCellDef="let element">{{ element.nombre }}</mat-cell>
             </ng-container>
 
-            <ng-container matColumnDef="seriesA">
+            <ng-container matColumnDef="codificado">
               <mat-header-cell *matHeaderCellDef> MONTO CODIFICADO </mat-header-cell>
               <mat-cell *matCellDef="let element">
-                {{ element.seriesA }}
+                {{ element.codificado }}
               </mat-cell>
             </ng-container>
 
-            <ng-container matColumnDef="seriesB">
+            <ng-container matColumnDef="devengado">
               <mat-header-cell *matHeaderCellDef> MONTO DEVENGADO </mat-header-cell>
               <mat-cell *matCellDef="let element">
-                {{ element.seriesB }}
+                {{ element.devengado }}
               </mat-cell>
             </ng-container>
 
-            <ng-container matColumnDef="porcentaje">
+            <ng-container matColumnDef="porc_ejecucion">
               <mat-header-cell *matHeaderCellDef> % EJECUCIÓN </mat-header-cell>
-              <mat-cell *matCellDef="let element" [ngClass]="getColorClass(element.porcentaje)">
-                {{ element.porcentaje }} %
+              <mat-cell *matCellDef="let element" [ngClass]="getColorClass(element.porc_ejecucion)">
+                {{ element.porc_ejecucion | number : "1.0-2" }} %
               </mat-cell>
             </ng-container>
+
+            <ng-container matColumnDef="footer">
+              <mat-footer-cell *matFooterCellDef colspan="4">
+                <strong>Totales</strong>
+              </mat-footer-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="footerCodificado">
+              <mat-footer-cell *matFooterCellDef>
+                <strong>{{ getTotalCodificado() }}</strong>
+              </mat-footer-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="footerDevengado">
+              <mat-footer-cell *matFooterCellDef>
+                <strong>{{ getTotalDevengado() }}</strong>
+              </mat-footer-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="footerPorent">
+              <mat-footer-cell *matFooterCellDef [ngClass]="getColorClass(getExecutionPercentage())">
+                <strong>{{ getExecutionPercentage() | number:'1.0-2' }} %</strong>
+              </mat-footer-cell>
+            </ng-container>
+
+
 
             <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
             <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+            <mat-footer-row *matFooterRowDef="footerColumns"></mat-footer-row>
           </mat-table>
           <mat-paginator [pageSizeOptions]="[10]" showFirstLastButtons aria-label="Select page of periodic elements"
             itemsPerPageLabel="Items por página:" nextPageLabel="Siguiente" previousPageLabel="Anterior">
           </mat-paginator>
+
+          <div *ngIf="!resultadosEncontradosporEstado" class="alert alert-warning">
+            No se encontraron resultados.
+          </div>
         </div>
         <div class="barChart-container">
           <!-- Sección del gráfico -->
