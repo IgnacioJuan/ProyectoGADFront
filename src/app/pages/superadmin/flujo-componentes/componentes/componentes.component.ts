@@ -115,12 +115,10 @@ export class ComponentesComponent  implements OnInit {
 
 
   eliminar(componente: any) {
-    this.loadingService.show();
-
     Swal.fire({
       title: 'Estas seguro de eliminar el registro?',
       showDenyButton: true,
-      confirmButtonText: 'Cacelar',
+      confirmButtonText: 'Cancelar',
       denyButtonText: `Eliminar`,
     }).then((result) => {
       if (!result.isConfirmed) {
