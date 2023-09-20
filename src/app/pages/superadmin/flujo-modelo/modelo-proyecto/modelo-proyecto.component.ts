@@ -5,11 +5,17 @@ import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { LoadingServiceService } from 'src/app/components/loading-spinner/LoadingService.service';
+import { Exportarexcel } from 'src/app/interface/Exportarexcel';
 import { ModeloPoa } from 'src/app/models/ModeloPoa';
 import { Proyecto } from 'src/app/models/Proyecto';
 import { IndicadorService } from 'src/app/services/indicador.service';
 import { ProyectoService } from 'src/app/services/proyecto.service';
 import Swal from 'sweetalert2';
+import * as XLSX from 'xlsx';
+import { Workbook } from 'exceljs';
+import * as wordwrap from 'word-wrap';
+
+import * as ExcelJS from 'exceljs';
 @Component({
   selector: 'app-modelo-proyecto',
   templateUrl: './modelo-proyecto.component.html',
@@ -37,6 +43,8 @@ export class ModeloProyectoComponent {
         : startIndex + pageSize;
     return `${startIndex + 1} - ${endIndex} de ${length}`;
   };
+
+  
   //
   modelopoa: ModeloPoa = new ModeloPoa();
   proyectos: any[] = [];
@@ -45,8 +53,10 @@ export class ModeloProyectoComponent {
   public subcrite = new Proyecto();
 
   filterPost = '';
-  dataSource = new MatTableDataSource<Proyecto>();
+  dataSource = new MatTableDataSource<Exportarexcel>();
   columnasUsuario: string[] = ['id_proyecto', 'nombre', 'codigo', 'objetivo', 'meta', 'poa', 'actions'];
+
+  columnaexportar: string[] = [ 'codigo', 'nombre_objetivoods', 'nombre_objetivopnd','nombre_objetivopdot','nombre_metapdot','nombre_indicador','nombre','objetivo','meta', 'nombre_competencia'];
 
   @ViewChild('datosModalRef') datosModalRef: any;
   @ViewChild(MatPaginator, { static: false }) paginator?: MatPaginator;
@@ -54,13 +64,15 @@ export class ModeloProyectoComponent {
   fechaMinima: string = "";
   fechaMax: string = "";
   selectedCodigo: string = "";
+  data: any;
   constructor(
     private proyectoservice: ProyectoService,
     private indicadorservice: IndicadorService,
     private paginatorIntl: MatPaginatorIntl,
     private router: Router,
     private fb: FormBuilder,
-    private loadingService: LoadingServiceService
+    private loadingService: LoadingServiceService,
+    
 
   ) {
     this.frmProyecto = fb.group({
@@ -83,6 +95,7 @@ export class ModeloProyectoComponent {
       indicadorControl: [''],
       competenciaControl: ['']
     });
+
     this.paginatorIntl.nextPageLabel = this.nextPageLabel;
     this.paginatorIntl.lastPageLabel = this.lastPageLabel;
     this.paginatorIntl.firstPageLabel = this.firstPageLabel;
@@ -105,6 +118,92 @@ export class ModeloProyectoComponent {
     this.listar()
   }
 
+   //optimizar
+   listar(): void {
+    this.loadingService.show();
+    this.proyectoservice.getexportarexcel(this.modelopoa.id_modelo_poa).subscribe(
+      
+      (data: any[]) => {
+        this.proyectos = data;
+        this.dataSource.data = this.proyectos;
+        this.loadingService.hide();
+
+      },
+      (error: any) => {
+        console.error('Error al listar los proyectos:', error);
+        this.loadingService.hide();
+      }
+    );
+  }
+
+
+  exportarr(): void {
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(
+      document.getElementById('materiaModaExcel')
+    );
+ 
+    XLSX.utils.book_append_sheet(wb, ws, 'Tabla 1');
+  
+    XLSX.writeFile(wb, 'Proyectos.xlsx');
+  }
+  
+  
+
+  exportar(): void {
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(
+      document.getElementById('materiaModaExcel')
+    );
+  
+    // Obtener los datos de la tabla HTML
+    const tableData = XLSX.utils.sheet_to_json(ws, { header: 1 });
+  
+    // Insertar un encabezado adicional
+    tableData.unshift(['Hola']); // Agrega un array con "Hola" como primer elemento
+  
+    // Calcular el ancho de las columnas
+    const columnWidths: number[] = this.calcularAnchoColumnas(tableData);
+  
+    // Aplicar el ancho calculado a las columnas en la hoja de trabajo
+    columnWidths.forEach((width, colIndex) => {
+      if (width) {
+        const colLetter = XLSX.utils.encode_col(colIndex);
+        ws['!cols'] = ws['!cols'] || [];
+        ws['!cols'][colIndex] = { wch: width };
+      }
+    });
+  
+    XLSX.utils.book_append_sheet(wb, ws, 'Tabla 1');
+  
+    XLSX.writeFile(wb, 'Proyectos.xlsx');
+  }
+  
+  // Función para calcular el ancho de las columnas
+  private calcularAnchoColumnas(data: any[]): number[] {
+    const columnWidths: number[] = [];
+  
+    data.forEach((rowData: any) => {
+      let columnIndex = 0;
+  
+      for (const key in rowData) {
+        if (rowData.hasOwnProperty(key)) {
+          const cellValue = rowData[key];
+          const cellText = cellValue ? cellValue.toString() : '';
+          const cellTextLength = cellText.length;
+  
+          if (!columnWidths[columnIndex] || cellTextLength > columnWidths[columnIndex]) {
+            columnWidths[columnIndex] = cellTextLength;
+          }
+  
+          columnIndex++;
+        }
+      }
+    });
+  
+    return columnWidths;
+  }
+  
 
 
   guardar() {
@@ -169,25 +268,7 @@ export class ModeloProyectoComponent {
     })
 
   }
-  //optimizar
-  listar(): void {
-    this.loadingService.show();
-
-    this.proyectoservice.getProyectosdelModelo(this.modelopoa.id_modelo_poa).subscribe(
-      (data: any[]) => {
-        this.proyectos = data;
-        this.dataSource.data = this.proyectos;
-        this.loadingService.hide();
-
-      },
-      (error: any) => {
-        console.error('Error al listar los proyectos:', error);
-        this.loadingService.hide();
-
-      }
-    );
-  }
-
+ 
   editDatos(proyecto: Proyecto) {
     this.subcrite = proyecto;
     this.frmProyecto = new FormGroup({

@@ -4,9 +4,11 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
+import { LoadingServiceService } from 'src/app/components/loading-spinner/LoadingService.service';
 import { ModeloPoa } from 'src/app/models/ModeloPoa';
 import { Proyecto } from 'src/app/models/Proyecto';
 import { ProyectoService } from 'src/app/services/proyecto.service';
+
 
 @Component({
   selector: 'app-listaproyecto',
@@ -59,7 +61,9 @@ export class ProyectosComponent {
     private proyectoservice: ProyectoService,
     private paginatorIntl: MatPaginatorIntl,
     private router: Router,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private loadingService: LoadingServiceService
+
   ) {
     this.frmProyectos = fb.group({
       nombre: ['', Validators.required],
@@ -98,13 +102,20 @@ export class ProyectosComponent {
   }
   //optimizar
   listar(): void {
+    this.loadingService.show();
+
     this.proyectoservice.getProyectos().subscribe(
       (data: any[]) => {
         this.proyectos = data;
         this.dataSource.data = this.proyectos;
+        this.loadingService.hide();
+
       },
       (error: any) => {
         console.error('Error al listar los proyectos:', error);
+
+            this.loadingService.hide();
+
       }
     );
   }
