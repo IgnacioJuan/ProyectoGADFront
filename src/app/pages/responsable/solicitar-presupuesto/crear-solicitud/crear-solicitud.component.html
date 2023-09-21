@@ -12,7 +12,7 @@
           <!---PASO 1--->
           <mat-step [stepControl]="FormDestinatario" label="DESTINATARIO"  >
             <button mat-raised-button color="primary" style="margin-bottom: 10px; margin-top: 10px; background-color: #077b15;" data-bs-toggle="modal"
-              data-bs-target="#exampleModalUsuario">Agregar Destinatario </button>
+               data-bs-target="#exampleModalUsuario " (click)=" cargarUsuarios()">Agregar Destinatario </button>
             <form [formGroup]="FormDestinatario">
               <div class="flex-container">
                 <mat-form-field>
