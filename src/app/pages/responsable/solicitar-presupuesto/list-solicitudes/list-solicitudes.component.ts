@@ -123,6 +123,7 @@ listarSolicitudes(idResponsable: number, estado: string): void {
   }
 
 
+  busquedaRealizada: boolean = false;
 
 
   buscar() {
@@ -131,12 +132,17 @@ listarSolicitudes(idResponsable: number, estado: string): void {
     );
     this.dataSource.data = this.filteredComponentes;
     this.resultadosEncontrados = this.filteredComponentes.length > 0;
+    this.busquedaRealizada = true;
+
   }
   irCrearSolicitud() {
     this.router.navigate(['/res/solicitar-presupuestos/crearSolicitudes']);
   }
   filtrarPorEstado(): void {
     this.listarSolicitudes(this.user.id, this.estadoSeleccionado);
+    if (this.busquedaRealizada) {
+      this.resultadosEncontrados = true; 
+    }
   }
   
 }

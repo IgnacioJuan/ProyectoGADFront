@@ -1,15 +1,14 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { ListarProyectosComponent } from '../listar-proyectos/listar-proyectos/listar-proyectos.component';
-import { ProjectSelectService } from 'src/app/services/poa/project-select.service';
-import { ProjectByIDDto } from 'src/app/interface/ProjectByIdDto';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import Swal from 'sweetalert2';
-import { PoaInsertService } from 'src/app/services/poa/poa-insert.service';
-import { Poa } from 'src/app/models/Poa';
-import { AprobPoa } from 'src/app/models/AprobPoa';
+import { MatDialog } from '@angular/material/dialog';
+import { LoadingServiceService } from 'src/app/components/loading-spinner/LoadingService.service';
+import { ProjectByIDDto } from 'src/app/interface/ProjectByIdDto';
 import { SolicitudPoa, SolicitudPoaActividad } from 'src/app/models/SolicitudPoa';
 import { LoginService } from 'src/app/services/login.service';
+import { PoaInsertService } from 'src/app/services/poa/poa-insert.service';
+import { ProjectSelectService } from 'src/app/services/poa/project-select.service';
+import Swal from 'sweetalert2';
+import { ListarProyectosComponent } from '../listar-proyectos/listar-proyectos/listar-proyectos.component';
 
 
 
@@ -64,7 +63,7 @@ export class RegistrarPoaComponent implements OnInit {
 
 
 
-  constructor(private cdRef: ChangeDetectorRef, fb: FormBuilder, public dialog: MatDialog, private projectSelectSetvice: ProjectSelectService, private poaInsertService: PoaInsertService, public login: LoginService) {
+  constructor(private cdRef: ChangeDetectorRef, fb: FormBuilder, public dialog: MatDialog, private projectSelectSetvice: ProjectSelectService, private poaInsertService: PoaInsertService, public login: LoginService, private loadingService: LoadingServiceService) {
     this.formComponentes = fb.group({
 
       nombre: ['', Validators.required],
@@ -92,13 +91,21 @@ export class RegistrarPoaComponent implements OnInit {
   }
 
   openDialogProjects(): void {
+
+    this.loadingService.show();
     const dialogRef = this.dialog.open(ListarProyectosComponent, {
-      data: {}
+      data: {},
+      width: '1000px',
     });
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed', result);
+      if (result.id_proyecto == 0 || result.id_proyecto == undefined || result.id_proyecto == null) {
+        this.loadingService.hide();
+        return;
+      }
       this.getProject(result.id_proyecto);
+      this.loadingService.hide();
     });
   }
 
@@ -126,11 +133,12 @@ export class RegistrarPoaComponent implements OnInit {
   }
 
   //SELECT
-  periodo: Periodo[] = [
+  periodo: any = [
     { value: 'TRIMESTRE' },
     { value: 'CUATRIMESTRE' },
   ];
   selectedPeriod = this.periodo[1].value;
+
 
 
   //MODAL
@@ -149,72 +157,99 @@ export class RegistrarPoaComponent implements OnInit {
   limpiarFormulario() {
     this.formComponentes.reset();
     this.componentes = new Act();
+    this.allComplete = false;
+    this.task = {
+      valor: 0,
+      completed: false,
+      position: 0,
+      subtasks: [
+        { valor: 0, completed: false, position: 1, },
+        { valor: 0, completed: false, position: 2, },
+        { valor: 0, completed: false, position: 3, },
+        { valor: 0, completed: false, position: 4, }
+      ],
+    };
   }
 
   guardar() {
     this.componentes = this.formComponentes.value;
-
-
-    //validar componentes values
-    if (this.componentes.valor_uno == null || this.componentes.valor_uno == undefined || this.componentes.valor_uno == 0) {
-      this.componentes.valor_uno = 0;
-    }
-    if (this.componentes.valor_dos == null || this.componentes.valor_dos == undefined || this.componentes.valor_dos == 0) {
-      this.componentes.valor_dos = 0;
-    }
-    if (this.componentes.valor_tres == null || this.componentes.valor_tres == undefined || this.componentes.valor_tres == 0) {
-      this.componentes.valor_tres = 0;
-    }
-    if (this.componentes.valor_cuatro == null || this.componentes.valor_cuatro == undefined || this.componentes.valor_cuatro == 0) {
+    let count = 0;
+    if (this.selectedPeriod === 'CUATRIMESTRE') {
+      this.task.subtasks?.splice(3, 1);
       this.componentes.valor_cuatro = 0;
-    }
-    const valorUno = this.componentes.valor_uno.toString();
-    const valorDos = this.componentes.valor_dos.toString();
-    const valorTres = this.componentes.valor_tres.toString();
-    const valorCuatro = this.componentes.valor_cuatro.toString();
-    this.componentes.valor_uno = Number(valorUno);
-    this.componentes.valor_dos = Number(valorDos);
-    this.componentes.valor_tres = Number(valorTres);
-    this.componentes.valor_cuatro = Number(valorCuatro);
-
-    //sumar values
-    const valueTotal = this.componentes.valor_uno + this.componentes.valor_dos + this.componentes.valor_tres + this.componentes.valor_cuatro;
-
-    if (this.componentes.recursos_propios == null || this.componentes.recursos_propios == undefined || this.componentes.recursos_propios == 0) {
-      this.componentes.recursos_propios = 0;
-    }
-    if (this.componentes.recursos_externos == null || this.componentes.recursos_externos == undefined || this.componentes.recursos_externos == 0) {
-      this.componentes.recursos_externos = 0;
-    }
-    const recursoPropio = this.componentes.recursos_propios.toString();
-    const recursoExterno = this.componentes.recursos_externos.toString();
-    this.componentes.recursos_propios = Number(recursoPropio);
-    this.componentes.recursos_externos = Number(recursoExterno);
-    this.componentes.presupuesto_referencial = this.componentes.recursos_propios + this.componentes.recursos_externos;
-
-    if (this.componentes.presupuesto_referencial == 0) {
+    };
+    this.task.subtasks?.forEach(element => {
+      if (element.completed) {
+        count++;
+      }
+    });
+    if (count == 0) {
       Swal.fire({
         icon: 'error',
         title: 'Oops...',
-        text: 'Debe ingresar un valor en recursos propios o externos',
+        text: 'Debe seleccionar al menos un ' + this.selectedPeriod.toLowerCase() + '',
       })
+      return;
     } else {
-      if (this.componentes.recursos_externos > 0 && (this.componentes.institucion_beneficiaria == null || this.componentes.institucion_beneficiaria == undefined || this.componentes.institucion_beneficiaria == "")) {
+      this.task.subtasks?.forEach(element => {
+        if (element.completed) {
+          element.valor = 100 / count;
+        }
+        if (element.position == 1) {
+          this.componentes.valor_uno = element.valor;
+        }
+        if (element.position == 2) {
+          this.componentes.valor_dos = element.valor;
+        }
+        if (element.position == 3) {
+          this.componentes.valor_tres = element.valor;
+        }
+        if (element.position == 4) {
+          this.componentes.valor_cuatro = element.valor;
+        }
+      });
+
+      console.log(this.componentes);
+
+      //sumar values
+      const valueTotal = this.componentes.valor_uno + this.componentes.valor_dos + this.componentes.valor_tres + this.componentes.valor_cuatro;
+
+      if (this.componentes.recursos_propios == null || this.componentes.recursos_propios == undefined || this.componentes.recursos_propios == 0) {
+        this.componentes.recursos_propios = 0;
+      }
+      if (this.componentes.recursos_externos == null || this.componentes.recursos_externos == undefined || this.componentes.recursos_externos == 0) {
+        this.componentes.recursos_externos = 0;
+      }
+      const recursoPropio = this.componentes.recursos_propios.toString();
+      const recursoExterno = this.componentes.recursos_externos.toString();
+      this.componentes.recursos_propios = Number(recursoPropio);
+      this.componentes.recursos_externos = Number(recursoExterno);
+      this.componentes.presupuesto_referencial = this.componentes.recursos_propios + this.componentes.recursos_externos;
+
+      if (this.componentes.presupuesto_referencial == 0) {
         Swal.fire({
           icon: 'error',
           title: 'Oops...',
-          text: 'Debe ingresar una institucion beneficiaria',
-        });
+          text: 'Debe ingresar un valor en recursos propios o externos',
+        })
       } else {
-        if (valueTotal != 100) {
+        if (this.componentes.recursos_externos > 0 && (this.componentes.institucion_beneficiaria == null || this.componentes.institucion_beneficiaria == undefined || this.componentes.institucion_beneficiaria == "")) {
           Swal.fire({
             icon: 'error',
             title: 'Oops...',
-            text: 'La suma de los ' + this.selectedPeriod.toLowerCase() + 's debe ser 100%',
-          })
+            text: 'Debe ingresar una institucion beneficiaria',
+          });
         } else {
-          this.getActivities();
-          this.limpiarFormulario();
+          if (valueTotal != 100) {
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: 'La suma de los ' + this.selectedPeriod.toLowerCase() + 's debe ser 100%',
+            })
+          } else {
+            this.getActivities();
+            this.limpiarFormulario();
+          }
         }
       }
     }
@@ -236,38 +271,75 @@ export class RegistrarPoaComponent implements OnInit {
       valor_tres: new FormControl(this.componentes.valor_tres),
       valor_cuatro: new FormControl(this.componentes.valor_cuatro),
     });
+    this.task.subtasks?.forEach(element => {
+      if (element.position == 1) {
+        if (this.componentes.valor_uno > 0) {
+          element.completed = true;
+        } else {
+          element.completed = false;
+        }
+      }
+      if (element.position == 2) {
+        if (this.componentes.valor_dos > 0) {
+          element.completed = true;
+        } else {
+          element.completed = false;
+        }
+      }
+      if (element.position == 3) {
+        if (this.componentes.valor_tres > 0) {
+          element.completed = true;
+        } else {
+          element.completed = false;
+        }
+      }
+      if (element.position == 4) {
+        if (this.componentes.valor_cuatro > 0) {
+          element.completed = true;
+        } else {
+          element.completed = false;
+        }
+      }
+    });
     this.i = index;
   }
 
   actualizar(index: number) {
-    //actualizar datasource con los valores del componente editado
-    //elimiar el componente en el datasource segun el index y agregar el componente editado
-
-
     this.componentes = this.formComponentes.value;
+    let count = 0;
+    this.task.subtasks?.forEach(element => {
+      if (element.completed) {
+        count++;
+      }
+    });
+    if (count == 0) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Debe seleccionar al menos un ' + this.selectedPeriod.toLowerCase() + '',
+      })
+      return;
+    } else {
+      this.task.subtasks?.forEach(element => {
+        if (element.completed) {
+          element.valor = 100 / count;
+        }
+        if (element.position == 1) {
+          this.componentes.valor_uno = element.valor;
+        }
+        if (element.position == 2) {
+          this.componentes.valor_dos = element.valor;
+        }
+        if (element.position == 3) {
+          this.componentes.valor_tres = element.valor;
+        }
+        if (element.position == 4) {
+          this.componentes.valor_cuatro = element.valor;
+        }
+      });
+    }
 
-
-    //validar componentes values
-    if (this.componentes.valor_uno == null || this.componentes.valor_uno == undefined || this.componentes.valor_uno == 0) {
-      this.componentes.valor_uno = 0;
-    }
-    if (this.componentes.valor_dos == null || this.componentes.valor_dos == undefined || this.componentes.valor_dos == 0) {
-      this.componentes.valor_dos = 0;
-    }
-    if (this.componentes.valor_tres == null || this.componentes.valor_tres == undefined || this.componentes.valor_tres == 0) {
-      this.componentes.valor_tres = 0;
-    }
-    if (this.componentes.valor_cuatro == null || this.componentes.valor_cuatro == undefined || this.componentes.valor_cuatro == 0) {
-      this.componentes.valor_cuatro = 0;
-    }
-    const valorUno = this.componentes.valor_uno.toString();
-    const valorDos = this.componentes.valor_dos.toString();
-    const valorTres = this.componentes.valor_tres.toString();
-    const valorCuatro = this.componentes.valor_cuatro.toString();
-    this.componentes.valor_uno = Number(valorUno);
-    this.componentes.valor_dos = Number(valorDos);
-    this.componentes.valor_tres = Number(valorTres);
-    this.componentes.valor_cuatro = Number(valorCuatro);
+    console.log(this.componentes);
 
     //sumar values
     const valueTotal = this.componentes.valor_uno + this.componentes.valor_dos + this.componentes.valor_tres + this.componentes.valor_cuatro;
@@ -362,103 +434,6 @@ export class RegistrarPoaComponent implements OnInit {
   //obten el id del usaurio logueado del storage session
   async solicitud() {
 
-    // if (this.projectSelect.id_proyecto == 0) {
-    //   Swal.fire({
-    //     icon: 'error',
-    //     title: 'Oops...',
-    //     text: 'Debe seleccionar un proyecto',
-    //   });
-
-    // } else {
-    //   if (this.dataSource.length == 0) {
-    //     Swal.fire({
-    //       icon: 'error',
-    //       title: 'Oops...',
-    //       text: 'Debe ingresar al menos una actividad',
-    //     });
-    //   } else {
-    //     this.solicitudPoa.id_proyecto = this.proyecto;
-    //     this.solicitudPoa.meta_planificada = this.metaPlanificada;
-    //     this.solicitudPoa.coberura = this.cobertura;
-    //     this.solicitudPoa.barrio = this.barrio;
-    //     this.solicitudPoa.comunidad = this.comunidad;
-    //     this.solicitudPoa.localizacion = this.localizacion;
-    //     this.solicitudPoa.tipo_periodo = this.selectedPeriod;
-    //     this.poaInsertService.crear(this.solicitudPoa, this.user.id).subscribe((data: any) => {
-    //       if (data) {
-    //         this.poaInsertService.solicitarAprobacion(data.id_poa, this.id_super_admin, this.proyecto).subscribe((aprobPoa: any) => {
-    //           console.log("aprobacion poa", aprobPoa);
-    //           if (aprobPoa) {
-
-    //             this.dataSource.forEach(element => {
-    //               console.log(element);
-    //               this.poaInsertService.crearActividad(element.nombre, element.observacion, element.recursos_propios, element.presupuesto_referencial).subscribe((actividad: any) => {
-    //                 if (actividad) {
-    //                   this.poaInsertService.solicitarAprobacionActividad(this.id_super_admin, actividad.id_actividad, data.id_poa).subscribe((aprobActividad: any) => {
-    //                     if (aprobActividad) {
-    //                       console.log(aprobActividad);
-    //                       if (element.recursos_externos > 0) {
-    //                         this.poaInsertService.crearPresupuestoExterno(element.recursos_externos, actividad.id_actividad, element.institucion_beneficiaria, "").subscribe((presupuestoExterno: any) => {
-    //                           if (presupuestoExterno) {
-    //                             console.log(presupuestoExterno);
-    //                           }
-    //                         });
-    //                       }
-    //                       this.poaInsertService.crearPeriodo(element.valor_uno, actividad.id_actividad, 1).subscribe((periodo: any) => {
-    //                         if (periodo) {
-    //                           console.log(periodo);
-    //                         }
-    //                       });
-    //                       this.poaInsertService.crearPeriodo(element.valor_dos, actividad.id_actividad, 2).subscribe((periodo: any) => {
-    //                         if (periodo) {
-    //                           console.log(periodo);
-    //                         }
-    //                       });
-    //                       this.poaInsertService.crearPeriodo(element.valor_tres, actividad.id_actividad, 3).subscribe((periodo: any) => {
-    //                         if (periodo) {
-    //                           console.log(periodo);
-    //                         }
-    //                       });
-    //                       this.poaInsertService.crearPeriodo(element.valor_cuatro, actividad.id_actividad, 4).subscribe((periodo: any) => {
-    //                         if (periodo) {
-    //                           console.log(periodo);
-    //                           //recargar la pagina forzadamente
-    //                         }
-    //                       });
-    //                     }
-    //                   });
-    //                 }
-    //               });
-    //             });
-    //           }
-    //         });
-
-    //         Swal.fire({
-    //           icon: 'success',
-    //           title: 'Solicitud enviada correctamente',
-    //           showConfirmButton: false,
-    //           timer: 1500
-    //         });
-    //         //tiempo de espera para recargar la pagina
-
-    //         setTimeout(function () {
-    //           window.location.reload();
-    //         }, 500);
-    //         // this.enviar_solictud = true;
-    //         // this.solicitudPoa = new SolicitudPoa();
-    //         // this.dataSource = [];
-    //         // this.refrescar();
-    //         // this.getProject(0);
-    //       } else {
-    //         Swal.fire({
-    //           icon: 'error',
-    //           title: 'Oops...',
-    //           text: 'Error al enviar la solicitud',
-    //         });
-    //       }
-    //     });
-    //   }
-    // }
 
     if (this.projectSelect.id_proyecto == 0) {
       Swal.fire({
@@ -474,6 +449,7 @@ export class RegistrarPoaComponent implements OnInit {
       this.solicitudPoa.comunidad = this.comunidad;
       this.solicitudPoa.localizacion = this.localizacion;
       this.solicitudPoa.tipo_periodo = this.selectedPeriod;
+      this.loadingService.show();
       this.poaInsertService.crear(this.solicitudPoa, this.user.id, this.id_super_admin).subscribe((data: any) => {
         console.log(data);
         if (data) {
@@ -495,6 +471,19 @@ export class RegistrarPoaComponent implements OnInit {
               console.log(actividad);
             });
           })
+          this.loadingService.hide();
+          Swal.fire({
+            icon: 'success',
+            title: 'Solicitud enviada',
+            text: 'Su solicitud ha sido enviada con exito',
+            //despues de apretar el boton de ok redirecciona a la pagina de inicio
+            confirmButtonText: 'Aceptar',
+            allowOutsideClick: false
+          }).then((result) => {
+            if (result.isConfirmed) {
+              window.location.href = "/use/user-dashboard";
+            }
+          });
         }
       })
     }
@@ -520,49 +509,67 @@ export class RegistrarPoaComponent implements OnInit {
         this.enviar_solictud = true;
       }
     }
-    //comprobar que dataSource no sea null
 
-    // //comprobar que cobertura, barrio, comunidad, localizacion y metaPlanificada no sean null o undefined o ""
-    // if (this.cobertura == null || this.cobertura == undefined || this.cobertura == "") {
-    //   Swal.fire({
-    //     icon: 'error',
-    //     title: 'Oops...',
-    //     text: 'Debe ingresar una cobertura',
-    //   });
-    //   this.enviar_solictud = false;
-    // }
-    // if (this.barrio == null || this.barrio == undefined || this.barrio == "") {
-    //   Swal.fire({
-    //     icon: 'error',
-    //     title: 'Oops...',
-    //     text: 'Debe ingresar un barrio',
-    //   });
-    //   this.enviar_solictud = false;
-    // }
-    // if (this.comunidad == null || this.comunidad == undefined || this.comunidad == "") {
-    //   Swal.fire({
-    //     icon: 'error',
-    //     title: 'Oops...',
-    //     text: 'Debe ingresar una comunidad',
-    //   });
-    //   this.enviar_solictud = false;
-    // }
-    // if (this.localizacion == null || this.localizacion == undefined || this.localizacion == "") {
-    //   Swal.fire({
-    //     icon: 'error',
-    //     title: 'Oops...',
-    //     text: 'Debe ingresar una localizacion',
-    //   });
-    //   this.enviar_solictud = false;
-    // }
-    // if (this.metaPlanificada == null || this.metaPlanificada == undefined || this.metaPlanificada == 0) {
-    //   Swal.fire({
-    //     icon: 'error',
-    //     title: 'Oops...',
-    //     text: 'Debe ingresar una meta planificada',
-    //   });
-    //   this.enviar_solictud = false;
-    // }
   }
+
+
+  //section
+  task: Task = {
+    valor: 0,
+    completed: false,
+    position: 0,
+    subtasks: [
+      { valor: 0, completed: false, position: 1, },
+      { valor: 0, completed: false, position: 2, },
+      { valor: 0, completed: false, position: 3, },
+      { valor: 0, completed: false, position: 4, }
+    ],
+  };
+
+
+
+  allComplete: boolean = false;
+
+  updateAllComplete() {
+    this.allComplete = this.task.subtasks != null && this.task.subtasks.every(t => t.completed);
+  }
+
+  someComplete(): boolean {
+    if (this.task.subtasks == null) {
+      return false;
+    }
+    return this.task.subtasks.filter(t => t.completed).length > 0 && !this.allComplete;
+  }
+
+  setAll(completed: boolean) {
+    this.allComplete = completed;
+    if (this.task.subtasks == null) {
+      return;
+    }
+    this.task.subtasks.forEach(t => (t.completed = completed));
+  }
+
+  getSubtasks() {
+    if (this.selectedPeriod === 'CUATRIMESTRE') {
+
+      if (this.task.subtasks === undefined) {
+        return this.task.subtasks;
+
+      } else {
+        return this.task.subtasks.slice(0, 3);
+      }
+
+    } else {
+      return this.task.subtasks;
+    }
+  }
+
+
 }
 
+export interface Task {
+  valor: number;
+  completed: boolean;
+  position: number;
+  subtasks?: Task[];
+}

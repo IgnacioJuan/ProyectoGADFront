@@ -16,8 +16,11 @@ import { UsuarioRol } from 'src/app/models/UsuarioRol';
 import { UsuariorolService } from 'src/app/services/usuariorol.service';
 import { Poa_proyec_dto } from 'src/app/interface/poa_proyec_dto';
 import { PoaService } from 'src/app/services/poa.service';
-import { Poa } from 'src/app/models/Poa';
 import { Proyecto } from 'src/app/models/Proyecto';
+import { EmailServiceService } from 'src/app/services/email-service.service';
+import { PersonaService } from 'src/app/services/persona.service';
+import { Persona2 } from 'src/app/models/Persona2';
+import { forkJoin } from 'rxjs';
 
 
 export class SolicitudActividad {
@@ -28,7 +31,6 @@ export class SolicitudActividad {
   reforma: number =0;
   monto_total: number =0;
 }
-
 
 export class Poa2 {
   id_poa!: number;
@@ -86,6 +88,14 @@ export class CrearSolicitudComponent implements OnInit  {
   listaActividadesSeleccionadas: any[] = [];
   actividadSeleccionada: ActividadesPoa = new ActividadesPoa();
 
+
+   //Variable para estado
+   public correo = '';
+   public estado = 'Solicitud de Presupuesto';
+   public observacion = '';
+   nombre!: string;
+
+
   @ViewChild(MatPaginator, { static: false }) paginator?: MatPaginator;
   //tabla
   itemsPerPageLabel = 'Actividades por página';
@@ -114,6 +124,9 @@ export class CrearSolicitudComponent implements OnInit  {
   private router: Router,
   private userService: UsuarioService,
   private userROLService: UsuariorolService,
+  private emaservices: EmailServiceService,
+  private serviper: PersonaService,
+
   private poaService : PoaService,
   private solicitudPresupuestoService: SolicitudPresupuestoService,
    //importar el spinner como servicio
@@ -145,21 +158,31 @@ export class CrearSolicitudComponent implements OnInit  {
   });
 
 }
-
+usuarioPrograma : UsuarioRol = new UsuarioRol();
  ngAfterViewInit() {
   this.dataActividades.paginator = this.paginator || null;}
 
   ngOnInit(): void {
-    this.cargarUsuarios();
   //Capturar usuario logueado
   this.user = this.login.getUser();
+  console.log("Logueado")
   console.log(this.user)
   this.listar(this.user.id);
+  this.userPrograma=this.user
   }
 
 
+idPrograma: number= 0
+userPrograma: any;
+
+
+
   cargarUsuarios() {
-    this.userROLService.ListarSuperAdmin().subscribe(
+  this.idPrograma= this.userPrograma.programa.id_programa
+    console.log("AQIOO ID")
+    console.log(this.idPrograma)
+
+    this.userROLService.ListarSuperAdmin(this.idPrograma).subscribe(
       (data: UsuarioRol[]) => {
         this.listaUsuarios2=data;
         this.listaUsuariosOriginal = this.listaUsuarios2.slice();
@@ -184,6 +207,8 @@ export class CrearSolicitudComponent implements OnInit  {
       correo: elemento.usuario.persona.correo
     });
   this.LimpiarBuscador();
+  this.correo=this.usuarioSeleccionado2.usuario.persona.correo
+  console.log(this.correo);
   }
   
  
@@ -206,9 +231,9 @@ AgregarDestinatario(){
     );
   }
 
-listarActividadPorPoa(idUser: number, poa:number){
 
-  
+
+listarActividadPorPoa(idUser: number, poa:number){
   this.actividadesService.getPoaActividades(idUser, this.poaSeleccionado).subscribe(
     (data: any[]) => {
       this.listaActividades = data;
@@ -296,7 +321,7 @@ if (this.dataSolicitud.data.length > 0) {
 
 
 
-
+/*
   guardar() {
     this.loadingService.show();
 
@@ -305,6 +330,12 @@ if (this.dataSolicitud.data.length > 0) {
     this.actividadSolicitudPresupuesto.fecha_solicitud = this.fechaActual;
     this.actividadSolicitudPresupuesto.destinatario = this.usuariosdit;
     this.actividadSolicitudPresupuesto.responsable = this.user.id;
+    this.observacion= this.actividadSolicitudPresupuesto.motivo;
+
+console.log(this.observacion)
+
+
+
 
     for (const actividadSeleccionada of this.listaActividadesSeleccionadas) {
       const solicitudActividad = new SolicitudActividadPrepuesto();
@@ -319,12 +350,12 @@ if (this.dataSolicitud.data.length > 0) {
       solicitudActividad.poa = this.actividadSolicitudPresupuesto.poa;
 
       console.log(solicitudActividad)
-      
+      let correoEnviado = false; // Variable para rastrear si se envió el correo
+
       this.solicitudPresupuestoService.crear(solicitudActividad) .subscribe(
           (response) => {
             console.log('Solicitud de actividad con éxito:', response);
             this.loadingService.hide();
-
             Swal.fire(
               'Exitoso',
               'Se ha completado el registro con éxito',
@@ -346,8 +377,73 @@ if (this.dataSolicitud.data.length > 0) {
           }
         );
     }
+    this.sendEmail();
+  }
+*/
+
+
+
+guardar() {
+  this.loadingService.show();
+
+  this.usuariosdit.id = this.usuarioSeleccionado2.usuario.id;
+  this.actividadSolicitudPresupuesto.motivo = this.datosSolicitud.detalle;
+  this.actividadSolicitudPresupuesto.fecha_solicitud = this.fechaActual;
+  this.actividadSolicitudPresupuesto.destinatario = this.usuariosdit;
+  this.actividadSolicitudPresupuesto.responsable = this.user.id;
+  this.observacion = this.actividadSolicitudPresupuesto.motivo;
+
+  console.log(this.observacion);
+
+  const solicitudActividadesObservables = [];
+
+  for (const actividadSeleccionada of this.listaActividadesSeleccionadas) {
+    const solicitudActividad = new SolicitudActividadPrepuesto();
+    solicitudActividad.motivo = this.actividadSolicitudPresupuesto.motivo;
+    solicitudActividad.monto_actual = actividadSeleccionada.monto_actual;
+    solicitudActividad.reforma = actividadSeleccionada.reforma;
+    solicitudActividad.monto_total = actividadSeleccionada.monto_total;
+    solicitudActividad.fecha_solicitud = this.actividadSolicitudPresupuesto.fecha_solicitud;
+    solicitudActividad.destinatario = this.actividadSolicitudPresupuesto.destinatario;
+    solicitudActividad.responsable = this.actividadSolicitudPresupuesto.responsable;
+    solicitudActividad.actividadSolicitud = actividadSeleccionada;
+    solicitudActividad.poa = this.actividadSolicitudPresupuesto.poa;
+
+    const solicitudObservable = this.solicitudPresupuestoService.crear(solicitudActividad);
+    solicitudActividadesObservables.push(solicitudObservable);
   }
 
+  // Utilizamos forkJoin para esperar a que todas las solicitudes se completen
+  forkJoin(solicitudActividadesObservables).subscribe(
+    (responses) => {
+      console.log('Todas las solicitudes de actividad se crearon con éxito:', responses);
+      this.loadingService.hide();
+
+      // Enviamos el correo electrónico solo una vez después de que se hayan creado todas las solicitudes
+      this.sendEmail();
+
+      Swal.fire(
+        'Exitoso',
+        'Se han completado todas las solicitudes con éxito',
+        'success'
+      );
+
+      setTimeout(() => {
+        this.router.navigate(['/res/solicitar-presupuestos/listSolicitudes']);
+      }, 500);
+    },
+    (error) => {
+      console.error('Error al crear las solicitudes de actividad:', error);
+      this.loadingService.hide();
+
+      Swal.fire(
+        'Error',
+        'Ha ocurrido un error al crear las solicitudes',
+        'warning'
+      );
+    }
+  );
+}
 
   Eliminar(elemento: any) {
     this.dataSolicitud.data = this.dataSolicitud.data.filter(item => item !== elemento);
@@ -382,13 +478,50 @@ ListadoSolicitud(){
 
 
     
-    filtrarPorEstado(): void {
+    filtrarPorProyecto(): void {
 
       this.listar(this.user.id);
       this.listarActividadPorPoa(this.user.id, this.poaSeleccionado);
       this.BuscarPoa(this.poaSeleccionado);
 
     }
+ 
+
+      /// envio de correo john
+  sendEmail() {
+    const toUser = [this.correo];
+    const subject = this.estado;
+    const listaDetallada = this.listaActividadesSeleccionadas.map(solicitud => `
+    - NOMBRE: ${solicitud.nombre}
+      DESCRIPCIÓN: ${solicitud.descripcion}
+      MONTO ACTUAL: ${solicitud.monto_actual}
+      REFORMA: ${solicitud.reforma}
+      MONTO TOTAL: ${solicitud.monto_total}
+  `).join('\n');
+
+   const salutation = 'De mi consideración. ' + 
+   '\n' + ' Reciba un cordial y efusivo saludo, no sin antes desearle éxito en sus funciones diarias' + '\n' ;
+  const message = salutation + '\n' + this.observacion + '\n\n'
+  +  ' Listado Detallado de Actividades:' +  `
+
+  ${listaDetallada}
+
+  Atentamente,
+  ${this.user.persona.primer_nombre} ${this.user.persona.primer_apellido}
+  ${this.user.persona.cargo}
+  GAD MUNICIPAL SANTA ISABEL
+`;
+
+    this.emaservices.sendEmail(toUser, subject, message).subscribe(
+      (response) => {
+        console.log('Correo electrónico enviado con éxito:', response);
+      },
+      (error) => {
+        console.error('Error al enviar el correo electrónico:', error);
+      }
+    );
+  }
+ 
     
   
 }

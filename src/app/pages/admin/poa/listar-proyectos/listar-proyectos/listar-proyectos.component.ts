@@ -1,12 +1,13 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
-import { RegistrarPoaComponent } from '../../registrar-poa/registrar-poa.component';
-import { MatTableDataSource } from '@angular/material/table';
-import { MatPaginator } from '@angular/material/paginator';
-import { ProjectsActivesService } from 'src/app/services/poa/projects-actives.service';
-import { ProjectsActives } from 'src/app/models/ProjectsActives';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatDialogRef } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
+import { LoadingServiceService } from 'src/app/components/loading-spinner/LoadingService.service';
+import { ProjectsActives } from 'src/app/models/ProjectsActives';
 import { LoginService } from 'src/app/services/login.service';
+import { ProjectsActivesService } from 'src/app/services/poa/projects-actives.service';
+import { RegistrarPoaComponent } from '../../registrar-poa/registrar-poa.component';
 
 
 @Component({
@@ -49,7 +50,8 @@ export class ListarProyectosComponent implements OnInit {
   constructor(public dialogRef: MatDialogRef<RegistrarPoaComponent>,
     private projectsActivesService: ProjectsActivesService,
     private fb: FormBuilder,
-    public login: LoginService) {
+    public login: LoginService,
+    private loadingService: LoadingServiceService) {
     this.frmProjects = fb.group({
       codigo: ['', Validators.required],
       nombre: ['', [Validators.required]]
@@ -75,14 +77,17 @@ export class ListarProyectosComponent implements OnInit {
 
   //listar projectos activos 
   public listarProjectsActives(): void {
+    this.loadingService.show();
     console.log(this.user);
     this.projectsActivesService.getProjectsActives(this.user.id).subscribe(
       (response: ProjectsActives[]) => {
         this.dataSource.data = response;
         this.projectsActives = response;
+        this.loadingService.hide();
       },
       (error: any) => {
         console.log(error);
+        this.loadingService.hide();
       }
     );
   }

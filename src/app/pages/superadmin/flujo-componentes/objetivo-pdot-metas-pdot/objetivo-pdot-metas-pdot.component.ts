@@ -70,7 +70,7 @@ constructor(private paginatorIntl: MatPaginatorIntl,
 ) {
   this.formMeta = fb.group({
     nombre: ['', Validators.required],
-    descripcion: ['', [Validators.required]],
+    descripcion: [''],
     meta_final: ['', Validators.required],
     linea_base: ['', Validators.required],
 
@@ -127,8 +127,6 @@ guardar() {
 
 }
 eliminar(meta: any) {
-  this.loadingService.show();
-
   Swal.fire({
     title: 'Estas seguro de eliminar el registro?',
     showDenyButton: true,
@@ -136,10 +134,14 @@ eliminar(meta: any) {
     denyButtonText: `Eliminar`,
   }).then((result) => {
     if (!result.isConfirmed) {
+      this.loadingService.show();
+
       this.metaPDOTService.eliminar(meta.id_meta_pdot, meta).subscribe(
         (response: any) => {
           this.listar(this.objPDOT.id_objetivo_pdot)
           Swal.fire('Eliminado!', '', 'success')
+          this.loadingService.hide();
+
         }
       );
     }
