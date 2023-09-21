@@ -116,7 +116,7 @@ export class ReporteEspecificoCompetenciaComponent implements OnInit {
           if (context.dataset.label === 'Porcentaje') {
             return value.toFixed(2) + '%';  // Formatea con dos decimales y añade '%'
           } else if (['Codificado', 'Devengado'].includes(context.dataset.label)) {
-            return '$' + value;  // Formatea con dos decimales y añade 'M' para millones
+            return '$ ' + value;  // Formatea con dos decimales y añade 'M' para millones
           }
           return value;
         }
@@ -135,15 +135,15 @@ export class ReporteEspecificoCompetenciaComponent implements OnInit {
         label: 'Porcentaje',
         type: 'line',
         yAxisID: 'y1', // Asigna el eje Y derecho
-        borderColor: 'rgb(125, 235, 105)',
-        borderWidth: 2,
+        borderColor: 'green',
+        borderWidth: 3,
       },
       {
         data: [],
         label: 'Codificado',
         type: 'bar',
         yAxisID: 'y', // Asigna el eje Y izquierdo
-        backgroundColor: 'blue',
+        backgroundColor: 'rgb(92, 92, 241)',
       },
       {
         data: [],
