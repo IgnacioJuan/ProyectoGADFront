@@ -11,6 +11,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { UsuarioResponsableDTO } from 'src/app/models/UsuarioResponsableDTO';
 import { DialogoUresponsablesComponent } from '../dialogo-uresponsables/dialogo-uresponsables.component';
 import { LoadingServiceService } from 'src/app/components/loading-spinner/LoadingService.service';
+import { LoginService } from 'src/app/services/login.service';
 
 @Component({
   selector: 'app-crear-responsables',
@@ -23,6 +24,8 @@ export class CrearResponsablesComponent implements OnInit {
   filterPost = '';
   usuarioBase = new Usuario2();
   usuarioEdit = new Usuario2();
+  user: any = null;
+  isLoggedIn = false;
   public usuario = {
     username: '',
     password: '',
@@ -65,7 +68,8 @@ export class CrearResponsablesComponent implements OnInit {
     private usuariosService: UsuarioService,
     private paginatorIntl: MatPaginatorIntl,
     private usuariorolservice: UsuariorolService,
-    private loadingService: LoadingServiceService
+    private loadingService: LoadingServiceService,
+    public login: LoginService
   ) {
     this.loadingService.show();
     this.paginatorIntl.nextPageLabel = this.nextPageLabel;
@@ -80,33 +84,47 @@ export class CrearResponsablesComponent implements OnInit {
     this.dataSource2.paginator = this.paginator || null;
   }
   ngOnInit(): void {
+    this.capturarDatosUsuarioLog();
     this.Listado();
   }
 
+  capturarDatosUsuarioLog() {
+    this.isLoggedIn = this.login.isLoggedIn();
+    this.user = this.login.getUser();
+    this.login.loginStatusSubjec.asObservable().subscribe((data) => {
+      this.isLoggedIn = this.login.isLoggedIn();
+      this.user = this.login.getUser();
+    });
+  }
+
   Listado() {
+    console.log('LISTADO', this.user.programa.id_programa);
+    this.loadingService.show();
     this.personaService
       .getPersonas()
       .subscribe((listaPerso) => (this.listaPersonas = listaPerso));
-    this.usuariorolservice.getuResponsables().subscribe((listaAsig: any[]) => {
+  
+    this.usuariorolservice.getuResponsables(this.user.programa.id_programa).subscribe((listaAsig: any[]) => {
       this.listaUsuarios = listaAsig;
       this.dataSource2.data = this.listaUsuarios;
       console.log(listaAsig);
       this.loadingService.hide();
     });
   }
+
   openDialog(event: MouseEvent): void {
-    this.loadingService.show();
     event.stopPropagation();
     const dialogRef = this.dialog.open(DialogoUresponsablesComponent, {
       width: '50%',
       disableClose: false,
     });
-    this.loadingService.hide();
+
     dialogRef.afterClosed().subscribe((result) => {
-      this.loadingService.show();
+
       this.Listado();
     });
   }
+
   eliminar(element: any) {
     this.loadingService.show();
     const id = element.id_usuario_responsable;
@@ -130,8 +148,9 @@ export class CrearResponsablesComponent implements OnInit {
       }
     });
   }
+
   editarUsuari(userId: number): void {
-    //this.loadingService.show();
+    this.loadingService.show();
     if (userId) {
       this.usuariosService
         .obtenerUsuarioResponsable(userId)
@@ -224,6 +243,7 @@ export class CrearResponsablesComponent implements OnInit {
       }
     });
   }
+
   applyFilter(event: Event) {
     const inputElement = event.target as HTMLInputElement;
     let value = inputElement.value;
