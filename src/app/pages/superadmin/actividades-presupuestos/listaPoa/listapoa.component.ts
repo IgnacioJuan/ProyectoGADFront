@@ -3,9 +3,11 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
+import { LoadingServiceService } from 'src/app/components/loading-spinner/LoadingService.service';
 import { PoaActividadProjection } from 'src/app/interface/PoaActividadProjection';
 import { ActividadesPoa } from 'src/app/models/ActividadesPoa';
 import { Poa } from 'src/app/models/Poa';
+import { LoginService } from 'src/app/services/login.service';
 import { PoaService } from 'src/app/services/poa.service';
 
 @Component({
@@ -37,6 +39,8 @@ export class ListaPoaComponent implements OnInit{
   poas: PoaActividadProjection[] = [];
   public activ = new ActividadesPoa();
   ocultarID: boolean = false;
+  isLoggedIn: boolean;
+  user: any;
 
   filterPost = '';
   filteredPoas: any[] = [];
@@ -49,8 +53,11 @@ export class ListaPoaComponent implements OnInit{
   constructor(
     private poaservice: PoaService,private paginatorIntl: MatPaginatorIntl,
     private router: Router, private fb: FormBuilder,
-    
+    private loadingService: LoadingServiceService, private login: LoginService
   ) {
+    this.loadingService.show();
+    this.isLoggedIn = this.login.isLoggedIn();
+    this.user = this.login.getUser();
     this.paginatorIntl.nextPageLabel = this.nextPageLabel;
     this.paginatorIntl.lastPageLabel = this.lastPageLabel;
     this.paginatorIntl.firstPageLabel=this.firstPageLabel;
@@ -63,21 +70,24 @@ export class ListaPoaComponent implements OnInit{
 
   }
   ngOnInit(): void {
-    this.listar();
-  }
-
-  listar(): void {
-    this.poaservice.obtenerDatosPoas().subscribe(
+    this.login.loginStatusSubjec.asObservable().subscribe(
+      data => {
+        this.isLoggedIn = this.login.isLoggedIn();
+        this.user = this.login.getUser();
+      }
+    );
+    this.poaservice.obtenerDatosPoas(this.user.id).subscribe(
       (data: any[]) => {
         this.poas = data;
         this.dataSource.data = this.poas;
+        this.loadingService.hide();
       },
       (error: any) => {
         console.error('Error al listar poas:', error);
+        this.loadingService.hide();
       }
     );
   }
-
   verActividades(poa: any) {
     this.router.navigate(['/sup/actividades-presupuestos/tabla-actividades'], { state: { data: poa } });
   }
