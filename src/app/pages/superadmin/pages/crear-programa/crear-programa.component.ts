@@ -57,7 +57,7 @@ export class CrearComponent implements OnInit {
   ) {
     this.frmCriterio = fb.group({
       nombre: ['', Validators.required],
-      descripcion: ['', [Validators.required]]
+      descripcion: ['']
     });
     this.paginatorIntl.nextPageLabel = this.nextPageLabel;
     this.paginatorIntl.lastPageLabel = this.lastPageLabel;
@@ -85,12 +85,13 @@ export class CrearComponent implements OnInit {
           this.guardadoExitoso = true;
           this.loadingService.hide();
 
-          this.listar();
           Swal.fire(
             'Exitoso',
             'Se ha completado el registro con exito',
             'success'
           )
+          this.listar();
+
         },
         (error) => {
           console.error('Error al crear el programa:', error);
