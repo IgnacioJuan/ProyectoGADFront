@@ -8,6 +8,7 @@ import { Poa } from 'src/app/models/Poa';
 import { MatTableDataSource } from '@angular/material/table';
 import { log, number } from 'mathjs';
 import { PoaNoAprobadoProjection } from 'src/app/interface/PoaNoAprobadoProjection';
+import { LoadingServiceService } from 'src/app/components/loading-spinner/LoadingService.service';
 
 @Component({
   selector: 'app-crear-competencia',
@@ -54,7 +55,9 @@ export class ListarpoaComponent implements OnInit {
 
   constructor(
     private poasservice: PoaService,private paginatorIntl: MatPaginatorIntl,
-    private router: Router, private fb: FormBuilder
+    private router: Router, private fb: FormBuilder,
+    private loadingService: LoadingServiceService
+
   ) {
     this.frmCriterio = fb.group({
       nombre: ['', Validators.required],
@@ -76,13 +79,19 @@ export class ListarpoaComponent implements OnInit {
   } 
 
   listar(): void {
+    this.loadingService.show();
+
     this.poasservice.getNoAprobados().subscribe(
       (data: any[]) => {
         this.competencias = data;
         this.dataSource.data = this.competencias;
+        this.loadingService.hide();
+
       },
       (error: any) => {
         console.error('Error al listar los programas:', error);
+        this.loadingService.hide();
+
       }
     );
   }

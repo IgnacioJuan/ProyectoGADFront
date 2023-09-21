@@ -275,13 +275,13 @@ this.actividad.devengado=devengado
     this.archivoSeleted.estado = this.estado;
     this.aprobarEvi.fecha_aprobacion = this.fechaActual;
     this.actividad.devengado = devengado;
-    this.actividad.usuario = this.usuariosdit2;
-
+    this.actividad.usuario = new Usuario2();
+    this.actividad.poa= new Poa();
     // Primero, define un observable que emita un valor nulo si el estado es "RECHAZADO"
     const updateActividad$ =
       this.estado === 'APROBADO'
         ? this.actividadServi
-            .actualizar(this.actividad.id_actividad, this.actividad)
+            .actualizarDevengado(this.actividad.id_actividad, this.actividad)
             .pipe(
               catchError((error) => {
                 this.loadingService.hide();

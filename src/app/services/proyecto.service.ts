@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Proyecto } from '../models/Proyecto';
 import baserUrl from './helper';
+import { Exportarexcel } from '../interface/Exportarexcel';
 import {ReporteProyecto} from "../interface/reporte-proyecto";
 
 @Injectable({
@@ -44,6 +45,13 @@ export class ProyectoService {
   getProyectosdelModelo(id_modelo_poa: number): Observable<Proyecto[]> {
     return this.http.get<Proyecto[]>(`${baserUrl}/api/proyecto/listardelModelo/${id_modelo_poa}`);
   }
+
+
+  getexportarexcel(id_modelo_poa:number): Observable<Exportarexcel[]> {
+    return this.http.get<Exportarexcel[]>(`${baserUrl}/api/proyecto/exportarexcel/${id_modelo_poa}`);
+  }
+
+
   crear(r: Proyecto, codigo_componente: String): Observable<Proyecto> {
     return this.http.post<Proyecto>(`${baserUrl}/api/proyecto/crear/${codigo_componente}`, r
     );

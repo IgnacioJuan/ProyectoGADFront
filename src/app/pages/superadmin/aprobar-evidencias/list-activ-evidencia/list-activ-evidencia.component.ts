@@ -119,6 +119,7 @@ export class ListActivEvidenciaComponent implements OnInit {
 
 
 
+  busquedaRealizada: boolean = false;
 
 
   buscar() {
@@ -132,8 +133,15 @@ export class ListActivEvidenciaComponent implements OnInit {
   
     // Verifica si se encontraron resultados
     this.resultadosEncontrados = this.filteredComponentes.length > 0;
-  }
+    this.busquedaRealizada = true;
+   this. ActualizarBus()
 
+  }
+ActualizarBus(){
+  if(this.busquedaRealizada){
+    this.resultadosEncontrados = true; 
+  }
+}
 
   //Ir a poas
   verPoas() {

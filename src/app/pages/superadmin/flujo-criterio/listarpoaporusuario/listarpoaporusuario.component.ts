@@ -8,6 +8,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { PoaporUsuarioProjection } from 'src/app/interface/PoaporUsuarioProjection';
 import { NgStyle } from '@angular/common';
 import { Proyecto } from 'src/app/models/Proyecto';
+import { LoadingServiceService } from 'src/app/components/loading-spinner/LoadingService.service';
 
 
 @Component({
@@ -59,7 +60,9 @@ export class ListarporUsuarioComponent implements OnInit {
 
   constructor(
     private poasservice: PoaService,private paginatorIntl: MatPaginatorIntl,
-    private router: Router, private fb: FormBuilder
+    private router: Router, private fb: FormBuilder,
+    private loadingService: LoadingServiceService
+
   ) {
     this.frmCriterio = fb.group({
       nombre: ['', Validators.required],
@@ -90,13 +93,19 @@ export class ListarporUsuarioComponent implements OnInit {
   }
  
   listar(): void {
+    this.loadingService.show();
+
     this.poasservice.getporUsuario(this.compete.id_proyecto ).subscribe(
       (data: any[]) => {
         this.competencias = data;
         this.dataSource.data = this.competencias;
+        this.loadingService.hide();
+
       },
       (error: any) => {
         console.error('Error al listar los usuarios:', error);
+        this.loadingService.hide();
+
       }
     );
   }

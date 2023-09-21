@@ -6,6 +6,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 import { Competencia } from 'src/app/models/Competencia';
 import { CompetenciaService } from 'src/app/services/competencia.service';
+import { LoadingServiceService } from 'src/app/components/loading-spinner/LoadingService.service';
 
 @Component({
   selector: 'app-crear-competencia',
@@ -50,7 +51,9 @@ export class CrearcompetenciaComponent implements OnInit {
 
   constructor(
     private competenciasservice: CompetenciaService,private paginatorIntl: MatPaginatorIntl,
-    private router: Router, private fb: FormBuilder
+    private router: Router, private fb: FormBuilder,
+    private loadingService: LoadingServiceService
+
   ) {
     this.frmCriterio = fb.group({
       nombre: ['', Validators.required],
@@ -72,12 +75,17 @@ export class CrearcompetenciaComponent implements OnInit {
   }
 
   guardar() {
+
+    this.loadingService.show();
+
     this.compete = this.frmCriterio.value;
     this.competenciasservice.crearCompetencia(this.compete)
       .subscribe(
         (response) => {
           console.log('Competencia COOTAD creada con éxito:', response);
           this.guardadoExitoso = true;
+          this.loadingService.hide();
+
           this.listar();
           Swal.fire(
             'Exitoso',
@@ -87,6 +95,8 @@ export class CrearcompetenciaComponent implements OnInit {
         },
         (error) => {
           console.error('Error al crear la competencis COOTAD:', error);
+          this.loadingService.hide();
+
           Swal.fire(
             'Error',
             'Ha ocurrido un error',
@@ -97,6 +107,9 @@ export class CrearcompetenciaComponent implements OnInit {
 
   }
     eliminar(id: any) {
+
+      this.loadingService.show();
+
     Swal.fire({
       title: 'Estas seguro de eliminar el registro?',
       showDenyButton: true,
@@ -107,6 +120,8 @@ export class CrearcompetenciaComponent implements OnInit {
       if (!result.isConfirmed) {
         this.competenciasservice.eliminarLogicoCompetencia(id).subscribe(
           (response) => {
+            this.loadingService.hide();
+
             this.listar()
             Swal.fire('Eliminado!', '', 'success')
 
@@ -118,13 +133,19 @@ export class CrearcompetenciaComponent implements OnInit {
   }
 
   listar(): void {
+    this.loadingService.show();
+
     this.competenciasservice.obtenerListaCompetencias().subscribe(
       (data: any[]) => {
         this.competencias = data;
         this.dataSource.data = this.competencias;
+        this.loadingService.hide();
+
       },
       (error: any) => {
         console.error('Error al listar las comptencias COOTAD:', error);
+        this.loadingService.hide();
+
       }
     );
   }
@@ -144,6 +165,8 @@ export class CrearcompetenciaComponent implements OnInit {
   }
 
   actualizar() {
+    this.loadingService.show();
+
     this.compete.nombre = this.frmCriterio.value.nombre;
     this.compete.descripcion = this.frmCriterio.value.descripcion;
     this.competenciasservice.actualizarCompetencia(this.compete.id_competencia, this.compete)
@@ -151,7 +174,13 @@ export class CrearcompetenciaComponent implements OnInit {
         this.compete = new Competencia();
         this.listar();
         Swal.fire('Operacion exitosa!', 'El registro se actualizo con exito', 'success')
+      },
+      (error: any) => {
+        console.error('Error al listar las comptenecias:', error);
+        this.loadingService.hide();
+
       });
+
   }
 
   aplicarFiltro() {

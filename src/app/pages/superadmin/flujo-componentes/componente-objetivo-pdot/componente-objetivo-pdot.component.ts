@@ -121,8 +121,6 @@ guardar() {
 
 //metodo para eliminar
 eliminar(objetivoP: any) {
-  this.loadingService.show();
-
   Swal.fire({
     title: 'Estas seguro de eliminar el registro?',
     showDenyButton: true,
@@ -130,10 +128,14 @@ eliminar(objetivoP: any) {
     denyButtonText: `Eliminar`,
   }).then((result) => {
     if (!result.isConfirmed) {
+      this.loadingService.show();
+
         this.objetivoPdotService.eliminar(objetivoP).subscribe(
           (response) => {
             this.listar(this.componente.id_componente)
             Swal.fire('Eliminado!', '', 'success')
+            this.loadingService.hide();
+
           }
         );
     }
