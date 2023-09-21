@@ -38,7 +38,13 @@ export class SidebarService {
       titulo: "Solicitud de Presupuesto",
       submenu: [
         { titulo: 'Listado de Solicitudes', url: 'adm/poas-solicitudes/listarPoasSoli', icono: 'fas fa-list-ul ' },
-
+      ]
+    },
+    {
+      icono: 'nav-icon fas fa-file-invoice',
+      titulo: "Actividades",
+      submenu: [
+        { titulo: 'Financiamiento', url: 'sup/actividades-presupuestos/tabla-poas', icono: 'fas fa-list-ul ' },
       ]
     },
     {
@@ -122,15 +128,6 @@ export class SidebarService {
 
     //   ]
     // },
-
-    {
-      icono: 'nav-icon fas fa-file-invoice',
-      titulo: "Solicitud de Presupuesto",
-      submenu: [
-        { titulo: 'Listado de Solicitudes', url: 'sup/listadoSolicitudes', icono: 'fas fa-list-ul ' },
-
-      ]
-    },
 
     {
       icono: 'nav-icon fas fa-file-invoice',

@@ -9,7 +9,8 @@
         <strong><a style="cursor: pointer" (click)="verModeloPoas()">LISTADO MODELOS
           </a>
           >
-          <a>{{ modelopoa.nombre }} </a></strong>
+          <a>Proyectos del Modelo Seleccionado </a></strong
+        >
       </h1>
     </blockquote>
     <div class="card">
@@ -79,12 +80,15 @@
             <ng-container matColumnDef="actions">
               <th mat-header-cell *matHeaderCellDef>ACCIONES</th>
               <td mat-cell *matCellDef="let element">
-                <button class="btn btn-danger" style="background-color: red" (click)="eliminar(element)"
-                  style="margin-right: 5%">
-                  <i class="fas fa-trash"></i>
-                </button>
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#materiaModal"
-                  style="margin-right: 5%; background-color: green" (click)="editDatos(element)">
+                
+                <button
+                  type="button"
+                  class="btn btn-primary"
+                  data-bs-toggle="modal"
+                  data-bs-target="#materiaModal"
+                  style="margin-right: 5%; background-color: green"
+                  (click)="editDatos(element)"
+                >
                   <i class="fas fa-edit"></i>
                 </button>
               </td>

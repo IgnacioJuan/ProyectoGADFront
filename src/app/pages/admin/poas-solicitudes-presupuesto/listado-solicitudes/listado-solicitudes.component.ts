@@ -24,6 +24,7 @@ import { ReformaTraspasoI } from 'src/app/models/ReformaTraspasoI';
 import { ReformaTraspasoD } from 'src/app/models/ReformaTraspasoD';
 import { ReformaTraspasoIService } from 'src/app/services/reformatraspaso-i.service';
 import { ReformaTraspasoDService } from 'src/app/services/reformatraspaso-d.service';
+import { Poa } from 'src/app/models/Poa';
 
 
 
@@ -43,6 +44,7 @@ export class ListadoSolicitudesComponent implements OnInit {
     'actividad_nombre',
     'codificado',
     'monto_actual',
+    'reforma',
     'estado',
     'fecha_solicitud',
     'evaluar'  ];
@@ -166,6 +168,10 @@ getRowCount(elemento: any): number {
     this.estado = this.solicitudSeleted.estado;
     if (this.solicitudSeleted.actividadSolicitud !== null) {
       this.actividadSelecciona = this.solicitudSeleted.actividadSolicitud;
+      this.actividadSeleccionaReforma=this.solicitudSeleted.actividadSolicitud;
+      this.actividadSeleccionaReforma.poa= new Poa();
+      this.actividadSeleccionaReforma.usuario= new Usuario2();
+
     } 
     if (this.solicitudSeleted.responsable?.id !== undefined) {
       this.correo = this.solicitudSeleted.responsable?.persona.correo;
@@ -179,11 +185,11 @@ getRowCount(elemento: any): number {
       this.solicitudSeleted.monto_total > this.solicitudSeleted.monto_actual
     ) {
       this.tipo = true;
-      this.reformaI.actividad = this.actividadSelecciona;
+      this.reformaI.actividad = this.actividadSeleccionaReforma;
       this.reformaI.valor = this.solicitudSeleted.monto_total;
       this.reformaI.fecha = this.fechaActual;
     } else {
-      this.reformaD.actividad = this.actividadSelecciona;
+      this.reformaD.actividad = this.actividadSeleccionaReforma;
       this.reformaD.valor = this.solicitudSeleted.monto_total;
       this.reformaD.fecha = this.fechaActual;
     }
@@ -239,6 +245,8 @@ getRowCount(elemento: any): number {
   solic: SolicitudActividadPrepuesto = new SolicitudActividadPrepuesto();
   usuariosdit2: Usuario2 = new Usuario2();
   actividadSelecciona: ActividadesPoa = new ActividadesPoa();
+  actividadSeleccionaReforma: ActividadesPoa = new ActividadesPoa();
+
   usuariosditDest: Usuario2 = new Usuario2();
   Resposable: Usuario2 = new Usuario2();
 
@@ -252,34 +260,25 @@ getRowCount(elemento: any): number {
       return;
 
     }
-
+    this.solic.id_solicitud_presupuesto= this.solicitudSeleted.id_solicitud_presupuesto
     this.usuariosdit.id = this.user.id;
-    this.solic.id_solicitud_presupuesto =
-    this.solicitudSeleted.id_solicitud_presupuesto;
     this.usuariosdit2.id = this.actividadSelecciona.usuario.id;
-    this.usuariosditDest.id = this.solic.destinatario?.id || 0; // 0 es un valor predeterminado si es undefined
-    this.Resposable.id = this.solic.responsable?.id || 0;
     this.aprobarSolicitud.estado = this.estado;
     this.aprobarSolicitud.observacion = this.observacion;
     this.aprobarSolicitud.solicitud = this.solic;
     this.aprobarSolicitud.usuario = this.usuariosdit;
-    this.solic.estado = this.estado;
-    this.solic.motivo = this.solicitudSeleted.motivo;
-    this.solic.fecha_solicitud = this.solicitudSeleted.fecha_solicitud;
-    this.solic.monto_actual = this.solicitudSeleted.monto_actual;
-    this.solic.monto_total = this.solicitudSeleted.monto_total;
-    this.solic.reforma = this.solicitudSeleted.reforma;
     this.aprobarSolicitud.fecha_aprobacion = this.fechaActual;
+
+    this.solic.estado=this.estado
     console.log('datosss');
     console.log(this.actividadSelecciona);
     this.actividadSelecciona.usuario = this.usuariosdit2;
     this.actividadSelecciona.codificado = codificado;
+      console.log(this.aprobarSolicitud)
+      console.log(this.actividadSelecciona)
+      console.log(this.solic)
 
-
-
-
-
-    
+  
     if (this.estado === 'APROBADO') {
       // Verificar el tipo
       if (this.tipo) {
@@ -291,7 +290,6 @@ getRowCount(elemento: any): number {
           },
           (error: any) => {
             console.error('Error al crear Reforma I:', error);
-            this.loadingService.hide();
           }
         );
       } else {
@@ -300,24 +298,50 @@ getRowCount(elemento: any): number {
           () => {
             console.log('Se creó Reforma D');
             this.actualizarActividad();
-            this.loadingService.hide();
 
           },
           (error: any) => {
             console.error('Error al crear Reforma D:', error);
-            this.loadingService.hide();
           }
         );
       }
     } else if (this.estado === 'RECHAZADO') {
-      // Solo realizar operaciones de aprobación y actualización de solicitud
-      this.realizarOperacionesAprobacionSolicitud();
+      forkJoin([
+        this.aprobacionSolicitudService.crear(this.aprobarSolicitud),
+        
+        this.solicitudPresupuestoService.actualizarEstado(
+          this.solicitudSeleted.id_solicitud_presupuesto,
+          this.solic
+        ),
+      ]).subscribe(
+        ([aprobarResponse, archivoResponse]) => {
+          this.sendEmail();
+          this.Limpiar();
+          this.listarSolicitudes(this.user.id, this.poa.id_poa);
+          console.log('Se creó la aprobacion y el editar');
+
+          Swal.fire(
+            'Exitoso',
+            'Se ha completado el registro con éxito',
+            'success'
+          );
+        },
+        (error) => {
+          console.error('Error al realizar alguna de las operaciones:', error);
+          this.loadingService.hide();
+          Swal.fire(
+            'Error',
+            'Ha ocurrido un error en una o ambas operaciones',
+            'warning'
+          );
+        }
+      );
     }
   }
 
   private actualizarActividad() {
     this.actividadServi
-      .actualizar(
+      .actualizarCodificado(
         this.actividadSelecciona.id_actividad,
         this.actividadSelecciona
       )
@@ -325,12 +349,9 @@ getRowCount(elemento: any): number {
         () => {
           console.log('Se editó la actividad');
           this.realizarOperacionesAprobacionSolicitud();
-          this.loadingService.hide();
-
         },
         (error: any) => {
           console.error('Error al editar la actividad:', error);
-          this.loadingService.hide();
         }
       );
   }
@@ -338,7 +359,8 @@ getRowCount(elemento: any): number {
   private realizarOperacionesAprobacionSolicitud() {
     forkJoin([
       this.aprobacionSolicitudService.crear(this.aprobarSolicitud),
-      this.solicitudPresupuestoService.actualizar(
+    
+      this.solicitudPresupuestoService.actualizarEstado(
         this.solicitudSeleted.id_solicitud_presupuesto,
         this.solic
       ),
@@ -346,7 +368,6 @@ getRowCount(elemento: any): number {
       ([aprobarResponse, archivoResponse]) => {
         this.sendEmail();
         this.Limpiar();
-        this.loadingService.hide();
         this.listarSolicitudes(this.user.id, this.poa.id_poa);
         Swal.fire(
           'Exitoso',
@@ -369,6 +390,19 @@ getRowCount(elemento: any): number {
 
 
 
+  //Cambiar colores de la TABLA
+  getEstadoCellStyle(estado: string): any {
+    switch (estado) {
+      case 'PENDIENTE':
+        return { background: 'rgb(235, 253, 133)' };
+      case 'APROBADO':
+        return { background: 'rgb(168, 216, 159)' };
+      case 'RECHAZADO':
+        return { background: 'rgb(231, 87, 87)' };
+      default:
+        return {};
+    }
+  }
 
 
 

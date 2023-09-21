@@ -16,6 +16,7 @@ import { PresupuestoExterno } from 'src/app/models/PresupuestoExterno';
 import { Usuario2 } from 'src/app/models/Usuario2';
 import { ActividadespoaService } from 'src/app/services/actividadespoa.service';
 import { AsignacionUsuarioService } from 'src/app/services/asignacionusuario.service';
+import { LoginService } from 'src/app/services/login.service';
 import { PoaInsertService } from 'src/app/services/poa/poa-insert.service';
 import { PresupuestoExternoService } from 'src/app/services/presupuestoexterno.service';
 import { UsuarioService } from 'src/app/services/usuario.service';
@@ -80,6 +81,8 @@ export class ActividadesComponent implements OnInit {
   spans: any[] = [];
   spans2: any[] = [];
   ocultarID: boolean = false;
+  isLoggedIn: boolean;
+  user: any;
   public presupuestoexterno = new PresupuestoExterno();
 
 
@@ -101,11 +104,15 @@ export class ActividadesComponent implements OnInit {
     private actividadservice: ActividadespoaService, private paginatorIntl: MatPaginatorIntl, private router: Router,
     private fb: FormBuilder, private userService: UsuarioService, private pexternoservice: PresupuestoExternoService,
     private usuariorolservice: UsuariorolService, private asignacionservice: AsignacionUsuarioService,
-    private poaInsertService: PoaInsertService, private route: ActivatedRoute, private loadingService: LoadingServiceService
+    private poaInsertService: PoaInsertService, private route: ActivatedRoute, private login: LoginService,
+    private loadingService: LoadingServiceService
   ) {
+    this.loadingService.show();
+    this.isLoggedIn = this.login.isLoggedIn();
+    this.user = this.login.getUser();
     this.frmActividad = fb.group({
       nombre: ['', Validators.required],
-      descripcion: ['', Validators.required],
+      descripcion: [''],
       recursos_propios: [0, Validators.min(0)],
       institucion: [''],
       valorPE: [0, Validators.min(0)],
@@ -130,8 +137,6 @@ export class ActividadesComponent implements OnInit {
         institucionControl.updateValueAndValidity();
       });
     }
-
-
     this.paginatorIntl.nextPageLabel = this.nextPageLabel;
     this.paginatorIntl.lastPageLabel = this.lastPageLabel;
     this.paginatorIntl.firstPageLabel = this.firstPageLabel;
@@ -144,6 +149,13 @@ export class ActividadesComponent implements OnInit {
     this.dataSource.paginator = this.paginator || null;
   }
   ngOnInit(): void {
+    this.login.loginStatusSubjec.asObservable().subscribe(
+      data => {
+        this.isLoggedIn = this.login.isLoggedIn();
+        this.user = this.login.getUser();
+      }
+    );
+    console.log(this.user);
     const data = history.state.data;
     this.cargarUsuarios();
     this.poa = data;
@@ -167,9 +179,11 @@ export class ActividadesComponent implements OnInit {
       (data: any[]) => {
         this.actividades = data;
         this.dataSource.data = this.actividades;
+        this.loadingService.hide();
       },
       (error: any) => {
         console.error('Error al listar las actividades:', error);
+        this.loadingService.hide();
       }
     );
   }
@@ -274,6 +288,7 @@ export class ActividadesComponent implements OnInit {
   }
 
   cargarDatosAlForm(activ: ActividadesPoa) {
+    this.loadingService.show();
     this.actividad = activ;
     const dynamicControls: DynamicControls = {
       nombre: new FormControl(this.actividad.nombre),
@@ -296,14 +311,17 @@ export class ActividadesComponent implements OnInit {
             });
             // Llena el formulario
             this.frmActividad = new FormGroup(dynamicControls);
+            this.loadingService.hide();
           },
           (error) => {
             console.error('Error al obtener los periodos de la actividad:', error);
+            this.loadingService.hide();
           }
         );
       },
       (error) => {
         console.error('Error al obtener los presupuestos externos:', error);
+        this.loadingService.hide();
       }
     );
   }
@@ -413,7 +431,7 @@ export class ActividadesComponent implements OnInit {
               () => {
                 this.loadingService.hide();
                 Swal.fire('Operación exitosa!', 'El registro se actualizó con éxito', 'success');
-                this.cdRef.detectChanges();
+                //this.cdRef.detectChanges();
                 this.listar(this.poa.id_poa);
               },
               (error) => {
@@ -434,7 +452,7 @@ export class ActividadesComponent implements OnInit {
               () => {
                 this.loadingService.hide();
                 Swal.fire('Operación exitosa!', 'El registro se actualizó con éxito', 'success');
-                this.cdRef.detectChanges();
+                //this.cdRef.detectChanges();
                 this.listar(this.poa.id_poa);
               },
               (error) => {
@@ -476,7 +494,7 @@ export class ActividadesComponent implements OnInit {
         );
       }
     })
-
+    this.loadingService.hide();
   }
   limpiarFormulario() {
     this.frmActividad.reset({
@@ -553,7 +571,7 @@ export class ActividadesComponent implements OnInit {
          'Se ha asignado el responsable con éxito',
          'success'
         );
-        this.cdRef.detectChanges();
+        //this.cdRef.detectChanges();
         this.listar(this.poa.id_poa);
       },
       (error) => {
@@ -578,7 +596,6 @@ export class ActividadesComponent implements OnInit {
       }
       );
       this.loadingService.hide();
-    
   }
 
   // FILTROS DE BUSQUEDA

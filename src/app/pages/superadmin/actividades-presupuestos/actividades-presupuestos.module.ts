@@ -5,6 +5,7 @@ import { ActividadesPresupuestosRoutingModule } from './actividades-presupuestos
 import { SharedModule } from 'src/app/shared/shared.module';
 import { ListaActividadesComponent } from './actividades/actividades.component';
 import { ListaPoaComponent } from './listaPoa/listapoa.component';
+import { LoginService } from 'src/app/services/login.service';
 
 
 @NgModule({
