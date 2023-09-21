@@ -5,6 +5,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { PoaService } from 'src/app/services/poa.service';
 import { LoadingServiceService } from 'src/app/components/loading-spinner/LoadingService.service';
+import { LoginService } from 'src/app/services/login.service';
 @Component({
   selector: 'app-list-poa-actividad',
   templateUrl: './list-poa-actividad.component.html',
@@ -17,15 +18,20 @@ export class ListPoaActividadComponent  implements OnInit {
  filterPost: string = "";
  filteredComponentes: any[] = [];
  resultadosEncontrados: boolean = true;
+ isLoggedIn: boolean;
+  user: any;
+
 
  constructor(
    private paginatorIntl: MatPaginatorIntl,
    private router: Router,
    private poaService: PoaService,
-      //importar el spinner como servicio
-      private loadingService: LoadingServiceService
+   private loadingService: LoadingServiceService,
+   private login: LoginService
  ) {
-
+   
+   this.isLoggedIn = this.login.isLoggedIn();
+   this.user = this.login.getUser();
    this.paginatorIntl.nextPageLabel = this.nextPageLabel;
    this.paginatorIntl.lastPageLabel = this.lastPageLabel;
    this.paginatorIntl.firstPageLabel=this.firstPageLabel;
@@ -38,7 +44,25 @@ export class ListPoaActividadComponent  implements OnInit {
 
  }
  ngOnInit(): void {
-   this.listar();
+  this.login.loginStatusSubjec.asObservable().subscribe(
+    data => {
+      this.isLoggedIn = this.login.isLoggedIn();
+      this.user = this.login.getUser();
+    }
+  );
+  this.poaService.obtenerDatosPoas(this.user.id).subscribe(
+    (data: any[]) => {
+      this.listaPoas = data;
+      this.dataSource.data = this.listaPoas;
+      this.loadingService.hide();
+
+    },
+    (error: any) => {
+      console.error('Error al listar los poas:', error);
+      this.loadingService.hide();
+
+    }
+  );
  }
  dataSource = new MatTableDataSource<Poa>();
  @ViewChild(MatPaginator, { static: false }) paginator?: MatPaginator;
@@ -65,23 +89,6 @@ export class ListPoaActividadComponent  implements OnInit {
 //Columnas Tabla
  columnasUsuario: string[] = [ 'proyecto','meta_planificada', 'periodo','evidencias'];
 
- listar(): void {
-  this.loadingService.show();
-
-  this.poaService.obtenerDatosPoas().subscribe(
-    (data: any[]) => {
-      this.listaPoas = data;
-      this.dataSource.data = this.listaPoas;
-      this.loadingService.hide();
-
-    },
-    (error: any) => {
-      console.error('Error al listar los poas:', error);
-      this.loadingService.hide();
-
-    }
-  );
-}
 
  buscar() {
   // Filtra los componentes basados en el filtro
