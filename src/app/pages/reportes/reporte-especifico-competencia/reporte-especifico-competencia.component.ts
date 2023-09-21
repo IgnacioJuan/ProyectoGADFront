@@ -275,7 +275,4 @@ export class ReporteEspecificoCompetenciaComponent implements OnInit {
       this.pdfUrl = this.sanitizer.bypassSecurityTrustResourceUrl(unsafeUrl);
     });
   }
-  redirectToPDF() {
-    window.open('http://localhost:5000/api/competencia/export-pdf', '_blank');
-  }
 }
