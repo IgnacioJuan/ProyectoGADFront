@@ -1,10 +1,15 @@
 <body>
   <div class="container bg-light border border-start-0 rounded-4">
-    <blockquote class="blockquote text-dark"
-      style="margin-top: 5%; background-color: #ffffff; border-left: 10px solid green;">
+    <blockquote
+      class="blockquote text-dark"
+      style="
+        margin-top: 5%;
+        background-color: #ffffff;
+        border-left: 10px solid green;
+      "
+    >
       <h1 style="text-transform: uppercase" class="titulo">
-        <strong>
-          <a>MONTO DE INVERSIÓN POR COMPETENCIA</a></strong>
+        <strong> <a>MONTO DE INVERSIÓN POR COMPETENCIA</a></strong>
       </h1>
     </blockquote>
 
@@ -12,9 +17,12 @@
       <div class="card">
         <div class="card-body">
           <div class="semaforo">
-            <div class="verde"></div><span><strong>Cumplida:</strong> 85% y el 100%</span>
-            <div class="amarillo"></div><span><strong>Parcialmente cumplida:</strong> 70% y el 84,9%</span>
-            <div class="rojo"></div><span><strong>Incumplida:</strong> 0 a 69,9%</span>
+            <div class="verde"></div>
+            <span><strong>Cumplida:</strong> 85% y el 100%</span>
+            <div class="amarillo"></div>
+            <span><strong>Parcialmente cumplida:</strong> 70% y el 84,9%</span>
+            <div class="rojo"></div>
+            <span><strong>Incumplida:</strong> 0 a 69,9%</span>
             <div></div>
             <div></div>
             <div></div>
@@ -22,13 +30,27 @@
             <div></div>
             <div></div>
             <div></div>
-            <button mat-raised-button color="warn" class="pdf-button" (click)="redirectToPDF()">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                class="bi bi-file-earmark-pdf-fill" viewBox="0 0 16 16">
+            <button
+              mat-raised-button
+              color="warn"
+              class="pdf-button"
+              (click)="redirectToPDF()"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                class="bi bi-file-earmark-pdf-fill"
+                viewBox="0 0 16 16"
+              >
                 <path
-                  d="M5.523 12.424c.14-.082.293-.162.459-.238a7.878 7.878 0 0 1-.45.606c-.28.337-.498.516-.635.572a.266.266 0 0 1-.035.012.282.282 0 0 1-.026-.044c-.056-.11-.054-.216.04-.36.106-.165.319-.354.647-.548zm2.455-1.647c-.119.025-.237.05-.356.078a21.148 21.148 0 0 0 .5-1.05 12.045 12.045 0 0 0 .51.858c-.217.032-.436.07-.654.114zm2.525.939a3.881 3.881 0 0 1-.435-.41c.228.005.434.022.612.054.317.057.466.147.518.209a.095.095 0 0 1 .026.064.436.436 0 0 1-.06.2.307.307 0 0 1-.094.124.107.107 0 0 1-.069.015c-.09-.003-.258-.066-.498-.256zM8.278 6.97c-.04.244-.108.524-.2.829a4.86 4.86 0 0 1-.089-.346c-.076-.353-.087-.63-.046-.822.038-.177.11-.248.196-.283a.517.517 0 0 1 .145-.04c.013.03.028.092.032.198.005.122-.007.277-.038.465z" />
-                <path fill-rule="evenodd"
-                  d="M4 0h5.293A1 1 0 0 1 10 .293L13.707 4a1 1 0 0 1 .293.707V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2zm5.5 1.5v2a1 1 0 0 0 1 1h2l-3-3zM4.165 13.668c.09.18.23.343.438.419.207.075.412.04.58-.03.318-.13.635-.436.926-.786.333-.401.683-.927 1.021-1.51a11.651 11.651 0 0 1 1.997-.406c.3.383.61.713.91.95.28.22.603.403.934.417a.856.856 0 0 0 .51-.138c.155-.101.27-.247.354-.416.09-.181.145-.37.138-.563a.844.844 0 0 0-.2-.518c-.226-.27-.596-.4-.96-.465a5.76 5.76 0 0 0-1.335-.05 10.954 10.954 0 0 1-.98-1.686c.25-.66.437-1.284.52-1.794.036-.218.055-.426.048-.614a1.238 1.238 0 0 0-.127-.538.7.7 0 0 0-.477-.365c-.202-.043-.41 0-.601.077-.377.15-.576.47-.651.823-.073.34-.04.736.046 1.136.088.406.238.848.43 1.295a19.697 19.697 0 0 1-1.062 2.227 7.662 7.662 0 0 0-1.482.645c-.37.22-.699.48-.897.787-.21.326-.275.714-.08 1.103z" />
+                  d="M5.523 12.424c.14-.082.293-.162.459-.238a7.878 7.878 0 0 1-.45.606c-.28.337-.498.516-.635.572a.266.266 0 0 1-.035.012.282.282 0 0 1-.026-.044c-.056-.11-.054-.216.04-.36.106-.165.319-.354.647-.548zm2.455-1.647c-.119.025-.237.05-.356.078a21.148 21.148 0 0 0 .5-1.05 12.045 12.045 0 0 0 .51.858c-.217.032-.436.07-.654.114zm2.525.939a3.881 3.881 0 0 1-.435-.41c.228.005.434.022.612.054.317.057.466.147.518.209a.095.095 0 0 1 .026.064.436.436 0 0 1-.06.2.307.307 0 0 1-.094.124.107.107 0 0 1-.069.015c-.09-.003-.258-.066-.498-.256zM8.278 6.97c-.04.244-.108.524-.2.829a4.86 4.86 0 0 1-.089-.346c-.076-.353-.087-.63-.046-.822.038-.177.11-.248.196-.283a.517.517 0 0 1 .145-.04c.013.03.028.092.032.198.005.122-.007.277-.038.465z"
+                />
+                <path
+                  fill-rule="evenodd"
+                  d="M4 0h5.293A1 1 0 0 1 10 .293L13.707 4a1 1 0 0 1 .293.707V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2zm5.5 1.5v2a1 1 0 0 0 1 1h2l-3-3zM4.165 13.668c.09.18.23.343.438.419.207.075.412.04.58-.03.318-.13.635-.436.926-.786.333-.401.683-.927 1.021-1.51a11.651 11.651 0 0 1 1.997-.406c.3.383.61.713.91.95.28.22.603.403.934.417a.856.856 0 0 0 .51-.138c.155-.101.27-.247.354-.416.09-.181.145-.37.138-.563a.844.844 0 0 0-.2-.518c-.226-.27-.596-.4-.96-.465a5.76 5.76 0 0 0-1.335-.05 10.954 10.954 0 0 1-.98-1.686c.25-.66.437-1.284.52-1.794.036-.218.055-.426.048-.614a1.238 1.238 0 0 0-.127-.538.7.7 0 0 0-.477-.365c-.202-.043-.41 0-.601.077-.377.15-.576.47-.651.823-.073.34-.04.736.046 1.136.088.406.238.848.43 1.295a19.697 19.697 0 0 1-1.062 2.227 7.662 7.662 0 0 0-1.482.645c-.37.22-.699.48-.897.787-.21.326-.275.714-.08 1.103z"
+                />
               </svg>
               PDF
             </button>
@@ -42,21 +64,26 @@
         <!-- Sección de la tabla -->
         <div class="table-section table-responsive">
           <mat-table [dataSource]="tableData">
-
             <ng-container matColumnDef="nombre">
               <mat-header-cell *matHeaderCellDef> COMPETENCIA </mat-header-cell>
-              <mat-cell *matCellDef="let element">{{ element.nombre }}</mat-cell>
+              <mat-cell *matCellDef="let element">{{
+                element.nombre
+              }}</mat-cell>
             </ng-container>
 
             <ng-container matColumnDef="codificado">
-              <mat-header-cell *matHeaderCellDef> MONTO CODIFICADO </mat-header-cell>
+              <mat-header-cell *matHeaderCellDef>
+                MONTO CODIFICADO
+              </mat-header-cell>
               <mat-cell *matCellDef="let element">
                 {{ element.codificado }}
               </mat-cell>
             </ng-container>
 
             <ng-container matColumnDef="devengado">
-              <mat-header-cell *matHeaderCellDef> MONTO DEVENGADO </mat-header-cell>
+              <mat-header-cell *matHeaderCellDef>
+                MONTO DEVENGADO
+              </mat-header-cell>
               <mat-cell *matCellDef="let element">
                 {{ element.devengado }}
               </mat-cell>
@@ -64,7 +91,10 @@
 
             <ng-container matColumnDef="porc_ejecucion">
               <mat-header-cell *matHeaderCellDef> % EJECUCIÓN </mat-header-cell>
-              <mat-cell *matCellDef="let element" [ngClass]="getColorClass(element.porc_ejecucion)">
+              <mat-cell
+                *matCellDef="let element"
+                [ngClass]="getColorClass(element.porc_ejecucion)"
+              >
                 {{ element.porc_ejecucion | number : "1.0-2" }} %
               </mat-cell>
             </ng-container>
@@ -88,31 +118,51 @@
             </ng-container>
 
             <ng-container matColumnDef="footerPorent">
-              <mat-footer-cell *matFooterCellDef [ngClass]="getColorClass(getExecutionPercentage())">
-                <strong>{{ getExecutionPercentage() | number:'1.0-2' }} %</strong>
+              <mat-footer-cell
+                *matFooterCellDef
+                [ngClass]="getColorClass(getExecutionPercentage())"
+              >
+                <strong
+                  >{{ getExecutionPercentage() | number : "1.0-2" }} %</strong
+                >
               </mat-footer-cell>
             </ng-container>
 
-
-
-            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-header-row
+              *matHeaderRowDef="displayedColumns"
+            ></mat-header-row>
             <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
             <mat-footer-row *matFooterRowDef="footerColumns"></mat-footer-row>
           </mat-table>
-          <mat-paginator [pageSizeOptions]="[10]" showFirstLastButtons aria-label="Select page of periodic elements"
-            itemsPerPageLabel="Items por página:" nextPageLabel="Siguiente" previousPageLabel="Anterior">
+          <mat-paginator
+            [pageSizeOptions]="[10]"
+            showFirstLastButtons
+            aria-label="Select page of periodic elements"
+            itemsPerPageLabel="Items por página:"
+            nextPageLabel="Siguiente"
+            previousPageLabel="Anterior"
+          >
           </mat-paginator>
 
-          <div *ngIf="!resultadosEncontradosporEstado" class="alert alert-warning">
+          <div
+            *ngIf="!resultadosEncontradosporEstado"
+            class="alert alert-warning"
+          >
             No se encontraron resultados.
           </div>
         </div>
         <div class="barChart-container">
           <!-- Sección del gráfico -->
           <div class="chart-section">
-            <canvas baseChart class="chart" [data]="barChartData" [options]="barChartOptions"
-              [plugins]="barChartPlugins" [type]="barChartType" (chartHover)="chartHovered($event)"
-              (chartClick)="chartClicked($event)">
+            <canvas
+              baseChart
+              class="chart"
+              [data]="barChartData"
+              [options]="barChartOptions"
+              [type]="barChartType"
+              (chartHover)="chartHovered($event)"
+              (chartClick)="chartClicked($event)"
+            >
             </canvas>
           </div>
         </div>

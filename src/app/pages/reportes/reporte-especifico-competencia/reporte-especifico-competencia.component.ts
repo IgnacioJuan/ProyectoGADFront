@@ -12,18 +12,21 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 @Component({
   selector: 'app-reporte-especifico-competencia',
   templateUrl: './reporte-especifico-competencia.component.html',
-  styleUrls: ['./reporte-especifico-competencia.component.css']
+  styleUrls: ['./reporte-especifico-competencia.component.css'],
 })
 export class ReporteEspecificoCompetenciaComponent implements OnInit {
+  @ViewChild(MatPaginator, { static: false }) paginator?: MatPaginator;
+  @ViewChild(BaseChartDirective) chart: BaseChartDirective | undefined;
   rCompentencias!: ReportICompetencia[];
   resultadosEncontradosporEstado: boolean = true;
   pdfUrl!: SafeResourceUrl;
 
   constructor(
-    private paginatorIntl: MatPaginatorIntl, 
+    private paginatorIntl: MatPaginatorIntl,
     private loadingService: LoadingServiceService,
     private sanitizer: DomSanitizer,
-    private competenciaService: CompetenciaService) {
+    private competenciaService: CompetenciaService
+  ) {
     this.paginatorIntl.nextPageLabel = this.nextPageLabel;
     this.paginatorIntl.lastPageLabel = this.lastPageLabel;
     this.paginatorIntl.firstPageLabel = this.firstPageLabel;
@@ -35,12 +38,10 @@ export class ReporteEspecificoCompetenciaComponent implements OnInit {
   ngOnInit(): void {
     this.cargarDataRICompetencias();
   }
-
   ngAfterViewInit() {
     this.tableData.paginator = this.paginator || null;
   }
 
-  @ViewChild(MatPaginator, { static: false }) paginator?: MatPaginator;
   //tabla
   itemsPerPageLabel = 'Monto Competencia por página';
   nextPageLabel = 'Siguiente';
@@ -61,15 +62,38 @@ export class ReporteEspecificoCompetenciaComponent implements OnInit {
     return `${startIndex + 1} - ${endIndex} de ${length}`;
   };
 
-  @ViewChild(BaseChartDirective) chart: BaseChartDirective | undefined;
-
+  //**Gráfica de lineas*/ 
   public barChartOptions: ChartConfiguration['options'] = {
     responsive: true,
     scales: {
       x: {},
-      y: {
-        min: 10,
+      y: { // Eje Y izquierdo para valores en millones
+        title: {
+          display: true,
+          text: 'Millones'
+        },
+        position: 'left',
+        ticks: {
+          callback: function(value) {
+            return value + 'M'; // Agrega el símbolo 'M' para millones
+          }
+        }
       },
+      y1: { // Eje Y derecho para porcentajes
+        title: {
+          display: true,
+          text: 'Porcentaje'
+        },
+        position: 'right',
+        min: 0,
+        max: 100,
+        ticks: {
+          stepSize: 10,
+          callback: function(value) {
+            return value + '%'; // Agrega el símbolo de porcentaje
+          }
+        }
+      }
     },
     plugins: {
       legend: {
@@ -81,18 +105,37 @@ export class ReporteEspecificoCompetenciaComponent implements OnInit {
       },
     },
   };
-  public barChartType: ChartType = 'bar';
-  public barChartPlugins = [DataLabelsPlugin];
+  
+  public barChartType: ChartType = 'bar'; // Mantén esto como 'bar'
 
-  public barChartData: ChartData<'bar'> = {
-    labels: ['ejemplo', 'ejemplo1', 'ejemplo2', 'ejemplo3', 'ejemplo4', 'ejemplo5', 'ejemplo6', 'ejmplo', 'ejemplo1', 'ejemplo2', 'ejemplo3', 'ejemplo4', 'ejemplo5', 'ejemplo6'],
+  public barChartData: ChartData<'bar' | 'line'> = {
+    labels: [],
     datasets: [
-      { data: [89, 59, 80, 81, 56, 55, 40], label: 'Series A' },
-      { data: [66, 48, 40, 19, 86, 27, 90], label: 'Series B' },
-      { data: [28, 48, 70, 19, 86, 8, 90], label: 'Porcentaje' }
+      {
+        data: [],
+        label: 'Codificado',
+        type: 'bar',
+        yAxisID: 'y', // Asigna el eje Y izquierdo
+        backgroundColor: 'blue',
+      },
+      {
+        data: [],
+        label: 'Devengado',
+        type: 'bar',
+        yAxisID: 'y', // Asigna el eje Y izquierdo
+        backgroundColor: 'rgb(248, 80, 80)',
+      },
+      {
+        data: [],
+        label: 'Porcentaje',
+        type: 'line',
+        yAxisID: 'y1', // Asigna el eje Y derecho
+        borderColor: 'rgb(125, 235, 105)',
+        borderWidth: 2,
+      },
     ],
   };
-
+  
   // events
   public chartClicked({
     event,
@@ -103,7 +146,6 @@ export class ReporteEspecificoCompetenciaComponent implements OnInit {
   }): void {
     console.log(event, active);
   }
-
   public chartHovered({
     event,
     active,
@@ -113,27 +155,34 @@ export class ReporteEspecificoCompetenciaComponent implements OnInit {
   }): void {
     console.log(event, active);
   }
-
-  public randomize(): void {
-
-    this.barChartData.datasets[0].data = [
-      Math.round(Math.random() * 100),
-      59,
-      80,
-      Math.round(Math.random() * 100),
-      56,
-      Math.round(Math.random() * 100),
-      40,
-    ];
-
+  actualizarGrafica(data: ReportICompetencia[]) {
+    const nombres = data.map(item => item.nombre);
+    const codificados = data.map(item => item.codificado / 1000000); // Divide por un millón para ajustar la escala
+    const devengados = data.map(item => item.devengado / 1000000); // Divide por un millón para ajustar la escala
+    const porcentajes = data.map(item => item.porc_ejecucion);
+  
+    this.barChartData.labels = nombres;
+    this.barChartData.datasets[0].data = codificados;
+    this.barChartData.datasets[1].data = devengados;
+    this.barChartData.datasets[2].data = porcentajes;
+  
     this.chart?.update();
   }
   // Datos para la tabla
   tableData = new MatTableDataSource<ReportICompetencia>();
   // Columnas a mostrar
-  displayedColumns: string[] = ['nombre', 'codificado', 'devengado', 'porc_ejecucion'];
-  footerColumns = ['footer', 'footerCodificado', 'footerDevengado','footerPorent'];
-
+  displayedColumns: string[] = [
+    'nombre',
+    'codificado',
+    'devengado',
+    'porc_ejecucion',
+  ];
+  footerColumns = [
+    'footer',
+    'footerCodificado',
+    'footerDevengado',
+    'footerPorent',
+  ];
   prepareTableData() {
     const data = [];
     if (this.barChartData.labels && this.barChartData.datasets) {
@@ -142,13 +191,12 @@ export class ReporteEspecificoCompetenciaComponent implements OnInit {
           year: this.barChartData.labels[i],
           seriesA: this.barChartData.datasets[0].data[i],
           seriesB: this.barChartData.datasets[1].data[i],
-          porcentaje: this.barChartData.datasets[2].data[i]
+          porcentaje: this.barChartData.datasets[2].data[i],
         });
       }
     }
     return data;
   }
-
   getColorClass(porcentaje: number): string {
     if (porcentaje < 70.0) {
       return 'rojo';
@@ -160,45 +208,45 @@ export class ReporteEspecificoCompetenciaComponent implements OnInit {
       return '';
     }
   }
-
   getTotalCodificado() {
-    return this.tableData.data.map((t: any) => t.codificado).reduce((acc: number, value: number) => acc + value, 0);
+    return this.tableData.data
+      .map((t: any) => t.codificado)
+      .reduce((acc: number, value: number) => acc + value, 0);
   }
-
   getTotalDevengado() {
-    return this.tableData.data.map((t: any) => t.devengado).reduce((acc: number, value: number) => acc + value, 0);
+    return this.tableData.data
+      .map((t: any) => t.devengado)
+      .reduce((acc: number, value: number) => acc + value, 0);
   }
-
   getExecutionPercentage(): number {
     const totalCodificado = this.getTotalCodificado();
     const totalDevengado = this.getTotalDevengado();
-  
+
     if (totalCodificado === 0) {
       return 0; // Avoid division by zero
     }
-  
+
     return (totalDevengado / totalCodificado) * 100;
   }
-  
-
   cargarDataRICompetencias() {
     this.loadingService.show();
     this.competenciaService.obtenerReportesICompetencias().subscribe(
       (data: ReportICompetencia[]) => {
         this.rCompentencias = data;
-        console.log('Data:', this.rCompentencias);
         this.tableData.data = this.rCompentencias;
-        this.resultadosEncontradosporEstado = this.rCompentencias.length > 0; // Actualiza la variable según si se encontraron resultados
+        this.resultadosEncontradosporEstado = this.rCompentencias.length > 0;
+
+        this.actualizarGrafica(this.rCompentencias);
+        console.log(this.rCompentencias);
         this.loadingService.hide();
       },
       (error: ReportICompetencia) => {
         console.error('Error al listar las competencias:', error);
         this.loadingService.hide();
-        this.resultadosEncontradosporEstado = false; // Si ocurre un error, no se encontraron resultados
+        this.resultadosEncontradosporEstado = false;
       }
     );
   }
-
   cargarPDF() {
     this.competenciaService.obtenerPDF().subscribe((data) => {
       const blob = new Blob([data], { type: 'application/pdf' });
