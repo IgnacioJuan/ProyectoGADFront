@@ -41,6 +41,7 @@ export class ListaPoaComponent implements OnInit{
   ocultarID: boolean = false;
   isLoggedIn: boolean;
   user: any;
+  userRole: any;
 
   filterPost = '';
   filteredPoas: any[] = [];
@@ -58,25 +59,30 @@ export class ListaPoaComponent implements OnInit{
     this.loadingService.show();
     this.isLoggedIn = this.login.isLoggedIn();
     this.user = this.login.getUser();
+    this.userRole = this.login.getUserRole();
     this.paginatorIntl.nextPageLabel = this.nextPageLabel;
     this.paginatorIntl.lastPageLabel = this.lastPageLabel;
     this.paginatorIntl.firstPageLabel=this.firstPageLabel;
     this.paginatorIntl.previousPageLabel=this.previousPageLabel;
     this.paginatorIntl.itemsPerPageLabel = this.itemsPerPageLabel;
     this.paginatorIntl.getRangeLabel=this.rango;
+
+    if (this.user && this.userRole === 'ADMIN') {
+      this.obtenerDatosPoas(this.user.id);
+    } else if (this.user && this.userRole === 'SUPERADMIN') {
+      this.obtenerDatosPoas2();
+    }
   }
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator || null;
 
   }
-  ngOnInit(): void {
-    this.login.loginStatusSubjec.asObservable().subscribe(
-      data => {
-        this.isLoggedIn = this.login.isLoggedIn();
-        this.user = this.login.getUser();
-      }
-    );
-    this.poaservice.obtenerDatosPoas(this.user.id).subscribe(
+
+  ngOnInit(): void {}
+
+  //    LISTAR POAS SEGUN ADMIN O SUPER
+  obtenerDatosPoas(usuarioId: number): void {
+    this.poaservice.obtenerDatosPoas(usuarioId).subscribe(
       (data: any[]) => {
         this.poas = data;
         this.dataSource.data = this.poas;
@@ -88,6 +94,22 @@ export class ListaPoaComponent implements OnInit{
       }
     );
   }
+  
+  obtenerDatosPoas2(): void {
+    this.poaservice.obtenerDatosPoas2().subscribe(
+      (data: any[]) => {
+        this.poas = data;
+        this.dataSource.data = this.poas;
+        this.loadingService.hide();
+      },
+      (error: any) => {
+        console.error('Error al listar poas:', error);
+        this.loadingService.hide();
+      }
+    );
+  }
+
+
   verActividades(poa: any) {
     this.router.navigate(['/sup/actividades-presupuestos/tabla-actividades'], { state: { data: poa } });
   }
