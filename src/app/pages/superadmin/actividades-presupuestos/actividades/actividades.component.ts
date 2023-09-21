@@ -17,6 +17,7 @@ import { ReformaSuplementoService } from 'src/app/services/reformasuplemento.ser
 import { ReformaTraspasoIService } from 'src/app/services/reformatraspaso-i.service';
 import { ReformaTraspasoDService } from 'src/app/services/reformatraspaso-d.service';
 import { LoadingServiceService } from 'src/app/components/loading-spinner/LoadingService.service';
+import { catchError } from 'rxjs/operators';
 
 @Component({
   selector: 'app-actividades',
@@ -316,7 +317,27 @@ export class ListaActividadesComponent implements OnInit {
     this.rtdecremento = this.frmRTD.value;
     this.rtdecremento.actividad = new ActividadesPoa();
     this.rtdecremento.actividad.id_actividad = this.selectedActividadId;
+    
     this.rtdecrementoservice.crear(this.rtdecremento)
+      .pipe(
+        catchError((error) => {
+          if (error.status === 400) {
+            Swal.fire(
+              'Error',
+              'No puede ingresar un decremento mayor al monto actual de la actividad',
+              'error'
+            );
+          } else {
+            console.error('Error al agregar Reforma Traspaso Decremento: ', error);
+            Swal.fire(
+              'Error',
+              'Ha ocurrido un error',
+              'warning'
+            );
+          }
+          return [];
+        })
+      )
       .subscribe(
         (response) => {
           console.log('Reforma Traspaso Decremento agregada con éxito: ', response);
@@ -324,21 +345,22 @@ export class ListaActividadesComponent implements OnInit {
           this.loadingService.hide();
           Swal.fire(
             'Exitoso',
-            'Se ha completado el registro con exito',
+            'Se ha completado el registro con éxito',
             'success'
-          )
+          );
           this.listar(this.poa.id_poa);
         },
         (error) => {
           console.error('Error al agregar Reforma Traspaso Decremento: ', error);
-          this.loadingService.show();
+          this.loadingService.hide();
           Swal.fire(
             'Error',
             'Ha ocurrido un error',
             'warning'
-          )
+          );
         }
       );
+    this.loadingService.hide();
   }
   limpiarFormulario1() {
     this.frmPE.reset();

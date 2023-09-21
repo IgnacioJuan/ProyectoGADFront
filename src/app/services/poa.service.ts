@@ -72,9 +72,16 @@ export class PoaService {
 
   }
 
+  //ADMIN
   obtenerDatosPoas(usuarioId: number): Observable<PoaActividadProjection[]> {
     return this.http.get<PoaActividadProjection[]>(`${baserUrl}/api/poa/listarPoasProyectoDeModeloFiltroFechas/${usuarioId}`);
   }
+
+  //SUPER
+  obtenerDatosPoas2(): Observable<PoaActividadProjection[]> {
+    return this.http.get<PoaActividadProjection[]>(`${baserUrl}/api/poa/listarTodosPoasProyectoFiltroFechasSuper`);
+  }
+
   listarPoasdelProyecto(id_proyecto: number, estado: string): Observable<Poa[]> {
     return this.http.get<Poa[]>(`${baserUrl}/api/poa/listardelProyecto/${id_proyecto}/${estado}`);
   }
