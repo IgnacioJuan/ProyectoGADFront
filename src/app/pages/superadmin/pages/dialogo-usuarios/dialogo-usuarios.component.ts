@@ -35,13 +35,10 @@ export class DialogoUsuariosComponent implements OnInit, OnDestroy {
   constructor(
     private _formBuilder: FormBuilder,
     private usuarioService: UsuarioService,
-    private rolService: RolService,
     private personaService: PersonaService,
     private snack: MatSnackBar,
     private dialogRef: MatDialogRef<DialogoUsuariosComponent>,
     private programaService: ProgramaService,
-    private renderer: Renderer2,
-    private el: ElementRef,
     @Inject(DOCUMENT) private document: Document
   ) {
 

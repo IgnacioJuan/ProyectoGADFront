@@ -32,7 +32,7 @@ export class UsuariorolService {
     return this.http.put(`${baserUrl}/api/usuariorol/actualizarUResponsable/${id}`, crite);
   }
 
-  getuResponsables(): Observable<any[]> {
-    return this.http.get<UsuarioResponsableDTO[]>(`${baserUrl}/api/usuariorol/listarUResponsables`);
+  getuResponsables(programaUsuarioLogeado: number): Observable<UsuarioResponsableDTO[]> {
+    return this.http.get<UsuarioResponsableDTO[]>(`${baserUrl}/api/usuariorol/listarUResponsables/${programaUsuarioLogeado}`);
   }
 }
