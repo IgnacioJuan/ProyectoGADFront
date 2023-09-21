@@ -112,7 +112,7 @@ export class ActividadesComponent implements OnInit {
     this.user = this.login.getUser();
     this.frmActividad = fb.group({
       nombre: ['', Validators.required],
-      descripcion: ['', Validators.required],
+      descripcion: [''],
       recursos_propios: [0, Validators.min(0)],
       institucion: [''],
       valorPE: [0, Validators.min(0)],
