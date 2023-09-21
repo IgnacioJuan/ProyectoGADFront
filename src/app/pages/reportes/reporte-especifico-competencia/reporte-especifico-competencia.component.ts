@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ChartConfiguration, ChartData, ChartEvent, ChartType } from 'chart.js';
+import { Chart, ChartConfiguration, ChartData, ChartEvent, ChartType } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
 import DataLabelsPlugin from 'chartjs-plugin-datalabels';
 import { MatTableDataSource } from '@angular/material/table';
@@ -8,6 +8,8 @@ import { CompetenciaService } from 'src/app/services/competencia.service';
 import { ReportICompetencia } from 'src/app/models/ReportICompetencia';
 import { LoadingServiceService } from 'src/app/components/loading-spinner/LoadingService.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+
+Chart.register(DataLabelsPlugin);
 
 @Component({
   selector: 'app-reporte-especifico-competencia',
@@ -68,49 +70,74 @@ export class ReporteEspecificoCompetenciaComponent implements OnInit {
     scales: {
       x: {},
       y: { // Eje Y izquierdo para valores en millones
+        display: false,
         title: {
           display: true,
           text: 'Millones'
         },
         position: 'left',
         ticks: {
-          callback: function(value) {
-            return value + 'M'; // Agrega el símbolo 'M' para millones
+          callback: function (value) {
+            return value + 'M';// Agrega el símbolo 'M' para millones
           }
         }
       },
       y1: { // Eje Y derecho para porcentajes
         title: {
           display: true,
-          text: 'Porcentaje'
+          text: ''
         },
         position: 'right',
         min: 0,
         max: 100,
         ticks: {
           stepSize: 10,
-          callback: function(value) {
+          callback: function (value) {
             return value + '%'; // Agrega el símbolo de porcentaje
           }
         }
       }
     },
     plugins: {
-      legend: {
-        display: true,
+      legend: { 
+        display: true, 
+        position: 'bottom', 
       },
       datalabels: {
         anchor: 'end',
         align: 'end',
-      },
-    },
+        color: 'black',
+        formatter: (value, context) => {
+          // Verifica si context.dataset.label existe
+          if (!context.dataset.label) {
+            return value;
+          }
+          // Si es el conjunto de datos de porcentaje
+          if (context.dataset.label === 'Porcentaje') {
+            return value.toFixed(2) + '%';  // Formatea con dos decimales y añade '%'
+          } else if (['Codificado', 'Devengado'].includes(context.dataset.label)) {
+            return '$' + value;  // Formatea con dos decimales y añade 'M' para millones
+          }
+          return value;
+        }
+      }
+    }
   };
-  
+
+
   public barChartType: ChartType = 'bar'; // Mantén esto como 'bar'
 
   public barChartData: ChartData<'bar' | 'line'> = {
     labels: [],
     datasets: [
+      {
+        data: [],
+        label: 'Porcentaje',
+        type: 'line',
+        yAxisID: 'y1', // Asigna el eje Y derecho
+        borderColor: 'rgb(125, 235, 105)',
+        borderWidth: 2,
+      },
       {
         data: [],
         label: 'Codificado',
@@ -124,18 +151,11 @@ export class ReporteEspecificoCompetenciaComponent implements OnInit {
         type: 'bar',
         yAxisID: 'y', // Asigna el eje Y izquierdo
         backgroundColor: 'rgb(248, 80, 80)',
-      },
-      {
-        data: [],
-        label: 'Porcentaje',
-        type: 'line',
-        yAxisID: 'y1', // Asigna el eje Y derecho
-        borderColor: 'rgb(125, 235, 105)',
-        borderWidth: 2,
-      },
+      }
+
     ],
   };
-  
+
   // events
   public chartClicked({
     event,
@@ -157,15 +177,15 @@ export class ReporteEspecificoCompetenciaComponent implements OnInit {
   }
   actualizarGrafica(data: ReportICompetencia[]) {
     const nombres = data.map(item => item.nombre);
-    const codificados = data.map(item => item.codificado / 1000000); // Divide por un millón para ajustar la escala
-    const devengados = data.map(item => item.devengado / 1000000); // Divide por un millón para ajustar la escala
     const porcentajes = data.map(item => item.porc_ejecucion);
-  
+    const codificados = data.map(item => item.codificado); // Divide por un millón para ajustar la escala
+    const devengados = data.map(item => item.devengado); // Divide por un millón para ajustar la escala
+
     this.barChartData.labels = nombres;
-    this.barChartData.datasets[0].data = codificados;
-    this.barChartData.datasets[1].data = devengados;
-    this.barChartData.datasets[2].data = porcentajes;
-  
+    this.barChartData.datasets[0].data = porcentajes;
+    this.barChartData.datasets[1].data = codificados;
+    this.barChartData.datasets[2].data = devengados;
+
     this.chart?.update();
   }
   // Datos para la tabla

@@ -43,7 +43,6 @@ body {
 .chart-section {
   flex: 1;
   /* Ocupa la mitad del espacio disponible */
-  padding: 1rem;
 }
 
 .titulo {
