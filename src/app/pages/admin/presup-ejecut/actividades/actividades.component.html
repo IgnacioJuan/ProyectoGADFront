@@ -214,7 +214,7 @@
                 [class.ultimo-elemento]="esUltimoElemento2(i)"
                 class="align-right-dollar"
               >
-                {{ elemento.inversion }}
+                {{ elemento.inversion.toFixed(2) }}
               </td>
             </ng-container>
 
@@ -228,7 +228,7 @@
                 [class.ultimo-elemento]="esUltimoElemento2(i)"
                 class="align-right-dollar"
               >
-                {{ elemento.ejecucion }}
+                {{ elemento.ejecucion.toFixed(2) }}
               </td>
             </ng-container>
 
@@ -311,7 +311,7 @@
                     [class.ultimo-elemento]="esUltimoElemento(i)"
                     class="align-right-dollar"
                   >
-                    {{ elemento.inversion }}
+                    {{ elemento.inversion.toFixed(2) }}
                   </td>
                 </ng-container>
 
@@ -325,7 +325,7 @@
                     [class.ultimo-elemento]="esUltimoElemento(i)"
                     class="align-right-dollar"
                   >
-                    {{ elemento.ejecucion }}
+                    {{ elemento.ejecucion.toFixed(2) }}
                   </td>
                 </ng-container>
 
