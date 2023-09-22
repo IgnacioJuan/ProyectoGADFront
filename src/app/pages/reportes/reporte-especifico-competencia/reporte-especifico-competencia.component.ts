@@ -218,9 +218,9 @@ export class ReporteEspecificoCompetenciaComponent implements OnInit {
     return data;
   }
   getColorClass(porcentaje: number): string {
-    if (porcentaje < 60.0) {
+    if (porcentaje < 70.0) {
       return 'rojo';
-    } else if (porcentaje >= 60.0 && porcentaje <= 84.9) {
+    } else if (porcentaje >= 70.0 && porcentaje <= 84.9) {
       return 'amarillo';
     } else if (porcentaje >= 85) {
       return 'verde';
@@ -284,10 +284,10 @@ export class ReporteEspecificoCompetenciaComponent implements OnInit {
         this.tableData.data = this.rCompentencias.filter(item => item.porc_ejecucion >= 85);
         break;
       case 'amarillo':
-        this.tableData.data = this.rCompentencias.filter(item => item.porc_ejecucion >= 60 && item.porc_ejecucion <= 84.9);
+        this.tableData.data = this.rCompentencias.filter(item => item.porc_ejecucion >= 70 && item.porc_ejecucion <= 84.9);
         break;
       case 'rojo':
-        this.tableData.data = this.rCompentencias.filter(item => item.porc_ejecucion < 60);
+        this.tableData.data = this.rCompentencias.filter(item => item.porc_ejecucion < 70);
         break;
       default:
         this.tableData.data = this.rCompentencias;
