@@ -64,15 +64,23 @@ body {
 }
 
 .rojo {
+  cursor: pointer;
   background-color: rgb(248, 80, 80);
 }
 
 .amarillo {
+  cursor: pointer;
   background-color: rgb(248, 246, 107);
 }
 
 .verde {
+  cursor: pointer;
   background-color: rgb(125, 235, 105);
+}
+
+.plomo {
+  cursor: pointer;
+  background-color: rgb(128, 128, 128);
 }
 
 .pdf-button {
