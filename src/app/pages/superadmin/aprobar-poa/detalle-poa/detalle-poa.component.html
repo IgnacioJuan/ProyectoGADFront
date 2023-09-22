@@ -322,7 +322,9 @@
           <div class="table-cell" *ngIf="tipSeguimiento === 'TRIMESTRE'">
             <strong>{{ tipSeguimiento }} 4:</strong>
           </div>
-          <div class="table-cell" *ngIf="tipSeguimiento === 'TRIMESTRE'">$</div>
+          <div class="table-cell" *ngIf="tipSeguimiento === 'TRIMESTRE'">
+            $ {{ porcentajes[3] | number : "1.0-2" }}
+          </div>
         </div>
       </div>
 
