@@ -43,7 +43,6 @@ body {
 .chart-section {
   flex: 1;
   /* Ocupa la mitad del espacio disponible */
-  padding: 1rem;
 }
 
 .titulo {
@@ -65,17 +64,47 @@ body {
 }
 
 .rojo {
+  cursor: pointer;
   background-color: rgb(248, 80, 80);
 }
 
 .amarillo {
+  cursor: pointer;
   background-color: rgb(248, 246, 107);
 }
 
 .verde {
+  cursor: pointer;
   background-color: rgb(125, 235, 105);
+}
+
+.plomo {
+  cursor: pointer;
+  background-color: rgb(128, 128, 128);
 }
 
 .pdf-button {
   color: white;
+}
+
+.pdf-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  /* Ajusta según tus necesidades */
+  padding: 2rem;
+}
+
+.pdf-viewer {
+  width: 100%;
+  /* Ajusta según tus necesidades */
+  height: 100%;
+  /* Ajusta según tus necesidades */
+  margin-top: 0;
+  /* Elimina el margen superior */
+  margin-bottom: 0;
+  /* Elimina el margen inferior */
+  border: 1px solid #ccc;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }

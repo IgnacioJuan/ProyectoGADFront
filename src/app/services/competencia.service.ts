@@ -63,7 +63,7 @@ export class CompetenciaService {
       'Accept': 'application/pdf'
     });
 
-    return this.http.get('http://localhost:5000/usuarios/export-pdf', { headers: headers, responseType: 'blob' });
+    return this.http.get('http://localhost:5000/api/competencia/export-pdf', { headers: headers, responseType: 'blob' });
   }
 
 }
