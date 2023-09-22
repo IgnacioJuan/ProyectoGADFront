@@ -18,6 +18,7 @@ import { DialogoUsuariosComponent } from '../dialogo-usuarios/dialogo-usuarios.c
 import { MatDialog } from '@angular/material/dialog';
 import { ProgramaUsuarioDTO } from 'src/app/models/Programa';
 import { ProgramaService } from 'src/app/services/programa.service';
+import { LoadingServiceService } from 'src/app/components/loading-spinner/LoadingService.service';
 
 let ELEMENT_DATA: Fenix[] = [];
 
@@ -89,7 +90,8 @@ export class CrearUsuariosComponent implements OnInit {
     private formBuilder: FormBuilder,
     private paginatorIntl: MatPaginatorIntl,
     private usuariorolservice: UsuariorolService,
-    private programaService: ProgramaService
+    private programaService: ProgramaService,
+    private loadingService: LoadingServiceService
   ) {
     this.formulario = this.formBuilder.group({
       username: { value: '', disabled: true },
@@ -113,6 +115,7 @@ export class CrearUsuariosComponent implements OnInit {
   }
 
   Listado() {
+    this.loadingService.show();
     this.programaService.listar().subscribe(data => {
       this.programas = data;
       console.log(this.programas);
@@ -126,7 +129,8 @@ export class CrearUsuariosComponent implements OnInit {
       (listaAsig: any[]) => {
         this.listaUsuarios = listaAsig;
         this.dataSource2.data = this.listaUsuarios;
-        console.log(listaAsig)
+        console.log(listaAsig);
+        this.loadingService.hide();
       }
     );
   }
@@ -356,6 +360,7 @@ export class CrearUsuariosComponent implements OnInit {
 
   // usuarioForm es el usuario que recibo del formulario 
   Actualizar(usuarioForm: UsuarioRol) {
+    this.loadingService.show();
     console.log(usuarioForm.usuario.programa.id_programa)
 
     if (usuarioForm.rol.rolId == 0) {
@@ -418,14 +423,15 @@ export class CrearUsuariosComponent implements OnInit {
     console.log(usuarioForm);
 
 
+    this.loadingService.hide();
     Swal.fire({
       title: '¿Desea modificar los campos?',
       showCancelButton: true,
       confirmButtonText: 'SI',
       denyButtonText: `NO`,
     }).then((result) => {
+      this.loadingService.show();
       if (result.isConfirmed) {
-
         this.usuariorolservice.actualizar(usuarioForm.usuarioRolId, usuarioForm)
           .subscribe((response: any) => {
             Swal.fire(
@@ -433,6 +439,7 @@ export class CrearUsuariosComponent implements OnInit {
               'El usuario ha sido modificado éxitosamente',
               'success'
             );
+            this.loadingService.hide();
             this.Listado();
             console.log(response);
             this.usuarioDB = new UsuarioRol();
@@ -440,9 +447,34 @@ export class CrearUsuariosComponent implements OnInit {
             console.log(response)
           });
       } else {
+        this.loadingService.hide();
         Swal.fire('Se ha cancelado la operación', '', 'info')
       }
     })
   }
 
 }
+
+//validaciones meh
+function validarCedula(control: FormControl): { [key: string]: boolean } | null {
+  const cedula = control.value;
+  if (!cedula.match(/^\d{10}$/)) {
+    return { 'cedulaInvalida': true };
+  }
+  // Aquí puedes agregar la validación específica para cédulas ecuatorianas si lo necesitas.
+  return null;
+}
+
+function validarNombreApellido(control: FormControl): { [key: string]: boolean } | null {
+  if (control.value && (control.value.length < 3 || /\d/.test(control.value))) {
+    return { 'nombreApellidoInvalido': true };
+  }
+  return null;
+}
+function validarCelular(control: FormControl): { [key: string]: boolean } | null {
+  if (!control.value.match(/^\d{10}$/)) {
+    return { 'celularInvalido': true };
+  }
+  return null;
+}
+

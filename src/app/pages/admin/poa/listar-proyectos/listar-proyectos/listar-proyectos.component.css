@@ -79,7 +79,7 @@ body {
 }
 
 .btn-seleccionar {
-  background-color: #2260d3;
+  background-color: green;
   color: white;
   border-radius: 20px;
   border: none;
@@ -89,4 +89,12 @@ body {
   margin: 0 auto;
   display: block;
   margin-top: 20px;
+}
+
+.header-title {
+  font-size: 30px;
+  font-weight: bold;
+  color: rgb(9, 70, 9);
+  /* You can choose your preferred color */
+  text-align: left;
 }

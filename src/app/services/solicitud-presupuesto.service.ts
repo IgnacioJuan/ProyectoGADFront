@@ -22,6 +22,10 @@ export class SolicitudPresupuestoService {
   actualizar(id: any, soli: any): Observable<any> {
     return this.http.put(`${baserUrl}/api/solicitudpresupuesto/actualizar/${id}`, soli);
   }
+  actualizarEstado(id: any, soli: any): Observable<any> {
+    return this.http.put(`${baserUrl}/api/solicitudpresupuesto/actualizarEstado/${id}`, soli);
+  }
+  
 
   eliminar(comp: any): Observable<any> {
     return this.http.put(`${baserUrl}/api/solicitudpresupuesto/eliminarlogic/${comp.id_componente}`, comp);

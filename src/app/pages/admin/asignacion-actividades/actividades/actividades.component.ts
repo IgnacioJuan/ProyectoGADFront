@@ -1,27 +1,27 @@
 import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ActividadesPoa } from 'src/app/models/ActividadesPoa';
-import { Poa } from 'src/app/models/Poa';
-import { Usuario2 } from 'src/app/models/Usuario2';
-import { ActividadespoaService } from 'src/app/services/actividadespoa.service';
-import { UsuarioService } from 'src/app/services/usuario.service';
-import Swal from 'sweetalert2';
-import { AprobacionActividad } from 'src/app/models/AprobacionActividad';
-import { ListaActividadesUsuario } from 'src/app/interface/ListaActividadesUsuario';
-import { MatDialog } from '@angular/material/dialog';
-import { UsuariorolService } from 'src/app/services/usuariorol.service';
 import 'jquery';
 import 'popper.js';
-import { AsignacionUsuarioService } from 'src/app/services/asignacionusuario.service';
-import { AsignacionUsuario } from 'src/app/models/AsignacionUsuario';
-import { PoaInsertService } from 'src/app/services/poa/poa-insert.service';
 import { LoadingServiceService } from 'src/app/components/loading-spinner/LoadingService.service';
-import { Periodo } from 'src/app/models/Periodo';
+import { ListaActividadesUsuario } from 'src/app/interface/ListaActividadesUsuario';
+import { ActividadesPoa } from 'src/app/models/ActividadesPoa';
+import { AprobacionActividad } from 'src/app/models/AprobacionActividad';
+import { AsignacionUsuario } from 'src/app/models/AsignacionUsuario';
+import { Poa } from 'src/app/models/Poa';
 import { PresupuestoExterno } from 'src/app/models/PresupuestoExterno';
+import { Usuario2 } from 'src/app/models/Usuario2';
+import { ActividadespoaService } from 'src/app/services/actividadespoa.service';
+import { AsignacionUsuarioService } from 'src/app/services/asignacionusuario.service';
+import { LoginService } from 'src/app/services/login.service';
+import { PoaInsertService } from 'src/app/services/poa/poa-insert.service';
 import { PresupuestoExternoService } from 'src/app/services/presupuestoexterno.service';
+import { UsuarioService } from 'src/app/services/usuario.service';
+import { UsuariorolService } from 'src/app/services/usuariorol.service';
+import Swal from 'sweetalert2';
 declare var $: any;
 
 interface DynamicControls {
@@ -81,6 +81,8 @@ export class ActividadesComponent implements OnInit {
   spans: any[] = [];
   spans2: any[] = [];
   ocultarID: boolean = false;
+  isLoggedIn: boolean;
+  user: any;
   public presupuestoexterno = new PresupuestoExterno();
 
 
@@ -89,24 +91,28 @@ export class ActividadesComponent implements OnInit {
   columnasUsuario: string[] = ['id_actividad', 'nombre', 'descripcion', 'presupuesto_referencial', 'recursos_propios', 'codificado', 'devengado', 'estado', 'actions'];
   //listarUsuariosconActividades
   columUsuario1: string[] = ['id_usuario', 'username', 'nombre', 'apellido', 'cargo'];
-  columUsuario2: string[] = ['id_usuario', 'username', 'nombre', 'apellido', 'cargo','fecha_asignacion'];
+  columUsuario2: string[] = ['id_usuario', 'username', 'nombre', 'apellido', 'cargo', 'fecha_asignacion'];
   //Listar Usuarios para Asignarles Actividad
   dataSource3 = new MatTableDataSource<Usuario2>();
-  columnasUsuario3: string[] = ['id','nombre', 'apellido','usuario','actions'];
+  columnasUsuario3: string[] = ['id', 'nombre', 'apellido', 'usuario', 'actions'];
 
   @ViewChild('datosModalRef') datosModalRef: any;
   @ViewChild(MatPaginator, { static: false }) paginator?: MatPaginator;
 
   constructor(
     private cdRef: ChangeDetectorRef, public dialog: MatDialog,
-    private actividadservice: ActividadespoaService, private paginatorIntl: MatPaginatorIntl, private router: Router, 
+    private actividadservice: ActividadespoaService, private paginatorIntl: MatPaginatorIntl, private router: Router,
     private fb: FormBuilder, private userService: UsuarioService, private pexternoservice: PresupuestoExternoService,
     private usuariorolservice: UsuariorolService, private asignacionservice: AsignacionUsuarioService,
-    private poaInsertService: PoaInsertService, private route: ActivatedRoute, private loadingService: LoadingServiceService
+    private poaInsertService: PoaInsertService, private route: ActivatedRoute, private login: LoginService,
+    private loadingService: LoadingServiceService
   ) {
+    this.loadingService.show();
+    this.isLoggedIn = this.login.isLoggedIn();
+    this.user = this.login.getUser();
     this.frmActividad = fb.group({
       nombre: ['', Validators.required],
-      descripcion: ['', Validators.required],
+      descripcion: [''],
       recursos_propios: [0, Validators.min(0)],
       institucion: [''],
       valorPE: [0, Validators.min(0)],
@@ -118,11 +124,11 @@ export class ActividadesComponent implements OnInit {
 
     const valorPEControl = this.frmActividad.get('valorPE');
     const institucionControl = this.frmActividad.get('institucion');
-    
+
     if (valorPEControl && institucionControl) {
       valorPEControl.valueChanges.subscribe((valorPE) => {
         const institucionValue = institucionControl.value;
-    
+
         if (valorPE !== 0) {
           institucionControl.setValidators([Validators.required]);
         } else {
@@ -131,8 +137,6 @@ export class ActividadesComponent implements OnInit {
         institucionControl.updateValueAndValidity();
       });
     }
-    
-
     this.paginatorIntl.nextPageLabel = this.nextPageLabel;
     this.paginatorIntl.lastPageLabel = this.lastPageLabel;
     this.paginatorIntl.firstPageLabel = this.firstPageLabel;
@@ -145,6 +149,13 @@ export class ActividadesComponent implements OnInit {
     this.dataSource.paginator = this.paginator || null;
   }
   ngOnInit(): void {
+    this.login.loginStatusSubjec.asObservable().subscribe(
+      data => {
+        this.isLoggedIn = this.login.isLoggedIn();
+        this.user = this.login.getUser();
+      }
+    );
+    console.log(this.user);
     const data = history.state.data;
     this.cargarUsuarios();
     this.poa = data;
@@ -152,7 +163,7 @@ export class ActividadesComponent implements OnInit {
     const tipoPeriodo = data.tipo_periodo;
     console.log('Tipo de período:', tipoPeriodo);
     this.listar(this.poa.id_poa);
-    this.Listado();
+    this.Listado(this.poa.id_poa);
     this.actividadservice.obtenerActividades().subscribe((data: ActividadesPoa[]) => {
       this.act = data;
     });
@@ -168,76 +179,15 @@ export class ActividadesComponent implements OnInit {
       (data: any[]) => {
         this.actividades = data;
         this.dataSource.data = this.actividades;
+        this.loadingService.hide();
       },
       (error: any) => {
         console.error('Error al listar las actividades:', error);
-      }
-    );
-  }
- 
-  guardar() {
-    this.loadingService.show();
-    this.actividad = this.frmActividad.value;
-    this.actividad.poa = this.poa;
-    this.actividad.estado = 'PENDIENTE';
-    this.actividad.presupuesto_referencial = this.actividad.recursos_propios + this.actividad.valorPE;
-    // Validación de suma
-    let suma = 0;
-    if (this.poa.tipo_periodo === 'CUATRIMESTRE') {
-        suma = Number(this.actividad.valor1) + Number(this.actividad.valor2) + Number(this.actividad.valor3);
-    } else if (this.poa.tipo_periodo === 'TRIMESTRE') {
-        suma = Number(this.actividad.valor1) + Number(this.actividad.valor2) + Number(this.actividad.valor3) + Number(this.actividad.valor4);
-    }
-    console.log("Suma total:", suma);
-    if (suma !== 100) {
-        Swal.fire('Advertencia', 'La suma de los valores de periodo debe 100', 'warning');
-        this.loadingService.hide();
-        return;
-    }
-    this.actividadservice.crear(this.actividad).subscribe(
-      (response) => {
-        console.log('Actividad creada con éxito:', response);
-        const idActividad = response.id_actividad;
-
-        if (this.poa.tipo_periodo === 'CUATRIMESTRE') {
-          this.crearPeriodo(idActividad, this.actividad.valor1, 1);
-          this.crearPeriodo(idActividad, this.actividad.valor2, 2);
-          this.crearPeriodo(idActividad, this.actividad.valor3, 3);
-        } else if (this.poa.tipo_periodo === 'TRIMESTRE') {
-          this.crearPeriodo(idActividad, this.actividad.valor1, 1);
-          this.crearPeriodo(idActividad, this.actividad.valor2, 2);
-          this.crearPeriodo(idActividad, this.actividad.valor3, 3);
-          this.crearPeriodo(idActividad, this.actividad.valor4, 4);
-        }
-
-        //Crear Presupuesto externo
-        const presupuestoExterno = new PresupuestoExterno();
-        presupuestoExterno.nombre_institucion = this.actividad.institucion;
-        presupuestoExterno.valor = this.actividad.valorPE;
-        presupuestoExterno.observacion = '';
-        presupuestoExterno.fecha = new Date();
-        presupuestoExterno.actividad.id_actividad = idActividad;
-
-        this.pexternoservice.crear(presupuestoExterno).subscribe(
-          (presupuestoResponse) => {
-            console.log('Presupuesto externo creado con éxito:', presupuestoResponse);
-            this.guardadoExitoso = true;
-            this.crearAprobacion(response);
-            this.loadingService.hide();
-            Swal.fire('Exitoso', 'Se ha completado el registro con éxito', 'success');
-            this.cdRef.detectChanges();
-            this.listar(this.poa.id_poa);
-          }
-        );
-      },
-      (error) => {
-        console.error('Error al crear la actividad:', error);
-        Swal.fire('Error', 'Ha ocurrido un error', 'warning');
         this.loadingService.hide();
       }
     );
   }
-  
+
   crearPeriodo(idActividad: number, porcentaje: number, referencia: number) {
     this.poaInsertService.crearPeriodoFechas(porcentaje, idActividad, referencia).subscribe(
       (periodoResponse) => {
@@ -248,7 +198,7 @@ export class ActividadesComponent implements OnInit {
       }
     );
   }
-  
+
   crearAprobacion(actividad: any) {
     this.aprobAct.estado = 'PENDIENTE';
     this.aprobAct.observacion = '';
@@ -263,7 +213,7 @@ export class ActividadesComponent implements OnInit {
       }
     );
   }
-  
+
 
   guardarActividad() {
     this.loadingService.show();
@@ -275,7 +225,7 @@ export class ActividadesComponent implements OnInit {
     this.actividad.fecha_inicio = this.poa.fecha_inicio;
     this.actividad.fecha_fin = this.poa.fecha_fin;
     this.actividad.presupuesto_referencial = this.actividad.recursos_propios + this.actividad.valorPE;
-    
+
     // Valores de los checkboxes
     const valor1Selected = this.frmActividad.get('valor1')?.value || false;
     const valor2Selected = this.frmActividad.get('valor2')?.value || false;
@@ -338,6 +288,7 @@ export class ActividadesComponent implements OnInit {
   }
 
   cargarDatosAlForm(activ: ActividadesPoa) {
+    this.loadingService.show();
     this.actividad = activ;
     const dynamicControls: DynamicControls = {
       nombre: new FormControl(this.actividad.nombre),
@@ -360,18 +311,21 @@ export class ActividadesComponent implements OnInit {
             });
             // Llena el formulario
             this.frmActividad = new FormGroup(dynamicControls);
+            this.loadingService.hide();
           },
           (error) => {
             console.error('Error al obtener los periodos de la actividad:', error);
+            this.loadingService.hide();
           }
         );
       },
       (error) => {
         console.error('Error al obtener los presupuestos externos:', error);
+        this.loadingService.hide();
       }
     );
   }
-  
+
 
   //ESTE SE SUPONE Q VALE CON EL METODO ARRAY DEL BACK, talves quieran revisar xD
   /*actualiza() {
@@ -417,40 +371,40 @@ export class ActividadesComponent implements OnInit {
 
   async actualizar() {
     this.loadingService.show();
-  
+
     // Valores del formulario a la actividad
     const actividadActualizada = this.frmActividad.value;
     this.actividad.nombre = actividadActualizada.nombre;
     this.actividad.descripcion = actividadActualizada.descripcion;
     this.actividad.recursos_propios = actividadActualizada.recursos_propios;
     this.actividad.estado = 'PENDIENTE';
-    //this.actividad.poa = this.poa;
+    this.actividad.poa = this.poa;
 
     const actividadId = this.actividad.id_actividad;
-  
+
     // Valores de los checkboxes
     const valor1Selected = actividadActualizada.valor1 || false;
     const valor2Selected = actividadActualizada.valor2 || false;
     const valor3Selected = actividadActualizada.valor3 || false;
     const valor4Selected = actividadActualizada.valor4 || false;
-  
+
     // Cantidad de checkboxes seleccionados
     let checkboxesSeleccionados = 0;
     if (valor1Selected) checkboxesSeleccionados++;
     if (valor2Selected) checkboxesSeleccionados++;
     if (valor3Selected) checkboxesSeleccionados++;
     if (valor4Selected) checkboxesSeleccionados++;
-  
+
     if (checkboxesSeleccionados === 0) {
       Swal.fire('Error', 'Debe seleccionar al menos un periodo', 'warning');
       this.loadingService.hide();
       return;
     }
-  
+
     // Calcula el valor por periodo 
     const valorPorPeriodo = 100 / checkboxesSeleccionados;
-  
-    try{
+
+    try {
       await this.actividadservice.actualizar(actividadId, this.actividad).toPromise();
       await this.actividadservice.eliminarPeriodosPorActividad(actividadId).toPromise();
       if (this.poa.tipo_periodo === 'CUATRIMESTRE') {
@@ -466,61 +420,61 @@ export class ActividadesComponent implements OnInit {
 
       console.log(actividadId)
       this.pexternoservice.listarPEActividades(actividadId).subscribe(
-      (presupuestosExternos) => {
-        if (presupuestosExternos.length > 0) {
-        const primerPresupuestoExterno = presupuestosExternos[0];
-        primerPresupuestoExterno.nombre_institucion = actividadActualizada.institucion;
-        primerPresupuestoExterno.valor = actividadActualizada.valorPE;
-  
-        // Actualizar el presupuesto externo
-        this.pexternoservice.actualizar(primerPresupuestoExterno.id_presupuesto_externo, primerPresupuestoExterno).subscribe(
-        () => {
-          this.loadingService.hide();
-          Swal.fire('Operación exitosa!', 'El registro se actualizó con éxito', 'success');
-          this.cdRef.detectChanges();
-          this.listar(this.poa.id_poa);
+        (presupuestosExternos) => {
+          if (presupuestosExternos.length > 0) {
+            const primerPresupuestoExterno = presupuestosExternos[0];
+            primerPresupuestoExterno.nombre_institucion = actividadActualizada.institucion;
+            primerPresupuestoExterno.valor = actividadActualizada.valorPE;
+
+            // Actualizar el presupuesto externo
+            this.pexternoservice.actualizar(primerPresupuestoExterno.id_presupuesto_externo, primerPresupuestoExterno).subscribe(
+              () => {
+                this.loadingService.hide();
+                Swal.fire('Operación exitosa!', 'El registro se actualizó con éxito', 'success');
+                //this.cdRef.detectChanges();
+                this.listar(this.poa.id_poa);
+              },
+              (error) => {
+                console.error('Error al actualizar el presupuesto externo:', error);
+                this.loadingService.hide();
+              }
+            );
+          } else {
+            // Si no existe un presupuesto externo, crea uno nuevo
+            const presupuestoExterno = new PresupuestoExterno();
+            presupuestoExterno.nombre_institucion = actividadActualizada.institucion;
+            presupuestoExterno.valor = actividadActualizada.valorPE;
+            presupuestoExterno.observacion = '';
+            presupuestoExterno.fecha = new Date();
+            presupuestoExterno.actividad.id_actividad = actividadId;
+
+            this.pexternoservice.crear(presupuestoExterno).subscribe(
+              () => {
+                this.loadingService.hide();
+                Swal.fire('Operación exitosa!', 'El registro se actualizó con éxito', 'success');
+                //this.cdRef.detectChanges();
+                this.listar(this.poa.id_poa);
+              },
+              (error) => {
+                console.error('Error al crear el presupuesto externo:', error);
+                this.loadingService.hide();
+              }
+            );
+          }
         },
         (error) => {
-          console.error('Error al actualizar el presupuesto externo:', error);
-          this.loadingService.hide();
-        }
-        );
-        } else {
-          // Si no existe un presupuesto externo, crea uno nuevo
-          const presupuestoExterno = new PresupuestoExterno();
-          presupuestoExterno.nombre_institucion = actividadActualizada.institucion;
-          presupuestoExterno.valor = actividadActualizada.valorPE;
-          presupuestoExterno.observacion = '';
-          presupuestoExterno.fecha = new Date();
-          presupuestoExterno.actividad.id_actividad = actividadId;
-  
-          this.pexternoservice.crear(presupuestoExterno).subscribe(
-          () => {
-            this.loadingService.hide();
-            Swal.fire('Operación exitosa!', 'El registro se actualizó con éxito', 'success');
-            this.cdRef.detectChanges();
-            this.listar(this.poa.id_poa);
-          },
-          (error) => {
-            console.error('Error al crear el presupuesto externo:', error);
-            this.loadingService.hide();
-            }
-          );
-          }
-          },
-          (error) => {
           console.error('Error al obtener los presupuestos externos:', error);
           this.loadingService.hide();
-          }
-        );
+        }
+      );
     } catch (error) {
-    console.error('Error en la función actualizar:', error);
-    Swal.fire('Error', 'Ha ocurrido un error al actualizar la actividad', 'warning');
-    this.loadingService.hide();
+      console.error('Error en la función actualizar:', error);
+      Swal.fire('Error', 'Ha ocurrido un error al actualizar la actividad', 'warning');
+      this.loadingService.hide();
     }
   }
-  
-  
+
+
   eliminar(activ: any) {
     this.loadingService.show();
     Swal.fire({
@@ -540,7 +494,7 @@ export class ActividadesComponent implements OnInit {
         );
       }
     })
-
+    this.loadingService.hide();
   }
   limpiarFormulario() {
     this.frmActividad.reset({
@@ -549,11 +503,10 @@ export class ActividadesComponent implements OnInit {
     });
     this.actividad = new ActividadesPoa();
   }
-
   // LISTA USUARIOS TABLA
   listaUsuarios: any[] = [];
-  Listado() {
-    this.usuariorolservice.getusuariosResponsable().subscribe(
+  Listado(poaId: number): void {
+    this.usuariorolservice.getusuariosResponsable(poaId).subscribe(
       (listaAsig: any[]) => {
         this.listaUsuarios = listaAsig;
         this.dataSource3.data = this.listaUsuarios;
@@ -595,71 +548,56 @@ export class ActividadesComponent implements OnInit {
       $('#asignarResponsableModal').modal('show');
     }
   }
-  
+
   //METODO QUE FUNCIONA CON LA SELECCION EN LA TABLA DE USUARIOS
   guardarResponsable(usuarioSeleccionado: any) {
+    console.log('Usuario seleccionado:', usuarioSeleccionado);
     this.loadingService.show();
-    this.actividadservice.getActividadPorId(this.idActividadSeleccionada)
+    this.actividadservice.actualizarResponsable(this.idActividadSeleccionada, usuarioSeleccionado)
+    .subscribe(
+      () => {
+      //Registro en la tabla asignaciones_usuarios
+      const asignacion = new AsignacionUsuario();
+      asignacion.usuario = usuarioSeleccionado;
+      asignacion.actividad = new ActividadesPoa();
+      asignacion.actividad.id_actividad = this.idActividadSeleccionada;
+      asignacion.fecha_asignacion = new Date();
+      this.asignacionservice.crear(asignacion)
       .subscribe(
-        (actividadToUpdate: ActividadesPoa) => {
-          const actividadActualizada = { ...actividadToUpdate };
-          actividadActualizada.usuario = usuarioSeleccionado;
-          this.actividadservice.actualizar(this.idActividadSeleccionada, actividadActualizada)
-            .subscribe(
-              () => {
-                // Registro en la tabla asignaciones_usuarios
-                const asignacion = new AsignacionUsuario();
-                asignacion.usuario = usuarioSeleccionado;
-                asignacion.actividad = new ActividadesPoa();
-                asignacion.actividad.id_actividad = actividadToUpdate.id_actividad;
-                asignacion.fecha_asignacion = new Date();
-                this.asignacionservice.crear(asignacion)
-                  .subscribe(
-                    () => {
-                      this.loadingService.hide();
-                      Swal.fire(
-                        'Exitoso',
-                        'Se ha asignado el responsable con éxito',
-                        'success'
-                      );
-                      this.cdRef.detectChanges();
-                      this.listar(this.poa.id_poa);
-                    },
-                    (error) => {
-                      console.error('Error al crear la asignación de responsable:', error);
-                      this.loadingService.hide();
-                      Swal.fire(
-                        'Error',
-                        'Ha ocurrido un error al crear la asignación de responsable',
-                        'warning'
-                      );
-                    }
-                  );
-              },
-              (error) => {
-                console.error('Error al actualizar el responsable:', error);
-                this.loadingService.hide();
-                Swal.fire(
-                  'Error',
-                  'Ha ocurrido un error al actualizar el responsable',
-                  'warning'
-                );
-              }
-            );
-        },
-        (error: any) => {
-          console.error('Error al obtener la actividad:', error);
-          this.loadingService.hide();
-          Swal.fire(
-            'Error',
-            'Ha ocurrido un error al obtener la actividad',
-            'warning'
-          );
-        }
+      () => {
+        this.loadingService.hide();
+        Swal.fire(
+         'Exitoso',
+         'Se ha asignado el responsable con éxito',
+         'success'
+        );
+        //this.cdRef.detectChanges();
+        this.listar(this.poa.id_poa);
+      },
+      (error) => {
+      console.error('Error al crear la asignación de responsable:', error);
+      this.loadingService.hide();
+      Swal.fire(
+        'Error',
+        'Ha ocurrido un error al crear la asignación de responsable',
+        'warning'
+      );
+      }
+      );
+      },
+      (error) => {
+      console.error('Error al actualizar el responsable:', error);
+      this.loadingService.hide();
+      Swal.fire(
+        'Error',
+        'Ha ocurrido un error al actualizar el responsable',
+        'warning'
+      );
+      }
       );
       this.loadingService.hide();
   }
-  
+
   // FILTROS DE BUSQUEDA
   aplicarFiltro() {
     if (this.filterPost) {
@@ -672,13 +610,13 @@ export class ActividadesComponent implements OnInit {
     }
   }
 
-  filtrarUsers(){
-    if(this.filtroUsuarios){
-      const filtro = this.filtroUsuarios.toLowerCase(); 
-      this.dataSource3.data = this.dataSource3.data.filter((item: any)=>{
+  filtrarUsers() {
+    if (this.filtroUsuarios) {
+      const filtro = this.filtroUsuarios.toLowerCase();
+      this.dataSource3.data = this.dataSource3.data.filter((item: any) => {
         return JSON.stringify(item).toLowerCase().includes(filtro);
       });
-    }else{
+    } else {
       this.dataSource3.data = this.listaUsuarios;
     }
   }
@@ -701,11 +639,11 @@ export class ActividadesComponent implements OnInit {
         }
         count++;
       }
-  
+
       if (!this.spans[i]) {
         this.spans[i] = {};
       }
-  
+
       this.spans[i][key] = count;
       i += count;
     }
@@ -714,18 +652,18 @@ export class ActividadesComponent implements OnInit {
     for (let i = 0; i < this.listaU2.length;) {
       let currentValue = accessor(this.listaU2[i]);
       let count = 1;
-  
+
       for (let j = i + 1; j < this.listaU2.length; j++) {
         if (currentValue !== accessor(this.listaU2[j])) {
           break;
         }
         count++;
       }
-  
+
       if (!this.spans2[i]) {
         this.spans2[i] = {};
       }
-  
+
       this.spans2[i][key] = count;
       i += count;
     }
@@ -738,26 +676,26 @@ export class ActividadesComponent implements OnInit {
 
   cargarTabla(actividadId: number) {
     console.log(this.actividad);
-    this.nombreActividad= this.act.find(m => m.id_actividad === actividadId)?.nombre || '';
+    this.nombreActividad = this.act.find(m => m.id_actividad === actividadId)?.nombre || '';
     console.log('Cargando tabla para el id_actividad', actividadId);
-    this.actividadservice.listarUsuariosActividades(actividadId).subscribe((data:ListaActividadesUsuario[])=>{
-      this.listaU=data;
+    this.actividadservice.listarUsuariosActividades(actividadId).subscribe((data: ListaActividadesUsuario[]) => {
+      this.listaU = data;
       console.log("Responsable Actual ", JSON.stringify(this.listaU))
       this.cacheSpan('id_usuario', (d) => d.id_usuario);
       this.cacheSpan('username', (d) => d.id_usuario + d.username);
       this.cacheSpan('nombre', (d) => d.id_usuario + d.username + d.nombre);
       this.cacheSpan('apellido', (d) => d.id_usuario + d.username + d.nombre + d.apellido);
-      this.cacheSpan('cargo', (d) => d.id_usuario + d.username + d.nombre + d.apellido + d.cargo );
+      this.cacheSpan('cargo', (d) => d.id_usuario + d.username + d.nombre + d.apellido + d.cargo);
     });
 
-    this.asignacionservice.getAsignacionesUsuarios(actividadId).subscribe((data:ListaActividadesUsuario[])=>{
-      this.listaU2=data;
+    this.asignacionservice.getAsignacionesUsuarios(actividadId).subscribe((data: ListaActividadesUsuario[]) => {
+      this.listaU2 = data;
       console.log("Usuario Anteriores ", JSON.stringify(this.listaU2))
       this.cacheSpan2('id_usuario', (d) => d.id_usuario);
       this.cacheSpan2('username', (d) => d.id_usuario + d.username);
       this.cacheSpan2('nombre', (d) => d.id_usuario + d.username + d.nombre);
       this.cacheSpan2('apellido', (d) => d.id_usuario + d.username + d.nombre + d.apellido);
-      this.cacheSpan2('cargo', (d) => d.id_usuario + d.username + d.nombre + d.apellido + d.cargo );
+      this.cacheSpan2('cargo', (d) => d.id_usuario + d.username + d.nombre + d.apellido + d.cargo);
       this.cacheSpan2('fecha_asignacion', (d) => d.id_usuario + d.username + d.nombre + d.apellido + d.cargo + d.fecha_asignacion);
     });
   }

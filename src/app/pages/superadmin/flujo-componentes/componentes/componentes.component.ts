@@ -64,7 +64,7 @@ export class ComponentesComponent  implements OnInit {
     this.formComponentes = fb.group({
       codigo: ['', Validators.required],
       nombre: ['', Validators.required],
-      descripcion: ['', [Validators.required]]
+      descripcion: ['']
     });
     this.paginatorIntl.nextPageLabel = this.nextPageLabel;
     this.paginatorIntl.lastPageLabel = this.lastPageLabel;
@@ -115,12 +115,10 @@ export class ComponentesComponent  implements OnInit {
 
 
   eliminar(componente: any) {
-    this.loadingService.show();
-
     Swal.fire({
       title: 'Estas seguro de eliminar el registro?',
       showDenyButton: true,
-      confirmButtonText: 'Cacelar',
+      confirmButtonText: 'Cancelar',
       denyButtonText: `Eliminar`,
     }).then((result) => {
       if (!result.isConfirmed) {

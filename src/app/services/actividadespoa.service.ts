@@ -1,11 +1,11 @@
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { HttpHeaders, HttpClient } from '@angular/common/http';
-import baserUrl from './helper';
-import { ActividadesPoa } from '../models/ActividadesPoa';
 import { ListaActividadesUsuario } from '../interface/ListaActividadesUsuario';
+import { ActividadesPoa } from '../models/ActividadesPoa';
 import { Periodo } from '../models/Periodo';
 import { Actividad_arch } from './actividad_arch';
+import baserUrl from './helper';
 
 @Injectable({
   providedIn: 'root'
@@ -28,18 +28,27 @@ export class ActividadespoaService {
     return this.http.put(`${baserUrl}/api/actividades/actualizar/${id}`, acti);
   }
 
+  
+  
+  actualizarDevengado(id: any, acti: any): Observable<any> {
+    return this.http.put(`${baserUrl}/api/actividades/actualizarDevengado/${id}`, acti);
+  }
+  actualizarCodificado(id: any, acti: any): Observable<any> {
+    return this.http.put(`${baserUrl}/api/actividades/actualizarCodificado/${id}`, acti);
+  }
+
   actualizarPeriodosActividad(id: any, periodo: any): Observable<any> {
     return this.http.put(`${baserUrl}/api/periodo/actualizar/${id}`, periodo);
   }
 
   actualizarPeriodosActividades(idActividad: number, periodos: any[]): Observable<any> {
     return this.http.put(`${baserUrl}/api/periodo/actualizarPeriodos/${idActividad}`, periodos);
-}
+  }
 
-  obtenerActividades():Observable<ActividadesPoa[]>{
+  obtenerActividades(): Observable<ActividadesPoa[]> {
     return this.http.get<ActividadesPoa[]>(`${baserUrl}/api/actividades/listar`);
   }
-  obtenerActividades2():Observable<Actividad_arch[]>{
+  obtenerActividades2(): Observable<Actividad_arch[]> {
     return this.http.get<Actividad_arch[]>(`${baserUrl}/api/actividades/listar`);
   }
 
@@ -76,5 +85,10 @@ export class ActividadespoaService {
   }
   public ActividadesPendientesPorPoa(id_Poa: any): Observable<any[]> {
     return this.http.get<any[]>(`${baserUrl}/api/actividades/ActividadesPendientesPorPoa/${id_Poa}`);
+  }
+
+  //creame un metodo put 'http://localhost:5000/api/actividades/actualizarResponsable?id_actividad=64&id_responsable=4'
+  actualizarResponsable(id_actividad: number, id_responsable: number): Observable<any> {
+    return this.http.put(`${baserUrl}/api/actividades/actualizarResponsable?id_actividad=${id_actividad}&id_responsable=${id_responsable}`, null);
   }
 }

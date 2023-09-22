@@ -3,36 +3,22 @@
 <body>
   <div class="container bg-light border border-start-0 rounded-4">
     <!-- Detalle POA -->
-    <blockquote
-      class="blockquote text-dark"
-      style="
+    <blockquote class="blockquote text-dark" style="
         margin-top: 5%;
         background-color: #ffffff;
         border-left: 10px solid green;
-      "
-    >
+      ">
       <h1 style="text-transform: uppercase">
-        <strong
-          ><a
-            style="cursor: pointer; color: rgba(0, 128, 0, 0.822)"
-            (click)="verPoas()"
-          >
+        <strong><a style="cursor: pointer; color: rgba(0, 128, 0, 0.822)" (click)="verPoas()">
             POA >
           </a>
-          <a style="cursor: pointer; color: green"
-            >{{ "DETALLE POA: " + poaAprob.nombre_proyecto || "No Definido" }}
-          </a></strong
-        >
+          <a style="cursor: pointer; color: green">{{ "DETALLE POA: " + poaAprob.nombre_proyecto || "No Definido" }}
+          </a></strong>
       </h1>
     </blockquote>
     <!-- Botón Evaluar -->
     <div class="contBtnEva">
-      <button
-        class="btn btn-warning"
-        role="button"
-        data-bs-toggle="modal"
-        data-bs-target="#materiaModal"
-      >
+      <button class="btn btn-warning" role="button" data-bs-toggle="modal" data-bs-target="#materiaModal">
         Evaluar
       </button>
     </div>
@@ -41,8 +27,7 @@
         <div class="table-container" id>
           <div class="table-row">
             <div class="table-cell">
-              <strong>DIRECCION DEPARTAMENTAL: </strong
-              >{{ poaAprob.direccion_departamental }}
+              <strong>DIRECCION DEPARTAMENTAL: </strong>{{ poaAprob.direccion_departamental }}
             </div>
             <div class="table-cell">
               <strong>RESPONSABLE:</strong> {{ poaAprob.responsable }}
@@ -56,36 +41,29 @@
             <div class="table-cell">
               <strong>SUPERVISION DEL PROYECTO:</strong>
               {{
-                user.persona.primer_nombre + "  " + user.persona.primer_apellido
+              user.persona.primer_nombre + " " + user.persona.primer_apellido
               }}
             </div>
           </div>
         </div>
         <div class="table-container">
           <div class="table-row">
-              <div class="table-cell colspan-2 centered-cell">
-                  <strong>AÑO DE EJECUCIÓN DEL PROYECTO:</strong>&nbsp; 
-                  {{poaAprob.fecha_inicio | date : "yyyy" }}
-                  -
-                  {{ poaAprob.fecha_fin | date : "yyyy" }}
-              </div>
+            <div class="table-cell colspan-2 centered-cell">
+              <strong>AÑO DE EJECUCIÓN DEL PROYECTO:</strong>&nbsp;
+              {{poaAprob.fecha_inicio | date : "yyyy" }}
+              -
+              {{ poaAprob.fecha_fin | date : "yyyy" }}
+            </div>
           </div>
-      </div>
+        </div>
         <br />
         <br />
         <div class="table-container">
           <div class="table-row">
-            <div
-              class="table-cell"
-              style="display: flex; flex-direction: column; gap: 8px"
-            >
+            <div class="table-cell" style="display: flex; flex-direction: column; gap: 8px">
               <mat-form-field>
                 <mat-label>Tipo de seguimiento</mat-label>
-                <input
-                  matInput
-                  readonly
-                  [value]="tipSeguimiento"
-                />
+                <input matInput readonly [value]="tipSeguimiento" />
               </mat-form-field>
             </div>
           </div>
@@ -170,11 +148,7 @@
         <div class="table-container">
           <div class="table-row">
             <div class="table-cell">
-              <mat-form-field
-                appearance="outline"
-                readonly
-                class="example-full-width"
-              >
+              <mat-form-field appearance="outline" readonly class="example-full-width">
                 <mat-label>Cobertura</mat-label>
                 <input matInput readonly value="{{ poaAprob.cobertura }}" />
               </mat-form-field>
@@ -234,14 +208,11 @@
     <!-- Actividades del POA -->
     <div class="card-body">
       <!-- Detalle Actividades del POA -->
-      <blockquote
-        class="blockquote text-dark"
-        style="
+      <blockquote class="blockquote text-dark" style="
           margin-top: 5%;
           background-color: #ffffff;
           border-left: 10px solid green;
-        "
-      >
+        ">
         <h1 style="cursor: pointer; color: green">
           <strong>Detalle Actividades del POA</strong>
         </h1>
@@ -263,30 +234,27 @@
           <ng-container matColumnDef="presupuesto_referencial">
             <th mat-header-cell *matHeaderCellDef>PRESUPUESTO REFERENCIAL</th>
             <td mat-cell *matCellDef="let elemento" class="currency-align">
-              <span class="currency-symbol">$</span
-              ><span class="currency-value">{{
+              <span class="currency-symbol">$</span><span class="currency-value">{{
                 elemento.presupuesto_referencial
-              }}</span>
+                }}</span>
             </td>
           </ng-container>
 
           <ng-container matColumnDef="recursos_propios">
             <th mat-header-cell *matHeaderCellDef>RECURSOS PROPIOS</th>
             <td mat-cell *matCellDef="let elemento" class="currency-align">
-              <span class="currency-symbol">$</span
-              ><span class="currency-value">{{
+              <span class="currency-symbol">$</span><span class="currency-value">{{
                 elemento.recursos_propios
-              }}</span>
+                }}</span>
             </td>
           </ng-container>
 
           <ng-container matColumnDef="recursos_externos">
             <th mat-header-cell *matHeaderCellDef>RECURSOS EXTERNOS</th>
             <td mat-cell *matCellDef="let elemento" class="currency-align">
-              <span class="currency-symbol">$</span
-              ><span class="currency-value">{{
+              <span class="currency-symbol">$</span><span class="currency-value">{{
                 elemento.recursos_externos
-              }}</span>
+                }}</span>
             </td>
           </ng-container>
 
@@ -354,45 +322,25 @@
   </div>
 </body>
 
-<div
-  class="modal fade"
-  id="materiaModal"
-  tabindex="-1"
-  aria-labelledby="exampleModalLabel"
-  aria-hidden="true"
->
+<div class="modal fade" id="materiaModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-xl">
     <div class="modal-content">
       <div class="modal-header" style="background-color: #077b15">
-        <h3
-          class="modal-title"
-          style="font-family: Arial, sans-serif; color: white"
-        >
+        <h3 class="modal-title" style="font-family: Arial, sans-serif; color: white">
           <i class="fa fa-info-circle"></i> EVALUAR
         </h3>
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-          (click)="Limpiar()"
-        ></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="Limpiar()"></button>
       </div>
       <div class="modal-body">
         <div class="card">
           <div class="card-body" style="height: 100%">
             <mat-form-field class="full-width" appearance="outline">
               <mat-label>Usuario Evaluador</mat-label>
-              <input
-                name="usuario"
-                matInput
-                disabled
-                [value]="
+              <input name="usuario" matInput disabled [value]="
                   user.persona.primer_nombre +
                   '  ' +
                   user.persona.primer_apellido
-                "
-              />
+                " />
             </mat-form-field>
 
             <div class="container text-center">
@@ -400,12 +348,7 @@
                 <div class="col-8">
                   <mat-form-field appearance="outline" class="full-width">
                     <mat-label>Estado</mat-label>
-                    <input
-                      matInput
-                      name="estado"
-                      disabled
-                      [(ngModel)]="estado"
-                    />
+                    <input matInput name="estado" disabled [(ngModel)]="estado" />
                   </mat-form-field>
                 </div>
                 <div class="col-4">
@@ -421,37 +364,19 @@
             </div>
 
             <div class="form-floating">
-              <textarea
-                class="form-control"
-                placeholder="Leave a comment here"
-                id="floatingTextarea2"
-                style="height: 100px"
-                [(ngModel)]="observacion"
-              ></textarea>
+              <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2"
+                style="height: 100px" [(ngModel)]="observacion"></textarea>
               <label for="floatingTextarea2">Observación</label>
             </div>
           </div>
         </div>
 
         <div class="modal-footer">
-          <button
-            type="button"
-            form="formulario"
-            class="btn btn-warning"
-            data-bs-dismiss="modal"
-            (click)="Limpiar()"
-          >
+          <button type="button" form="formulario" class="btn btn-warning" data-bs-dismiss="modal" (click)="Limpiar()">
             Cancelar
           </button>
-          <button
-            type="submit"
-            class="btn btn-primary"
-            form="formulario"
-            data-dismiss="modal"
-            data-bs-dismiss="modal"
-            (click)="crearAprobacion()"
-            [disabled]="!estado"
-          >
+          <button type="submit" class="btn btn-primary" form="formulario" data-dismiss="modal" data-bs-dismiss="modal"
+            (click)="crearAprobacion()" [disabled]="!estado">
             Agregar
           </button>
         </div>

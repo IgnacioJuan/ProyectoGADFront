@@ -99,9 +99,9 @@ export class ReporteEspecificoCompetenciaComponent implements OnInit {
       }
     },
     plugins: {
-      legend: { 
-        display: true, 
-        position: 'bottom', 
+      legend: {
+        display: true,
+        position: 'bottom',
       },
       datalabels: {
         anchor: 'end',
@@ -116,7 +116,7 @@ export class ReporteEspecificoCompetenciaComponent implements OnInit {
           if (context.dataset.label === 'Porcentaje') {
             return value.toFixed(2) + '%';  // Formatea con dos decimales y añade '%'
           } else if (['Codificado', 'Devengado'].includes(context.dataset.label)) {
-            return '$' + value;  // Formatea con dos decimales y añade 'M' para millones
+            return '$ ' + value;  // Formatea con dos decimales y añade 'M' para millones
           }
           return value;
         }
@@ -135,15 +135,15 @@ export class ReporteEspecificoCompetenciaComponent implements OnInit {
         label: 'Porcentaje',
         type: 'line',
         yAxisID: 'y1', // Asigna el eje Y derecho
-        borderColor: 'rgb(125, 235, 105)',
-        borderWidth: 2,
+        borderColor: 'green',
+        borderWidth: 3,
       },
       {
         data: [],
         label: 'Codificado',
         type: 'bar',
         yAxisID: 'y', // Asigna el eje Y izquierdo
-        backgroundColor: 'blue',
+        backgroundColor: 'rgb(92, 92, 241)',
       },
       {
         data: [],
@@ -268,14 +268,35 @@ export class ReporteEspecificoCompetenciaComponent implements OnInit {
     );
   }
   cargarPDF() {
+    this.loadingService.show();
     this.competenciaService.obtenerPDF().subscribe((data) => {
       const blob = new Blob([data], { type: 'application/pdf' });
       const unsafeUrl = URL.createObjectURL(blob);
+      this.loadingService.hide();
       console.log('Unsafe URL:', unsafeUrl);
       this.pdfUrl = this.sanitizer.bypassSecurityTrustResourceUrl(unsafeUrl);
     });
   }
-  redirectToPDF() {
-    window.open('http://localhost:5000/api/competencia/export-pdf', '_blank');
+
+  filtrarPorColor(color: string) {
+    switch (color) {
+      case 'verde':
+        this.tableData.data = this.rCompentencias.filter(item => item.porc_ejecucion >= 85);
+        break;
+      case 'amarillo':
+        this.tableData.data = this.rCompentencias.filter(item => item.porc_ejecucion >= 70 && item.porc_ejecucion <= 84.9);
+        break;
+      case 'rojo':
+        this.tableData.data = this.rCompentencias.filter(item => item.porc_ejecucion < 70);
+        break;
+      default:
+        this.tableData.data = this.rCompentencias;
+        break;
+    }
   }
+
+  resetFiltro() {
+    this.tableData.data = this.rCompentencias;
+  }
+
 }

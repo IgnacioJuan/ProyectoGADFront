@@ -9,6 +9,10 @@
     </blockquote>
     <div class="card">
       <div class="card-body">
+      <!-- Button trigger modal -->
+      <button type="button" class="btn btn-primary"   (click)="generarInformeTotal()">
+        <i class="fas fa-print"></i>  Generar Informe PDF
+      </button>
 
         <br />
         <br />
@@ -28,6 +32,14 @@
               </td>
             </ng-container>
 
+
+
+            <ng-container matColumnDef="linea_base">
+              <th mat-header-cell *matHeaderCellDef>LINEA BASE</th>
+              <td mat-cell *matCellDef="let elemento">
+                {{ elemento.linea_base }}
+              </td>
+            </ng-container>
 
             <ng-container matColumnDef="meta_alcanzar">
               <th mat-header-cell *matHeaderCellDef>META ALCANZAR</th>
@@ -74,6 +86,29 @@
         </div>
       </div>
     </div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+        <div class="pdf-container">
+          <iframe [src]="pdfUrl" frameborder="0" class="pdf-viewer"></iframe>
+        </div>
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary"   data-dismiss="modal">OK</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
     <div class="container mt-5">
       <div class="card">
         <div class="card-body">

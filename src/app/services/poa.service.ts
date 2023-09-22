@@ -72,9 +72,16 @@ export class PoaService {
 
   }
 
-  obtenerDatosPoas(): Observable<PoaActividadProjection[]> {
-    return this.http.get<PoaActividadProjection[]>(`${baserUrl}/api/poa/listarPoasProyectoDeModeloFiltroFechas`);
+  //ADMIN
+  obtenerDatosPoas(usuarioId: number): Observable<PoaActividadProjection[]> {
+    return this.http.get<PoaActividadProjection[]>(`${baserUrl}/api/poa/listarPoasProyectoDeModeloFiltroFechas/${usuarioId}`);
   }
+
+  //SUPER
+  obtenerDatosPoas2(): Observable<PoaActividadProjection[]> {
+    return this.http.get<PoaActividadProjection[]>(`${baserUrl}/api/poa/listarTodosPoasProyectoFiltroFechasSuper`);
+  }
+
   listarPoasdelProyecto(id_proyecto: number, estado: string): Observable<Poa[]> {
     return this.http.get<Poa[]>(`${baserUrl}/api/poa/listardelProyecto/${id_proyecto}/${estado}`);
   }
@@ -143,5 +150,13 @@ export class PoaService {
     //Listar poas con indicadores
     listarPoasIndicadores(): Observable<PoasIndicadoresProjection[]> {
       return this.http.get<PoasIndicadoresProjection[]>(`${baserUrl}/api/poa/listarPoasIndicadores`);
+    }
+
+     //Generar reporte
+    GenerarReporte(): Observable<Blob> {
+      const headers = new HttpHeaders({
+        'Accept': 'application/pdf'
+      });
+      return this.http.get(`${baserUrl}/api/poa/Metas-export-pdf`, { headers: headers, responseType: 'blob' });
     }
 }
