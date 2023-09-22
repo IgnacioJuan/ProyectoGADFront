@@ -197,7 +197,7 @@ export class DetallePoaComponent implements OnInit {
     // this.loadingService.show();
     // Verificar si el estado es "RECHAZADO" y la observación está vacía
     //mensaje para confirma si desea guardar
-
+    //este deaqui
 
     if (this.estado === 'RECHAZADO' && !this.observacion) {
       this.loadingService.hide();
@@ -327,6 +327,7 @@ export class DetallePoaComponent implements OnInit {
 
 
   resultadoSolicitud() {
+    //y tambien este de aca
     this.poacService
       .aprobarPoa(this.poaAprob.id_poa, this.user.id, this.observacion, this.estado)
       .subscribe((response) => {
