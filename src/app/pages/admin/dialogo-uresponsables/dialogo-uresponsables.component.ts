@@ -14,6 +14,7 @@ import { ProgramaUsuarioDTO } from 'src/app/models/Programa';
 import { Observable } from 'rxjs';
 import { DOCUMENT } from '@angular/common';
 import { LoginService } from 'src/app/services/login.service';
+import { LoadingServiceService } from 'src/app/components/loading-spinner/LoadingService.service';
 
 
 @Component({
@@ -47,6 +48,7 @@ export class DialogoUresponsablesComponent implements OnInit, OnDestroy {
     private programaService: ProgramaService,
     private renderer: Renderer2,
     private el: ElementRef,
+    private loadingService: LoadingServiceService,
     @Inject(DOCUMENT) private document: Document
   ) {
 
@@ -118,6 +120,7 @@ export class DialogoUresponsablesComponent implements OnInit, OnDestroy {
   }
 
   guardarUsuario(): void {
+    this.loadingService.show();
     if (this.firstFormGroup.valid && this.secondFormGroup.valid) {
       console.log('Formularios válidos, procediendo a guardar...');
 
@@ -140,22 +143,26 @@ export class DialogoUresponsablesComponent implements OnInit, OnDestroy {
         this.usuarioService.createResponsable(usuario, idRol).subscribe(() => {
           console.log('Usuario guardado correctamente.');
           Swal.fire('Usuario guardado', 'Usuario registrado con éxito en el sistema', 'success');
+          this.loadingService.hide();
           this.dialogRef.close();
 
         }, (error) => {
           console.error('Error al guardar el usuario:', error);
+          this.loadingService.hide();
           this.snack.open('Error al guardar el usuario', 'Aceptar', {
             duration: 3000
           });
         });
       }, (error) => {
         console.error('Error al guardar la persona:', error);
+        this.loadingService.hide();
         this.snack.open('Error al guardar la persona', 'Aceptar', {
           duration: 3000
         });
       });
     } else {
       console.log('Formularios no válidos.');
+      this.loadingService.hide();
       this.snack.open('Por favor, complete todos los campos requeridos', 'Aceptar', {
         duration: 3000
       });
