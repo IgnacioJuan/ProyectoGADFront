@@ -2,6 +2,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { PageNotFoundComponent } from './shared/page-not-found/page-not-found.component';
+import { SobreNosotrosComponent } from './components/sobre-nosotros/sobre-nosotros.component';
 
 
 const routes: Routes = [
@@ -9,6 +10,7 @@ const routes: Routes = [
   
   
   { path: '', redirectTo: 'use/login', pathMatch: 'full' },
+  { path: 'sobre-nosotros', component: SobreNosotrosComponent },
 
   //PATHS DE ADMINISTRADOR
   {

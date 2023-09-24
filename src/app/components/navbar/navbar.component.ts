@@ -39,6 +39,10 @@ export class NavbarComponent implements OnInit {
     this.listarnoti(this.user.id);
   }
 
+   public irConocenos() {
+    location.replace('/sobre-nosotros');
+  }
+
   listarnoti(id: any) {
     console.log("id ver " + id);
     // Cargar notificaciones propias por id
