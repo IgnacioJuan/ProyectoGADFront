@@ -164,6 +164,8 @@ export class CrearComponent implements OnInit {
 
     this.progra.nombre = this.frmCriterio.value.nombre;
     this.progra.descripcion = this.frmCriterio.value.descripcion;
+ 
+ 
     this.programaservice.actualizar(this.progra.id_programa, this.progra)
       .subscribe(response => {
         this.progra = new Programa();

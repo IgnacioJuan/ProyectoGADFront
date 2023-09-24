@@ -19,6 +19,7 @@ import { ReformaTraspasoIService } from 'src/app/services/reformatraspaso-i.serv
 import { ReformaSuplementoService } from 'src/app/services/reformasuplemento.service';
 import { ReformaTraspasoDService } from 'src/app/services/reformatraspaso-d.service';
 import { ActividadespoaService } from 'src/app/services/actividadespoa.service';
+
 @Component({
   selector: 'app-actividades_desig',
   templateUrl: './actividades_desig.component.html',
@@ -89,11 +90,17 @@ poaacti: Poa_proyec_dto = new Poa_proyec_dto();
   }
   
   getPoaActividades(idres: number, idpoa: number): void {
+    this.loadingService.show();
+
     this.serviactiv.getPoaActividades(idres, idpoa).subscribe(
       data => {
+        this.loadingService.hide();
+
         this.dataSource.data = data;
       },
       error => {
+        this.loadingService.hide();
+
         console.error('Error fetching data:', error);
       }
     );
