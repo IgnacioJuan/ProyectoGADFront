@@ -14,6 +14,7 @@ import { ProgramaService } from 'src/app/services/programa.service';
 import { ProgramaUsuarioDTO } from 'src/app/models/Programa';
 import { Observable } from 'rxjs';
 import { DOCUMENT } from '@angular/common';
+import { LoadingServiceService } from 'src/app/components/loading-spinner/LoadingService.service';
 
 
 @Component({
@@ -39,6 +40,7 @@ export class DialogoUsuariosComponent implements OnInit, OnDestroy {
     private snack: MatSnackBar,
     private dialogRef: MatDialogRef<DialogoUsuariosComponent>,
     private programaService: ProgramaService,
+    private loadingService: LoadingServiceService,
     @Inject(DOCUMENT) private document: Document
   ) {
 
@@ -99,6 +101,8 @@ export class DialogoUsuariosComponent implements OnInit, OnDestroy {
   }
 
   guardarUsuario(): void {
+    this.loadingService.show();
+
     if (this.firstFormGroup.valid && this.secondFormGroup.valid) {
 
       const persona: Persona2 = this.firstFormGroup.value;
@@ -122,21 +126,25 @@ export class DialogoUsuariosComponent implements OnInit, OnDestroy {
 
         this.usuarioService.createUsuario(usuario, idRol).subscribe(() => {
           Swal.fire('Usuario guardado', 'Usuario registrado con éxito en el sistema', 'success');
+          this.loadingService.hide();
           this.dialogRef.close();
 
         }, (error) => {
           console.error(error);
+          this.loadingService.hide();
           this.snack.open('Error al guardar el usuario', 'Aceptar', {
             duration: 3000
           });
         });
       }, (error) => {
         console.error(error);
+        this.loadingService.hide();
         this.snack.open('Error al guardar la persona', 'Aceptar', {
           duration: 3000
         });
       });
     } else {
+      this.loadingService.hide();
       this.snack.open('Por favor, complete todos los campos requeridos', 'Aceptar', {
         duration: 3000
       });

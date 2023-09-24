@@ -52,7 +52,7 @@ export class ListarporUsuarioComponent implements OnInit {
   competencias: PoaporUsuarioProjection[] = [];
 
   dataSource = new MatTableDataSource<PoaporUsuarioProjection>();
-  columnasUsuario: string[] = ['cedula','nombre_completo','username','nombre','nombrepro', 'estado'];
+  columnasUsuario: string[] = ['cedula','nombre_completo','username','nombre','fecha_fin','nombrepro', 'estado'];
 
   
   @ViewChild('datosModalRef') datosModalRef: any;

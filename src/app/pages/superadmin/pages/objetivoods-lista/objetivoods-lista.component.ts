@@ -1,17 +1,15 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 
-import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {ObjetivoodsService} from "../../../../services/objetivoods.service";
+import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
+import { ObjetivoodsService } from "../../../../services/objetivoods.service";
 
-import {Objetivoods} from "../../../../models/objetivoods";
-import {Componentes} from "../../../../models/Componentes";
-import {MatTableDataSource} from "@angular/material/table";
-import {MatPaginator, MatPaginatorIntl} from "@angular/material/paginator";
-import {Router} from "@angular/router";
-import {ComponentesService} from "../../../../services/componentes.service";
-import {ObjetivoPdotService} from "../../../../services/objetivo-pdot.service";
+import { MatPaginator, MatPaginatorIntl } from "@angular/material/paginator";
+import { MatTableDataSource } from "@angular/material/table";
+import { Router } from "@angular/router";
 import Swal from "sweetalert2";
-import {LoadingServiceService} from "../../../../components/loading-spinner/LoadingService.service";
+import { LoadingServiceService } from "../../../../components/loading-spinner/LoadingService.service";
+import { Objetivoods } from "../../../../models/objetivoods";
+import { ComponentesService } from "../../../../services/componentes.service";
 
 @Component({
   selector: 'app-objetivoods-lista',
@@ -26,9 +24,9 @@ export class ObjetivoodsListaComponent implements OnInit {
   itemsPerPageLabel = 'Objetivos por página';
   nextPageLabel = 'Siguiente';
   lastPageLabel = 'Última';
-  firstPageLabel='Primera';
-  previousPageLabel='Anterior';
-  rango:any= (page: number, pageSize: number, length: number) => {
+  firstPageLabel = 'Primera';
+  previousPageLabel = 'Anterior';
+  rango: any = (page: number, pageSize: number, length: number) => {
     if (length == 0 || pageSize == 0) {
       return `0 de ${length}`;
     }
@@ -44,14 +42,14 @@ export class ObjetivoodsListaComponent implements OnInit {
   //
   public componentes = new Objetivoods();
   listaComponentes: Objetivoods[] = [];
-  numeroObjetivos:number=0;
+  numeroObjetivos: number = 0;
 
 
   //Buscar
   filterPost: string = "";
   filteredComponentes: any[] = [];
   resultadosEncontrados: boolean = true;
-//aqui esta llenandose el array de componentes
+  //aqui esta llenandose el array de componentes
   dataSource = new MatTableDataSource<Objetivoods>();
 
   columnasUsuario: string[] = ['id_componente', 'nombre', 'descripcion', 'actions'];
@@ -70,14 +68,14 @@ export class ObjetivoodsListaComponent implements OnInit {
     this.formComponentes = fb.group({
 
       nombre: ['', Validators.required],
-      descripcion: ['', [Validators.required]]
+      descripcion: ['']
     });
     this.paginatorIntl.nextPageLabel = this.nextPageLabel;
     this.paginatorIntl.lastPageLabel = this.lastPageLabel;
-    this.paginatorIntl.firstPageLabel=this.firstPageLabel;
-    this.paginatorIntl.previousPageLabel=this.previousPageLabel;
+    this.paginatorIntl.firstPageLabel = this.firstPageLabel;
+    this.paginatorIntl.previousPageLabel = this.previousPageLabel;
     this.paginatorIntl.itemsPerPageLabel = this.itemsPerPageLabel;
-    this.paginatorIntl.getRangeLabel=this.rango;
+    this.paginatorIntl.getRangeLabel = this.rango;
   }
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator || null;
@@ -121,14 +119,16 @@ export class ObjetivoodsListaComponent implements OnInit {
 
 
   eliminar(componente: any) {
-    this.loadingService.show();
+
     Swal.fire({
       title: '¿Estas seguro de eliminar el registro?',
       showDenyButton: true,
       confirmButtonText: 'Cancelar',
       denyButtonText: `Eliminar`,
     }).then((result) => {
+
       if (!result.isConfirmed) {
+        this.loadingService.show();
         this.objetivoodsServicio.eliminarobjetivoods(componente).subscribe(
           (response) => {
             this.loadingService.hide();

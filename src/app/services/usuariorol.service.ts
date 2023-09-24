@@ -23,10 +23,11 @@ export class UsuariorolService {
   actualizar(id: any, crite: any): Observable<any> {
     return this.http.put(`${baserUrl}/api/usuariorol/actualizar/${id}`, crite);
   }
-  ListarSuperAdmin(): Observable<any[]> {
-    return this.http.get<UsuarioRol[]>(`${baserUrl}/api/usuariorol/listarUsuarioSuperAdmin`);
-  }
-  
+//Listar ADmins para solictud
+ListarSuperAdmin(idPrograma:number): Observable<any[]> {
+  return this.http.get<UsuarioRol[]>(`${baserUrl}/api/usuariorol/listarUsuarioSuperAdmin/${idPrograma}`);
+}
+
 
   actualizarResponsable(id: any, crite: any): Observable<any> {
     return this.http.put(`${baserUrl}/api/usuariorol/actualizarUResponsable/${id}`, crite);

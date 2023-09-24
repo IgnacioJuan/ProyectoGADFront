@@ -1,6 +1,13 @@
 <body>
   <div class="container bg-light border border-start-0 rounded-4">
-    <blockquote class="blockquote text-dark" style="margin-top: 5%">
+    <blockquote
+    class="blockquote text-dark"
+    style="
+      margin-top: 5%;
+      background-color: #ffffff;
+      border-left: 10px solid green;
+    "
+  >
       <h1 style="text-transform: uppercase">
         <strong
           ><a style="cursor: pointer" (click)="verModelos()" class="titulo" >PROYECTOS  </a>
@@ -61,6 +68,13 @@
               <th mat-header-cell *matHeaderCellDef>PROGRAMA</th>
               <td mat-cell *matCellDef="let elemento">
                 {{ elemento.nombrepro }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="fecha_fin">
+              <th mat-header-cell *matHeaderCellDef>FECHA</th>
+              <td mat-cell *matCellDef="let elemento">
+                {{ elemento.fecha_fin | date : "dd/MM/yyyy"  }}
               </td>
             </ng-container>
         

@@ -1,10 +1,12 @@
 <body>
   <div class="container bg-light border border-start-0 rounded-4">
-    <blockquote class="blockquote text-dark"
-      style="margin-top: 5%; background-color: #ffffff; border-left: 10px solid green;">
+    <blockquote class="blockquote text-dark" style="
+        margin-top: 5%;
+        background-color: #ffffff;
+        border-left: 10px solid green;
+      ">
       <h1 style="text-transform: uppercase" class="titulo">
-        <strong>
-          <a>MONTO DE INVERSIÓN POR COMPETENCIA</a></strong>
+        <strong> <a>MONTO DE INVERSIÓN POR COMPETENCIA</a></strong>
       </h1>
     </blockquote>
 
@@ -12,17 +14,19 @@
       <div class="card">
         <div class="card-body">
           <div class="semaforo">
-            <div class="verde"></div><span><strong>Cumplida:</strong> 85% y el 100%</span>
-            <div class="amarillo"></div><span><strong>Parcialmente cumplida:</strong> 70% y el 84,9%</span>
-            <div class="rojo"></div><span><strong>Incumplida:</strong> 0 a 69,9%</span>
+            <div class="verde" (click)="filtrarPorColor('verde')"></div>
+            <span><strong>Cumplida:</strong> 85% y el 100%</span>
+            <div class="amarillo" (click)="filtrarPorColor('amarillo')"></div>
+            <span><strong>Parcialmente cumplida:</strong> 70% y el 84,9%</span>
+            <div class="rojo" (click)="filtrarPorColor('rojo')"></div>
+            <span><strong>Incumplida:</strong> 0 a 69,9%</span>
+            <div class="plomo" (click)="resetFiltro()"></div>
+            <span><strong>Mostrar todos</strong></span>
             <div></div>
             <div></div>
             <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <button mat-raised-button color="warn" class="pdf-button" (click)="redirectToPDF()">
+            <button mat-raised-button color="warn" class="pdf-button" data-toggle="modal" data-target="#exampleModal"
+              (click)="cargarPDF()">
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                 class="bi bi-file-earmark-pdf-fill" viewBox="0 0 16 16">
                 <path
@@ -42,21 +46,26 @@
         <!-- Sección de la tabla -->
         <div class="table-section table-responsive">
           <mat-table [dataSource]="tableData">
-
             <ng-container matColumnDef="nombre">
               <mat-header-cell *matHeaderCellDef> COMPETENCIA </mat-header-cell>
-              <mat-cell *matCellDef="let element">{{ element.nombre }}</mat-cell>
+              <mat-cell *matCellDef="let element">{{
+                element.nombre
+                }}</mat-cell>
             </ng-container>
 
             <ng-container matColumnDef="codificado">
-              <mat-header-cell *matHeaderCellDef> MONTO CODIFICADO </mat-header-cell>
+              <mat-header-cell *matHeaderCellDef>
+                MONTO CODIFICADO
+              </mat-header-cell>
               <mat-cell *matCellDef="let element">
                 {{ element.codificado }}
               </mat-cell>
             </ng-container>
 
             <ng-container matColumnDef="devengado">
-              <mat-header-cell *matHeaderCellDef> MONTO DEVENGADO </mat-header-cell>
+              <mat-header-cell *matHeaderCellDef>
+                MONTO DEVENGADO
+              </mat-header-cell>
               <mat-cell *matCellDef="let element">
                 {{ element.devengado }}
               </mat-cell>
@@ -89,11 +98,9 @@
 
             <ng-container matColumnDef="footerPorent">
               <mat-footer-cell *matFooterCellDef [ngClass]="getColorClass(getExecutionPercentage())">
-                <strong>{{ getExecutionPercentage() | number:'1.0-2' }} %</strong>
+                <strong>{{ getExecutionPercentage() | number : "1.0-2" }} %</strong>
               </mat-footer-cell>
             </ng-container>
-
-
 
             <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
             <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
@@ -107,16 +114,33 @@
             No se encontraron resultados.
           </div>
         </div>
-        <div class="barChart-container">
+        <div class="barChart-container table-responsive">
           <!-- Sección del gráfico -->
           <div class="chart-section">
-            <canvas baseChart class="chart" [data]="barChartData" [options]="barChartOptions"
-              [plugins]="barChartPlugins" [type]="barChartType" (chartHover)="chartHovered($event)"
-              (chartClick)="chartClicked($event)">
+            <canvas baseChart class="chart" [data]="barChartData" [options]="barChartOptions" [type]="barChartType"
+              (chartHover)="chartHovered($event)" (chartClick)="chartClicked($event)">
             </canvas>
           </div>
         </div>
       </div>
     </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+          <div class="modal-body">
+            <div class="pdf-container">
+              <iframe [src]="pdfUrl" frameborder="0" class="pdf-viewer"></iframe>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </body>
