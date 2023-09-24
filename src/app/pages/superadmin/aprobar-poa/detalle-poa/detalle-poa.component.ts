@@ -372,13 +372,13 @@ export class DetallePoaComponent implements OnInit {
     console.log("Poa finalizado con exito");
     this.showSuccessAlert();
   }
-
-  calcularPeriodos(totalf: number) {
-    if (!this.periodosPoa || this.periodosPoa.length < 3) {
-      return;
+  
+  calcularPeriodos(totalf: number){
+    if (!this.periodosPoa || this.periodosPoa.length < 4) {
+        return; 
     }
-    this.porcentajes = this.periodosPoa.slice(0, 3).map(periodo => totalf * (periodo.porcentaje / 100));
-  }
+    this.porcentajes = this.periodosPoa.slice(0, 4).map(periodo => totalf * (periodo.porcentaje / 100));
+}
 
   showSuccessAlert() {
     Swal.fire({
