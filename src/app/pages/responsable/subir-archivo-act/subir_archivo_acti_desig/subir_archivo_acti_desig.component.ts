@@ -47,8 +47,6 @@ export class Subir_archivo_acti_desigComponent implements OnInit {
   dataSource = new MatTableDataSource<Archivo>();
   formulario: FormGroup;
   @ViewChild('archivoInput') archivoInput!: ElementRef<HTMLInputElement>; // Note the "!" operator
-  variable1: number = 0; // Asigna un valor predeterminado o inicializa la variable
-  variable2: number = 0; // Asigna un valor predeterminado o inicializa la variable
   valorMaximo: number = 0;
   constructor(
     private archivo: ArchivoService,
@@ -96,7 +94,7 @@ export class Subir_archivo_acti_desigComponent implements OnInit {
       location.replace('/use/user-dashboard');
     }
     const datos = history.state.data;
-    this.archi = data;
+    this.archi = datos;
     if (this.archi == undefined) {
       this.router.navigate(['user-dashboard']);
       location.replace('/use/user-dashboard');
@@ -131,10 +129,7 @@ export class Subir_archivo_acti_desigComponent implements OnInit {
       this.descripcion = '';
       this.activ.devengado = this.activ.devengado + this.valor;
       this.valor = 0;
-  
-      console.log('valor =' + this.valor);
       this.loadingService.hide();
-  
       // Mostrar el mensaje de éxito
       await Swal.fire({
         title: '¡Éxito!',
@@ -147,9 +142,6 @@ export class Subir_archivo_acti_desigComponent implements OnInit {
     } catch (error) {
       console.log('Archivo subido:');
       this.loadingService.hide();
-  
-      console.error('Error al subir el archivo:', error);
-  
       // Mostrar el mensaje de error
       await Swal.fire({
         title: '¡Error!',
@@ -218,7 +210,6 @@ export class Subir_archivo_acti_desigComponent implements OnInit {
         this.restrivalor();
       },
       (error) => {
-        console.error('Error al eliminar:', error);
       }
     );
   }
@@ -238,45 +229,45 @@ export class Subir_archivo_acti_desigComponent implements OnInit {
   }
   isEditing: boolean = false;
 
-  editar(id_archi: any): void {
-    this.archivon.descripcion=this.formulario.value.descripcion;
-    this.archivon.valor=this.formulario.value.valor;
-    
-    this.archivo
-      .editArchivo(
+  async editar(id_archi: any): Promise<void> {
+    try {
+      this.archivon.descripcion = this.formulario.value.descripcion;
+      this.archivon.valor = this.formulario.value.valor;
+  
+      const response = await this.archivo.editArchivo(
         id_archi,
         this.archivon.descripcion,
         this.archivon.valor,
         this.activ.id_actividad
-      )
-      .subscribe(
-        (response) => {
-          console.log('Archivo editado:', response);
-
-          Swal.fire({
-            title: '¡Éxito!',
-            text: 'El archivo se ha editado correctamente',
-            icon: 'success',
-            confirmButtonText: 'OK',
-          });
-          this.formulario.reset();
-          this.isEditing = false;
-          this.listar();
-          this.restrivalor();
-        },
-        (error) => {
-          console.error('Error al editar el archivo:', error);
-
-          this.isEditing = false;
-          Swal.fire({
-            title: '¡Error!',
-            text: 'Ocurrió un error al editar el archivo',
-            icon: 'error',
-            confirmButtonText: 'OK',
-          });
-        }
-      );
+      ).toPromise();
+  
+      console.log('Archivo editado:', response);
+  
+      // Mostrar el mensaje de éxito
+      await Swal.fire({
+        title: '¡Éxito!',
+        text: 'El archivo se ha editado correctamente',
+        icon: 'success',
+        confirmButtonText: 'OK',
+      });
+  
+      this.formulario.reset();
+      this.isEditing = false;
+      this.listar();
+      this.restrivalor();
+    } catch (error) {
+      this.isEditing = false;
+  
+      // Mostrar el mensaje de error
+      await Swal.fire({
+        title: '¡Error!',
+        text: 'Ocurrió un error al editar el archivo',
+        icon: 'error',
+        confirmButtonText: 'OK',
+      });
+    }
   }
+  
 
   editDatos(archi: Archivo) {
     this.isEditing = true;
@@ -296,12 +287,7 @@ export class Subir_archivo_acti_desigComponent implements OnInit {
           // Verifica si data y fecha_fin son definidos
           const fechaActual = new Date();
           const fechaFin = new Date(data.fecha_fin);
-
-          console.log('fecha ini >>> ' + fechaActual);
-          console.log('fecha fin >>> ' + data.fecha_fin);
-          console.log('fecha fin 2 >>> ' + fechaFin);
-
-          if (fechaActual > fechaFin) {
+       if (fechaActual > fechaFin) {
             this.botonDeshabilitado = true;
             this.mostrarMensaje(
               'Usted ya no puede subir archivos a esta actividad debido a una fecha límite superada.'
