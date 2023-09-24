@@ -120,8 +120,8 @@ export class CrearResponsablesComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-
       this.Listado();
+      this.loadingService.hide();
     });
   }
 
