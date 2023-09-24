@@ -1,10 +1,16 @@
 <body>
   <div class="container bg-light border border-start-0 rounded-4">
-      <blockquote style="margin-top: 5%;">
-      <h1  class="titulo"  ><strong> PROGRAMAS</strong></h1>
+    <blockquote
+      class="blockquote text-dark"
+      style="
+        margin-top: 5%;
+        background-color: #ffffff;
+        border-left: 10px solid green;
+      "
+    >
+      <h1 class="titulo" ><strong>PROGRAMAS</strong></h1>
     </blockquote>
     <div></div>
-
     <div class="card">
       <div class="card-body">
         <div class="form-group">
@@ -212,9 +218,6 @@
                     data-dismiss="modal"
                     data-bs-dismiss="modal"
                     style="background-color: green"
-
-
-
                     (click)="actualizar()"
                     [disabled]="!frmCriterio.valid"
                   >

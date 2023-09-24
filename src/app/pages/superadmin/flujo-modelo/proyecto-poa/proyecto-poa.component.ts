@@ -7,6 +7,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 import { ModeloPoa } from 'src/app/models/ModeloPoa';
 import { Poa } from 'src/app/models/Poa';
+import { LoadingServiceService } from 'src/app/components/loading-spinner/LoadingService.service';
 
 @Component({
   selector: 'app-proyecto-poa',
@@ -42,15 +43,16 @@ export class ProyectoPoaComponent {
   filterPost = '';
   dataSource = new MatTableDataSource<Poa>();//, 'actividades'
   columnasUsuario: string[] = ['id_poa', 'meta_alcanzar', 'meta_fisica', 'fecha_inicio', 'fecha_fin', 'localizacion'
-  // 'actions'
+    // 'actions'
 
-];
+  ];
 
   @ViewChild(MatPaginator, { static: false }) paginator?: MatPaginator;
 
   constructor(private poaervice: PoaService, private paginatorIntl: MatPaginatorIntl,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute, private loadingService: LoadingServiceService
+
   ) {
   }
 
@@ -67,17 +69,21 @@ export class ProyectoPoaComponent {
     }
     this.listar()
   }
- 
+
   listar(): void {
+    this.loadingService.show();
+
     this.poaervice.listarPoasdelProyecto(this.proyecto.id_proyecto, 'APROBADO').subscribe(
       (data: any[]) => {
         this.poa = data;
-        this.dataSource.data = this.poa;
+        this.dataSource.data = this.poa; this.loadingService.hide();
+
       },
       (error: any) => {
-        console.error('Error al listar los poa:', error);
+        console.error('Error al listar los poa:', error); this.loadingService.hide();
+
       }
-    );   
+    );
   }
 
 
