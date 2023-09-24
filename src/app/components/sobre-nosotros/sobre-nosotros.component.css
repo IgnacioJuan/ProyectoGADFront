@@ -1,8 +1,3 @@
-* {
-    padding: 0;
-    margin: 0;
-}
-
 body {
     font: 1em/1.618 Inter, sans-serif;
 
@@ -12,101 +7,104 @@ body {
 
     min-height: 100vh;
     padding: 30px;
-    /* background:
-      url(https://images.unsplash.com/photo-1617957796155-72d8717ac882?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Zm9uZG9zJTIwdmVyZGVzfGVufDB8fDB8fHww&w=1000&q=80) center / cover no-repeat fixed; */
+    background-color: white;
+}
+
+.header-title {
+  font-size: 30px;
+  font-weight: bold;
+  color:rgb(9, 70, 9);
+  text-align: left;
+}
+.space-div {
+  margin-top: 80px; 
 }
 
 .container {
     margin: 20px 40px;
     color: white;
-}
-
-.heading {
-    font-size: 60px;
-    color: black;
-}
-
-.heading span {
-    font-size: 30px;
-}
-
-.profiles {
+  }
+  
+  .profiles {
     display: flex;
+    margin-top: 200px;
     justify-content: space-around;
     margin: 20px 80px;
-}
-
-.profile {
-    flex-basis: 260px;
-}
-
-.profile .profile-img {
-    width: 260px;
+    flex-wrap: wrap; /* Permite que los perfiles se envuelvan en filas */
+  }
+  
+  .profile {
+    flex-basis: calc(33.33% - 20px); /* Para que cada perfil ocupe el 33.33% del espacio con un margen de 20px entre ellos */
+    margin: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    color: black; 
+  }
+  
+  .profile .profile-img {
+    width: 250px;
     height: 260px;
+    /*border-radius: 50%;*/
     filter: grayscale(0);
     cursor: pointer;
     transition: 400ms;
-}
-
-.profile:hover .profile-img {
+  }
+  
+  .profile:hover .profile-img {
     filter: grayscale(100%);
-}
-
-.user-name {
-    margin-top: 30px;
-    text-align: center;
-    color: black;
-}
-
-.profile h5 {
-    font-size: 18px;
-    font-weight: 100;
-    color: black;
-    text-align: center;
-}
-
-.profile p {
-    font-size: 16px;
+  }
+  
+  .user-name {
     margin-top: 20px;
     text-align: center;
-    color: black;
-}
-
-@media only screen and (max-width: 1150px) {
+    font-size: 20px;
+  }
+  
+  .profile h5 {
+    font-size: 18px; /* Cambio el tamaño de la fuente para mantener los efectos actuales */
+    font-weight: 100;
+    text-align: center;
+  }
+  
+  .profile p {
+    font-size: 16px; /* Cambio el tamaño de la fuente para mantener los efectos actuales */
+    margin-top: 20px; /* Reduzco el margen superior para mantener los efectos actuales */
+    text-align: center;
+    color:rgb(9, 70, 9);
+    font-weight: bold;
+  }
+  
+  @media only screen and (max-width: 1150px) {
     .profiles {
-        flex-direction: column;
+      flex-direction: column;
     }
-
-    .profile {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-
+  
     .profile p {
-        text-align: center;
-        margin: 20px 60px 80px 60px;
-        font-size: 20px;
+      text-align: center;
+      margin: 20px 60px 80px 60px; /* Ajusto los márgenes para mantener los efectos actuales */
+      font-size: 14px; /* Cambio el tamaño de la fuente para mantener los efectos actuales */
     }
-}
-
-@media only screen and (max-width: 900px) {
+  }
+  
+  @media only screen and (max-width: 900px) {
     .heading {
-        font-size: 40px;
-        color: black;
-        text-align: center;
+      font-size: 40px;
+      color: black;
+      text-align: center;
     }
-
+  
     .heading span {
-        font-size: 15px;
+      font-size: 15px;
     }
-
+  
     .profiles {
-        margin: 20px 0;
+      margin: 20px 0;
     }
-
+  
     .profile p {
-        margin: 20px 10px 80px 10px;
+      margin: 20px 10px 80px 10px;
     }
-
-}
+  }
+  
