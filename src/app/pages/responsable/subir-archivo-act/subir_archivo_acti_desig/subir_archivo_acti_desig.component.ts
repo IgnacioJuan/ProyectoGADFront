@@ -40,7 +40,10 @@ export class Subir_archivo_acti_desigComponent implements OnInit {
   filearchivo!: File;
 
   public archivon = new Archivo();
-  // Crear una fuente de datos para la tabla
+  // Crear una fuente de datos para la tabla  
+  descripcion: string = '';
+  valor: number = 0;
+
   dataSource = new MatTableDataSource<Archivo>();
   formulario: FormGroup;
   @ViewChild('archivoInput') archivoInput!: ElementRef<HTMLInputElement>; // Note the "!" operator
@@ -62,7 +65,7 @@ export class Subir_archivo_acti_desigComponent implements OnInit {
 
     this.formulario = this.fb.group({
       descripcion: ['', [Validators.required, Validators.maxLength(255)]],
-      valor: [null, [Validators.required]],
+      valor: [null, [Validators.required,this.valorNoNegativo]],
     });
   }
   onFileChange(event: any) {
@@ -114,8 +117,6 @@ export class Subir_archivo_acti_desigComponent implements OnInit {
     });
   }
 
-  descripcion: string = '';
-  valor: number = 0;
   onUpload(): void {
     this.loadingService.show();
     this.archivo
@@ -235,11 +236,14 @@ export class Subir_archivo_acti_desigComponent implements OnInit {
   isEditing: boolean = false;
 
   editar(id_archi: any): void {
+    this.archivon.descripcion=this.formulario.value.descripcion;
+    this.archivon.valor=this.formulario.value.valor;
+    
     this.archivo
       .editArchivo(
         id_archi,
-        this.descripcion,
-        this.valor,
+        this.archivon.descripcion,
+        this.archivon.valor,
         this.activ.id_actividad
       )
       .subscribe(
@@ -338,5 +342,9 @@ export class Subir_archivo_acti_desigComponent implements OnInit {
   }
 verpro() {
     this.router.navigate(['/res/activ/poa_proyectos']);
+  }
+  valorNoNegativo(control: { value: any; }) {
+    const valor = control.value;
+    return valor < 0 ? { valorNegativo: true } : null;
   }
 }
