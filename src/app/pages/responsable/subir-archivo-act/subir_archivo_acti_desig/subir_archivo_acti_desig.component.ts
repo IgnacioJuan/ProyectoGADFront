@@ -117,48 +117,51 @@ export class Subir_archivo_acti_desigComponent implements OnInit {
     });
   }
 
-  onUpload(): void {
-    this.loadingService.show();
-    this.archivo
-      .cargarpparagad(
+  async onUpload(): Promise<void> {
+    try {
+      this.loadingService.show();
+      const response = await this.archivo.cargarpparagad(
         this.filearchivo,
         this.descripcion,
         this.valor,
         this.activ.id_actividad
-      )
-      .subscribe(
-        (event) => {
-          this.descripcion = '';
-          this.listar();
-          this.activ.devengado = this.activ.devengado + this.valor;
-          this.restrivalor();
-          this.valor = 0;
-
-          console.log('valor =' + this.valor);
-          this.loadingService.hide();
-          Swal.fire({
-            title: '¡Éxito!',
-            text: 'El archivo se ha subido correctamente',
-            icon: 'success',
-            confirmButtonText: 'OK',
-          });
-        },
-        (error) => {
-          console.log('Archivo subido:');
-          this.loadingService.hide();
-
-          console.error('Error al subir el archivo:', error);
-          Swal.fire({
-            title: '¡Error!',
-            text: 'Nombre del archivo repetido',
-            icon: 'error',
-            confirmButtonText: 'OK',
-          });
-        }
-      );
+      ).toPromise();
+  
+      this.restrivalor();
+      this.descripcion = '';
+      this.activ.devengado = this.activ.devengado + this.valor;
+      this.valor = 0;
+  
+      console.log('valor =' + this.valor);
+      this.loadingService.hide();
+  
+      // Mostrar el mensaje de éxito
+      await Swal.fire({
+        title: '¡Éxito!',
+        text: 'El archivo se ha subido correctamente',
+        icon: 'success',
+        confirmButtonText: 'OK',
+      });
+  
+      this.listar();
+    } catch (error) {
+      console.log('Archivo subido:');
+      this.loadingService.hide();
+  
+      console.error('Error al subir el archivo:', error);
+  
+      // Mostrar el mensaje de error
+      await Swal.fire({
+        title: '¡Error!',
+        text: 'Nombre del archivo repetido',
+        icon: 'error',
+        confirmButtonText: 'OK',
+      });
+    }
     // this.notificar();
     // this.notificaradmin();
   }
+  
 
   limpiarFormulario() {
     this.isEditing = false;
