@@ -8,6 +8,7 @@ import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 import { ModeloPoa } from 'src/app/models/ModeloPoa';
 import { Poa } from 'src/app/models/Poa';
 import { LoadingServiceService } from 'src/app/components/loading-spinner/LoadingService.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-proyecto-poa',
@@ -15,6 +16,8 @@ import { LoadingServiceService } from 'src/app/components/loading-spinner/Loadin
   styleUrls: ['./proyecto-poa.component.css']
 })
 export class ProyectoPoaComponent {
+  private suscripciones: Subscription[] = [];
+
   //tabla
   itemsPerPageLabel = 'Poaes por página';
   nextPageLabel = 'Siguiente';
@@ -69,9 +72,15 @@ export class ProyectoPoaComponent {
     }
     this.listar()
   }
+  ngOnDestroy() {
+    // Desuscribe todas las suscripciones en ngOnDestroy
+    this.suscripciones.forEach(suscripcion => suscripcion.unsubscribe());
+  }
+
 
   listar(): void {
     this.loadingService.show();
+    this.suscripciones.push(
 
     this.poaervice.listarPoasdelProyecto(this.proyecto.id_proyecto, 'APROBADO').subscribe(
       (data: any[]) => {
@@ -83,7 +92,7 @@ export class ProyectoPoaComponent {
         console.error('Error al listar los poa:', error); this.loadingService.hide();
 
       }
-    );
+    ));
   }
 
 

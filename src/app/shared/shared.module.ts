@@ -36,6 +36,7 @@ import { FiltrarEvidenciasPorIDPipe } from '../pages/admin/aprobar-rechazar-admi
 import { MatSortModule } from '@angular/material/sort';
 import { LoadingSpinnerComponent } from '../components/loading-spinner/loading-spinner.component';
 import { SafePipe } from './safe.pipe';
+import { MatDividerModule } from '@angular/material/divider';
 @NgModule({
   declarations: [BuscarPipe,BuscarUsuarioPipe,PageNotFoundComponent,
     FiltrarEvidenciasPorIDPipe, ResponsablePipe,LoadingSpinnerComponent,SafePipe
@@ -73,7 +74,6 @@ import { SafePipe } from './safe.pipe';
     CdkTableModule,
     MatTooltipModule,
     MatSortModule,
-
   ],
   exports: [
     BuscarPipe,

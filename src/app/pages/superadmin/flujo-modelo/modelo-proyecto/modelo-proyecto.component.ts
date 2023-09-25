@@ -3,6 +3,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { LoadingServiceService } from 'src/app/components/loading-spinner/LoadingService.service';
 import { Exportarexcel } from 'src/app/interface/Exportarexcel';
 import { ModeloPoa } from 'src/app/models/ModeloPoa';
@@ -17,6 +18,10 @@ import * as XLSX from 'xlsx';
   styleUrls: ['./modelo-proyecto.component.css']
 })
 export class ModeloProyectoComponent {
+  //
+  private suscripciones: Subscription[] = [];
+
+  //
   frmProyecto: FormGroup;
   guardadoExitoso: boolean = false;
   //tabla
@@ -39,7 +44,7 @@ export class ModeloProyectoComponent {
     return `${startIndex + 1} - ${endIndex} de ${length}`;
   };
 
-  
+
   //
   modelopoa: ModeloPoa = new ModeloPoa();
   proyectos: any[] = [];
@@ -51,7 +56,7 @@ export class ModeloProyectoComponent {
   dataSource = new MatTableDataSource<Exportarexcel>();
   columnasUsuario: string[] = ['codigo', 'nombre', 'objetivo', 'meta', 'poa', 'actions'];
 
-  columnaexportar: string[] = [ 'codigo', 'nombre_objetivoods', 'nombre_objetivopnd','nombre_objetivopdot','nombre_metapdot','nombre_indicador','nombre','objetivo','meta', 'nombre_competencia'];
+  columnaexportar: string[] = ['codigo', 'nombre_objetivoods', 'nombre_objetivopnd', 'nombre_objetivopdot', 'nombre_metapdot', 'nombre_indicador', 'nombre', 'objetivo', 'meta', 'nombre_competencia'];
 
   @ViewChild('datosModalRef') datosModalRef: any;
   @ViewChild(MatPaginator, { static: false }) paginator?: MatPaginator;
@@ -67,7 +72,7 @@ export class ModeloProyectoComponent {
     private router: Router,
     private fb: FormBuilder,
     private loadingService: LoadingServiceService,
-    
+
 
   ) {
     this.frmProyecto = fb.group({
@@ -112,23 +117,28 @@ export class ModeloProyectoComponent {
     }
     this.listar()
   }
-
-   //optimizar
-   listar(): void {
+  ngOnDestroy() {
+    // Desuscribe todas las suscripciones en ngOnDestroy
+    this.suscripciones.forEach(suscripcion => suscripcion.unsubscribe());
+  }
+  //optimizar
+  listar(): void {
     this.loadingService.show();
-    this.proyectoservice.getexportarexcel(this.modelopoa.id_modelo_poa).subscribe(
-      
-      (data: any[]) => {
-        this.proyectos = data;
-        this.dataSource.data = this.proyectos;
-        this.loadingService.hide();
+    this.suscripciones.push(
 
-      },
-      (error: any) => {
-        console.error('Error al listar los proyectos:', error);
-        this.loadingService.hide();
-      }
-    );
+      this.proyectoservice.getexportarexcel(this.modelopoa.id_modelo_poa).subscribe(
+
+        (data: any[]) => {
+          this.proyectos = data;
+          this.dataSource.data = this.proyectos;
+          this.loadingService.hide();
+
+        },
+        (error: any) => {
+          console.error('Error al listar los proyectos:', error);
+          this.loadingService.hide();
+        }
+      ));
   }
 
 
@@ -137,29 +147,29 @@ export class ModeloProyectoComponent {
     const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(
       document.getElementById('materiaModaExcel')
     );
- 
+
     XLSX.utils.book_append_sheet(wb, ws, 'Tabla 1');
-  
+
     XLSX.writeFile(wb, 'Proyectos.xlsx');
   }
-  
-  
+
+
 
   exportar(): void {
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(
       document.getElementById('materiaModaExcel')
     );
-  
+
     // Obtener los datos de la tabla HTML
     const tableData = XLSX.utils.sheet_to_json(ws, { header: 1 });
-  
+
     // Insertar un encabezado adicional
     tableData.unshift(['Hola']); // Agrega un array con "Hola" como primer elemento
-  
+
     // Calcular el ancho de las columnas
     const columnWidths: number[] = this.calcularAnchoColumnas(tableData);
-  
+
     // Aplicar el ancho calculado a las columnas en la hoja de trabajo
     columnWidths.forEach((width, colIndex) => {
       if (width) {
@@ -168,37 +178,37 @@ export class ModeloProyectoComponent {
         ws['!cols'][colIndex] = { wch: width };
       }
     });
-  
+
     XLSX.utils.book_append_sheet(wb, ws, 'Tabla 1');
-  
+
     XLSX.writeFile(wb, 'Proyectos.xlsx');
   }
-  
+
   // Función para calcular el ancho de las columnas
   private calcularAnchoColumnas(data: any[]): number[] {
     const columnWidths: number[] = [];
-  
+
     data.forEach((rowData: any) => {
       let columnIndex = 0;
-  
+
       for (const key in rowData) {
         if (rowData.hasOwnProperty(key)) {
           const cellValue = rowData[key];
           const cellText = cellValue ? cellValue.toString() : '';
           const cellTextLength = cellText.length;
-  
+
           if (!columnWidths[columnIndex] || cellTextLength > columnWidths[columnIndex]) {
             columnWidths[columnIndex] = cellTextLength;
           }
-  
+
           columnIndex++;
         }
       }
     });
-  
+
     return columnWidths;
   }
-  
+
 
 
   guardar() {
@@ -217,29 +227,31 @@ export class ModeloProyectoComponent {
       indicador: { id_indicador: this.frmProyecto.value.indicador },
       competencia: { id_competencia: this.frmProyecto.value.competencia }
     };
-    this.proyectoservice.crear(this.subcrite, this.selectedCodigo)
-      .subscribe(
-        (response: any) => {
-          console.log('Proyecto creado con éxito:', response);
-          this.guardadoExitoso = true;
-          this.listar();
-          Swal.fire(
-            'Exitoso',
-            'Se ha completado el registro con exito',
-            'success'
-          )
-        },
-        (error: any) => {
-          console.error('Error al crear el proyecto:', error);
-          Swal.fire(
-            'Error',
-            'Ha ocurrido un error',
-            'warning'
-          )
-          this.loadingService.hide();
+    this.suscripciones.push(
 
-        }
-      );
+      this.proyectoservice.crear(this.subcrite, this.selectedCodigo)
+        .subscribe(
+          (response: any) => {
+            console.log('Proyecto creado con éxito:', response);
+            this.guardadoExitoso = true;
+            this.listar();
+            Swal.fire(
+              'Exitoso',
+              'Se ha completado el registro con exito',
+              'success'
+            )
+          },
+          (error: any) => {
+            console.error('Error al crear el proyecto:', error);
+            Swal.fire(
+              'Error',
+              'Ha ocurrido un error',
+              'warning'
+            )
+            this.loadingService.hide();
+
+          }
+        ));
 
   }
   eliminar(proyecto: any) {
@@ -252,18 +264,20 @@ export class ModeloProyectoComponent {
       denyButtonText: `Eliminar`,
     }).then((result) => {
       if (!result.isConfirmed) {
-        this.proyectoservice.eliminar(proyecto).subscribe(
-          (response) => {
-            this.listar()
-            Swal.fire('Eliminado!', '', 'success')
+        this.suscripciones.push(
 
-          }
-        );
+          this.proyectoservice.eliminar(proyecto).subscribe(
+            (response) => {
+              this.listar()
+              Swal.fire('Eliminado!', '', 'success')
+
+            }
+          ));
       }
     })
 
   }
- 
+
   editDatos(proyecto: any) {
     this.subcrite = proyecto;
     this.frmProyecto = new FormGroup({
@@ -276,7 +290,7 @@ export class ModeloProyectoComponent {
 
       fecha_inicio: new FormControl(proyecto.fecha_inicio),
       fecha_fin: new FormControl(proyecto.fecha_inicio),
-      
+
       pnd: new FormControl(proyecto.id_objetivo_pnd),
       ods: new FormControl(proyecto.id_objetivo_ods),
       programa: new FormControl(proyecto.id_programa),
@@ -320,29 +334,29 @@ export class ModeloProyectoComponent {
       competencia: { id_competencia: this.frmProyecto.value.competencia }
     };
     this.subcrite.modelopoa.usuario = null;
-    console.log(this.subcrite)
-    this.proyectoservice.actualizar(this.subcrite.id_proyecto, this.subcrite)
-      .subscribe((response: any) => {
-        this.subcrite = new Proyecto();
-        this.listar();
-        Swal.fire('Operacion exitosa!', 'El registro se actualizo con exito', 'success')
-      }, (error) => {
-        console.error('Error al crear el modelo_poa:', error);
-        this.loadingService.hide();
+    this.suscripciones.push(
+      this.proyectoservice.actualizar(this.subcrite.id_proyecto, this.subcrite)
+        .subscribe((response: any) => {
+          this.subcrite = new Proyecto();
+          this.listar();
+          Swal.fire('Operacion exitosa!', 'El registro se actualizo con exito', 'success')
+        }, (error) => {
+          console.error('Error al crear el modelo_poa:', error);
+          this.loadingService.hide();
 
-        Swal.fire(
-          'Error',
-          'Ha ocurrido un error',
-          'warning'
-        )
-      });
+          Swal.fire(
+            'Error',
+            'Ha ocurrido un error',
+            'warning'
+          )
+        }));
   }
 
   verDetalles(proyecto: any) {
     this.router.navigate(['/sup/flujo-modelo/proyecto-poa'], { state: { proyecto: proyecto, modelo: this.modelopoa } });
   }
 
-  
+
   verModeloPoas() {
     this.router.navigate(['/sup/flujo-modelo/modelo']);
   }
@@ -359,68 +373,78 @@ export class ModeloProyectoComponent {
   }
 
   validarFechas(): void {
-    // const fechaInicio = this.frmModeloPoa.get('fecha_inicial')?.value as string;
-    // const fechaFin = this.frmModeloPoa.get('fecha_final')?.value as string;
+    const fechaInicio = this.frmProyecto.get('fecha_inicio')?.value as string;
+    const fechaFin = this.frmProyecto.get('fecha_fin')?.value as string;
 
-    // if (fechaInicio && fechaFin) {
-    //   const dateInicio = new Date(fechaInicio);
-    //   const dateFin = new Date(fechaFin);
+    if (fechaInicio && fechaFin) {
+      const dateInicio = new Date(fechaInicio);
+      const dateFin = new Date(fechaFin);
 
-    //   if (dateFin < dateInicio) {
-    //     this.frmModeloPoa.setErrors({ fechasInvalidas: true });
-    //   } else {
-    //     this.frmModeloPoa.setErrors(null);
-    //   }
-    // }
+      if (dateFin < dateInicio) {
+        this.frmProyecto.setErrors({ fechasInvalidas: true });
+      } else {
+        this.frmProyecto.setErrors(null);
+      }
+    }
   }
 
   alimentarOptions(): void {
-    this.proyectoservice.getPNDOptions().subscribe(
-      (data: any[]) => {
-        this.pndOptions = data;
-        this.filteredPndOptions = this.pndOptions;
+    this.suscripciones.push(
 
-      },
-      (error: any) => {
-        console.error('Error al listar los proyectos:', error);
-      }
-    );
-    this.proyectoservice.getODSOptions().subscribe(
-      (data: any[]) => {
-        this.odsOptions = data;
-        this.filteredodsOptions = this.odsOptions;
-      },
-      (error: any) => {
-        console.error('Error al listar los proyectos:', error);
-      }
-    );
-    this.proyectoservice.getProgramaOptions().subscribe(
-      (data: any[]) => {
-        this.programaOptions = data;
-        this.filteredprogramaOptions = this.programaOptions;
-      },
-      (error: any) => {
-        console.error('Error al listar los proyectos:', error);
-      }
-    );
-    this.indicadorservice.listarIndicadoresconComponente().subscribe(
-      (data: any[]) => {
-        this.indicadorOptions = data;
-        this.filteredindicadorOptions = this.indicadorOptions;
-      },
-      (error: any) => {
-        console.error('Error al listar los proyectos:', error);
-      }
-    );
-    this.proyectoservice.getCompetenciaOptions().subscribe(
-      (data: any[]) => {
-        this.competenciaOptions = data;
-        this.filteredcompetenciaOptions = this.competenciaOptions;
-      },
-      (error: any) => {
-        console.error('Error al listar los proyectos:', error);
-      }
-    );
+      this.proyectoservice.getPNDOptions().subscribe(
+        (data: any[]) => {
+          this.pndOptions = data;
+          this.filteredPndOptions = this.pndOptions;
+
+        },
+        (error: any) => {
+          console.error('Error al listar los proyectos:', error);
+        }
+      ));
+    this.suscripciones.push(
+
+      this.proyectoservice.getODSOptions().subscribe(
+        (data: any[]) => {
+          this.odsOptions = data;
+          this.filteredodsOptions = this.odsOptions;
+        },
+        (error: any) => {
+          console.error('Error al listar los proyectos:', error);
+        }
+      ));
+    this.suscripciones.push(
+
+      this.proyectoservice.getProgramaOptions().subscribe(
+        (data: any[]) => {
+          this.programaOptions = data;
+          this.filteredprogramaOptions = this.programaOptions;
+        },
+        (error: any) => {
+          console.error('Error al listar los proyectos:', error);
+        }
+      ));
+    this.suscripciones.push(
+
+      this.indicadorservice.listarIndicadoresconComponente().subscribe(
+        (data: any[]) => {
+          this.indicadorOptions = data;
+          this.filteredindicadorOptions = this.indicadorOptions;
+        },
+        (error: any) => {
+          console.error('Error al listar los proyectos:', error);
+        }
+      ));
+    this.suscripciones.push(
+
+      this.proyectoservice.getCompetenciaOptions().subscribe(
+        (data: any[]) => {
+          this.competenciaOptions = data;
+          this.filteredcompetenciaOptions = this.competenciaOptions;
+        },
+        (error: any) => {
+          console.error('Error al listar los proyectos:', error);
+        }
+      ));
   }
   filteredPndOptions: any[] = [];
   selectedPND: number | null = null;
