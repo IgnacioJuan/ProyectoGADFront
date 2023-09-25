@@ -1,4 +1,3 @@
-import { usuario } from './../../../../models/Usuario';
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
@@ -12,10 +11,6 @@ import { IndicadorService } from 'src/app/services/indicador.service';
 import { ProyectoService } from 'src/app/services/proyecto.service';
 import Swal from 'sweetalert2';
 import * as XLSX from 'xlsx';
-import { Workbook } from 'exceljs';
-import * as wordwrap from 'word-wrap';
-
-import * as ExcelJS from 'exceljs';
 @Component({
   selector: 'app-modelo-proyecto',
   templateUrl: './modelo-proyecto.component.html',
@@ -54,7 +49,7 @@ export class ModeloProyectoComponent {
 
   filterPost = '';
   dataSource = new MatTableDataSource<Exportarexcel>();
-  columnasUsuario: string[] = ['id_proyecto', 'nombre', 'codigo', 'objetivo', 'meta', 'poa', 'actions'];
+  columnasUsuario: string[] = ['codigo', 'nombre', 'objetivo', 'meta', 'poa', 'actions'];
 
   columnaexportar: string[] = [ 'codigo', 'nombre_objetivoods', 'nombre_objetivopnd','nombre_objetivopdot','nombre_metapdot','nombre_indicador','nombre','objetivo','meta', 'nombre_competencia'];
 
@@ -269,7 +264,7 @@ export class ModeloProyectoComponent {
 
   }
  
-  editDatos(proyecto: Proyecto) {
+  editDatos(proyecto: any) {
     this.subcrite = proyecto;
     this.frmProyecto = new FormGroup({
       nombre: new FormControl(proyecto.nombre),
@@ -281,11 +276,12 @@ export class ModeloProyectoComponent {
 
       fecha_inicio: new FormControl(proyecto.fecha_inicio),
       fecha_fin: new FormControl(proyecto.fecha_inicio),
-      pnd: new FormControl(proyecto.pnd?.id_objetivo_pnd),
-      ods: new FormControl(proyecto.ods?.id_objetivo_ods),
-      programa: new FormControl(proyecto.programa?.id_programa),
-      indicador: new FormControl(proyecto.indicador?.id_indicador),
-      competencia: new FormControl(proyecto.competencia?.id_competencia),
+      
+      pnd: new FormControl(proyecto.id_objetivo_pnd),
+      ods: new FormControl(proyecto.id_objetivo_ods),
+      programa: new FormControl(proyecto.id_programa),
+      indicador: new FormControl(proyecto.id_indicador),
+      competencia: new FormControl(proyecto.id_competencia),
 
     });
   }
