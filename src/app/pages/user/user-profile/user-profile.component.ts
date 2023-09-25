@@ -1,3 +1,4 @@
+import { Subscription } from 'rxjs';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 import { LoginService } from 'src/app/services/login.service';
@@ -13,6 +14,8 @@ import { Persona2 } from 'src/app/models/Persona2';
   styleUrls: ['./user-profile.component.css']
 })
 export class UserProfileComponent implements OnInit {
+  private suscripciones: Subscription[] = [];
+
   isLoggedIn = false;
   user: any = null;
   rol: any = null;
@@ -51,6 +54,10 @@ export class UserProfileComponent implements OnInit {
     )
     this.rol = this.login.getUserRole();
   }
+  ngOnDestroy() {
+    // Desuscribe todas las suscripciones en ngOnDestroy
+    this.suscripciones.forEach(suscripcion => suscripcion.unsubscribe());
+  }
 
   validatePasswords(control: FormControl): { [s: string]: boolean } | null {
     const password = this.usuariosEditGuar.password;
@@ -72,6 +79,7 @@ export class UserProfileComponent implements OnInit {
       icon: 'info',
     }).then((result) => {
       if (result.isConfirmed) {
+        this.suscripciones.push(
 
         this.usuariosService.actualizar(usuariosdit.id, usuariosdit)
           .subscribe((response: any) => {
@@ -86,7 +94,7 @@ export class UserProfileComponent implements OnInit {
                 location.replace('/use/login');
               }
             })
-          });
+          }));
       } else {
         Swal.fire('Se ha cancelado la operación', '', 'info')
       }
@@ -121,6 +129,7 @@ export class UserProfileComponent implements OnInit {
       icon: 'info',
     }).then((result) => {
       if (result.isConfirmed) {
+        this.suscripciones.push(
 
         this.personaService.actualizar(persona.id_persona, persona)
           .subscribe((response: any) => {
@@ -133,7 +142,7 @@ export class UserProfileComponent implements OnInit {
               this.login.setUser(user);
               this.user = this.login.getUser();
             });
-          })
+          }));
       } else {
         Swal.fire('Se ha cancelado la operación', '', 'info')
       }
