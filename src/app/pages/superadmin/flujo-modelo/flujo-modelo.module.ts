@@ -7,7 +7,12 @@ import { ModeloProyectoComponent } from './modelo-proyecto/modelo-proyecto.compo
 import { ProyectoPoaComponent } from './proyecto-poa/proyecto-poa.component';
 import { PoaActividadComponent } from './poa-actividad/poa-actividad.component';
 import { ActividadEvidenciaComponent } from './actividad-evidencia/actividad-evidencia.component';
-import { SharedModule } from 'src/app/shared/shared.module';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatCardModule } from '@angular/material/card';
+import { MatDividerModule } from '@angular/material/divider';
 
 
 @NgModule({
@@ -21,7 +26,14 @@ import { SharedModule } from 'src/app/shared/shared.module';
   imports: [
     CommonModule,
     FlujoModeloRoutingModule,
-    SharedModule
+    FormsModule,
+    ReactiveFormsModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatTabsModule,
+    MatCardModule,
+    MatDividerModule,
+
   ]
 })
 export class FlujoModeloModule { }

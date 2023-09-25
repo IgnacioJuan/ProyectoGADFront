@@ -12,6 +12,15 @@ export interface Exportarexcel {
     nombre_objetivopdot: string;
     nombre_competencia: string;
 
+    id_objetivo_pnd:number;
+    id_objetivo_ods:number;
+    id_programa:number;
+    id_indicador:number;
+    id_competencia:number;
 
+    porcentaje_alcance:number;
+    area: string;
 
+    fecha_inicio: string;
+    fecha_fin: string;
 }
