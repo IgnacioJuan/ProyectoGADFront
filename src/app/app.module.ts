@@ -11,6 +11,7 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { SiderbarComponent } from './components/siderbar/siderbar.component';
 import { authInterceptorProviders } from './services/auth/auth.interceptor';
 import { SharedModule } from './shared/shared.module';
+import { SobreNosotrosComponent } from './components/sobre-nosotros/sobre-nosotros.component';
 
 
 @NgModule({
@@ -19,6 +20,7 @@ import { SharedModule } from './shared/shared.module';
     NavbarComponent,
     SiderbarComponent,
     FooterComponent,
+    SobreNosotrosComponent,
 
   ],
   imports: [
