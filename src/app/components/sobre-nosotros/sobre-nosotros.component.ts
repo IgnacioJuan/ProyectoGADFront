@@ -12,14 +12,13 @@ export class SobreNosotrosComponent implements OnInit{
   grupos: any[][] = [];
   
   constructor() {
+    const profilesPerGroup = 3;
     let currentIndex = 0;
-    const maxProfilesPerGroup = [3, 3, 3, 3, 2];
-    for (const profilesCount of maxProfilesPerGroup) {
-      const group = this.nosotros.slice(currentIndex, currentIndex + profilesCount);
-      if (group.length > 0) {
-        this.grupos.push(group);
-        currentIndex += profilesCount;
-      }
+    
+    while (currentIndex < this.nosotros.length) {
+      const group = this.nosotros.slice(currentIndex, currentIndex + profilesPerGroup);
+      this.grupos.push(group);
+      currentIndex += profilesPerGroup;
     }
   }
 
