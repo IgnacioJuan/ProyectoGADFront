@@ -1,4 +1,4 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Proyecto } from '../models/Proyecto';
@@ -20,7 +20,7 @@ export class ProyectoService {
 
     return this.http.get<Proyecto>(`${baserUrl}/api/proyecto/buscar/${id}`);
   }
-  // No borar sirve para bsucar el proyecto del poa 
+  // No borar sirve para bsucar el proyecto del poa
 // No borar sirve para bsucar el proyecto del poa
 
   buscarProyectosPorIds(ids: number[]): Observable<any> {
@@ -90,4 +90,16 @@ export class ProyectoService {
   obtenerReportePresupuesto(): Observable<any[]> {
     return this.http.get<ReporteProyecto[]>(`${baserUrl}/api/proyecto/reporte`);
   }
+
+  descargarReportePresupuesto(): Observable<any> {
+    const headers = new HttpHeaders({ 'Accept': 'application/pdf' });
+
+    return this.http.get(`${baserUrl}/api/proyecto/Proyecto-export-pdf`, {
+      headers: headers,
+      responseType: 'blob' as 'json' // Indicamos que esperamos un blob
+    });
+  }
+
+
+
 }
