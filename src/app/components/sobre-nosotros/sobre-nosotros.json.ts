@@ -68,7 +68,7 @@ export const datos = [
         "nombres": "MARCOS HORACIO",
         "contacto": "0958814375",
         "enlace": "https://github.com/CAB3ZON",
-        "correo": "marcos.pillco.est@tecazuay.edu.ec",
+        "correo": "marcospillcocontreras@gmail.com",
         "git": "github.com/CAB3ZON"
     },
     {
