@@ -1,4 +1,3 @@
-import { type } from "jquery";
 import { Poa } from "./Poa";
 import { Usuario2 } from "./Usuario2";
 

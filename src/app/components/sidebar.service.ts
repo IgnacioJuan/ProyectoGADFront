@@ -52,7 +52,7 @@ export class SidebarService {
       icono: 'nav-icon fas   fa-users',
       titulo: "Usuarios",
       submenu: [
-        { titulo: 'Control Usuarios', url: 'sup/usuarios', icono: 'fas fa-list-ul ' },
+        { titulo: 'Control Usuarios', url: 'sup/crear-usuarios/usuarios', icono: 'fas fa-list-ul ' },
       ]
     },
     {
