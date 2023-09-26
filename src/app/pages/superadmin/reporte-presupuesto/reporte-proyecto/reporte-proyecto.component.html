@@ -12,9 +12,19 @@
 
       <br />
       <br />
+      <div class="ver-pdf-button-container" style="margin-bottom: 20px;">
+        <button class="ver-pdf-button" (click)="togglePDFViewer()">{{ buttonText }} <i class="fas fa-file-pdf"></i></button>
+
+      </div>
+
+
+      <div *ngIf="showPDF" class="pdf-container">
+        <!-- Usando el elemento <embed> -->
+        <embed [src]="pdfSrc" type="application/pdf" width="100%" height="500px" />
+      </div>
       <div class="mat-elevation-z8 table-responsive" style="margin-bottom: 5%">
 
-        <table mat-table [dataSource]="dataSource">
+        <table mat-table [dataSource]="dataSource" >
           <ng-container matColumnDef="nombre_proyecto">
             <th mat-header-cell *matHeaderCellDef>PROYECTO</th>
             <td mat-cell *matCellDef="let elemento">

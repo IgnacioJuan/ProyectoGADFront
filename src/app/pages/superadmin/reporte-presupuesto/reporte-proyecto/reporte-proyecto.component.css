@@ -23,3 +23,16 @@
 .titulo {
   color: green !important;
 }
+.ver-pdf-button {
+  background-color: red; /* Fondo rojo */
+  color: white; /* Texto blanco */
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.ver-pdf-button i {
+  margin-right: 5px; /* Espacio entre el ícono y el texto */
+}
