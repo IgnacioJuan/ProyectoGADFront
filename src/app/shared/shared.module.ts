@@ -27,7 +27,6 @@ import { MatRadioModule } from '@angular/material/radio';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
-import { FullCalendarModule } from '@fullcalendar/angular';
 import { MatTabsModule } from '@angular/material/tabs';
 import { CdkTableModule } from '@angular/cdk/table';
 import { ResponsablePipe } from '../pages/admin/asignacion-evidencia/responsable.pipe';
@@ -70,7 +69,6 @@ import { MatDividerModule } from '@angular/material/divider';
     MatExpansionModule,
     MatProgressSpinnerModule,
     MatRadioModule,
-    FullCalendarModule,
     CdkTableModule,
     MatTooltipModule,
     MatSortModule,
