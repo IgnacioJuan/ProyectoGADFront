@@ -34,8 +34,8 @@ body {
   }
   
   .profile {
-    flex-basis: calc(33.33% - 20px); /* Para que cada perfil ocupe el 33.33% del espacio con un margen de 20px entre ellos */
-    margin: 10px;
+    flex-basis: calc(33.33% - 100px);
+    margin: 26px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -44,9 +44,9 @@ body {
   }
   
   .profile .profile-img {
-    width: 250px;
-    height: 260px;
-    /*border-radius: 50%;*/
+    width: 220px;
+    height: 230px;
+    border-radius: 50%;
     filter: grayscale(0);
     cursor: pointer;
     transition: 400ms;
@@ -57,20 +57,19 @@ body {
   }
   
   .user-name {
-    margin-top: 20px;
     text-align: center;
     font-size: 20px;
   }
   
   .profile h5 {
-    font-size: 18px; /* Cambio el tamaño de la fuente para mantener los efectos actuales */
+    font-size: 18px; 
     font-weight: 100;
     text-align: center;
   }
   
   .profile p {
-    font-size: 16px; /* Cambio el tamaño de la fuente para mantener los efectos actuales */
-    margin-top: 20px; /* Reduzco el margen superior para mantener los efectos actuales */
+    font-size: 16px;
+    margin-top: 20px;
     text-align: center;
     color:rgb(9, 70, 9);
     font-weight: bold;
