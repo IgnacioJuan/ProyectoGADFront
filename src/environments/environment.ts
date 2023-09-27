@@ -6,7 +6,7 @@ import baserUrl from "src/app/services/helper";
 
 export const environment = {
   production: false,
-  baserUrl:'http://localhost:5000'
+  baserUrl:'http://146.190.137.83:5000'
 };
 
 /*

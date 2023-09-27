@@ -13,7 +13,7 @@ import baserUrl from './helper';
 export class FenixService {
     constructor(private http: HttpClient) { }
 
-    //private url: string = 'http://localhost:5000/api/fenix';
+    //private url: string = 'http://146.190.137.83:5000/api/fenix';
 
     //metodo para obtener los datos de la api de fenix
     public getFenixData(): Observable<any> {

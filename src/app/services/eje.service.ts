@@ -10,7 +10,7 @@ import {Eje} from "../models/eje";
 export class EjeService {
 
   constructor(private httpClient : HttpClient) { }
-  private url: string = 'http://localhost:5000/api/eje';
+  private url: string = 'http://146.190.137.83:5000/api/eje';
 
  
   obtenerListaejes1(): Observable<Eje[]>{

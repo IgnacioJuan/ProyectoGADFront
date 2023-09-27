@@ -20,7 +20,7 @@ import { PoasIndicadoresProjection } from '../interface/PoasIndicadoresProjectio
 })
 export class PoaService {
 
-  private url: string = 'http://localhost:5000/api/poa';
+  private url: string = 'http://146.190.137.83:5000/api/poa';
   constructor(private http: HttpClient) { }
   getPoaById(id: number): Observable<PoaActividadProjection> {
 

@@ -10,7 +10,7 @@ import { Programa, ProgramaUsuarioDTO } from '../models/Programa';
 })
 export class ProgramaService {
 
-  private baseUrl: string = 'http://localhost:5000/api/programa';
+  private baseUrl: string = 'http://146.190.137.83:5000/api/programa';
 
   constructor(private http: HttpClient) { }
 

@@ -87,7 +87,7 @@ export class ActividadespoaService {
     return this.http.get<any[]>(`${baserUrl}/api/actividades/ActividadesPendientesPorPoa/${id_Poa}`);
   }
 
-  //creame un metodo put 'http://localhost:5000/api/actividades/actualizarResponsable?id_actividad=64&id_responsable=4'
+  //creame un metodo put 'http://146.190.137.83:5000/api/actividades/actualizarResponsable?id_actividad=64&id_responsable=4'
   actualizarResponsable(id_actividad: number, id_responsable: number): Observable<any> {
     return this.http.put(`${baserUrl}/api/actividades/actualizarResponsable?id_actividad=${id_actividad}&id_responsable=${id_responsable}`, null);
   }

@@ -86,7 +86,7 @@ export class ProyectoService {
 
 
 
-  //CREA UN SERVICIO PARA VERIFICAR SI EXISTE UN PROYECTO RUTA 'http://localhost:5000/api/proyecto/existProject?id_proyecto=1'
+  //CREA UN SERVICIO PARA VERIFICAR SI EXISTE UN PROYECTO RUTA 'http://146.190.137.83:5000/api/proyecto/existProject?id_proyecto=1'
   obtenerReportePresupuesto(): Observable<any[]> {
     return this.http.get<ReporteProyecto[]>(`${baserUrl}/api/proyecto/reporte`);
   }

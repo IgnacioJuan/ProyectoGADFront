@@ -6,7 +6,7 @@ import baserUrl from './helper';
   providedIn: 'root'
 })
 export class EmailServiceService {
- // private API_URL = 'http://localhost:5000';
+ // private API_URL = 'http://146.190.137.83:5000';
 
   constructor(private http: HttpClient) { }
 
