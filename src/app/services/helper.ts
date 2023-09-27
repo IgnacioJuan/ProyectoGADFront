@@ -1,2 +1,2 @@
-let baserUrl = 'http://143.198.54.70:5000'
+let baserUrl = 'http://146.190.137.83:5000'
 export default baserUrl;

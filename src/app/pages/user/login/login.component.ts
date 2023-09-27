@@ -103,7 +103,18 @@ export class LoginComponent implements OnInit {
                 else {
                   this.loginService.logout();
                 }
-              }))
+              }, (error) => {
+                this.loadingService.hide();
+    
+                Swal.fire(
+                  'Error',
+                  'Detalles inválidos , vuelva a intentar !!',
+                  'warning'
+                )
+                // this.open_snackBar('Detalles inválidos , vuelva a intentar !!', 'Aceptar')
+              }
+              
+              ))
           }, (error) => {
             this.loadingService.hide();
 
