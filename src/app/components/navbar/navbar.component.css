@@ -58,4 +58,6 @@
 
 ::-webkit-scrollbar-thumb:hover {
   background: #555; /* Color del pulgar de la barra de desplazamiento al pasar el cursor sobre él */
+}.dropdown-item:hover {
+  cursor: pointer;
 }
