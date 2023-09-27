@@ -7,6 +7,8 @@ import {PoaService} from "../../../../services/poa.service";
 import {MatTableDataSource} from "@angular/material/table";
 import {ProyectoService} from "../../../../services/proyecto.service";
 import {ReporteProyecto} from "../../../../interface/reporte-proyecto";
+import {DomSanitizer, SafeResourceUrl} from "@angular/platform-browser";
+
 
 @Component({
   selector: 'app-reporte-proyecto',
@@ -14,6 +16,9 @@ import {ReporteProyecto} from "../../../../interface/reporte-proyecto";
   styleUrls: ['./reporte-proyecto.component.css']
 })
 export class ReporteProyectoComponent implements OnInit {
+  showPDF: boolean = false;
+  pdfSrc: SafeResourceUrl;
+  buttonText: string = 'Ver PDF ';
   //Buscar
   filterPost: string = "";
   filteredComponentes: any[] = [];
@@ -27,7 +32,9 @@ export class ReporteProyectoComponent implements OnInit {
     //proyecto servicio para listar el proyecto
     private ProyectoServicio: ProyectoService,
     private loadingService: LoadingServiceService,
+    private sanitizer: DomSanitizer
   ) {
+    this.pdfSrc = '';
     this.paginatorIntl.nextPageLabel = this.nextPageLabel;
     this.paginatorIntl.lastPageLabel = this.lastPageLabel;
     this.paginatorIntl.firstPageLabel=this.firstPageLabel;
@@ -96,7 +103,37 @@ export class ReporteProyectoComponent implements OnInit {
     }
   }
 
+  verPDF(){
+    console.log("si esta valiendo el boton")
+    this.ProyectoServicio.descargarReportePresupuesto().subscribe((data: Blob) => {
+      // Crea una URL segura para el blob
+      const blobUrl = URL.createObjectURL(data);
 
+      // Sanitiza la URL para evitar problemas de seguridad
+      this.pdfSrc = this.sanitizer.bypassSecurityTrustResourceUrl(blobUrl);
+    });
 
+  }
+
+  togglePDFViewer() {
+    if (this.showPDF) {
+      // Si ya está visible, ocultarlo
+      this.showPDF = false;
+      this.buttonText = 'Ver PDF ';
+    } else {
+      // Llama a tu servicio para obtener el PDF como un blob
+      this.ProyectoServicio.descargarReportePresupuesto().subscribe((data: Blob) => {
+        // Crea una URL segura para el blob
+        const blobUrl = URL.createObjectURL(data);
+
+        // Sanitiza la URL para evitar problemas de seguridad
+        this.pdfSrc = this.sanitizer.bypassSecurityTrustResourceUrl(blobUrl);
+
+        // Mostrar el PDF
+        this.showPDF = true;
+        this.buttonText = 'Ocultar PDF';
+      });
+    }
+  }
 
 }
