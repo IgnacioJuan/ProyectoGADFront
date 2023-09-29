@@ -29,7 +29,7 @@ export class ObjetivopndService {
   }
 
   listarObjetivosPorEje(eje: any): Observable<Objetivopnd[]> {
-    return this.httpClient.get<Objetivopnd[]>(`${baserUrl}/api/objetivopnd/por-eje?idEje=${eje.id_eje}`);
+    return this.httpClient.get<Objetivopnd[]>(`${baserUrl}/api/objetivopnd/listarporejenew/${eje.id_eje}`);
   }
 
 }
