@@ -16,7 +16,6 @@ import { ProyectoService } from 'src/app/services/proyecto.service';
   styleUrls: ['./listaproyecto.component.css']
 })
 export class ProyectosComponent {
-  frmProyectos: FormGroup;
   guardadoExitoso: boolean = false;
   //tabla
   itemsPerPageLabel = 'Proyectos por página';
@@ -61,30 +60,10 @@ export class ProyectosComponent {
     private proyectoservice: ProyectoService,
     private paginatorIntl: MatPaginatorIntl,
     private router: Router,
-    private fb: FormBuilder,
     private loadingService: LoadingServiceService
 
   ) {
-    this.frmProyectos = fb.group({
-      nombre: ['', Validators.required],
-      codigo: [''],
-      objetivo: ['', [Validators.required]],
-      meta: ['', [Validators.required]],
-      porcentaje_alcance: ['', [Validators.required]],
-      area: ['', [Validators.required]],
-      fecha_inicio: ['', [Validators.required]],
-      fecha_fin: ['', [Validators.required]],
-      pnd: ['', [Validators.required]],
-      ods: ['', [Validators.required]],
-      programa: ['', [Validators.required]],
-      indicador: ['', [Validators.required]],
-      competencia: ['', [Validators.required]],
-      programaControl: [''],
-      pndControl: [''],
-      odsControl: [''],
-      indicadorControl: [''],
-      competenciaControl: ['']
-    });
+    
     this.paginatorIntl.nextPageLabel = this.nextPageLabel;
     this.paginatorIntl.lastPageLabel = this.lastPageLabel;
     this.paginatorIntl.firstPageLabel=this.firstPageLabel;

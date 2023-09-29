@@ -8,6 +8,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { ReporteEspecificoCompetenciaComponent } from './reporte-especifico-competencia/reporte-especifico-competencia.component';
+import { NgChartsModule } from 'ng2-charts';
 
 @NgModule({
   declarations: [Repote_metasComponent,
@@ -18,7 +19,8 @@ import { ReporteEspecificoCompetenciaComponent } from './reporte-especifico-comp
     MatTableModule,
     MatPaginatorModule,
     MatInputModule,
-    SharedModule
+    SharedModule,
+    NgChartsModule
   ]
 })
 export class ReportesModule { }

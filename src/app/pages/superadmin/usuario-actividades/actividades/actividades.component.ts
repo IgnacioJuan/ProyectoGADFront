@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 import { UsuarioActividadDTO } from 'src/app/models/UsuarioActividadDTO';
 import { ActividadService } from 'src/app/services/actividad.service';
+import { LoadingServiceService } from 'src/app/components/loading-spinner/LoadingService.service';
 
 @Component({
   selector: 'app-actividades',
@@ -19,7 +20,8 @@ export class ActividadesComponent implements OnInit {
   columnasUsuario: string[] = ['nombre_responsable', 'cargo_responsable', 'numero_de_actividades', 'actividades'];
   constructor(
     private router: Router,
-    private actService: ActividadService
+    private actService: ActividadService,
+    private loadingService: LoadingServiceService
   ) { }
 
   ngOnInit() {
@@ -27,9 +29,11 @@ export class ActividadesComponent implements OnInit {
   }
 
   cargarDatos() {
+    this.loadingService.show();
     this.actService.obtenerUsuariosConActividades().subscribe(
       (data: UsuarioActividadDTO[]) => {
         this.dataSource.data = data;
+        this.loadingService.hide();
       },
       error => {
         console.error("Error al cargar los datos: ", error);

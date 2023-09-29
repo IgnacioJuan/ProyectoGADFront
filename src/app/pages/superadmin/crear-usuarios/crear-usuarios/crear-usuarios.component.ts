@@ -144,6 +144,7 @@ export class CrearUsuariosComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       this.Listado();
+      this.loadingService.hide();
     });
   }
 

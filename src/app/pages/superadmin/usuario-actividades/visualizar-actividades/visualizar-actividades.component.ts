@@ -4,6 +4,7 @@ import { DetalleActividadDTO } from 'src/app/models/DetalleActividadDTO';
 import { ActividadService } from 'src/app/services/actividad.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { UsuarioActividadDTO } from 'src/app/models/UsuarioActividadDTO';
+import { LoadingServiceService } from 'src/app/components/loading-spinner/LoadingService.service';
 @Component({
   selector: 'app-visualizar-actividades',
   templateUrl: './visualizar-actividades.component.html',
@@ -22,7 +23,9 @@ export class VisualizarActividadesComponent {
   constructor(
     private router: ActivatedRoute,
     private rout: Router,
-    private actService: ActividadService
+    private actService: ActividadService,
+    private loadingService: LoadingServiceService
+
   ) { }
 
   ngOnInit() {
@@ -38,12 +41,14 @@ export class VisualizarActividadesComponent {
   }*/
 
   cargarDatos() {
+    this.loadingService.show();
     const idParam = this.router.snapshot.paramMap.get('id_usuario');
     if (idParam) {
       const id_usuario = +idParam;
       this.actService.obtenerDetalleActividades(id_usuario).subscribe(data => {
         this.listaDetalleActividades = data;
         this.dataSource.data = this.listaDetalleActividades;
+        this.loadingService.hide();
         if (this.listaDetalleActividades.length > 0) {
           this.nombre_responsable = this.listaDetalleActividades[0].nombre_responsable;
         }

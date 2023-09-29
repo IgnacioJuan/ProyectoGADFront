@@ -11,12 +11,17 @@ import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 import { LoginService } from 'src/app/services/login.service';
 import { Usuario2 } from 'src/app/models/Usuario2';
 import { LoadingServiceService } from 'src/app/components/loading-spinner/LoadingService.service';
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-modelo',
   templateUrl: './modelo.component.html',
   styleUrls: ['./modelo.component.css']
 })
 export class ModeloComponent {
+  //
+  private suscripciones: Subscription[] = [];
+
+  //
   frmModeloPoa: FormGroup;
   guardadoExitoso: boolean = false;
   miModal!: ElementRef;
@@ -87,6 +92,10 @@ export class ModeloComponent {
     this.user = this.login.getUser();
     this.listar();
   }
+  ngOnDestroy() {
+    // Desuscribe todas las suscripciones en ngOnDestroy
+    this.suscripciones.forEach(suscripcion => suscripcion.unsubscribe());
+  }
   onPageChange(event: any) {
     this.pageIndex = event.pageIndex;
     this.pageSize = event.pageSize;
@@ -120,32 +129,33 @@ export class ModeloComponent {
     this.crite = this.frmModeloPoa.value;
     this.usuariosdit.id = this.user.id;
     this.crite.usuario = this.usuariosdit;
-    this.modeloPoaservice.crear(this.crite)
-      .subscribe(
-        (response) => {
-          console.log('ModeloPoa creado con éxito:', response);
-          this.guardadoExitoso = true;
-          this.loadingService.hide();
+    this.suscripciones.push(
+      this.modeloPoaservice.crear(this.crite)
+        .subscribe(
+          (response) => {
+            console.log('ModeloPoa creado con éxito:', response);
+            this.guardadoExitoso = true;
+            this.loadingService.hide();
 
 
-          Swal.fire(
-            'Exitoso',
-            'Se ha completado el registro con exito',
-            'success'
-          )
-          this.listar();
-        },
-        (error) => {
-          console.error('Error al crear el modelo_poa:', error);
-          this.loadingService.hide();
+            Swal.fire(
+              'Exitoso',
+              'Se ha completado el registro con exito',
+              'success'
+            )
+            this.listar();
+          },
+          (error) => {
+            console.error('Error al crear el modelo_poa:', error);
+            this.loadingService.hide();
 
-          Swal.fire(
-            'Error',
-            'Ha ocurrido un error',
-            'warning'
-          )
-        }
-      );
+            Swal.fire(
+              'Error',
+              'Ha ocurrido un error',
+              'warning'
+            )
+          }
+        ));
 
   }
   eliminar(modelo_poa: any) {
@@ -159,15 +169,16 @@ export class ModeloComponent {
     }).then((result) => {
       /* Read more about isConfirmed, isDenied below */
       if (!result.isConfirmed) {
-        this.modeloPoaservice.eliminar(modelo_poa).subscribe(
-          (response) => {
-            this.loadingService.hide();
+        this.suscripciones.push(
+          this.modeloPoaservice.eliminar(modelo_poa).subscribe(
+            (response) => {
+              this.loadingService.hide();
 
-            Swal.fire('Eliminado!', '', 'success')
-            this.listar()
+              Swal.fire('Eliminado!', '', 'success')
+              this.listar()
 
-          }
-        );
+            }
+          ));
       }
     })
 
@@ -175,24 +186,24 @@ export class ModeloComponent {
 
   listar(): void {
     this.loadingService.show();
+    this.suscripciones.push(
+      this.modeloPoaservice.getModeloPoas().subscribe(
+        (data: any[]) => {
+          // this.modeloPoas = data;
+          this.modeloPoastot = data;
+          this.totalCards = this.modeloPoastot.length;
+          this.updateCardsToShow();
 
-    this.modeloPoaservice.getModeloPoas().subscribe(
-      (data: any[]) => {
-        // this.modeloPoas = data;
-        this.modeloPoastot = data;
-        this.totalCards = this.modeloPoastot.length;
-        this.updateCardsToShow();
+          this.dataSource.data = this.modeloPoas;
+          this.loadingService.hide();
 
-        this.dataSource.data = this.modeloPoas;
-        this.loadingService.hide();
+        },
+        (error: any) => {
+          console.error('Error al listar los modeloPoas:', error);
+          this.loadingService.hide();
 
-      },
-      (error: any) => {
-        console.error('Error al listar los modeloPoas:', error);
-        this.loadingService.hide();
-
-      }
-    );
+        }
+      ));
   }
 
   editDatos(modelo_poa: ModeloPoa) {
@@ -218,18 +229,19 @@ export class ModeloComponent {
     this.crite.fecha_inicial = this.frmModeloPoa.value.fecha_inicial
     this.crite.fecha_final = this.frmModeloPoa.value.fecha_final;
     this.crite.usuario = null;
-    this.modeloPoaservice.actualizar(this.crite.id_modelo_poa, this.crite)
-      .subscribe(response => {
-        this.crite = new ModeloPoa();
-        //this.loadingService.hide();
-        Swal.fire('Operacion exitosa!', 'El registro se actualizo con exito', 'success')
-        this.listar();
-      },
-        (error: any) => {
-          console.error('Error al listar los modeloPoas:', error);
-          this.loadingService.hide();
+    this.suscripciones.push(
+      this.modeloPoaservice.actualizar(this.crite.id_modelo_poa, this.crite)
+        .subscribe(response => {
+          this.crite = new ModeloPoa();
+          //this.loadingService.hide();
+          Swal.fire('Operacion exitosa!', 'El registro se actualizo con exito', 'success')
+          this.listar();
+        },
+          (error: any) => {
+            console.error('Error al listar los modeloPoas:', error);
+            this.loadingService.hide();
 
-        });
+          }));
   }
 
   verDetalles(modelo_poa: any) {

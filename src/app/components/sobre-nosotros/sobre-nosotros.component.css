@@ -1,0 +1,109 @@
+body {
+    font: 1em/1.618 Inter, sans-serif;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 100vh;
+    padding: 30px;
+    background-color: white;
+}
+
+.header-title {
+  font-size: 30px;
+  font-weight: bold;
+  color:rgb(9, 70, 9);
+  text-align: left;
+}
+.space-div {
+  margin-top: 80px; 
+}
+
+.container {
+    margin: 20px 40px;
+    color: white;
+  }
+  
+  .profiles {
+    display: flex;
+    margin-top: 200px;
+    justify-content: space-around;
+    margin: 20px 80px;
+    flex-wrap: wrap; /* Permite que los perfiles se envuelvan en filas */
+  }
+  
+  .profile {
+    flex-basis: calc(33.33% - 100px);
+    margin: 26px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    color: black; 
+  }
+  
+  .profile .profile-img {
+    width: 220px;
+    height: 230px;
+    border-radius: 50%;
+    filter: grayscale(0);
+    cursor: pointer;
+    transition: 400ms;
+  }
+  
+  .profile:hover .profile-img {
+    filter: grayscale(100%);
+  }
+  
+  .user-name {
+    text-align: center;
+    font-size: 20px;
+  }
+  
+  .profile h5 {
+    font-size: 18px; 
+    font-weight: 100;
+    text-align: center;
+  }
+  
+  .profile p {
+    font-size: 16px;
+    margin-top: 20px;
+    text-align: center;
+    color:rgb(9, 70, 9);
+    font-weight: bold;
+  }
+  
+  @media only screen and (max-width: 1150px) {
+    .profiles {
+      flex-direction: column;
+    }
+  
+    .profile p {
+      text-align: center;
+      margin: 20px 60px 80px 60px; /* Ajusto los márgenes para mantener los efectos actuales */
+      font-size: 14px; /* Cambio el tamaño de la fuente para mantener los efectos actuales */
+    }
+  }
+  
+  @media only screen and (max-width: 900px) {
+    .heading {
+      font-size: 40px;
+      color: black;
+      text-align: center;
+    }
+  
+    .heading span {
+      font-size: 15px;
+    }
+  
+    .profiles {
+      margin: 20px 0;
+    }
+  
+    .profile p {
+      margin: 20px 10px 80px 10px;
+    }
+  }
+  

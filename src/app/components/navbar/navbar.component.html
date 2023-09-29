@@ -6,7 +6,7 @@
     </a>
   </li>
   <mat-card-content>
-    <img style="cursor: pointer;" (click)="redirectToDashboard()" src="./assets/GAD SI/logosanta_isabel.png"
+    <img loading="lazy" style="cursor: pointer;" (click)="redirectToDashboard()" src="./assets/GAD SI/logosanta_isabel.png"
       *ngIf="isLoggedIn" width="130px" />
   </mat-card-content>
   <div class="btn-group ml-auto" role="group" aria-label="Button group with nested dropdown">
@@ -39,6 +39,7 @@
       </button>
       <ul class="dropdown-menu dropdown-menu-end">
         <li><a class="dropdown-item" (click)="verPerfil()">Perfil</a></li>
+        <li><a class="dropdown-item" (click)="irConocenos()">Quiénes somos</a></li>
         <li>
           <a class="dropdown-item" *ngIf="isLoggedIn" (click)="logout()">Cerrar sesión</a>
         </li>

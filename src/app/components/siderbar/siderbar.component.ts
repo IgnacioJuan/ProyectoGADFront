@@ -47,6 +47,9 @@ export class SiderbarComponent implements OnInit {
     location.replace('/use/login');
   }
 
+  public irConocenos() {
+    location.replace('/sobre-nosotros');
+  }
 
   cargar() {
     if (this.isLoggedIn == false) {
