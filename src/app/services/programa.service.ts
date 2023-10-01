@@ -10,8 +10,7 @@ import { Programa, ProgramaUsuarioDTO } from '../models/Programa';
 })
 export class ProgramaService {
 
-  private baseUrl: string = 'http://localhost:5000/api/programa';
-
+  private baseUrl: string = `${baserUrl}/api/programa`;
   constructor(private http: HttpClient) { }
 
   crear(programa: Programa): Observable<Programa> {
