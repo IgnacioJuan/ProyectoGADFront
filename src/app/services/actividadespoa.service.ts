@@ -46,7 +46,7 @@ export class ActividadespoaService {
   }
 
   obtenerActividades(): Observable<ActividadesPoa[]> {
-    return this.http.get<ActividadesPoa[]>(`${baserUrl}/api/actividades/listar`);
+    return this.http.get<ActividadesPoa[]>(`${baserUrl}/api/actividades/listar2`);
   }
   obtenerActividades2(): Observable<Actividad_arch[]> {
     return this.http.get<Actividad_arch[]>(`${baserUrl}/api/actividades/listar`);
