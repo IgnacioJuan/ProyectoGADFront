@@ -6,6 +6,7 @@ import { ActividadesPoa } from '../models/ActividadesPoa';
 import { Periodo } from '../models/Periodo';
 import { Actividad_arch } from './actividad_arch';
 import baserUrl from './helper';
+import { actividad_archi_projection } from '../models/actividad_archi_projection';
 
 @Injectable({
   providedIn: 'root'
@@ -48,8 +49,8 @@ export class ActividadespoaService {
   obtenerActividades(): Observable<ActividadesPoa[]> {
     return this.http.get<ActividadesPoa[]>(`${baserUrl}/api/actividades/listar`);
   }
-  obtenerActividades2(): Observable<Actividad_arch[]> {
-    return this.http.get<Actividad_arch[]>(`${baserUrl}/api/actividades/listar`);
+  obtenerActividades2(): Observable<actividad_archi_projection[]> {
+    return this.http.get<actividad_archi_projection[]>(`${baserUrl}/api/actividades/listar`);
   }
 
   getActividadesPoa(poaId: number): Observable<ActividadesPoa[]> {

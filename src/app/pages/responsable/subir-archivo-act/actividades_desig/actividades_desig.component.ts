@@ -85,10 +85,8 @@ poaacti: Poa_proyec_dto = new Poa_proyec_dto();
     }
     console.log("poa ="+this.poaacti.id_poa);
     this.getPoaActividades(this.user.id,this.poaacti.id_poa);
-
-    //trate de arreglar no me vale lo siento.... el actix cree yo  borra esto  jajaajaj
-        this.actividadservice.obtenerActividades2().subscribe((data: Actividad_arch[]) => {
-      this.actix = data;
+        this.actividadservice.obtenerActividades2().subscribe((data: actividad_archi_projection[]) => {
+      this.act = data;
     });
   }
   
