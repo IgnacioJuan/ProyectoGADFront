@@ -12,6 +12,7 @@ import { UsuarioActividadDTO } from '../models/UsuarioActividadDTO';
 import { ActividadesPoaDTO } from '../models/ActividadesAprobPoa ';
 import { valorprojec } from '../interface/valorprojec';
 import { actividad_archi_projection } from '../models/actividad_archi_projection';
+import { fechalim_activ_projection } from '../models/fechalim_activ_projection';
 //import { fechaactiProjection } from '../interface/fechaactiProjecttion';
 
 @Injectable({
@@ -118,8 +119,8 @@ getPoaActividades(idres: number, idpoa: number): Observable<actividad_archi_proj
   const url = `${baserUrl}/api/actividades/poaacti/${idres}/${idpoa}`;
   return this.http.get<actividad_archi_projection[]>(url);
 }
-public getFechaFin(idres: number): Observable<Actividad_arch | undefined> {
-  return this.http.get<Actividad_arch>(`${baserUrl}/api/actividades/fecha_fin/${idres}`)
+public getFechaFin(idres: number): Observable<fechalim_activ_projection | undefined> {
+  return this.http.get<fechalim_activ_projection>(`${baserUrl}/api/actividades/fecha_fin/${idres}`)
     .pipe(
       catchError((error: any) => {
         console.error('Error al obtener la fecha de finalización:', error);
