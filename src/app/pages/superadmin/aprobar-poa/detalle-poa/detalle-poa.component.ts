@@ -297,7 +297,7 @@ export class DetallePoaComponent implements OnInit {
     }).then((result) => {
       // Cierra el modal de ng-bootstrap cuando el SweetAlert se cierra
       if (result.isConfirmed) {
-        setTimeout(() => { }, 1000);
+        setTimeout(() => { }, 3000);
         this.router.navigate(['/sup/aprobacion-poa/lista-aprobar-poa']);
       }
     });
