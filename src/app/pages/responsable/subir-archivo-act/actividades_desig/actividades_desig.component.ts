@@ -19,6 +19,7 @@ import { ReformaTraspasoIService } from 'src/app/services/reformatraspaso-i.serv
 import { ReformaSuplementoService } from 'src/app/services/reformasuplemento.service';
 import { ReformaTraspasoDService } from 'src/app/services/reformatraspaso-d.service';
 import { ActividadespoaService } from 'src/app/services/actividadespoa.service';
+import { actividad_archi_projection } from 'src/app/models/actividad_archi_projection';
 
 @Component({
   selector: 'app-actividades_desig',
@@ -26,12 +27,14 @@ import { ActividadespoaService } from 'src/app/services/actividadespoa.service';
   styleUrls: ['./actividades_desig.component.css'],
 })
 export class Actividades_desigComponent implements OnInit {
-  act!: Actividad_arch[];
+  act!: actividad_archi_projection[];
   acti: Actividad_arch[] = [];
+  actix!: Actividad_arch[];
+ 
   isLoggedIn: boolean;
   user: any;
   botonDeshabilitado: boolean | undefined;
-  dataSource = new MatTableDataSource<Actividad_arch>(this.act);
+  dataSource = new MatTableDataSource<actividad_archi_projection>(this.act);
   displayedColumns: string[] = [
     'id_actividad',
     'nombre',
@@ -85,7 +88,7 @@ poaacti: Poa_proyec_dto = new Poa_proyec_dto();
 
     //
     this.actividadservice.obtenerActividades2().subscribe((data: Actividad_arch[]) => {
-      this.act = data;
+      this.actix = data;
     });
   }
   

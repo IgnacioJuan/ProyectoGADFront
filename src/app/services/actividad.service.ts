@@ -11,6 +11,7 @@ import { DetalleActividadDTO } from '../models/DetalleActividadDTO';
 import { UsuarioActividadDTO } from '../models/UsuarioActividadDTO';
 import { ActividadesPoaDTO } from '../models/ActividadesAprobPoa ';
 import { valorprojec } from '../interface/valorprojec';
+import { actividad_archi_projection } from '../models/actividad_archi_projection';
 //import { fechaactiProjection } from '../interface/fechaactiProjecttion';
 
 @Injectable({
@@ -113,9 +114,9 @@ public valor(idres: number): Observable<valorprojec> {
   return this.http.get<valorprojec>(`${baserUrl}/api/actividades/valor/${idres}`);
 }
 
-getPoaActividades(idres: number, idpoa: number): Observable<Actividad_arch[]> {
+getPoaActividades(idres: number, idpoa: number): Observable<actividad_archi_projection[]> {
   const url = `${baserUrl}/api/actividades/poaacti/${idres}/${idpoa}`;
-  return this.http.get<Actividad_arch[]>(url);
+  return this.http.get<actividad_archi_projection[]>(url);
 }
 public getFechaFin(idres: number): Observable<Actividad_arch | undefined> {
   return this.http.get<Actividad_arch>(`${baserUrl}/api/actividades/fecha_fin/${idres}`)
