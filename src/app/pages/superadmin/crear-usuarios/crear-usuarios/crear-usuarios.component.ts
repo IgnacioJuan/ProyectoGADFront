@@ -131,6 +131,10 @@ export class CrearUsuariosComponent implements OnInit {
         this.dataSource2.data = this.listaUsuarios;
         console.log(listaAsig);
         this.loadingService.hide();
+      },
+      (error: any) => {
+        console.error('Error al listar los usuarios', error);
+        this.loadingService.hide();
       }
     );
   }
