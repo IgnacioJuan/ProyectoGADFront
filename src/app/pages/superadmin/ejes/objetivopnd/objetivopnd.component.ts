@@ -164,9 +164,11 @@ export class ObjetivopndComponent  implements OnInit {
     this.loadingService.show();
 
     this.objetivopndServicio.listarObjetivosPorEje(eje).subscribe(
+
       (data: any[]) => {
         this.listaComponentes = data;
         this.dataSource.data = this.listaComponentes;
+
         this.loadingService.hide();
       },
       (error: any) => {

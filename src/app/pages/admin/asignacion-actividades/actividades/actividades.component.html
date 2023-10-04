@@ -41,31 +41,33 @@
             <ng-container matColumnDef="descripcion">
               <th mat-header-cell *matHeaderCellDef>DESCRIPCIÓN</th>
               <td mat-cell *matCellDef="let elemento">
-                {{ elemento.descripcion }}
+                <ng-container *ngIf="elemento.descripcion !== null && elemento.descripcion !== undefined">
+                  {{ elemento.descripcion}}
+                </ng-container>
               </td>
             </ng-container>
             <ng-container matColumnDef="presupuesto_referencial">
               <th mat-header-cell *matHeaderCellDef>PRESUPUESTO REFERENCIAL</th>
               <td mat-cell *matCellDef="let elemento" class="align-right-dollar">
-                {{ elemento.presupuesto_referencial }}
+                {{ formatNumber(elemento.presupuesto_referencial) }}
               </td>
             </ng-container>
             <ng-container matColumnDef="recursos_propios">
               <th mat-header-cell *matHeaderCellDef>R. PROPIOS</th>
               <td mat-cell *matCellDef="let elemento" class="align-right-dollar">
-                {{ elemento.recursos_propios }}
+                {{ formatNumber(elemento.recursos_propios) }}
               </td>
             </ng-container>
             <ng-container matColumnDef="codificado">
               <th mat-header-cell *matHeaderCellDef>CODIFICADO</th>
               <td mat-cell *matCellDef="let elemento" class="align-right-dollar">
-                {{ elemento.codificado }}
+                {{ formatNumber(elemento.codificado) }}
               </td>
             </ng-container>
             <ng-container matColumnDef="devengado">
               <th mat-header-cell *matHeaderCellDef>DEVENGADO</th>
               <td mat-cell *matCellDef="let elemento" class="align-right-dollar">
-                {{ elemento.devengado }}
+                {{ formatNumber(elemento.devengado) }}
               </td>
             </ng-container>
             <ng-container matColumnDef="estado">

@@ -42,40 +42,45 @@
                         <ng-container matColumnDef="devengado">
                             <th mat-header-cell *matHeaderCellDef>DEVENGADO</th>
                             <td mat-cell *matCellDef="let elemento" class="currency-align">
-                                <span class="currency-symbol">$</span><span class="currency-value">
-                                    {{ elemento.devengado }}
+                                <span class="currency-symbol">$</span>
+                                <span class="currency-value">
+                                    {{ elemento.devengado | number:'1.2-2' }}
                                 </span>
                             </td>
                         </ng-container>
                         <ng-container matColumnDef="codificado">
                             <th mat-header-cell *matHeaderCellDef>CODIFICADO</th>
                             <td mat-cell *matCellDef="let elemento" class="currency-align">
-                                <span class="currency-symbol">$</span><span class="currency-value">
-                                    {{ elemento.codificado }}
+                                <span class="currency-symbol">$</span>
+                                <span class="currency-value">
+                                    {{ elemento.codificado | number:'1.2-2' }}
                                 </span>
                             </td>
                         </ng-container>
                         <ng-container matColumnDef="presupuesto_referencial">
                             <th mat-header-cell *matHeaderCellDef>PRESUPUESTO REFERENCIAL</th>
                             <td mat-cell *matCellDef="let elemento" class="currency-align">
-                                <span class="currency-symbol">$</span><span class="currency-value">
-                                    {{ elemento.presupuesto_referencial }}
+                                <span class="currency-symbol">$</span>
+                                <span class="currency-value">
+                                    {{ elemento.presupuesto_referencial | number:'1.2-2' }}
                                 </span>
                             </td>
                         </ng-container>
                         <ng-container matColumnDef="recursos_propios">
                             <th mat-header-cell *matHeaderCellDef>RECURSOS PROPIOS</th>
                             <td mat-cell *matCellDef="let elemento" class="currency-align">
-                                <span class="currency-symbol">$</span><span class="currency-value">
-                                    {{ elemento.recursos_propios }}
+                                <span class="currency-symbol">$</span>
+                                <span class="currency-value">
+                                    {{ elemento.recursos_propios | number:'1.2-2' }}
                                 </span>
                             </td>
                         </ng-container>
                         <ng-container matColumnDef="presupuesto_externo">
                             <th mat-header-cell *matHeaderCellDef>PRESUPUESTO EXTERNO</th>
                             <td mat-cell *matCellDef="let elemento" class="currency-align">
-                                <span class="currency-symbol">$</span><span class="currency-value">
-                                    {{ elemento.presupuesto_externo }}
+                                <span class="currency-symbol">$</span>
+                                <span class="currency-value">
+                                    {{ elemento.presupuesto_externo | number:'1.2-2' }}
                                 </span>
                             </td>
                         </ng-container>

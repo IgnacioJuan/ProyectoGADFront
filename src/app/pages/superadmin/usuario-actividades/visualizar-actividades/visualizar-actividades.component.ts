@@ -52,7 +52,13 @@ export class VisualizarActividadesComponent {
         if (this.listaDetalleActividades.length > 0) {
           this.nombre_responsable = this.listaDetalleActividades[0].nombre_responsable;
         }
-      });
+      },
+        (error: any) => {
+          console.error('Error al listar los modeloPoas:', error);
+          this.loadingService.hide();
+
+        }
+      );
 
     }
 

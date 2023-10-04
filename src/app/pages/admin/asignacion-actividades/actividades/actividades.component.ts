@@ -157,7 +157,6 @@ export class ActividadesComponent implements OnInit {
     );
     console.log(this.user);
     const data = history.state.data;
-    this.cargarUsuarios();
     this.poa = data;
     console.log(this.poa);
     const tipoPeriodo = data.tipo_periodo;
@@ -213,8 +212,6 @@ export class ActividadesComponent implements OnInit {
       }
     );
   }
-
-
   guardarActividad() {
     this.loadingService.show();
     this.actividad = this.frmActividad.value;
@@ -325,49 +322,6 @@ export class ActividadesComponent implements OnInit {
       }
     );
   }
-
-
-  //ESTE SE SUPONE Q VALE CON EL METODO ARRAY DEL BACK, talves quieran revisar xD
-  /*actualiza() {
-    this.loadingService.show();
-    
-    // Actualiza los datos de la actividad
-    this.actividad.nombre = this.frmActividad.value.nombre;
-    this.actividad.descripcion = this.frmActividad.value.descripcion;
-    this.actividad.presupuesto_referencial = this.frmActividad.value.recursos_propios;
-    this.actividad.recursos_propios = this.frmActividad.value.recursos_propios;
-    this.actividad.estado = 'PENDIENTE';
-
-    // Llama al servicio para obtener los ID de los periodos asociados a la actividad
-    this.actividadservice.listarPeriodosPorActividad(this.actividad.id_actividad)
-      .subscribe((periodos: Periodo[]) => {
-        const periodosActualizados = periodos.map(periodo => {
-        const referencia = periodo.referencia;
-        const porcentaje = this.frmActividad.value[`valor${referencia}`];
-          return { id_periodo: periodo.id_periodo, porcentaje };
-        });
-
-        // Llama al servicio para actualizar
-        this.actividadservice.actualizarPeriodosActividades(this.actividad.id_actividad, periodosActualizados)
-          .subscribe(() => {
-            this.actividadservice.actualizar(this.actividad.id_actividad, this.actividad)
-            .subscribe(() => {
-              this.loadingService.hide();
-                Swal.fire('Operación exitosa!', 'La actividad y los periodos se actualizaron con éxito', 'success');
-                  this.cdRef.detectChanges();
-                  this.listar(this.poa.id_poa);
-                  }, (error) => {
-                    console.error('Error al actualizar la actividad:', error);
-                    Swal.fire('Error', 'Ha ocurrido un error al actualizar la actividad', 'warning');
-                    this.loadingService.hide();
-                  });
-          }, (error) => {
-            console.error('Error al actualizar los periodos:', error);
-            Swal.fire('Error', 'Ha ocurrido un error al actualizar los periodos', 'warning');
-            this.loadingService.hide();
-            });
-        });
-  }*/
 
   async actualizar() {
     this.loadingService.show();
@@ -620,6 +574,10 @@ export class ActividadesComponent implements OnInit {
     } else {
       this.dataSource3.data = this.listaUsuarios;
     }
+  }
+
+  formatNumber(value: number): string {
+    return value.toFixed(2);
   }
 
   //PROCESOS PARA LISTAR USUARIOS DE UNA ACTIVIDAD

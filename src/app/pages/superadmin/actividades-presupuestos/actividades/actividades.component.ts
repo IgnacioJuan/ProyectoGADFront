@@ -197,6 +197,10 @@ export class ListaActividadesComponent implements OnInit {
     };
   }
 
+  formatNumber(value: number): string {
+    return value.toFixed(2);
+  }
+
   //PETICIONES | RUTAS
   verPoas() {
     this.router.navigate(['/sup/actividades-presupuestos/tabla-poas']);
