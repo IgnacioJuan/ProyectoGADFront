@@ -37,6 +37,7 @@ export class ActividadesComponent implements OnInit {
       },
       error => {
         console.error("Error al cargar los datos: ", error);
+        this.loadingService.hide();
       }
     );
   }

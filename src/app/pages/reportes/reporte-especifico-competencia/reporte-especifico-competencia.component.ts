@@ -176,7 +176,7 @@ export class ReporteEspecificoCompetenciaComponent implements OnInit {
     console.log(event, active);
   }
   actualizarGrafica(data: ReportICompetencia[]) {
-    const nombres = data.map(item => item.nombre);
+    const nombres = data.map(item => item.nombre.length > 32 ? item.nombre.substring(0, 32) + '...' : item.nombre);
     const porcentajes = data.map(item => item.porc_ejecucion);
     const codificados = data.map(item => item.codificado); // Divide por un millón para ajustar la escala
     const devengados = data.map(item => item.devengado); // Divide por un millón para ajustar la escala

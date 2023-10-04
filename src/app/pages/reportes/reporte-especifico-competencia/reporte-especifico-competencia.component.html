@@ -57,8 +57,11 @@
               <mat-header-cell *matHeaderCellDef>
                 MONTO CODIFICADO
               </mat-header-cell>
-              <mat-cell *matCellDef="let element">
-                {{ element.codificado }}
+              <mat-cell *matCellDef="let element" class="currency-align">
+                <span class="currency-symbol">$</span>
+                <span class="currency-value">
+                  &nbsp;{{ element.codificado | number:'1.2-2' }}
+                </span>
               </mat-cell>
             </ng-container>
 
@@ -66,8 +69,11 @@
               <mat-header-cell *matHeaderCellDef>
                 MONTO DEVENGADO
               </mat-header-cell>
-              <mat-cell *matCellDef="let element">
-                {{ element.devengado }}
+              <mat-cell *matCellDef="let element" class="currency-align">
+                <span class="currency-symbol">$</span>
+                <span class="currency-value">
+                  &nbsp;{{ element.devengado | number:'1.2-2' }}
+                </span>
               </mat-cell>
             </ng-container>
 
@@ -85,14 +91,24 @@
             </ng-container>
 
             <ng-container matColumnDef="footerCodificado">
-              <mat-footer-cell *matFooterCellDef>
-                <strong>{{ getTotalCodificado() }}</strong>
+              <mat-footer-cell *matFooterCellDef class="currency-align">
+                <strong>
+                  <span class="currency-symbol">$</span>
+                  <span class="currency-value">
+                    &nbsp;{{ getTotalCodificado() | number:'1.2-2' }}
+                  </span>
+                </strong>
               </mat-footer-cell>
             </ng-container>
 
             <ng-container matColumnDef="footerDevengado">
-              <mat-footer-cell *matFooterCellDef>
-                <strong>{{ getTotalDevengado() }}</strong>
+              <mat-footer-cell *matFooterCellDef class="currency-align">
+                <strong>
+                  <span class="currency-symbol">$</span>
+                  <span class="currency-value">
+                    &nbsp;{{ getTotalDevengado() | number:'1.2-2' }}
+                  </span>
+                </strong>
               </mat-footer-cell>
             </ng-container>
 

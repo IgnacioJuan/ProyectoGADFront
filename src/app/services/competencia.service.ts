@@ -10,7 +10,7 @@ import { ReportICompetencia } from '../models/ReportICompetencia';
   providedIn: 'root'
 })
 export class CompetenciaService {
-  private apiUrl = 'http://localhost:5000/api/competencia'; 
+  private apiUrl = `${baserUrl}/api/competencia`; 
   constructor(private http: HttpClient) {}
 
   private handleError(error: any) {
@@ -63,7 +63,7 @@ export class CompetenciaService {
       'Accept': 'application/pdf'
     });
 
-    return this.http.get('http://localhost:5000/api/competencia/export-pdf', { headers: headers, responseType: 'blob' });
+    return this.http.get(`${baserUrl}/api/competencia/export-pdf`, { headers: headers, responseType: 'blob' });
   }
 
 }
