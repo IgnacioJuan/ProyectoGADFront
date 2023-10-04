@@ -34,9 +34,11 @@
               </td>
             </ng-container>
             <ng-container matColumnDef="descripcion">
-              <th mat-header-cell *matHeaderCellDef [style.display]="ocultarID ? '' : 'none'">DESCRIPCIÓN</th>
-              <td mat-cell *matCellDef="let elemento" [style.display]="ocultarID ? '' : 'none'">
-                {{ elemento.descripcion ? elemento.descripcion : '' }}
+              <th mat-header-cell *matHeaderCellDef>DESCRIPCIÓN</th>
+              <td mat-cell *matCellDef="let elemento">
+                <ng-container *ngIf="elemento.descripcion !== null && elemento.descripcion !== undefined">
+                  {{ elemento.descripcion}}
+                </ng-container>
               </td>
             </ng-container>
             <ng-container matColumnDef="presupuesto_referencial">
