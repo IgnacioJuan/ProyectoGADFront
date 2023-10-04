@@ -10,7 +10,7 @@ import { ReportICompetencia } from '../models/ReportICompetencia';
   providedIn: 'root'
 })
 export class CompetenciaService {
-  private apiUrl = 'http://localhost:5000/api/competencia'; 
+  private apiUrl = `${baserUrl}/api/competencia`; 
   constructor(private http: HttpClient) {}
 
   private handleError(error: any) {
