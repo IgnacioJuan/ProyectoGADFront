@@ -85,7 +85,7 @@
               <strong>DESCRIPCION DEL PROGRAMA PROYECTO:</strong>
             </div>
             <div class="table-cell centered">
-              {{ poaAprob.descripcion_proyecto || '' }}
+              {{ poaAprob.descripcion_proyecto !== null ? poaAprob.descripcion_proyecto : '' }}
             </div>
             <div class="table-cell wide-cell"></div>
           </div>
@@ -228,7 +228,7 @@
           <ng-container matColumnDef="descripcion">
             <th mat-header-cell *matHeaderCellDef>DESCRIPCIÓN</th>
             <td mat-cell *matCellDef="let elemento">
-              {{ elemento?.descripcion || "" }}
+              {{ elemento.descripcion !== null ? elemento.descripcion : '' }}
             </td>
           </ng-container>
           <ng-container matColumnDef="presupuesto_referencial">
