@@ -117,6 +117,10 @@ poaacti: Poa_proyec_dto = new Poa_proyec_dto();
     this.router.navigate(['/res/activ/poa_proyectos']);
   }
 
+  formatNumber(value: number): string {
+    return value.toFixed(2);
+  }
+  
   //PROCESO  PARA PRESUPUESTOS
   public actividad = new Actividad_arch();
   public presupuestoexterno = new PresupuestoExterno();
