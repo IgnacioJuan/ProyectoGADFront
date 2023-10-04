@@ -41,7 +41,9 @@
             <ng-container matColumnDef="descripcion">
               <th mat-header-cell *matHeaderCellDef>DESCRIPCIÓN</th>
               <td mat-cell *matCellDef="let elemento">
-                {{ elemento.descripcion ? elemento.descripcion : ''}}
+                <ng-container *ngIf="elemento.descripcion !== null && elemento.descripcion !== undefined">
+                  {{ elemento.descripcion}}
+                </ng-container>
               </td>
             </ng-container>
             <ng-container matColumnDef="presupuesto_referencial">
