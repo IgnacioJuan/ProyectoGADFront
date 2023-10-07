@@ -8,6 +8,8 @@ import { CompetenciaService } from 'src/app/services/competencia.service';
 import { ReportICompetencia } from 'src/app/models/ReportICompetencia';
 import { LoadingServiceService } from 'src/app/components/loading-spinner/LoadingService.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { ReportICProyecto } from 'src/app/models/ReportICProyecto';
+import { ReportICPActividades } from 'src/app/models/ReportICPActividades';
 
 Chart.register(DataLabelsPlugin);
 
@@ -20,6 +22,8 @@ export class ReporteEspecificoCompetenciaComponent implements OnInit {
   @ViewChild(MatPaginator, { static: false }) paginator?: MatPaginator;
   @ViewChild(BaseChartDirective) chart: BaseChartDirective | undefined;
   rCompentencias!: ReportICompetencia[];
+  rCProyectos!: ReportICProyecto[];
+  rCPActividades!: ReportICPActividades[];
   resultadosEncontradosporEstado: boolean = true;
   pdfUrl!: SafeResourceUrl;
 
@@ -36,6 +40,8 @@ export class ReporteEspecificoCompetenciaComponent implements OnInit {
     this.paginatorIntl.itemsPerPageLabel = this.itemsPerPageLabel;
     this.paginatorIntl.getRangeLabel = this.rango;
     this.cargarDataRICompetencias();
+    this.cargarDataRCProyetos();
+    this.cargarDataRCPActividades();
   }
   ngOnInit(): void {
     this.cargarDataRICompetencias();
@@ -264,6 +270,28 @@ export class ReporteEspecificoCompetenciaComponent implements OnInit {
         console.error('Error al listar las competencias:', error);
         this.loadingService.hide();
         this.resultadosEncontradosporEstado = false;
+      }
+    );
+  }
+  cargarDataRCProyetos() {
+    this.competenciaService.obtenerProyectosPorIdCompetencia(1).subscribe(
+      (data: ReportICProyecto[]) => {
+        this.rCProyectos = data;
+        console.log(this.rCProyectos);
+      },
+      (error: ReportICProyecto) => {
+        console.error('Error al listar las competencias:', error);
+      }
+    );
+  }
+  cargarDataRCPActividades() {
+    this.competenciaService.obtenerActividadesPorIdProyecto(1).subscribe(
+      (data: ReportICPActividades[]) => {
+        this.rCPActividades = data;
+        console.log(this.rCPActividades);
+      },
+      (error: ReportICPActividades) => {
+        console.error('Error al listar las competencias:', error);
       }
     );
   }

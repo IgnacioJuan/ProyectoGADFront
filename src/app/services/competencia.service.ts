@@ -4,6 +4,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import baserUrl from './helper';
 import { Competencia } from '../models/Competencia';
 import { ReportICompetencia } from '../models/ReportICompetencia';
+import { ReportICProyecto } from '../models/ReportICProyecto';
+import { ReportICPActividades } from '../models/ReportICPActividades';
 
 
 @Injectable({
@@ -55,6 +57,16 @@ export class CompetenciaService {
 
   obtenerReportesICompetencias(): Observable<ReportICompetencia[]> {
     return this.http.get<ReportICompetencia[]>(`${baserUrl}/api/competencia/reporteicompetencias`)
+      .pipe(catchError(this.handleError));
+  }
+
+  obtenerProyectosPorIdCompetencia(id_competencia: number): Observable<ReportICProyecto[]> {
+    return this.http.get<ReportICProyecto[]>(`${baserUrl}/api/competencia/reporteicproyectos/${id_competencia}`)
+      .pipe(catchError(this.handleError));
+  }
+
+  obtenerActividadesPorIdProyecto(id_proyecto: number): Observable<ReportICPActividades[]> {
+    return this.http.get<ReportICPActividades[]>(`${baserUrl}/api/competencia/reporteicpactividades/${id_proyecto}`)
       .pipe(catchError(this.handleError));
   }
 
