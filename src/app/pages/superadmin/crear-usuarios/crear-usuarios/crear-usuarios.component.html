@@ -12,7 +12,7 @@
         <div class="form-group d-flex justify-between align-center">
           <div class="input-container">
             <input type="text" class="form-control custom-input" name="filterPost3" placeholder="Buscar..."
-              [(ngModel)]="filterPost" (input)="aplicarFiltro()" />
+                            [(ngModel)]="filterPost" (keyup)="applyFilter($event)" />
           </div>
           <div class="button-container">
             <button class="btn btn-primary" role="button" (click)="openDialog($event)" style="background-color: green">
@@ -93,7 +93,7 @@
                     <div class="col-md-6">
                       <mat-form-field class="full-width" appearance="outline">
                         <mat-label>Nombre de usuario</mat-label>
-                        <input [(ngModel)]="usuarioEdit.usuario.username" name="username" matInput
+                        <input [(ngModel)]="usuarioDB.usuario.username" name="username" matInput
                           placeholder="Digite su nombre de usuario" [value]="usuarioDB.usuario.username" />
                       </mat-form-field>
                     </div>
@@ -101,13 +101,12 @@
                     <div class="col-md-6">
                       <mat-form-field class="full-width" appearance="outline">
                         <mat-label>Rol</mat-label>
-                        <select matNativeControl [(ngModel)]="usuarioEdit.rol" name="rol" class="form-control">
-                          <option *ngFor="let rol of roles" [ngValue]="rol"
-                            [selected]="rol.rolNombre === usuarioDB.rol.rolNombre">
+                        <mat-select [(value)]="usuarioDB.rol" name="rol" [compareWith]="compareRoles">
+                          <mat-option *ngFor="let rol of roles" [value]="rol">
                             {{ rol.rolNombre }}
-                          </option>
-                        </select>
-                      </mat-form-field>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>                      
                     </div>
                   </div>
                   <div class="row">
@@ -115,21 +114,19 @@
                     <div class="col-md-6">
                       <mat-form-field class="full-width" appearance="outline">
                         <mat-label>Nueva Contraseña</mat-label>
-                        <input required [(ngModel)]="usuarioEdit.usuario.password" name="password2" type="password"
+                        <input required [(ngModel)]="usuarioDB.usuario.password" name="password2" type="password"
                           matInput placeholder="Digite su contraseña" />
                       </mat-form-field>
                     </div>
                     <div class="col-md-6">
                       <mat-form-field class="full-width" appearance="outline">
                         <mat-label>Programa</mat-label>
-                        <select matNativeControl [(ngModel)]="usuarioEdit.usuario.programa" name="programa"
-                          class="form-control">
-                          <option *ngFor="let programa of programas" [ngValue]="programa"
-                            [selected]="programa.id_programa == usuarioDB.usuario.programa.id_programa">
+                        <mat-select [(value)]="usuarioDB.usuario.programa" name="programa" [compareWith]="compareProgramas">
+                          <mat-option *ngFor="let programa of programas" [value]="programa">
                             {{ programa.nombre }}
-                          </option>
-                        </select>
-                      </mat-form-field>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>                  
                     </div>
                   </div>
                   <div class="divider-with-text">
