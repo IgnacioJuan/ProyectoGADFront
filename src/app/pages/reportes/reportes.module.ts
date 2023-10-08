@@ -9,10 +9,14 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { ReporteEspecificoCompetenciaComponent } from './reporte-especifico-competencia/reporte-especifico-competencia.component';
 import { NgChartsModule } from 'ng2-charts';
+import { ReporteCProyectoComponent } from './reporte-c-proyecto/reporte-c-proyecto.component';
+import { ReporteCActividadesComponent } from './reporte-c-actividades/reporte-c-actividades.component';
 
 @NgModule({
   declarations: [Repote_metasComponent,
-    ReporteEspecificoCompetenciaComponent],
+    ReporteEspecificoCompetenciaComponent,
+    ReporteCProyectoComponent,
+    ReporteCActividadesComponent],
   imports: [
     CommonModule,
     ReportesRoutingModule,     

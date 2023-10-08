@@ -114,7 +114,7 @@ export class SidebarService {
       titulo: "Reporte",
       submenu: [
         { titulo: 'Metas', url: 'repor/reporte_metas', icono: 'fas fa-list-ul ' },
-        { titulo: 'Competencia', url: 'repor/reporteEspecificoCompetencia', icono: 'fas fa-list-ul ' },
+        { titulo: 'Competencia', url: 'repor/reporteECompetencia', icono: 'fas fa-list-ul ' },
         { titulo: 'Presupuestos', url: 'sup/reporte-presupuesto/reporteproyecto', icono: 'fas fa-list-ul ' },
         { titulo: 'Periodos', url: 'adm/presup-ejecut/tabla-poas', icono: 'fas fa-list-ul ' },
 
