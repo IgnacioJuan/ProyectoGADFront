@@ -48,11 +48,6 @@ const routes: Routes = [
     path: '**',
     component: PageNotFoundComponent
   },
-  {
-    path: 'menus',
-    loadChildren: () => import("./menus/menus.module").then(m => m.MenusModule)
-  },
-  
 ];
 
 @NgModule({
