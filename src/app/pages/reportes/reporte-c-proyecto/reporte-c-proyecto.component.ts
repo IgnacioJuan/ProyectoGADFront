@@ -24,6 +24,7 @@ export class ReporteCProyectoComponent implements OnInit {
   pdfUrl!: SafeResourceUrl;
   nombre: string = '';
   nombreCompetencia: string = '';
+  id_competencia: any;
 
   constructor(
     private paginatorIntl: MatPaginatorIntl,
@@ -237,8 +238,9 @@ export class ReporteCProyectoComponent implements OnInit {
     this.loadingService.show();
     const idParam = this.rout.snapshot.paramMap.get('id_competencia');
     console.log('DENTRO', idParam)
-  
+
     if (idParam) {
+      this.id_competencia = idParam;
       const id_competencia = +idParam;
       this.competenciaService.obtenerProyectosPorIdCompetencia(id_competencia).subscribe(data => {
         this.rCProyectos = data;
@@ -260,7 +262,7 @@ export class ReporteCProyectoComponent implements OnInit {
   
   cargarPDF() {
     this.loadingService.show();
-    this.competenciaService.obtenerPDF().subscribe((data) => {
+    this.competenciaService.obtenerPdfReportICProyecto(this.id_competencia).subscribe((data) => {
       const blob = new Blob([data], { type: 'application/pdf' });
       const unsafeUrl = URL.createObjectURL(blob);
       this.loadingService.hide();

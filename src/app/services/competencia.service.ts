@@ -78,4 +78,18 @@ export class CompetenciaService {
     return this.http.get(`${baserUrl}/api/competencia/export-pdf`, { headers: headers, responseType: 'blob' });
   }
 
+  obtenerPdfReportICProyecto(id_competencia: number): Observable<Blob> {
+    const headers = new HttpHeaders({
+      'Accept': 'application/pdf'
+    });
+
+    return this.http.get(`${baserUrl}/api/competencia/export-pdf-report-icp/${id_competencia}`, { headers: headers, responseType: 'blob' });
+  }
+  obtenerPdfReportICPActividad(id_proyecto: number): Observable<Blob> {
+    const headers = new HttpHeaders({
+      'Accept': 'application/pdf'
+    });
+
+    return this.http.get(`${baserUrl}/api/competencia/export-pdf-report-icpa/${id_proyecto}`, { headers: headers, responseType: 'blob' });
+  }
 }
