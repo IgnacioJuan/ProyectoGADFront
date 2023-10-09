@@ -238,7 +238,7 @@ export class ReporteCProyectoComponent implements OnInit {
     this.loadingService.show();
     const idParam = this.rout.snapshot.paramMap.get('id_competencia');
     console.log('DENTRO', idParam)
-
+    
     if (idParam) {
       this.id_competencia = idParam;
       const id_competencia = +idParam;
