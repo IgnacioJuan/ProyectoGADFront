@@ -71,7 +71,6 @@ export class CrearResponsablesComponent implements OnInit {
     private loadingService: LoadingServiceService,
     public login: LoginService
   ) {
-    this.loadingService.show();
     this.paginatorIntl.nextPageLabel = this.nextPageLabel;
     this.paginatorIntl.lastPageLabel = this.lastPageLabel;
     this.paginatorIntl.firstPageLabel = this.firstPageLabel;
