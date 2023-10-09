@@ -171,6 +171,17 @@ export class CrearUsuariosComponent implements OnInit {
     this.usuarioDB = usuariossssss;
   }
 
+  isSaveDisabled(): boolean {
+    // Añade aquí todas las validaciones necesarias para tus campos
+    return !this.usuarioDB.usuario.username ||
+      !this.usuarioDB.usuario.persona.cedula ||
+      !this.usuarioDB.usuario.persona.primer_nombre ||
+      !this.usuarioDB.usuario.persona.primer_apellido ||
+      !this.usuarioDB.usuario.persona.cargo ||
+      !this.usuarioDB.usuario.persona.correo ||
+      !this.usuarioDB.usuario.persona.celular;
+  }
+
   // usuarioForm es el usuario que recibo del formulario
   Actualizar(usuarioForm: UsuarioRol) {
     this.loadingService.show();
@@ -186,6 +197,7 @@ export class CrearUsuariosComponent implements OnInit {
     if (usuarioForm.usuario.password == '') {
       usuarioForm.usuario.password = this.usuarioDB.usuario.password;
     }
+
     if (usuarioForm.usuario.username == '') {
       usuarioForm.usuario.username = this.usuarioDB.usuario.username;
     }
@@ -236,7 +248,7 @@ export class CrearUsuariosComponent implements OnInit {
 
     usuarioForm.usuario.id = this.usuarioDB.usuario.id;
     usuarioForm.usuario.persona.id_persona =
-      this.usuarioDB.usuario.persona.id_persona;
+    this.usuarioDB.usuario.persona.id_persona;
     usuarioForm.usuarioRolId = this.usuarioDB.usuarioRolId;
 
     this.loadingService.hide();
@@ -269,6 +281,7 @@ export class CrearUsuariosComponent implements OnInit {
       }
     });
   }
+
 
   applyFilter(event: Event) {
     const inputElement = event.target as HTMLInputElement;

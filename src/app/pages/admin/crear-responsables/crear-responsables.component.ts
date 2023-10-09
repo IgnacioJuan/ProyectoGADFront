@@ -160,6 +160,18 @@ export class CrearResponsablesComponent implements OnInit {
         });
     }
   }
+
+  isSaveDisabled(): boolean {
+    // Añade aquí todas las validaciones necesarias para tus campos
+    return !this.usuarioBase.username ||
+      !this.usuarioBase.persona.cedula ||
+      !this.usuarioBase.persona.primer_nombre ||
+      !this.usuarioBase.persona.primer_apellido ||
+      !this.usuarioBase.persona.cargo ||
+      !this.usuarioBase.persona.correo ||
+      !this.usuarioBase.persona.celular;
+  }
+
   // this.usuarioEdit es el usuario que recibo del formulario
   Actualizar() {
     this.loadingService.show();

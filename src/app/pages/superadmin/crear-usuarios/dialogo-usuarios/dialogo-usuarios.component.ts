@@ -50,13 +50,13 @@ export class DialogoUsuariosComponent implements OnInit, OnDestroy {
     this.firstFormGroup = this._formBuilder.group({
       cedula: ['', [Validators.required, validarCedula]],
       primer_nombre: ['', [Validators.required, validarNombreApellido]],
-      segundo_nombre: ['', [Validators.required, validarNombreApellido]],
+      segundo_nombre: ['', [validarNombreApellido]],
       primer_apellido: ['', [Validators.required, validarNombreApellido]],
-      segundo_apellido: ['', [Validators.required, validarNombreApellido]],
+      segundo_apellido: ['', [validarNombreApellido]],
       celular: ['', [Validators.required, validarCelular]],
       correo: ['', [Validators.required, Validators.email]],
       cargo: ['', [Validators.required, validarNombreApellido]],
-      direccion: ['', [Validators.required]],
+      direccion: [''],
       visible: [true]
     });
 
@@ -79,51 +79,37 @@ export class DialogoUsuariosComponent implements OnInit, OnDestroy {
   documentClickListener(event: MouseEvent): void {
     const matDialogContainerEl: HTMLElement | null = document.querySelector('mat-dialog-container');
     if (!matDialogContainerEl) return;
-
     // Si el clic fue dentro del contenedor del diálogo o en un desplegable, no hacemos nada.
     if (matDialogContainerEl.contains(event.target as Node) || event.target instanceof HTMLElement && event.target.closest('mat-option')) {
         return;
     }
-
     // Si llegamos a este punto, el clic fue fuera del diálogo. Cerramos el diálogo.
     this.dialogRef.close();
-}
-
+  }
 
   ngOnDestroy(): void {
-
     // Eliminar el escuchador cuando el componente se destruye para evitar fugas de memoria
     if (this.clickListener) {
       document.removeEventListener('click', this.clickListener);
     }
-
-
   }
 
   guardarUsuario(): void {
     this.loadingService.show();
-
     if (this.firstFormGroup.valid && this.secondFormGroup.valid) {
-
       const persona: Persona2 = this.firstFormGroup.value;
-
       this.personaService.createPersona(persona).subscribe((personaGuardada) => {
         const usuario: Usuario2 = this.secondFormGroup.value;
         usuario.persona = personaGuardada; // Asigna la persona guardada con su ID al usuario
-
         // Obtiene el rol seleccionado
         const rolControl = this.secondFormGroup.get('rol');
         const idRol = rolControl ? rolControl.value : null;
-
         // Obtiene el programa seleccionado
-
         const programaControl = this.secondFormGroup.get('id_programa');
         const programaSeleccionado = programaControl ? programaControl.value : null;
         console.log(programaSeleccionado);
         usuario.programa = programaSeleccionado;
         console.log(usuario);
-
-
         this.usuarioService.createUsuario(usuario, idRol).subscribe(() => {
           Swal.fire('Usuario guardado', 'Usuario registrado con éxito en el sistema', 'success');
           this.loadingService.hide();
@@ -155,7 +141,6 @@ export class DialogoUsuariosComponent implements OnInit, OnDestroy {
     this.dialogRef.close();
   }
 
-
   resetForm() {
     this.firstFormGroup.reset({
       cedula: '',
@@ -170,7 +155,6 @@ export class DialogoUsuariosComponent implements OnInit, OnDestroy {
       visible: true
     });
   }
-
 
   resetForm2() {
     this.secondFormGroup.reset({
