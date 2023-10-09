@@ -11,7 +11,7 @@ import { PersonaService } from 'src/app/services/persona.service';
 import { CrearUsuariosComponent } from '../crear-usuarios/crear-usuarios.component';
 import { MatDialogRef } from '@angular/material/dialog';
 import { ProgramaService } from 'src/app/services/programa.service';
-import { ProgramaUsuarioDTO } from 'src/app/models/Programa';
+import { Programa, ProgramaUsuarioDTO } from 'src/app/models/Programa';
 import { Observable } from 'rxjs';
 import { DOCUMENT } from '@angular/common';
 import { LoadingServiceService } from 'src/app/components/loading-spinner/LoadingService.service';
@@ -27,7 +27,7 @@ export class DialogoUsuariosComponent implements OnInit, OnDestroy {
   secondFormGroup!: FormGroup;
   isLinear = false;
   roles: Rol[] = [];
-  programas: ProgramaUsuarioDTO[] = [];
+  programas: Programa[] = [];
   Programaformulario!: FormGroup;
   
   private clickListener: ((event: MouseEvent) => void) | undefined = undefined;
