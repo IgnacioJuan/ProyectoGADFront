@@ -117,3 +117,10 @@ body {
   text-overflow: ellipsis;
   /* Muestra puntos suspensivos (...) si el contenido se desborda */
 }
+
+.mat-mdc-row:hover .mat-mdc-cell {
+  background-color: #ccc9c99f;
+  /* Cambia el color de fondo al pasar el mouse */
+  cursor: pointer;
+  font-weight: lighter;
+}
