@@ -36,4 +36,7 @@ ListarSuperAdmin(idPrograma:number): Observable<any[]> {
   getuResponsables(programaUsuarioLogeado: number): Observable<UsuarioResponsableDTO[]> {
     return this.http.get<UsuarioResponsableDTO[]>(`${baserUrl}/api/usuariorol/listarUResponsables/${programaUsuarioLogeado}`);
   }
+  getLUsuarios(): Observable<UsuarioRol[]> {
+    return this.http.get<UsuarioRol[]>(`${baserUrl}/api/usuariorol/listarv`);
+  }
 }

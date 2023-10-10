@@ -54,7 +54,7 @@ export class VisualizarActividadesComponent {
         }
       },
         (error: any) => {
-          console.error('Error al listar los modeloPoas:', error);
+          console.error('Error al listar las actividades:', error);
           this.loadingService.hide();
 
         }

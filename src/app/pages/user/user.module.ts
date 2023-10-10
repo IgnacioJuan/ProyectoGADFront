@@ -15,6 +15,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
+import { UserMenuComponent } from './user-menu/user-menu.component';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 
 @NgModule({
@@ -23,6 +25,7 @@ import { MatInputModule } from '@angular/material/input';
     LoginComponent,
     UserProfileComponent,
     UserDashboardComponent,
+    UserMenuComponent,
   ],
   imports: [
     CommonModule,
@@ -36,7 +39,7 @@ import { MatInputModule } from '@angular/material/input';
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
-
+    MatExpansionModule
   ]
 })
 export class UserModule { }

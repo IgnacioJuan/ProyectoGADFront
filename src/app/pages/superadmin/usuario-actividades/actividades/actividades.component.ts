@@ -50,16 +50,6 @@ export class ActividadesComponent implements OnInit {
     });
   }
 
-
-
-  /*
-    redirectToDetails(element: UsuarioActividadDTO) {
-    this.router.navigate(['/sup/usuario-actividades/visualizar', element.id_usuario], {
-      state: { nombre_responsable: element.nombre_responsable }
-    });
-  }
-*/
-
   aplicarFiltro() {
     if (this.filterPost) {
       const lowerCaseFilter = this.filterPost.toLowerCase();

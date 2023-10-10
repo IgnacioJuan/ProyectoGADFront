@@ -1,0 +1,62 @@
+
+
+<body>
+ 
+
+    
+    <div class="container bg-light border border-start-0 rounded-4">
+    
+        <div class="menu-cards">
+            <mat-accordion>
+                <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false"
+                    class="menu-card" *ngFor="let item of menuItems">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title class="titulo">
+                            <i  class="{{ item.icono }}  icono" > </i> {{ item.titulo }}
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+                  
+                      <ul>
+                        <p *ngFor="let submenu of item.submenu">
+                            <a [routerLink]="['/' + submenu.url]" class="contenido">{{ submenu.titulo }}</a>
+                        </p>
+                    </ul>
+                </mat-expansion-panel>
+
+                <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false"
+                    class="menu-card">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title class="titulo">
+                            <i class="nav-icon fas fa-users icono "></i> Quiénes somos
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <a (click)="irConocenos()" style="cursor: pointer" class="contenido" >Ir a Quiénes somos</a>
+                </mat-expansion-panel>
+
+                <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false"
+                    class="menu-card">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title class="titulo">
+                            <i class="nav-icon fas fa-user icono "></i> Perfil de Usuario
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <a (click)="verPerfil()" style="cursor: pointer" class="contenido">Ir a perfil de usuario</a>
+                </mat-expansion-panel>
+                <!---
+        <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false" class="menu-card">
+            <mat-expansion-panel-header>
+                <mat-panel-title  class="titulo">
+                    <i class="nav-icon fas fa-sign-out-alt"></i> Logout
+                </mat-panel-title>
+            </mat-expansion-panel-header>
+            <a (click)="logout()" style="cursor: pointer">Logout</a>
+        </mat-expansion-panel>--->
+
+
+
+            </mat-accordion>
+        </div>
+
+
+      </div>
+</body>

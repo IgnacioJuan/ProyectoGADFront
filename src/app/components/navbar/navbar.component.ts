@@ -42,7 +42,9 @@ export class NavbarComponent implements OnInit {
    public irConocenos() {
     location.replace('/sobre-nosotros');
   }
-
+  public irMenu() {
+    location.replace('/use/user-menu');
+  }
   listarnoti(id: any) {
     console.log("id ver " + id);
     // Cargar notificaciones propias por id

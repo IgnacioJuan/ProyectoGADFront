@@ -6,6 +6,7 @@ import { UserProfileComponent } from './user-profile/user-profile.component';
 import { LoginComponent } from './login/login.component';
 import { SignupComponent } from './signup/signup.component';
 import { PageNotFoundComponent } from 'src/app/shared/page-not-found/page-not-found.component';
+import { UserMenuComponent } from './user-menu/user-menu.component';
 
 const routes: Routes = [
   {
@@ -41,6 +42,13 @@ const routes: Routes = [
     data: { allowedRoles: ['RESPONSABLE', 'SUPERADMIN', 'ADMIN', 'AUTORIDAD'] }
   },
   {
+    path: 'user-menu',
+    component: UserMenuComponent,
+    pathMatch: 'full',
+    canActivate: [RoleguardGuard],
+    data: { allowedRoles: ['RESPONSABLE', 'SUPERADMIN', 'ADMIN', 'AUTORIDAD'] }
+  },
+  {
     path: 'pagenotfoud',
     component: PageNotFoundComponent
   },
@@ -48,6 +56,8 @@ const routes: Routes = [
     path: '**',
     component: PageNotFoundComponent
   },
+
+  
 ];
 
 @NgModule({

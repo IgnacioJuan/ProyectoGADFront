@@ -163,3 +163,6 @@ mat-divider {
   margin: 0 10px;
   /* Espacio a los lados del divider */
 }
+::ng-deep .cdk-overlay-container {
+  z-index: 9999;
+}
