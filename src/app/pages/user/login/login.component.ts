@@ -74,29 +74,29 @@ export class LoginComponent implements OnInit {
                 if (this.loginService.getUserRole() == 'ADMIN') {
                   //dashboard admin
                   //window.location.href = '/adm/admin';
-                  this.router.navigate(['user-dashboard']);
-                  location.replace('/use/user-dashboard');
+                  this.router.navigate(['user-menu']);
+                  location.replace('/use/user-menu');
                   this.loginService.loginStatusSubjec.next(true);
                 }
                 else if (this.loginService.getUserRole() == 'RESPONSABLE') {
                   //user dashboard
                   //window.location.href = '/use/user-dashboard';
-                  this.router.navigate(['user-dashboard']);
-                  location.replace('/use/user-dashboard');
+                  this.router.navigate(['user-menu']);
+                  location.replace('/use/user-menu');
                   this.loginService.loginStatusSubjec.next(true);
                 }
                 else if (this.loginService.getUserRole() == 'SUPERADMIN') {
                   //user dashboard
                   //window.location.href = '/use/user-dashboard';
-                  this.router.navigate(['/use/menus/menusuper/menuprincipal']);
-                  location.replace('/use/menus/menusuper/menuprincipal');
+                  this.router.navigate(['user-menu']);
+                  location.replace('/use/user-menu');
                   this.loginService.loginStatusSubjec.next(true);
                 }
                 else if (this.loginService.getUserRole() == 'AUTORIDAD') {
                   //user dashboard
                   //window.location.href = '/use/user-dashboard';
-                  this.router.navigate(['user-dashboard']);
-                  location.replace('/use/user-dashboard');
+                  this.router.navigate(['user-menu']);
+                  location.replace('/use/user-menu');
                   this.loginService.loginStatusSubjec.next(true);
                   window.location.reload();
                 }
