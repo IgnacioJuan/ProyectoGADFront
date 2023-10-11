@@ -1,6 +1,57 @@
 body {
 	font-family: 'Lato', sans-serif;
 }
+
+.borde {
+	text-align:center;
+	color: #face0f;
+	/* background: #eee; */
+	font-family: impact;
+	font-size: 40px;
+	letter-spacing: 0;
+	text-shadow: -3px -3px 3px #009900, 3px -3px 3px #009900, -3px 3px 3px #009900, 3px 3px 3px #009900;
+}
+
+.menu-card {
+	width: calc(33.33% - 20px);
+	margin: -10px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	box-sizing: border-box;
+	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  }
+  
+  .icono {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+  }
+  
+  .icono-img {
+	max-width: 80px;
+	max-height: 80px;
+  }
+  
+  .titulo {
+	text-align: center;
+	margin-top: 10px;
+  }
+  
+  .menu-cards {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+  }
+  
+  @media (max-width: 768px) {
+	.menu-card {
+	  width: 100%;
+	}
+  }
+  
+
 .background {
 	background: url('../../../../assets/reunionGAD.jpg');
 	background-size: cover;
@@ -42,13 +93,16 @@ body {
 	background: transparent;
 	color: white;
 }
+
 .btn-custom {
 	color: white;
 	cursor: pointer;
 }
+
 .display-5 {
 	font-size: 1.5rem;
 }
+
 #greeting {
 	margin-top: 2rem;
 	font-size: 2rem;
@@ -58,9 +112,16 @@ body {
 		font-size: 5.5rem;
 		padding: 60px;
 	}
-	.display-5 {
-		font-size: 2.5rem;
+
+.display-5 {
+	font-size: 2.5rem;
+	text-align:center;
+	color: #face0f;
+	font-size: 40px;
+	letter-spacing: 0;
+	text-shadow: -3px -3px 3px #009900, 3px -3px 3px #009900, -3px 3px 3px #009900, 3px 3px 3px #009900;
 	}
+	
 	#greeting {
 		margin-top: 2rem;
 		font-size: 2.5rem;

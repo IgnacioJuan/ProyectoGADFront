@@ -3,7 +3,8 @@ import { Router } from '@angular/router';
 import { LoadingServiceService } from 'src/app/components/loading-spinner/LoadingService.service';
 import { SidebarService } from 'src/app/components/sidebar.service';
 import { LoginService } from 'src/app/services/login.service';
-
+import { SubmenuserviceService } from 'src/app/services/submenuservice.service';
+import { iconos } from '../iconos.json';
 @Component({
   selector: 'app-user-menu',
   templateUrl: './user-menu.component.html',
@@ -11,6 +12,7 @@ import { LoginService } from 'src/app/services/login.service';
 })
 export class UserMenuComponent implements OnInit {
   menuItems?: any[];
+  icon=iconos as any[];
   isLoggedIn = false;
   user: any = null;
   rol: any = null;
@@ -18,8 +20,9 @@ export class UserMenuComponent implements OnInit {
   panelOpenState = false;
   time: string="";
   day: string="";
-  constructor(private sidebarService: SidebarService, private router: Router, public login: LoginService, private loadingService: LoadingServiceService) {
-    //this.cargar();
+  constructor(private sidebarService: SidebarService, private router: Router, public login: LoginService,
+    private loadingService: LoadingServiceService,private submenuserv:SubmenuserviceService) {
+
   }
 
 
@@ -35,13 +38,7 @@ export class UserMenuComponent implements OnInit {
       }
     )
     this.rol = this.login.getUserRole();
-
-
-
-
-
     this.loadingService.show();
-
     this.isLoggedIn = this.login.isLoggedIn();
     this.user = this.login.getUser();
     setInterval(() => this.updateClock(), 1000);
@@ -49,6 +46,10 @@ export class UserMenuComponent implements OnInit {
     this.loadingService.hide();
   }
 
+  obtenerIcono(titulo: string): string{
+    const icono = this.icon.find((item) => item.nombre === titulo.toLowerCase());
+    return icono ? icono.imagen : 'assets/iconos/poas.png';
+  }
   public logout() {
     this.login.logout();
     location.replace('/use/login');
@@ -60,6 +61,12 @@ export class UserMenuComponent implements OnInit {
   public irConocenos() {
     location.replace('/sobre-nosotros');
   }
+
+  cargarSubmenu(submenu: any) {
+    this.submenuserv.setSubmenu(submenu);
+    this.router.navigate(['use/user-dashboard']);
+  }
+
   cargar() {
     if (this.isLoggedIn == false) {
 
@@ -98,7 +105,7 @@ export class UserMenuComponent implements OnInit {
     console.log('aqui rol: ' + this.rol);
     console.log(this.user);
   }
-
+  
   updateClock() {
     // Crea un objeto de fecha
     const now = new Date();
@@ -119,7 +126,7 @@ export class UserMenuComponent implements OnInit {
 
     // Formatea la hora y la fecha
     this.time = `${hours}:${minutes.toString().padStart(2, '0')} ${ante}`;
-    this.day = `${now.toLocaleDateString('en-US', {
+    this.day = `${now.toLocaleDateString('es-EC', {
       weekday: 'long',
       month: 'long',
       day: 'numeric',

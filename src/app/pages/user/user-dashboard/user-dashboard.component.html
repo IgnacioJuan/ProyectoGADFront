@@ -5,15 +5,29 @@
       class="row flex-column justify-content-center align-items-center text-center"
     >
       <div class="col-sm-12 col-md-10 col-lg-8">
-        <h1 id="time">{{ time }}</h1>
+        <h1 class="borde" id="time">{{ time }}</h1>
         <h3 id="day" class="display-5">{{ day }}</h3>
-        <h2 id="greeting" *ngIf="user != null && user.persona?.primer_nombre">Bienvenido, {{ user.persona.primer_nombre }}.</h2>
+        <h2 class="borde" id="greeting" *ngIf="user != null && user.persona?.primer_nombre">Bienvenido, {{ user.persona.primer_nombre }}.</h2>
       </div>
       <!-- /.col -->
 
     </div>
     <!-- /.container -->
-
+    <div class="container bg-light border border-start-0 rounded-4">
+    <div class="menu-cards">
+      <ng-container *ngFor="let submenu of submenuData">
+        <mat-card class="submenu-card" (click)="irdir(submenu.url)">
+          <mat-card-header>
+            <div class="icono">
+              <img [src]="obtenerIcono(submenu.titulo)" alt="{{ submenu.titulo }}" class="icono-img">
+            </div>
+          </mat-card-header>
+          <mat-card-title class="titulo"> {{submenu.titulo}}</mat-card-title>
+       
+        </mat-card>
+      </ng-container>
+    </div>
+  </div>
   </div>
 </div>
 

@@ -2,12 +2,9 @@
 
 <body>
  
-
-    
     <div class="container bg-light border border-start-0 rounded-4">
-    
         <div class="menu-cards">
-            <mat-accordion>
+             <!-- <mat-accordion>
                 <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false"
                     class="menu-card" *ngFor="let item of menuItems">
                     <mat-expansion-panel-header>
@@ -41,22 +38,17 @@
                         </mat-panel-title>
                     </mat-expansion-panel-header>
                     <a (click)="verPerfil()" style="cursor: pointer" class="contenido">Ir a perfil de usuario</a>
-                </mat-expansion-panel>
-                <!---
-        <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false" class="menu-card">
-            <mat-expansion-panel-header>
-                <mat-panel-title  class="titulo">
-                    <i class="nav-icon fas fa-sign-out-alt"></i> Logout
-                </mat-panel-title>
-            </mat-expansion-panel-header>
-            <a (click)="logout()" style="cursor: pointer">Logout</a>
-        </mat-expansion-panel>--->
+                </mat-expansion-panel> 
+            </mat-accordion> -->
 
-
-
-            </mat-accordion>
+            <ng-container *ngFor="let item of menuItems">
+                <mat-card class="menu-card" (click)="cargarSubmenu(item.submenu)">
+                  <div class="icono">
+                    <img [src]="obtenerIcono(item.titulo)" alt="{{ item.titulo }}" class="icono-img">
+                  </div>
+                  <mat-card-title class="titulo">{{ item.titulo }}</mat-card-title>
+                </mat-card>
+              </ng-container>                   
         </div>
-
-
       </div>
 </body>

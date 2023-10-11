@@ -5,6 +5,7 @@ import { Notificacion } from 'src/app/models/Notificacion';
 import { MatDialog } from '@angular/material/dialog';
 import { DatePipe } from '@angular/common';
 import { Router } from '@angular/router';
+import { SubmenuserviceService } from 'src/app/services/submenuservice.service';
 
 @Component({
   selector: 'app-navbar',
@@ -23,7 +24,8 @@ export class NavbarComponent implements OnInit {
   notificaciones2: Notificacion[] = [];
   idactividad:any;
 
-  constructor(public login: LoginService, private notificationService: NotificacionService, private dialog: MatDialog, private rout: Router) {
+  constructor(public login: LoginService, private notificationService: NotificacionService, 
+    private submenuserv:SubmenuserviceService, private rout: Router) {
     this.rol = this.login.getUserRole();
   }
 
@@ -122,6 +124,7 @@ export class NavbarComponent implements OnInit {
 
   public logout() {
     this.login.logout();
+    this.submenuserv.limpiarSubmenu();
     location.replace('/use/login');
   }
 
@@ -160,7 +163,7 @@ export class NavbarComponent implements OnInit {
   }
 
   redirectToDashboard() {
-    location.replace('use/user-dashboard');
+    location.replace('use/user-menu');
     //this.rout.navigate(['use/user-dashboard']);
   }
 
