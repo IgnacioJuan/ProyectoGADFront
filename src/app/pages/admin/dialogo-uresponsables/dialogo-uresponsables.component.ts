@@ -58,13 +58,13 @@ export class DialogoUresponsablesComponent implements OnInit, OnDestroy {
     this.firstFormGroup = this._formBuilder.group({
       cedula: ['', [Validators.required, validarCedula]],
       primer_nombre: ['', [Validators.required, validarNombreApellido]],
-      segundo_nombre: ['', [Validators.required, validarNombreApellido]],
+      segundo_nombre: ['', [ validarNombreApellido]],
       primer_apellido: ['', [Validators.required, validarNombreApellido]],
-      segundo_apellido: ['', [Validators.required, validarNombreApellido]],
+      segundo_apellido: ['', [ validarNombreApellido]],
       celular: ['', [Validators.required, validarCelular]],
       correo: ['', [Validators.required, Validators.email]],
       cargo: ['', [Validators.required, validarNombreApellido]],
-      direccion: ['', [Validators.required]],
+      direccion: [''],
       visible: [true]
     });
 

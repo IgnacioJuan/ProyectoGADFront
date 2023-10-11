@@ -8,6 +8,9 @@ import { CompetenciaService } from 'src/app/services/competencia.service';
 import { ReportICompetencia } from 'src/app/models/ReportICompetencia';
 import { LoadingServiceService } from 'src/app/components/loading-spinner/LoadingService.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { ReportICProyecto } from 'src/app/models/ReportICProyecto';
+import { ReportICPActividades } from 'src/app/models/ReportICPActividades';
+import { Router } from '@angular/router';
 
 Chart.register(DataLabelsPlugin);
 
@@ -20,6 +23,8 @@ export class ReporteEspecificoCompetenciaComponent implements OnInit {
   @ViewChild(MatPaginator, { static: false }) paginator?: MatPaginator;
   @ViewChild(BaseChartDirective) chart: BaseChartDirective | undefined;
   rCompentencias!: ReportICompetencia[];
+  rCProyectos!: ReportICProyecto[];
+  rCPActividades!: ReportICPActividades[];
   resultadosEncontradosporEstado: boolean = true;
   pdfUrl!: SafeResourceUrl;
 
@@ -27,7 +32,8 @@ export class ReporteEspecificoCompetenciaComponent implements OnInit {
     private paginatorIntl: MatPaginatorIntl,
     private loadingService: LoadingServiceService,
     private sanitizer: DomSanitizer,
-    private competenciaService: CompetenciaService
+    private competenciaService: CompetenciaService,
+    private router: Router
   ) {
     this.paginatorIntl.nextPageLabel = this.nextPageLabel;
     this.paginatorIntl.lastPageLabel = this.lastPageLabel;
@@ -36,6 +42,8 @@ export class ReporteEspecificoCompetenciaComponent implements OnInit {
     this.paginatorIntl.itemsPerPageLabel = this.itemsPerPageLabel;
     this.paginatorIntl.getRangeLabel = this.rango;
     this.cargarDataRICompetencias();
+    this.cargarDataRCProyetos();
+    this.cargarDataRCPActividades();
   }
   ngOnInit(): void {
     this.cargarDataRICompetencias();
@@ -124,7 +132,6 @@ export class ReporteEspecificoCompetenciaComponent implements OnInit {
     }
   };
 
-
   public barChartType: ChartType = 'bar'; // Mantén esto como 'bar'
 
   public barChartData: ChartData<'bar' | 'line'> = {
@@ -135,7 +142,7 @@ export class ReporteEspecificoCompetenciaComponent implements OnInit {
         label: 'Porcentaje',
         type: 'line',
         yAxisID: 'y1', // Asigna el eje Y derecho
-        borderColor: 'green',
+        borderColor: 'red',
         borderWidth: 3,
       },
       {
@@ -143,38 +150,19 @@ export class ReporteEspecificoCompetenciaComponent implements OnInit {
         label: 'Codificado',
         type: 'bar',
         yAxisID: 'y', // Asigna el eje Y izquierdo
-        backgroundColor: 'rgb(92, 92, 241)',
+        backgroundColor: 'green',
       },
       {
         data: [],
         label: 'Devengado',
         type: 'bar',
         yAxisID: 'y', // Asigna el eje Y izquierdo
-        backgroundColor: 'rgb(248, 80, 80)',
+        backgroundColor: 'yellow',
       }
 
     ],
   };
 
-  // events
-  public chartClicked({
-    event,
-    active,
-  }: {
-    event?: ChartEvent;
-    active?: object[];
-  }): void {
-    console.log(event, active);
-  }
-  public chartHovered({
-    event,
-    active,
-  }: {
-    event?: ChartEvent;
-    active?: object[];
-  }): void {
-    console.log(event, active);
-  }
   actualizarGrafica(data: ReportICompetencia[]) {
     const nombres = data.map(item => item.nombre.length > 32 ? item.nombre.substring(0, 32) + '...' : item.nombre);
     const porcentajes = data.map(item => item.porc_ejecucion);
@@ -267,6 +255,28 @@ export class ReporteEspecificoCompetenciaComponent implements OnInit {
       }
     );
   }
+  cargarDataRCProyetos() {
+    this.competenciaService.obtenerProyectosPorIdCompetencia(1).subscribe(
+      (data: ReportICProyecto[]) => {
+        this.rCProyectos = data;
+        console.log(this.rCProyectos);
+      },
+      (error: ReportICProyecto) => {
+        console.error('Error al listar las competencias:', error);
+      }
+    );
+  }
+  cargarDataRCPActividades() {
+    this.competenciaService.obtenerActividadesPorIdProyecto(1).subscribe(
+      (data: ReportICPActividades[]) => {
+        this.rCPActividades = data;
+        console.log(this.rCPActividades);
+      },
+      (error: ReportICPActividades) => {
+        console.error('Error al listar las competencias:', error);
+      }
+    );
+  }
   cargarPDF() {
     this.loadingService.show();
     this.competenciaService.obtenerPDF().subscribe((data) => {
@@ -299,4 +309,10 @@ export class ReporteEspecificoCompetenciaComponent implements OnInit {
     this.tableData.data = this.rCompentencias;
   }
 
+  rowClicked(compeId: ReportICompetencia) {
+    console.log("Pasando competencia:", compeId);
+    this.router.navigate(['/repor/reporteECompetencia/reporteEProyecto', compeId.id_competencia], {
+      state: { competencia: compeId }
+    });
+  }
 }

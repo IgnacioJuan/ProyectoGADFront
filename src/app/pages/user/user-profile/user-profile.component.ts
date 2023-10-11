@@ -147,8 +147,5 @@ export class UserProfileComponent implements OnInit {
         Swal.fire('Se ha cancelado la operación', '', 'info')
       }
     })
-
-
   }
-
 }

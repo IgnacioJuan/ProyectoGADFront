@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { LoginService } from 'src/app/services/login.service';
 import { SidebarService } from 'src/app/components/sidebar.service';
+import { SubmenuserviceService } from 'src/app/services/submenuservice.service';
 
 @Component({
   selector: 'app-siderbar',
@@ -23,7 +24,7 @@ export class SiderbarComponent implements OnInit {
   rol: any = null;
   ruta: any = null;*/
 
-  constructor(private sidebarService: SidebarService, private router: Router, public login: LoginService) {
+  constructor(private sidebarService: SidebarService, private submenuserv:SubmenuserviceService, public login: LoginService) {
     //this.cargar();
   }
 
@@ -44,6 +45,7 @@ export class SiderbarComponent implements OnInit {
 
   public logout() {
     this.login.logout();
+    this.submenuserv.limpiarSubmenu();
     location.replace('/use/login');
   }
 
@@ -58,7 +60,6 @@ export class SiderbarComponent implements OnInit {
 
       if (this.isLoggedIn) {
 
-        //this.user = this.login.getUser();
         this.rol = this.login.getUserRole();
 
         if (this.rol == 'ADMIN') {

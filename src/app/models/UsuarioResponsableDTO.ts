@@ -8,4 +8,4 @@ export class UsuarioResponsableDTO {
     usuario!: string;
     programa!: string;
     cargo!: string;
-}
+} 
