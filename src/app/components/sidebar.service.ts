@@ -32,7 +32,7 @@ export class SidebarService {
       submenu: [
         { titulo: 'Solicitudes', url: 'adm/poas-solicitudes/listarPoasSoli', icono: 'fas fa-list-ul ' },
         { titulo: 'Financiamiento', url: 'sup/actividades-presupuestos/tabla-poas', icono: 'fas fa-list-ul ' },
-        { titulo: 'Ejecucion Periodo', url: 'adm/presup-ejecut/tabla-poas', icono: 'fas fa-list-ul ' },
+        { titulo: 'Ejecución Periodo', url: 'adm/presup-ejecut/tabla-poas', icono: 'fas fa-list-ul ' },
 
       ]
     },
@@ -73,7 +73,6 @@ export class SidebarService {
       icono: 'nav-icon fas fa-tasks',
       titulo: "POAS",
       submenu: [
-        //{ titulo: 'Poas Rechazados', url: 'sup/flujo-criterio/listarpoa', icono: 'fas fa-list-ul ' },
         { titulo: 'Estados', url: 'sup/flujo-criterio/listaproyecto', icono: 'fas fa-list-ul ' },
         { titulo: 'Avance Meta', url: 'adm/evaluar-poa/poas', icono: 'fas fa-list-ul ' },
 

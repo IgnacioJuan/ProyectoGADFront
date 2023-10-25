@@ -12,6 +12,7 @@ import { SiderbarComponent } from './components/siderbar/siderbar.component';
 import { authInterceptorProviders } from './services/auth/auth.interceptor';
 import { SharedModule } from './shared/shared.module';
 import { SobreNosotrosComponent } from './components/sobre-nosotros/sobre-nosotros.component';
+import { SubmenuserviceService } from './services/submenuservice.service';
 
 
 @NgModule({
@@ -33,7 +34,7 @@ import { SobreNosotrosComponent } from './components/sobre-nosotros/sobre-nosotr
     //
     SharedModule
   ],
-  providers: [authInterceptorProviders],
+  providers: [authInterceptorProviders,SubmenuserviceService],
   bootstrap: [AppComponent]
 })
 export class AppModule {

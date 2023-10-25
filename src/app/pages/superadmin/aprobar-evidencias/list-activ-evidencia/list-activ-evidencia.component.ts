@@ -100,7 +100,7 @@ export class ListActivEvidenciaComponent implements OnInit {
   listar(idPoa: number): void {
     this.loadingService.show();
 
-    this.actividadService.getActividadesPoa(idPoa).subscribe(
+    this.actividadService.listadeActividadesPoa(idPoa).subscribe(
       (data: any[]) => {
         this.listaActividades = data;
         console.log("Dataa")

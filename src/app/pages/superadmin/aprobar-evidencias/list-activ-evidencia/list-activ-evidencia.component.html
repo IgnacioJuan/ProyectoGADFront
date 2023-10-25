@@ -43,21 +43,23 @@
             <ng-container matColumnDef="descripcion">
               <th mat-header-cell *matHeaderCellDef>DESCRIPCIÓN</th>
               <td mat-cell *matCellDef="let elemento">
-                {{ elemento.descripcion }}
+                {{ elemento.descripcion || 'SIN DESCRIPCIÓN' }}
               </td>
-            </ng-container>
+            </ng-container>            
             <ng-container matColumnDef="codificado">
               <th mat-header-cell *matHeaderCellDef>CODIFICADO</th>
               <td mat-cell *matCellDef="let elemento">
-                {{ elemento.codificado }}
+                {{ elemento.codificado | currency:'USD':'symbol':'1.2-2' }}
               </td>
             </ng-container>
+            
             <ng-container matColumnDef="devengado">
               <th mat-header-cell *matHeaderCellDef>DEVENGADO</th>
               <td mat-cell *matCellDef="let elemento">
-                {{ elemento.devengado }}
+                {{ elemento.devengado | currency:'USD':'symbol':'1.2-2' }}
               </td>
             </ng-container>
+            
             <ng-container matColumnDef="evidencias">
               <th mat-header-cell *matHeaderCellDef>ARCHIVOS</th>
               <td mat-cell *matCellDef="let elemento">
