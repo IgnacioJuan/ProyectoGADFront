@@ -287,6 +287,10 @@ export class Subir_archivo_acti_desigComponent implements OnInit {
           // Verifica si data y fecha_fin son definidos
           const fechaActual = new Date();
           const fechaFin = new Date(data.fecha_fin);
+
+          //Cambio: No se sube archivos para una actividad luego de 15 dias despues de terminar la actividad
+          fechaFin.setDate(fechaFin.getDate() + 15);
+
        if (fechaActual > fechaFin) {
             this.botonDeshabilitado = true;
             this.mostrarMensaje(
