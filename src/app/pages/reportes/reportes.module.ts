@@ -11,12 +11,16 @@ import { ReporteEspecificoCompetenciaComponent } from './reporte-especifico-comp
 import { NgChartsModule } from 'ng2-charts';
 import { ReporteCProyectoComponent } from './reporte-c-proyecto/reporte-c-proyecto.component';
 import { ReporteCActividadesComponent } from './reporte-c-actividades/reporte-c-actividades.component';
+import { ReporteProgramasComponent } from './reporte-programas/reporte-programas.component';
+import { ReportePgProyectoComponent } from './reporte-pg-proyecto/reporte-pg-proyecto.component';
 
 @NgModule({
   declarations: [Repote_metasComponent,
     ReporteEspecificoCompetenciaComponent,
     ReporteCProyectoComponent,
-    ReporteCActividadesComponent],
+    ReporteCActividadesComponent,
+    ReporteProgramasComponent,
+    ReportePgProyectoComponent],
   imports: [
     CommonModule,
     ReportesRoutingModule,     

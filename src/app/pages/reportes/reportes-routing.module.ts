@@ -5,6 +5,8 @@ import { RoleguardGuard } from 'src/app/services/Guards/roleguard.guard';
 import { ReporteEspecificoCompetenciaComponent } from './reporte-especifico-competencia/reporte-especifico-competencia.component';
 import { ReporteCProyectoComponent } from './reporte-c-proyecto/reporte-c-proyecto.component';
 import { ReporteCActividadesComponent } from './reporte-c-actividades/reporte-c-actividades.component';
+import { ReporteProgramasComponent } from './reporte-programas/reporte-programas.component';
+import { ReportePgProyectoComponent } from './reporte-pg-proyecto/reporte-pg-proyecto.component';
 const routes: Routes = [
   {
     path: 'reporte_metas',
@@ -29,6 +31,27 @@ const routes: Routes = [
   },
   {
     path: 'reporteECompetencia/reporteEProyecto/reporteEActividad/:id_proyecto',
+    component: ReporteCActividadesComponent,
+    pathMatch: 'full',
+    canActivate: [RoleguardGuard],
+    data: { allowedRoles: ['SUPERADMIN', 'ADMIN'] },
+  },
+  {
+    path: 'reporteProgramas',
+    component: ReporteProgramasComponent,
+    pathMatch: 'full',
+    canActivate: [RoleguardGuard],
+    data: { allowedRoles: ['SUPERADMIN', 'ADMIN'] },
+  },
+  {
+    path: 'reporteProgramas/reportePProyecto/:id_programa',
+    component: ReportePgProyectoComponent,
+    pathMatch: 'full',
+    canActivate: [RoleguardGuard],
+    data: { allowedRoles: ['SUPERADMIN', 'ADMIN'] },
+  },
+  {
+    path: 'reporteProgramas/reportePProyecto/reportePActividad/:id_proyecto',
     component: ReporteCActividadesComponent,
     pathMatch: 'full',
     canActivate: [RoleguardGuard],

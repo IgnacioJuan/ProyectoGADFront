@@ -44,5 +44,9 @@ export class ProgramaService {
   buscarProgramasPorNombreDTO(nombre: string): Observable<Programa[]> {
     return this.http.get<Programa[]>(`${this.baseUrl}/buscarprogramanombre/${nombre}`);
   }
+
+  /// reporte de programas / departamentos 
+  
+
 }
 
