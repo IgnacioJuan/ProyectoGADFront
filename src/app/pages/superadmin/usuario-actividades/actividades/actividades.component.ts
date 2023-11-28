@@ -37,6 +37,7 @@ export class ActividadesComponent implements OnInit {
       },
       error => {
         console.error("Error al cargar los datos: ", error);
+        this.loadingService.hide();
       }
     );
   }
@@ -48,16 +49,6 @@ export class ActividadesComponent implements OnInit {
       state: { usuario: usuarioAct }
     });
   }
-
-
-
-  /*
-    redirectToDetails(element: UsuarioActividadDTO) {
-    this.router.navigate(['/sup/usuario-actividades/visualizar', element.id_usuario], {
-      state: { nombre_responsable: element.nombre_responsable }
-    });
-  }
-*/
 
   aplicarFiltro() {
     if (this.filterPost) {

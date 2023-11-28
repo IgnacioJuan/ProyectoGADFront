@@ -32,7 +32,7 @@ export class SidebarService {
       submenu: [
         { titulo: 'Solicitudes', url: 'adm/poas-solicitudes/listarPoasSoli', icono: 'fas fa-list-ul ' },
         { titulo: 'Financiamiento', url: 'sup/actividades-presupuestos/tabla-poas', icono: 'fas fa-list-ul ' },
-        { titulo: 'Ejecucion Periodo', url: 'adm/presup-ejecut/tabla-poas', icono: 'fas fa-list-ul ' },
+        { titulo: 'Ejecución Periodo', url: 'adm/presup-ejecut/tabla-poas', icono: 'fas fa-list-ul ' },
 
       ]
     },
@@ -73,7 +73,6 @@ export class SidebarService {
       icono: 'nav-icon fas fa-tasks',
       titulo: "POAS",
       submenu: [
-        //{ titulo: 'Poas Rechazados', url: 'sup/flujo-criterio/listarpoa', icono: 'fas fa-list-ul ' },
         { titulo: 'Estados', url: 'sup/flujo-criterio/listaproyecto', icono: 'fas fa-list-ul ' },
         { titulo: 'Avance Meta', url: 'adm/evaluar-poa/poas', icono: 'fas fa-list-ul ' },
 
@@ -114,7 +113,7 @@ export class SidebarService {
       titulo: "Reporte",
       submenu: [
         { titulo: 'Metas', url: 'repor/reporte_metas', icono: 'fas fa-list-ul ' },
-        { titulo: 'Competencia', url: 'repor/reporteEspecificoCompetencia', icono: 'fas fa-list-ul ' },
+        { titulo: 'Competencia', url: 'repor/reporteECompetencia', icono: 'fas fa-list-ul ' },
         { titulo: 'Presupuestos', url: 'sup/reporte-presupuesto/reporteproyecto', icono: 'fas fa-list-ul ' },
         { titulo: 'Periodos', url: 'adm/presup-ejecut/tabla-poas', icono: 'fas fa-list-ul ' },
 
@@ -134,7 +133,6 @@ export class SidebarService {
       titulo: "Actividades",
       submenu: [
         { titulo: 'Mis Actividades', url: 'res/activ/poa_proyectos', icono: 'fas fa-file-contract' },
-        { titulo: 'Resumen Presupuestos', url: 'res/resumen-presupuestos/lista-actividades', icono: 'fas fa-list-ul ' },
         { titulo: 'Solicitud de Presupuesto', url: 'res/solicitar-presupuestos/listSolicitudes', icono: 'fas fa-list-ul ' },
 
       ]

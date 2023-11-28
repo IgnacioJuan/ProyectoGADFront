@@ -4,13 +4,15 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import baserUrl from './helper';
 import { Competencia } from '../models/Competencia';
 import { ReportICompetencia } from '../models/ReportICompetencia';
+import { ReportICProyecto } from '../models/ReportICProyecto';
+import { ReportICPActividades } from '../models/ReportICPActividades';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class CompetenciaService {
-  private apiUrl = 'http://localhost:5000/api/competencia'; 
+  private apiUrl = `${baserUrl}/api/competencia`; 
   constructor(private http: HttpClient) {}
 
   private handleError(error: any) {
@@ -58,12 +60,36 @@ export class CompetenciaService {
       .pipe(catchError(this.handleError));
   }
 
+  obtenerProyectosPorIdCompetencia(id_competencia: number): Observable<ReportICProyecto[]> {
+    return this.http.get<ReportICProyecto[]>(`${baserUrl}/api/competencia/reporteicproyectos/${id_competencia}`)
+      .pipe(catchError(this.handleError));
+  }
+
+  obtenerActividadesPorIdProyecto(id_proyecto: number): Observable<ReportICPActividades[]> {
+    return this.http.get<ReportICPActividades[]>(`${baserUrl}/api/competencia/reporteicpactividades/${id_proyecto}`)
+      .pipe(catchError(this.handleError));
+  }
+
   obtenerPDF(): Observable<Blob> {
     const headers = new HttpHeaders({
       'Accept': 'application/pdf'
     });
 
-    return this.http.get('http://localhost:5000/api/competencia/export-pdf', { headers: headers, responseType: 'blob' });
+    return this.http.get(`${baserUrl}/api/competencia/export-pdf`, { headers: headers, responseType: 'blob' });
   }
 
+  obtenerPdfReportICProyecto(id_competencia: number): Observable<Blob> {
+    const headers = new HttpHeaders({
+      'Accept': 'application/pdf'
+    });
+
+    return this.http.get(`${baserUrl}/api/competencia/export-pdf-report-icp/${id_competencia}`, { headers: headers, responseType: 'blob' });
+  }
+  obtenerPdfReportICPActividad(id_proyecto: number): Observable<Blob> {
+    const headers = new HttpHeaders({
+      'Accept': 'application/pdf'
+    });
+
+    return this.http.get(`${baserUrl}/api/competencia/export-pdf-report-icpa/${id_proyecto}`, { headers: headers, responseType: 'blob' });
+  }
 }

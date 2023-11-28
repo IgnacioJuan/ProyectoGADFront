@@ -110,9 +110,8 @@
                                         <div class="col-md-6">
                                             <mat-form-field class="full-width" appearance="outline">
                                                 <mat-label>Nombre de usuario</mat-label>
-                                                <input [(ngModel)]="usuarioEdit.username" name="username" matInput
-                                                    placeholder="Digite su nombre de usuario"
-                                                    [value]="usuarioBase.username" />
+                                                <input required [(ngModel)]="usuarioBase.username" name="username"
+                                                    matInput placeholder="Digite su nombre de usuario" />
                                             </mat-form-field>
                                         </div>
                                         <br><br>
@@ -133,25 +132,22 @@
                                         <div class="col-md-4">
                                             <mat-form-field class="full-width" appearance="outline">
                                                 <mat-label>Cédula</mat-label>
-                                                <input [(ngModel)]="usuarioEdit.persona.cedula"
-                                                    [value]="usuarioBase.persona.cedula" name="cedula"
+                                                <input required [(ngModel)]="usuarioBase.persona.cedula" name="cedula"
                                                     matInput placeholder="Primer Nombre" />
                                             </mat-form-field>
                                         </div>
                                         <div class="col-md-4">
                                             <mat-form-field class="full-width" appearance="outline">
                                                 <mat-label>Primer Nombre</mat-label>
-                                                <input [(ngModel)]="usuarioEdit.persona.primer_nombre"
-                                                    [value]="usuarioBase.persona.primer_nombre" name="primer_nombre"
-                                                    matInput placeholder="Primer Nombre" />
+                                                <input required [(ngModel)]="usuarioBase.persona.primer_nombre"
+                                                    name="primer_nombre" matInput placeholder="Primer Nombre" />
                                             </mat-form-field>
                                         </div>
                                         <div class="col-md-4">
                                             <mat-form-field class="full-width" appearance="outline">
                                                 <mat-label>Segundo Nombre</mat-label>
-                                                <input [(ngModel)]="usuarioEdit.persona.segundo_nombre"
-                                                    [value]="usuarioBase.persona.segundo_nombre" name="segundo_nombre"
-                                                    matInput placeholder="Segundo Nombre" />
+                                                <input [(ngModel)]="usuarioBase.persona.segundo_nombre"
+                                                    name="segundo_nombre" matInput placeholder="Segundo Nombre" />
                                             </mat-form-field>
                                         </div>
                                     </div>
@@ -159,25 +155,22 @@
                                         <div class="col-md-4">
                                             <mat-form-field class="full-width" appearance="outline">
                                                 <mat-label>Primer Apellido</mat-label>
-                                                <input [(ngModel)]="usuarioEdit.persona.primer_apellido"
-                                                    [value]="usuarioBase.persona.primer_apellido" name="primer_apellido"
-                                                    matInput placeholder="Primer Apellido" />
+                                                <input required [(ngModel)]="usuarioBase.persona.primer_apellido"
+                                                    name="primer_apellido" matInput placeholder="Primer Apellido" />
                                             </mat-form-field>
                                         </div>
                                         <div class="col-md-4">
                                             <mat-form-field class="full-width" appearance="outline">
                                                 <mat-label>Segundo Apellido</mat-label>
-                                                <input [(ngModel)]="usuarioEdit.persona.segundo_apellido"
-                                                    [value]="usuarioBase.persona.segundo_apellido"
+                                                <input [(ngModel)]="usuarioBase.persona.segundo_apellido"
                                                     name="segundo_apellido" matInput placeholder="Segundo Apellido" />
                                             </mat-form-field>
                                         </div>
                                         <div class="col-md-4">
                                             <mat-form-field class="full-width" appearance="outline">
                                                 <mat-label>Cargo</mat-label>
-                                                <input [(ngModel)]="usuarioEdit.persona.cargo"
-                                                    [value]="usuarioBase.persona.cargo" name="cargo" matInput
-                                                    placeholder="Cargo" />
+                                                <input required [(ngModel)]="usuarioBase.persona.cargo" name="cargo"
+                                                    matInput placeholder="Cargo" />
                                             </mat-form-field>
                                         </div>
                                     </div>
@@ -185,32 +178,30 @@
                                         <div class="col-md-4">
                                             <mat-form-field class="full-width" appearance="outline">
                                                 <mat-label>Dirección</mat-label>
-                                                <input [(ngModel)]="usuarioEdit.persona.direccion"
-                                                    [value]="usuarioBase.persona.direccion" name="direccion" matInput
-                                                    placeholder="Dirección" />
+                                                <input [(ngModel)]="usuarioBase.persona.direccion" name="direccion"
+                                                    matInput placeholder="Dirección" />
                                             </mat-form-field>
                                         </div>
                                         <div class="col-md-4">
                                             <mat-form-field class="full-width" appearance="outline">
                                                 <mat-label>Correo</mat-label>
-                                                <input [(ngModel)]="usuarioEdit.persona.correo"
-                                                    [value]="usuarioBase.persona.correo" name="correo" matInput
-                                                    placeholder="Correo" />
+                                                <input required [(ngModel)]="usuarioBase.persona.correo" name="correo"
+                                                    matInput placeholder="Correo" />
                                             </mat-form-field>
                                         </div>
                                         <div class="col-md-4">
                                             <mat-form-field class="full-width" appearance="outline">
                                                 <mat-label>Celular</mat-label>
-                                                <input [(ngModel)]="usuarioEdit.persona.celular"
-                                                    [value]="usuarioBase.persona.celular" name="celular" matInput
-                                                    placeholder="Celular" />
+                                                <input required [(ngModel)]="usuarioBase.persona.celular" name="celular"
+                                                    matInput placeholder="Celular" />
                                             </mat-form-field>
                                         </div>
                                     </div>
                                     <div class="container text-center">
                                         <button mat-raised-button class="rounded-button"
                                             style="background-color: rgb(235, 212, 13); margin-right: 5%"
-                                            data-bs-dismiss="modal" (click)="Actualizar()">
+                                            data-bs-dismiss="modal" (click)="Actualizar()"
+                                            [disabled]="isSaveDisabled()">
                                             <mat-icon>save</mat-icon>Guardar
                                         </button>
                                         <button mat-raised-button class="rounded-button" style="margin-left: 5%"
