@@ -61,6 +61,21 @@ export class ProgramaService {
       .pipe(catchError(this.handleError));
   }
 
+  obtenerPDF(): Observable<Blob> {
+    const headers = new HttpHeaders({
+      'Accept': 'application/pdf'
+    });
+
+    return this.http.get(`${baserUrl}/api/programa/export-pdf`, { headers: headers, responseType: 'blob' });
+  }
+
+  obtenerPdfReportIPProyecto(id_programa: number): Observable<Blob> {
+    const headers = new HttpHeaders({
+      'Accept': 'application/pdf'
+    });
+
+    return this.http.get(`${baserUrl}/api/programa/export-pdf-report-ipp/${id_programa}`, { headers: headers, responseType: 'blob' });
+  }
 
 }
 
