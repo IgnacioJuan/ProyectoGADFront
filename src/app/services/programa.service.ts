@@ -56,7 +56,7 @@ export class ProgramaService {
       .pipe(catchError(this.handleError));
   }
 
-  obtenerProyectosPorIdCompetencia(id_programa: number): Observable<ReportIPProyecto[]> {
+  obtenerProyectosPorIdProgramas(id_programa: number): Observable<ReportIPProyecto[]> {
     return this.http.get<ReportIPProyecto[]>(`${baserUrl}/api/programa/reporteipproyectos/${id_programa}`)
       .pipe(catchError(this.handleError));
   }

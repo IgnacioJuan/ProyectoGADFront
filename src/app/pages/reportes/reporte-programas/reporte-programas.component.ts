@@ -4,13 +4,12 @@ import { BaseChartDirective } from 'ng2-charts';
 import DataLabelsPlugin from 'chartjs-plugin-datalabels';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
-import { CompetenciaService } from 'src/app/services/competencia.service';
 import { ReportICompetencia } from 'src/app/models/ReportICompetencia';
 import { LoadingServiceService } from 'src/app/components/loading-spinner/LoadingService.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { ReportICProyecto } from 'src/app/models/ReportICProyecto';
-import { ReportICPActividades } from 'src/app/models/ReportICPActividades';
 import { Router } from '@angular/router';
+import { ReportIPrograma } from 'src/app/models/ReportIPrograma';
+import { ProgramaService } from 'src/app/services/programa.service';
 
 Chart.register(DataLabelsPlugin);
 
@@ -23,9 +22,7 @@ Chart.register(DataLabelsPlugin);
 export class ReporteProgramasComponent implements OnInit{
   @ViewChild(MatPaginator, { static: false }) paginator?: MatPaginator;
   @ViewChild(BaseChartDirective) chart: BaseChartDirective | undefined;
-  rCompentencias!: ReportICompetencia[];
-  rCProyectos!: ReportICProyecto[];
-  rCPActividades!: ReportICPActividades[];
+  rProgramas!: ReportIPrograma[];
   resultadosEncontradosporEstado: boolean = true;
   pdfUrl!: SafeResourceUrl;
 
@@ -33,7 +30,7 @@ export class ReporteProgramasComponent implements OnInit{
     private paginatorIntl: MatPaginatorIntl,
     private loadingService: LoadingServiceService,
     private sanitizer: DomSanitizer,
-    private competenciaService: CompetenciaService,
+    private programaService: ProgramaService,
     private router: Router
   ) {
     this.paginatorIntl.nextPageLabel = this.nextPageLabel;
@@ -42,12 +39,10 @@ export class ReporteProgramasComponent implements OnInit{
     this.paginatorIntl.previousPageLabel = this.previousPageLabel;
     this.paginatorIntl.itemsPerPageLabel = this.itemsPerPageLabel;
     this.paginatorIntl.getRangeLabel = this.rango;
-    this.cargarDataRICompetencias();
-    this.cargarDataRCProyetos();
-    this.cargarDataRCPActividades();
+    this.cargarDataRIProgramas();
   }
   ngOnInit(): void {
-    this.cargarDataRICompetencias();
+    this.cargarDataRIProgramas();
   }
   ngAfterViewInit() {
     this.tableData.paginator = this.paginator || null;
@@ -164,7 +159,7 @@ export class ReporteProgramasComponent implements OnInit{
     ],
   };
 
-  actualizarGrafica(data: ReportICompetencia[]) {
+  actualizarGrafica(data: ReportIPrograma[]) {
     const nombres = data.map(item => item.nombre.length > 32 ? item.nombre.substring(0, 32) + '...' : item.nombre);
     const porcentajes = data.map(item => item.porc_ejecucion);
     const codificados = data.map(item => item.codificado); // Divide por un millón para ajustar la escala
@@ -178,7 +173,7 @@ export class ReporteProgramasComponent implements OnInit{
     this.chart?.update();
   }
   // Datos para la tabla
-  tableData = new MatTableDataSource<ReportICompetencia>();
+  tableData = new MatTableDataSource<ReportIPrograma>();
   // Columnas a mostrar
   displayedColumns: string[] = [
     'nombre',
@@ -237,50 +232,31 @@ export class ReporteProgramasComponent implements OnInit{
 
     return (totalDevengado / totalCodificado) * 100;
   }
-  cargarDataRICompetencias() {
-    this.loadingService.show();
-    this.competenciaService.obtenerReportesICompetencias().subscribe(
-      (data: ReportICompetencia[]) => {
-        this.rCompentencias = data;
-        this.tableData.data = this.rCompentencias;
-        this.resultadosEncontradosporEstado = this.rCompentencias.length > 0;
 
-        this.actualizarGrafica(this.rCompentencias);
-        console.log(this.rCompentencias);
+  cargarDataRIProgramas() {
+    this.loadingService.show();
+    this.programaService.obtenerReportesIProgramas().subscribe(
+      (data: ReportIPrograma[]) => {
+        this.rProgramas = data;
+        this.tableData.data = this.rProgramas;
+        this.resultadosEncontradosporEstado = this.rProgramas.length > 0;
+
+        this.actualizarGrafica(this.rProgramas);
+        console.log(this.rProgramas);
         this.loadingService.hide();
       },
-      (error: ReportICompetencia) => {
-        console.error('Error al listar las competencias:', error);
+      (error: ReportIPrograma) => {
+        console.error('Error al listar los programas:', error);
         this.loadingService.hide();
         this.resultadosEncontradosporEstado = false;
       }
     );
   }
-  cargarDataRCProyetos() {
-    this.competenciaService.obtenerProyectosPorIdCompetencia(1).subscribe(
-      (data: ReportICProyecto[]) => {
-        this.rCProyectos = data;
-        console.log(this.rCProyectos);
-      },
-      (error: ReportICProyecto) => {
-        console.error('Error al listar las competencias:', error);
-      }
-    );
-  }
-  cargarDataRCPActividades() {
-    this.competenciaService.obtenerActividadesPorIdProyecto(1).subscribe(
-      (data: ReportICPActividades[]) => {
-        this.rCPActividades = data;
-        console.log(this.rCPActividades);
-      },
-      (error: ReportICPActividades) => {
-        console.error('Error al listar las competencias:', error);
-      }
-    );
-  }
+  
+  
   cargarPDF() {
     this.loadingService.show();
-    this.competenciaService.obtenerPDF().subscribe((data) => {
+    this.programaService.obtenerPDF().subscribe((data) => {
       const blob = new Blob([data], { type: 'application/pdf' });
       const unsafeUrl = URL.createObjectURL(blob);
       this.loadingService.hide();
@@ -292,28 +268,28 @@ export class ReporteProgramasComponent implements OnInit{
   filtrarPorColor(color: string) {
     switch (color) {
       case 'verde':
-        this.tableData.data = this.rCompentencias.filter(item => item.porc_ejecucion >= 85);
+        this.tableData.data = this.rProgramas.filter(item => item.porc_ejecucion >= 85);
         break;
       case 'amarillo':
-        this.tableData.data = this.rCompentencias.filter(item => item.porc_ejecucion >= 70 && item.porc_ejecucion <= 84.9);
+        this.tableData.data = this.rProgramas.filter(item => item.porc_ejecucion >= 70 && item.porc_ejecucion <= 84.9);
         break;
       case 'rojo':
-        this.tableData.data = this.rCompentencias.filter(item => item.porc_ejecucion < 70);
+        this.tableData.data = this.rProgramas.filter(item => item.porc_ejecucion < 70);
         break;
       default:
-        this.tableData.data = this.rCompentencias;
+        this.tableData.data = this.rProgramas;
         break;
     }
   }
 
   resetFiltro() {
-    this.tableData.data = this.rCompentencias;
+    this.tableData.data = this.rProgramas;
   }
 
-  rowClicked(compeId: ReportICompetencia) {
-    console.log("Pasando competencia:", compeId);
-    this.router.navigate(['/repor/reporteECompetencia/reporteEProyecto', compeId.id_competencia], {
-      state: { competencia: compeId }
+  rowClicked(programId: ReportIPrograma) {
+    console.log("Pasando programa:", programId);
+    this.router.navigate(['/repor/reporteProgramas/reportePProyecto', programId.id_programa], {
+      state: { programa: programId }
     });
   }
 }

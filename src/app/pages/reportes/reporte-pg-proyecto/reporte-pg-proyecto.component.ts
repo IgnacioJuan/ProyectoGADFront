@@ -1,14 +1,14 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Chart, ChartConfiguration, ChartData, ChartEvent, ChartType } from 'chart.js';
+import { Chart, ChartConfiguration, ChartData, ChartType } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
 import DataLabelsPlugin from 'chartjs-plugin-datalabels';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
-import { CompetenciaService } from 'src/app/services/competencia.service';
 import { LoadingServiceService } from 'src/app/components/loading-spinner/LoadingService.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { ReportICProyecto } from 'src/app/models/ReportICProyecto';
+import { ReportIPProyecto } from 'src/app/models/ReportIPProyecto';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ProgramaService } from 'src/app/services/programa.service';
 
 Chart.register(DataLabelsPlugin);
 @Component({
@@ -19,18 +19,18 @@ Chart.register(DataLabelsPlugin);
 export class ReportePgProyectoComponent implements OnInit {
   @ViewChild(MatPaginator, { static: false }) paginator?: MatPaginator;
   @ViewChild(BaseChartDirective) chart: BaseChartDirective | undefined;
-  rCProyectos!: ReportICProyecto[];
+  rPProyectos!: ReportIPProyecto[];
   resultadosEncontradosporEstado: boolean = true;
   pdfUrl!: SafeResourceUrl;
   nombre: string = '';
-  nombreCompetencia: string = '';
-  id_competencia: any;
+  nombrePrograma: string = '';
+  id_programa: any;
 
   constructor(
     private paginatorIntl: MatPaginatorIntl,
     private loadingService: LoadingServiceService,
     private sanitizer: DomSanitizer,
-    private competenciaService: CompetenciaService,
+    private programaService: ProgramaService,
     private router: Router,
     private rout: ActivatedRoute
   ) {
@@ -160,7 +160,7 @@ export class ReportePgProyectoComponent implements OnInit {
     ],
   };
 
-  actualizarGrafica(data: ReportICProyecto[]) {
+  actualizarGrafica(data: ReportIPProyecto[]) {
     const nombres = data.map(item => item.nombre_proyecto.length > 32 ? item.nombre_proyecto.substring(0, 32) + '...' : item.nombre_proyecto);
     const porcentajes = data.map(item => item.porc_ejecucion);
     const codificados = data.map(item => item.codificado); // Divide por un millón para ajustar la escala
@@ -174,7 +174,7 @@ export class ReportePgProyectoComponent implements OnInit {
     this.chart?.update();
   }
   // Datos para la tabla
-  tableData = new MatTableDataSource<ReportICProyecto>();
+  tableData = new MatTableDataSource<ReportIPProyecto>();
   // Columnas a mostrar
   displayedColumns: string[] = [
     'nombre_proyecto',
@@ -236,20 +236,20 @@ export class ReportePgProyectoComponent implements OnInit {
 
   cargarDataRCProyetos() {
     this.loadingService.show();
-    const idParam = this.rout.snapshot.paramMap.get('id_competencia');
+    const idParam = this.rout.snapshot.paramMap.get('id_programa');
     console.log('DENTRO', idParam)
 
     if (idParam) {
-      this.id_competencia = idParam;
-      const id_competencia = +idParam;
-      this.competenciaService.obtenerProyectosPorIdCompetencia(id_competencia).subscribe(data => {
-        this.rCProyectos = data;
-        this.tableData.data = this.rCProyectos;
+      this.id_programa = idParam;
+      const id_programa = +idParam;
+      this.programaService.obtenerProyectosPorIdProgramas(id_programa).subscribe(data => {
+        this.rPProyectos = data;
+        this.tableData.data = this.rPProyectos;
         this.loadingService.hide();
-        if (this.rCProyectos.length > 0) {
-          this.nombre = this.rCProyectos[0].nombre_proyecto;
-          this.nombreCompetencia = this.rCProyectos[0].nombre_competencia;
-          this.actualizarGrafica(this.rCProyectos); // Asegúrate de actualizar la gráfica aquí
+        if (this.rPProyectos.length > 0) {
+          this.nombre = this.rPProyectos[0].nombre_proyecto;
+          this.nombrePrograma = this.rPProyectos[0].nombre_programa;
+          this.actualizarGrafica(this.rPProyectos); // Asegúrate de actualizar la gráfica aquí
         }
       },
         (error: any) => {
@@ -262,7 +262,7 @@ export class ReportePgProyectoComponent implements OnInit {
 
   cargarPDF() {
     this.loadingService.show();
-    this.competenciaService.obtenerPdfReportICProyecto(this.id_competencia).subscribe((data) => {
+    this.programaService.obtenerPdfReportIPProyecto(this.id_programa).subscribe((data) => {
       const blob = new Blob([data], { type: 'application/pdf' });
       const unsafeUrl = URL.createObjectURL(blob);
       this.loadingService.hide();
@@ -274,33 +274,33 @@ export class ReportePgProyectoComponent implements OnInit {
   filtrarPorColor(color: string) {
     switch (color) {
       case 'verde':
-        this.tableData.data = this.rCProyectos.filter(item => item.porc_ejecucion >= 85);
+        this.tableData.data = this.rPProyectos.filter(item => item.porc_ejecucion >= 85);
         break;
       case 'amarillo':
-        this.tableData.data = this.rCProyectos.filter(item => item.porc_ejecucion >= 70 && item.porc_ejecucion <= 84.9);
+        this.tableData.data = this.rPProyectos.filter(item => item.porc_ejecucion >= 70 && item.porc_ejecucion <= 84.9);
         break;
       case 'rojo':
-        this.tableData.data = this.rCProyectos.filter(item => item.porc_ejecucion < 70);
+        this.tableData.data = this.rPProyectos.filter(item => item.porc_ejecucion < 70);
         break;
       default:
-        this.tableData.data = this.rCProyectos;
+        this.tableData.data = this.rPProyectos;
         break;
     }
   }
 
   resetFiltro() {
-    this.tableData.data = this.rCProyectos;
+    this.tableData.data = this.rPProyectos;
   }
 
-  rowClicked(proId: ReportICProyecto) {
+  rowClicked(proId: ReportIPProyecto) {
     console.log("Pasando proyecto:", proId);
-    this.router.navigate(['/repor/reporteECompetencia/reporteEProyecto/reporteEActividad', proId.id_proyecto], {
+    this.router.navigate(['/repor/reporteProgramas/reportePProyecto/reportePActividad', proId.id_proyecto], {
       state: { proyecto: proId }
     });
   }
 
   backCompetencias() {
-    this.router.navigate(['/repor/reporteECompetencia']);
+    this.router.navigate(['/repor/reporteProgramas']);
   }
 
 }
