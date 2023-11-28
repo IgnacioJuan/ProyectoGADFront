@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
-import { map, Observable, catchError, of } from 'rxjs';
+import { map, Observable, catchError, of, throwError } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import baserUrl from './helper';
 import { Programa, ProgramaUsuarioDTO } from '../models/Programa';
+import { ReportIPrograma } from '../models/ReportIPrograma';
+import { ReportIPProyecto } from '../models/ReportIPProyecto';
 
 
 @Injectable({
@@ -12,7 +14,10 @@ export class ProgramaService {
 
   private baseUrl: string = `${baserUrl}/api/programa`;
   constructor(private http: HttpClient) { }
-
+  private handleError(error: any) {
+    console.error('Error:', error);
+    return throwError(error);
+  }
   crear(programa: Programa): Observable<Programa> {
     return this.http.post<Programa>(`${this.baseUrl}/crear`, programa);
   }
@@ -44,5 +49,33 @@ export class ProgramaService {
   buscarProgramasPorNombreDTO(nombre: string): Observable<Programa[]> {
     return this.http.get<Programa[]>(`${this.baseUrl}/buscarprogramanombre/${nombre}`);
   }
+
+  /// reporte de programas / departamentos 
+  obtenerReportesIProgramas(): Observable<ReportIPrograma[]> {
+    return this.http.get<ReportIPrograma[]>(`${baserUrl}/api/programa/reporteiprogramas`)
+      .pipe(catchError(this.handleError));
+  }
+
+  obtenerProyectosPorIdProgramas(id_programa: number): Observable<ReportIPProyecto[]> {
+    return this.http.get<ReportIPProyecto[]>(`${baserUrl}/api/programa/reporteipproyectos/${id_programa}`)
+      .pipe(catchError(this.handleError));
+  }
+
+  obtenerPDF(): Observable<Blob> {
+    const headers = new HttpHeaders({
+      'Accept': 'application/pdf'
+    });
+
+    return this.http.get(`${baserUrl}/api/programa/export-pdf`, { headers: headers, responseType: 'blob' });
+  }
+
+  obtenerPdfReportIPProyecto(id_programa: number): Observable<Blob> {
+    const headers = new HttpHeaders({
+      'Accept': 'application/pdf'
+    });
+
+    return this.http.get(`${baserUrl}/api/programa/export-pdf-report-ipp/${id_programa}`, { headers: headers, responseType: 'blob' });
+  }
+
 }
 
