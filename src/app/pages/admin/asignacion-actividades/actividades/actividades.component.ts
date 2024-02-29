@@ -161,7 +161,7 @@ export class ActividadesComponent implements OnInit {
     console.log(this.poa);
     const tipoPeriodo = data.tipo_periodo;
     console.log('Tipo de período:', tipoPeriodo);
-    this.listar(this.poa.id_poa);
+    this.listar(data.id_poa);
     this.Listado(this.poa.id_poa);
     this.actividadservice.obtenerActividades().subscribe((data: ActividadesPoa[]) => {
       this.act = data;
@@ -574,10 +574,6 @@ export class ActividadesComponent implements OnInit {
     } else {
       this.dataSource3.data = this.listaUsuarios;
     }
-  }
-
-  formatNumber(value: number): string {
-    return value.toFixed(2);
   }
 
   //PROCESOS PARA LISTAR USUARIOS DE UNA ACTIVIDAD

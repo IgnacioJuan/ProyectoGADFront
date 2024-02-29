@@ -49,25 +49,25 @@
             <ng-container matColumnDef="presupuesto_referencial">
               <th mat-header-cell *matHeaderCellDef>PRESUPUESTO REFERENCIAL</th>
               <td mat-cell *matCellDef="let elemento" class="align-right-dollar">
-                {{ formatNumber(elemento.presupuesto_referencial) }}
+                {{elemento.presupuesto_referencial}}
               </td>
             </ng-container>
             <ng-container matColumnDef="recursos_propios">
               <th mat-header-cell *matHeaderCellDef>R. PROPIOS</th>
               <td mat-cell *matCellDef="let elemento" class="align-right-dollar">
-                {{ formatNumber(elemento.recursos_propios) }}
+                {{elemento.recursos_propios}}
               </td>
             </ng-container>
             <ng-container matColumnDef="codificado">
               <th mat-header-cell *matHeaderCellDef>CODIFICADO</th>
               <td mat-cell *matCellDef="let elemento" class="align-right-dollar">
-                {{ formatNumber(elemento.codificado) }}
+                {{elemento.codificado}}
               </td>
             </ng-container>
             <ng-container matColumnDef="devengado">
               <th mat-header-cell *matHeaderCellDef>DEVENGADO</th>
               <td mat-cell *matCellDef="let elemento" class="align-right-dollar">
-                {{ formatNumber(elemento.devengado) }}
+                {{elemento.devengado}}
               </td>
             </ng-container>
             <ng-container matColumnDef="estado">
