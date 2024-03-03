@@ -54,6 +54,8 @@ filterPost = '';
 filteredComponentes: any[] = [];
 resultadosEncontrados: boolean = true;
 
+ocultar = false;
+
 dataSource = new MatTableDataSource<MetasPDOT>();
 
 columnasUsuario: string[] = ['id_meta_pdot', 'nombre', 'descripcion','meta_final', 'linea_base', 'cantidadIndicadores', 'actions'];

@@ -1,13 +1,13 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {EjeService} from "../../../../services/eje.service";
-import {Eje} from "../../../../models/eje";
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { EjeService } from "../../../../services/eje.service";
+import { Eje } from "../../../../models/eje";
 import Swal from "sweetalert2";
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 
-import {MatTableDataSource} from "@angular/material/table";
-import {MatPaginator, MatPaginatorIntl} from "@angular/material/paginator";
-import {Router} from "@angular/router";
-import {LoadingServiceService} from "../../../../components/loading-spinner/LoadingService.service";
+import { MatTableDataSource } from "@angular/material/table";
+import { MatPaginator, MatPaginatorIntl } from "@angular/material/paginator";
+import { Router } from "@angular/router";
+import { LoadingServiceService } from "../../../../components/loading-spinner/LoadingService.service";
 
 
 @Component({
@@ -15,7 +15,7 @@ import {LoadingServiceService} from "../../../../components/loading-spinner/Load
   templateUrl: './ejes-lista.component.html',
   styleUrls: ['./ejes-lista.component.css']
 })
-export class EjesListaComponent implements OnInit{
+export class EjesListaComponent implements OnInit {
   formComponentes: FormGroup;
   guardadoExitoso: boolean = false;
   miModal!: ElementRef;
@@ -23,9 +23,9 @@ export class EjesListaComponent implements OnInit{
   itemsPerPageLabel = 'Ejes por página';
   nextPageLabel = 'Siguiente';
   lastPageLabel = 'Última';
-  firstPageLabel='Primera';
-  previousPageLabel='Anterior';
-  rango:any= (page: number, pageSize: number, length: number) => {
+  firstPageLabel = 'Primera';
+  previousPageLabel = 'Anterior';
+  rango: any = (page: number, pageSize: number, length: number) => {
     if (length == 0 || pageSize == 0) {
       return `0 de ${length}`;
     }
@@ -41,17 +41,17 @@ export class EjesListaComponent implements OnInit{
   //
   public componentes = new Eje();
   listaComponentes: Eje[] = [];
-  numeroObjetivos:number=0;
+  numeroObjetivos: number = 0;
 
-
+  ocultar = false;
   //Buscar
   filterPost: string = "";
   filteredComponentes: any[] = [];
   resultadosEncontrados: boolean = true;
-//aqui esta llenandose el array de componentes
+  //aqui esta llenandose el array de componentes
   dataSource = new MatTableDataSource<Eje>();
 
-  columnasUsuario: string[] = ['id_componente', 'nombre','cantidadObjetivoPDOT', 'actions'];
+  columnasUsuario: string[] = ['id_componente', 'nombre', 'cantidadObjetivoPDOT', 'actions'];
 
   @ViewChild('datosModalRef') datosModalRef: any;
   @ViewChild(MatPaginator, { static: false }) paginator?: MatPaginator;
@@ -69,10 +69,10 @@ export class EjesListaComponent implements OnInit{
     });
     this.paginatorIntl.nextPageLabel = this.nextPageLabel;
     this.paginatorIntl.lastPageLabel = this.lastPageLabel;
-    this.paginatorIntl.firstPageLabel=this.firstPageLabel;
-    this.paginatorIntl.previousPageLabel=this.previousPageLabel;
+    this.paginatorIntl.firstPageLabel = this.firstPageLabel;
+    this.paginatorIntl.previousPageLabel = this.previousPageLabel;
     this.paginatorIntl.itemsPerPageLabel = this.itemsPerPageLabel;
-    this.paginatorIntl.getRangeLabel=this.rango;
+    this.paginatorIntl.getRangeLabel = this.rango;
   }
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator || null;

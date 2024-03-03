@@ -29,8 +29,8 @@
         <div class="mat-elevation-z8 table-responsive" style="margin-bottom: 5%">
           <table mat-table [dataSource]="dataSource">
             <ng-container matColumnDef="id_competencia">
-              <th mat-header-cell *matHeaderCellDef>ID</th>
-              <td mat-cell *matCellDef="let elemento">
+              <th mat-header-cell *matHeaderCellDef [style.display]="ocultar? '' : 'none'">ID</th>
+              <td mat-cell *matCellDef="let elemento" [style.display]="ocultar? '' : 'none'">
                 {{ elemento.id_competencia }}
               </td>
             </ng-container>
@@ -51,12 +51,8 @@
             <ng-container matColumnDef="actions">
               <th mat-header-cell *matHeaderCellDef>ACCIONES</th>
               <td mat-cell *matCellDef="let elemento">
-                <button
-                  class="btn btn-danger"
-                  style="background-color: red"
-                  (click)="eliminar(elemento.id_competencia)"
-                  style="margin-right: 5%"
-                >
+                <button class="btn btn-danger" style="background-color: red" (click)="eliminar(elemento.id_competencia)"
+                  style="margin-right: 5%">
                   <i class="fas fa-trash"></i>
                 </button>
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#materiaModal"

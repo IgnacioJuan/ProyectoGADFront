@@ -43,7 +43,7 @@ export class ObjetivoodsListaComponent implements OnInit {
   public componentes = new Objetivoods();
   listaComponentes: Objetivoods[] = [];
   numeroObjetivos: number = 0;
-
+  ocultar = false;
 
   //Buscar
   filterPost: string = "";

@@ -19,7 +19,7 @@ export class ArchivosRechazadosComponent implements OnInit {
   public evi = new ArchivosRechazados();
   archivos: any[] = [];
   archivo: ActividadArchivosRechazados = new ActividadArchivosRechazados();
-
+  ocultar = false;
   //tabla
   itemsPerPageLabel = 'Evidencias por página';
   nextPageLabel = 'Siguiente';

@@ -21,13 +21,13 @@ export class CrearcompetenciaComponent implements OnInit {
   itemsPerPageLabel = 'Competencias por página';
   nextPageLabel = 'Siguiente';
   lastPageLabel = 'Última';
-  firstPageLabel='Primera';
-  previousPageLabel='Anterior';
-  rango:any= (page: number, pageSize: number, length: number) => {
+  firstPageLabel = 'Primera';
+  previousPageLabel = 'Anterior';
+  rango: any = (page: number, pageSize: number, length: number) => {
     if (length == 0 || pageSize == 0) {
       return `0 de ${length}`;
     }
-  
+
     length = Math.max(length, 0);
     const startIndex = page * pageSize;
     const endIndex =
@@ -37,10 +37,11 @@ export class CrearcompetenciaComponent implements OnInit {
     return `${startIndex + 1} - ${endIndex} de ${length}`;
   };
 
+  ocultar = false;
 
   public compete = new Competencia();
   competencias: Competencia[] = [];
-  
+
 
   filterPost = '';
   dataSource = new MatTableDataSource<Competencia>();
@@ -50,7 +51,7 @@ export class CrearcompetenciaComponent implements OnInit {
   @ViewChild(MatPaginator, { static: false }) paginator?: MatPaginator;
 
   constructor(
-    private competenciasservice: CompetenciaService,private paginatorIntl: MatPaginatorIntl,
+    private competenciasservice: CompetenciaService, private paginatorIntl: MatPaginatorIntl,
     private router: Router, private fb: FormBuilder,
     private loadingService: LoadingServiceService
 
@@ -61,10 +62,10 @@ export class CrearcompetenciaComponent implements OnInit {
     });
     this.paginatorIntl.nextPageLabel = this.nextPageLabel;
     this.paginatorIntl.lastPageLabel = this.lastPageLabel;
-    this.paginatorIntl.firstPageLabel=this.firstPageLabel;
-    this.paginatorIntl.previousPageLabel=this.previousPageLabel;
+    this.paginatorIntl.firstPageLabel = this.firstPageLabel;
+    this.paginatorIntl.previousPageLabel = this.previousPageLabel;
     this.paginatorIntl.itemsPerPageLabel = this.itemsPerPageLabel;
-    this.paginatorIntl.getRangeLabel=this.rango;
+    this.paginatorIntl.getRangeLabel = this.rango;
   }
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator || null;
@@ -106,7 +107,7 @@ export class CrearcompetenciaComponent implements OnInit {
       );
 
   }
-    eliminar(id: any) {
+  eliminar(id: any) {
 
 
     Swal.fire({
@@ -124,7 +125,7 @@ export class CrearcompetenciaComponent implements OnInit {
             Swal.fire('Eliminado!', '', 'success')
 
           }
-          
+
         );
 
       }
@@ -175,11 +176,11 @@ export class CrearcompetenciaComponent implements OnInit {
         this.listar();
         Swal.fire('Operacion exitosa!', 'El registro se actualizo con exito', 'success')
       },
-      (error: any) => {
-        console.error('Error al listar las comptenecias:', error);
-        this.loadingService.hide();
+        (error: any) => {
+          console.error('Error al listar las comptenecias:', error);
+          this.loadingService.hide();
 
-      });
+        });
 
   }
 
@@ -192,7 +193,7 @@ export class CrearcompetenciaComponent implements OnInit {
     } else {
       this.dataSource.data = this.competencias;;
     }
-  }  
+  }
 
 }
 

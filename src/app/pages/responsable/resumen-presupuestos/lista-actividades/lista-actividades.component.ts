@@ -5,7 +5,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { ActividadesPoa } from 'src/app/models/ActividadesPoa';
 import { Poa } from 'src/app/models/Poa';
-import { FormsModule } from '@angular/forms'; 
+import { FormsModule } from '@angular/forms';
 import { ActividadespoaService } from 'src/app/services/actividadespoa.service';
 import { UsuarioService } from 'src/app/services/usuario.service';
 import { LoginService } from 'src/app/services/login.service';
@@ -15,8 +15,8 @@ import { LoginService } from 'src/app/services/login.service';
   templateUrl: './lista-actividades.component.html',
   styleUrls: ['./lista-actividades.component.css']
 })
-export class ListaActividadesComponent implements OnInit{
-//tabla
+export class ListaActividadesComponent implements OnInit {
+  //tabla
   itemsPerPageLabel = 'Actividades por página';
   nextPageLabel = 'Siguiente';
   lastPageLabel = 'Última';
@@ -35,18 +35,18 @@ export class ListaActividadesComponent implements OnInit{
         : startIndex + pageSize;
     return `${startIndex + 1} - ${endIndex} de ${length}`;
   };
-  
+
   filterPost: string = '';
   resultadosEncontrados: boolean = true;
   poa: Poa = new Poa();
   actividades: any = [];
   isLoggedIn: boolean;
   user: any;
-
+  ocultar = false;
   dataSource = new MatTableDataSource<ActividadesPoa>();
   columnasUsuario: string[] = ['id_actividad', 'nombre', 'descripcion', 'presupuesto_referencial', 'recursos_propios', 'codificado', 'devengado', 'estado', 'actions'];
 
-  
+
   @ViewChild('datosModalRef') datosModalRef: any;
   @ViewChild(MatPaginator, { static: false }) paginator?: MatPaginator;
 
@@ -54,7 +54,7 @@ export class ListaActividadesComponent implements OnInit{
     private actividadservice: ActividadespoaService, private paginatorIntl: MatPaginatorIntl,
     private router: Router, private fb: FormBuilder, private login: LoginService,
   ) {
-  
+
     this.isLoggedIn = this.login.isLoggedIn();
     this.user = this.login.getUser();
     this.paginatorIntl.nextPageLabel = this.nextPageLabel;
@@ -75,7 +75,7 @@ export class ListaActividadesComponent implements OnInit{
         this.user = this.login.getUser();
       }
     );
-    console.log("Usuario"+this.user.id);
+    console.log("Usuario" + this.user.id);
     this.actividadservice.listarActividadesPorIdResponsable(this.user.id).subscribe(data => {
       this.actividades = data;
       this.dataSource.data = data;

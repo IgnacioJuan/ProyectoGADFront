@@ -13,7 +13,7 @@ import Swal from 'sweetalert2';
   templateUrl: './componentes.component.html',
   styleUrls: ['./componentes.component.css']
 })
-export class ComponentesComponent  implements OnInit {
+export class ComponentesComponent implements OnInit {
   formComponentes: FormGroup;
   guardadoExitoso: boolean = false;
   miModal!: ElementRef;
@@ -21,13 +21,13 @@ export class ComponentesComponent  implements OnInit {
   itemsPerPageLabel = 'Componentes por página';
   nextPageLabel = 'Siguiente';
   lastPageLabel = 'Última';
-  firstPageLabel='Primera';
-  previousPageLabel='Anterior';
-  rango:any= (page: number, pageSize: number, length: number) => {
+  firstPageLabel = 'Primera';
+  previousPageLabel = 'Anterior';
+  rango: any = (page: number, pageSize: number, length: number) => {
     if (length == 0 || pageSize == 0) {
       return `0 de ${length}`;
     }
-  
+
     length = Math.max(length, 0);
     const startIndex = page * pageSize;
     const endIndex =
@@ -39,7 +39,8 @@ export class ComponentesComponent  implements OnInit {
   //
   public componentes = new Componentes();
   listaComponentes: Componentes[] = [];
-  numeroObjetivos:number=0;
+  numeroObjetivos: number = 0;
+  ocultar = false;
 
 
   //Buscar
@@ -58,8 +59,8 @@ export class ComponentesComponent  implements OnInit {
     private paginatorIntl: MatPaginatorIntl,
     private router: Router, private fb: FormBuilder,
     private componentesService: ComponentesService,
-      //importar el spinner como servicio
-      private loadingService: LoadingServiceService
+    //importar el spinner como servicio
+    private loadingService: LoadingServiceService
   ) {
     this.formComponentes = fb.group({
       codigo: ['', Validators.required],
@@ -68,10 +69,10 @@ export class ComponentesComponent  implements OnInit {
     });
     this.paginatorIntl.nextPageLabel = this.nextPageLabel;
     this.paginatorIntl.lastPageLabel = this.lastPageLabel;
-    this.paginatorIntl.firstPageLabel=this.firstPageLabel;
-    this.paginatorIntl.previousPageLabel=this.previousPageLabel;
+    this.paginatorIntl.firstPageLabel = this.firstPageLabel;
+    this.paginatorIntl.previousPageLabel = this.previousPageLabel;
     this.paginatorIntl.itemsPerPageLabel = this.itemsPerPageLabel;
-    this.paginatorIntl.getRangeLabel=this.rango;
+    this.paginatorIntl.getRangeLabel = this.rango;
   }
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator || null;
@@ -80,8 +81,8 @@ export class ComponentesComponent  implements OnInit {
   ngOnInit(): void {
     this.listar();
   }
-  
- 
+
+
   guardar() {
     this.loadingService.show();
 
@@ -154,7 +155,7 @@ export class ComponentesComponent  implements OnInit {
   }
 
   editDatos(componente: Componentes) {
-   this.componentes = componente;
+    this.componentes = componente;
     this.formComponentes = new FormGroup({
       codigo: new FormControl(componente.codigo),
       nombre: new FormControl(componente.nombre),
@@ -164,7 +165,7 @@ export class ComponentesComponent  implements OnInit {
   }
 
   limpiarFormulario() {
-   this.formComponentes.reset();
+    this.formComponentes.reset();
     this.componentes = new Componentes();
   }
 
@@ -172,7 +173,7 @@ export class ComponentesComponent  implements OnInit {
     this.loadingService.show();
 
     this.componentes.codigo = this.formComponentes.value.codigo;
-   this.componentes.nombre = this.formComponentes.value.nombre;
+    this.componentes.nombre = this.formComponentes.value.nombre;
     this.componentes.descripcion = this.formComponentes.value.descripcion;
     this.componentesService.actualizar(this.componentes.id_componente, this.componentes)
       .subscribe(response => {
@@ -181,19 +182,19 @@ export class ComponentesComponent  implements OnInit {
         Swal.fire('Operacion exitosa!', 'El registro se actualizo con exito', 'success')
 
       },
-      (error: any) => {
-        console.error('Error al listar los modeloPoas:', error);
-        this.loadingService.hide();
+        (error: any) => {
+          console.error('Error al listar los modeloPoas:', error);
+          this.loadingService.hide();
 
-      })
-      
+        })
+
   }
 
   verDetalles(componente: any) {
     this.router.navigate(['/sup/flujo_Componentes/componente_objetivoPDOT'], { state: { data: componente } });
   }
- 
-  
+
+
 
   buscar() {
     // Filtra los componentes basados en el filtro

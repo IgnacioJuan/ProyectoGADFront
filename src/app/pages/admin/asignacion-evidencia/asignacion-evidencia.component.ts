@@ -27,7 +27,7 @@ let ELEMENT_DATA: Fenix[] = [];
   styleUrls: ['./asignacion-evidencia.component.css']
 })
 export class AsignacionEvidenciaComponent implements OnInit {
-  columnas: string[] = ['id', 'nombre', 'usuario','evidencia', 'actions'];
+  columnas: string[] = ['id', 'nombre', 'usuario', 'evidencia', 'actions'];
   columnasEvidencia: string[] = ['idevi', 'descripcion', 'actions'];
   columnasEvidenciaAsignacion: string[] = ['idasigna', 'usuario', 'descripcion', 'actions'];
   rowspanArray: number[] = [];
@@ -35,13 +35,13 @@ export class AsignacionEvidenciaComponent implements OnInit {
   itemsPerPageLabel = 'Datos por página';
   nextPageLabel = 'Siguiente';
   lastPageLabel = 'Última';
-  firstPageLabel='Primera';
-  previousPageLabel='Anterior';
-  rango:any= (page: number, pageSize: number, length: number) => {
+  firstPageLabel = 'Primera';
+  previousPageLabel = 'Anterior';
+  rango: any = (page: number, pageSize: number, length: number) => {
     if (length == 0 || pageSize == 0) {
       return `0 de ${length}`;
     }
-  
+
     length = Math.max(length, 0);
     const startIndex = page * pageSize;
     const endIndex =
@@ -80,18 +80,19 @@ export class AsignacionEvidenciaComponent implements OnInit {
   @ViewChild('paginator3') paginator3?: MatPaginator;
   isLoggedIn = false;
   user: any = null;
+  ocultar = false;
   //
-  noti=new Notificacion();
-  idusuario:any=null;
-  nombre:any=null;
-  nombreasignado:any=null;
+  noti = new Notificacion();
+  idusuario: any = null;
+  nombre: any = null;
+  nombreasignado: any = null;
   ngAfterViewInit() {
-     // Usuarios
-     this.dataSource2.paginator = this.paginator|| null
-     // Evidencias
-     this.dataSource3.paginator = this.paginator2|| null
-     // Asignaciones
-     this.dataSource4.paginator = this.paginator3|| null
+    // Usuarios
+    this.dataSource2.paginator = this.paginator || null
+    // Evidencias
+    this.dataSource3.paginator = this.paginator2 || null
+    // Asignaciones
+    this.dataSource4.paginator = this.paginator3 || null
 
 
     this.listar();
@@ -110,7 +111,7 @@ export class AsignacionEvidenciaComponent implements OnInit {
     public login: LoginService,
     //importacion para tabla
     private paginatorIntl: MatPaginatorIntl,
-    private notificationService:NotificacionService
+    private notificationService: NotificacionService
   ) {
     this.formulario = this.formBuilder.group({
       username: { value: '', disabled: true },
@@ -118,12 +119,12 @@ export class AsignacionEvidenciaComponent implements OnInit {
     });
     this.paginatorIntl.nextPageLabel = this.nextPageLabel;
     this.paginatorIntl.lastPageLabel = this.lastPageLabel;
-    this.paginatorIntl.firstPageLabel=this.firstPageLabel;
-    this.paginatorIntl.previousPageLabel=this.previousPageLabel;
+    this.paginatorIntl.firstPageLabel = this.firstPageLabel;
+    this.paginatorIntl.previousPageLabel = this.previousPageLabel;
     this.paginatorIntl.itemsPerPageLabel = this.itemsPerPageLabel;
-    this.paginatorIntl.getRangeLabel=this.rango;
+    this.paginatorIntl.getRangeLabel = this.rango;
     this.dataSource2.data = this.listaUsuarios;
-    
+
   }
 
   ngOnInit(): void {
@@ -149,7 +150,7 @@ export class AsignacionEvidenciaComponent implements OnInit {
   cacheSpan(key: string, accessor: (data: any) => any): void {
     let prevValue: any = undefined;
     let rowspan = 1;
-  
+
     this.listaAsignaEvidencias.forEach((row: any, index: number) => {
       const value = accessor(row);
       if (index === 0) {
@@ -162,7 +163,7 @@ export class AsignacionEvidenciaComponent implements OnInit {
         rowspan = 1;
         prevValue = value;
       }
-  
+
       // Set rowspan for the last group of rows.
       if (index === this.listaAsignaEvidencias.length - 1) {
         this.dataSource4.data[index][key + '-rowspan'] = rowspan;
@@ -174,10 +175,10 @@ export class AsignacionEvidenciaComponent implements OnInit {
   notificar() {
     this.noti.fecha = new Date();
     this.noti.rol = "SUPERADMIN";
-    this.noti.mensaje = this.user.persona.primer_nombre+" "+this.user.persona.primer_apellido+" ha asignado la evidencia " + this.nombreasignado
-    +" a "+this.nombre;
+    this.noti.mensaje = this.user.persona.primer_nombre + " " + this.user.persona.primer_apellido + " ha asignado la evidencia " + this.nombreasignado
+      + " a " + this.nombre;
     this.noti.visto = false;
-    this.noti.usuario =  0;
+    this.noti.usuario = 0;
 
     this.notificationService.crear(this.noti).subscribe(
       (data: Notificacion) => {
@@ -193,9 +194,9 @@ export class AsignacionEvidenciaComponent implements OnInit {
   notificaruser() {
     this.noti.fecha = new Date();
     this.noti.rol = "";
-    this.noti.mensaje = this.user.persona.primer_nombre+" "+this.user.persona.primer_apellido+" te ha asignado la evidencia " + this.nombreasignado;
+    this.noti.mensaje = this.user.persona.primer_nombre + " " + this.user.persona.primer_apellido + " te ha asignado la evidencia " + this.nombreasignado;
     this.noti.visto = false;
-    this.noti.usuario =  this.idusuario;
+    this.noti.usuario = this.idusuario;
 
     this.notificationService.crear(this.noti).subscribe(
       (data: Notificacion) => {
@@ -207,14 +208,14 @@ export class AsignacionEvidenciaComponent implements OnInit {
       }
     );
   }
-  
+
   notificaradmin() {
     this.noti.fecha = new Date();
     this.noti.rol = "ADMIN";
-    this.noti.mensaje = this.user.persona.primer_nombre+" "+this.user.persona.primer_apellido+" ha asignado la evidencia " + this.nombreasignado
-    +" a "+this.nombre;
+    this.noti.mensaje = this.user.persona.primer_nombre + " " + this.user.persona.primer_apellido + " ha asignado la evidencia " + this.nombreasignado
+      + " a " + this.nombre;
     this.noti.visto = false;
-    this.noti.usuario =  0;
+    this.noti.usuario = 0;
 
     this.notificationService.crear(this.noti).subscribe(
       (data: Notificacion) => {
@@ -240,19 +241,19 @@ export class AsignacionEvidenciaComponent implements OnInit {
 
 
   //consumir servicio de fenix para obtener datos de la persona por cedula
-  public consultarPorNombreCompleto(){
-    if (this.fenix.primer_nombre == null && this.fenix.primer_apellido == null || this.fenix.primer_nombre == "" && this.fenix.primer_apellido == ""){
+  public consultarPorNombreCompleto() {
+    if (this.fenix.primer_nombre == null && this.fenix.primer_apellido == null || this.fenix.primer_nombre == "" && this.fenix.primer_apellido == "") {
       Swal.fire('Error', 'Debe llenar los campos', 'error');
-      return; 
+      return;
     }
-    this.fenix_service.getDocenteByNombresCompletos(this.fenix.primer_nombre,this.fenix.primer_apellido).subscribe(
+    this.fenix_service.getDocenteByNombresCompletos(this.fenix.primer_nombre, this.fenix.primer_apellido).subscribe(
       (result) => {
         this.dataSource = result;
         console.log(this.dataSource);
       }
     )
   }
-  
+
   public consultarPorCedula() {
     if (this.fenix.cedula == null || this.fenix.cedula == '') {
       Swal.fire('Error', 'Debe ingresar una cedula', 'error');
@@ -323,7 +324,7 @@ export class AsignacionEvidenciaComponent implements OnInit {
       return;
     }
   }
-  
+
 
 
 
@@ -347,14 +348,14 @@ export class AsignacionEvidenciaComponent implements OnInit {
 
   public seleccionarUsuario(elemento: any) {
     this.usuarioSele.id = elemento.id;
-    console.log("id traido "+this.usuarioSele.id)
+    console.log("id traido " + this.usuarioSele.id)
     this.usuarioSele.username = elemento.usua;
     this.usuarioSele.persona = elemento.nombres;
   }
 
   public AsignaUsuario(element: any) {
     this.asignacion.evidencia.id_evidencia = element.id_evidencia;
-    this.nombreasignado=element.descripcion;
+    this.nombreasignado = element.descripcion;
     this.asignacion.usuario.id = this.usuarioSele.id
     console.log(this.asignacion)
     this.asignarEvidenciaService.createAsigna(this.asignacion)
@@ -363,10 +364,10 @@ export class AsignacionEvidenciaComponent implements OnInit {
 
           this.listar();
           this.Listado();
-          
-          this.nombre=this.usuarioSele.persona.primer_nombre+" "+this.usuarioSele.persona.primer_apellido;
-          this.idusuario=this.usuarioSele.id;
-          console.log("Nombre asignado "+this.nombreasignado+ " Nombre "+this.nombre+" id: "+this.idusuario);
+
+          this.nombre = this.usuarioSele.persona.primer_nombre + " " + this.usuarioSele.persona.primer_apellido;
+          this.idusuario = this.usuarioSele.id;
+          console.log("Nombre asignado " + this.nombreasignado + " Nombre " + this.nombre + " id: " + this.idusuario);
           this.notificar();
           this.notificaradmin();
           this.notificaruser();
@@ -400,12 +401,12 @@ export class AsignacionEvidenciaComponent implements OnInit {
   }
 
 
- ListarAsignacion() {
+  ListarAsignacion() {
     this.asignarEvidenciaService.listarAsignarEvi().subscribe(
       listaAsig => {
         this.listaAsignaEvidencias = listaAsig;
         this.dataSource4.data = this.listaAsignaEvidencias;
-        console.log("Asignaciones"+JSON.stringify(this.dataSource4.data))
+        console.log("Asignaciones" + JSON.stringify(this.dataSource4.data))
         this.calculateRowSpan(); // Llamamos a la función para calcular rowspan
       }
     );
@@ -494,7 +495,7 @@ export class AsignacionEvidenciaComponent implements OnInit {
     );
   }
   crearUsuario() {
-    
+
     console.log(this.usuarioGuardar)
     this.usuariosService.createUsuario(this.usuarioGuardar, this.rol).subscribe(
       () => {
@@ -614,7 +615,7 @@ export class AsignacionEvidenciaComponent implements OnInit {
   }
 
   Actualizar(usuariosdit: Usuario2) {
-    usuariosdit.id=this.usuariosEdit.id;
+    usuariosdit.id = this.usuariosEdit.id;
     Swal.fire({
       title: '¿Desea modificar los campos?',
       showCancelButton: true,
@@ -624,31 +625,31 @@ export class AsignacionEvidenciaComponent implements OnInit {
       if (result.isConfirmed) {
 
         this.usuariosService.actualizar(usuariosdit.id, usuariosdit)
-        .subscribe((response: any) => {
-          Swal.fire(
-            'Usuario Modificado!',
-            'El usuario ha sido modificado éxitosamente',
-            'success'
-          );
-          this.Listado();
-          this.usuariosEdit=new Usuario2();
-          this.usuariosEditGuar=new Usuario2();
-        });
-    } else{
-      Swal.fire('Se ha cancelado la operación', '', 'info')
-    }
+          .subscribe((response: any) => {
+            Swal.fire(
+              'Usuario Modificado!',
+              'El usuario ha sido modificado éxitosamente',
+              'success'
+            );
+            this.Listado();
+            this.usuariosEdit = new Usuario2();
+            this.usuariosEditGuar = new Usuario2();
+          });
+      } else {
+        Swal.fire('Se ha cancelado la operación', '', 'info')
+      }
     })
 
 
   }
 
   listar() {
-    console.log("usuario a consultar "+this.user.id);
+    console.log("usuario a consultar " + this.user.id);
     this.evidenciaService.getEvidenciasAdmin(this.user.id).subscribe(
       listaEvi => {
         this.listaEvidencias = listaEvi; // Asignar la lista directamente
         this.dataSource3.data = this.listaEvidencias;
-        console.log("lista evidencias"+this.listaEvidencias);
+        console.log("lista evidencias" + this.listaEvidencias);
       }
     );
   }

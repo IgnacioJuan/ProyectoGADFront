@@ -21,6 +21,7 @@ export class ModeloProyectoComponent {
   //
   private suscripciones: Subscription[] = [];
 
+  ocultar = false;
   //
   frmProyecto: FormGroup;
   guardadoExitoso: boolean = false;

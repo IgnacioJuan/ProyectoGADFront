@@ -15,7 +15,7 @@ export class ActividadesEvidenciasrechazadasComponent implements OnInit {
   miModal!: ElementRef;
   public evi = new ActividadArchivosRechazados();
   archivos: any[] = [];
-
+  ocultar = false;
   //tabla
   itemsPerPageLabel = 'Evidencias por página';
   nextPageLabel = 'Siguiente';

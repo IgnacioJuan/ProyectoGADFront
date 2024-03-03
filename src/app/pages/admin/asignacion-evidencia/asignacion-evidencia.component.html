@@ -1,9 +1,6 @@
 <body>
   <div class="container bg-light border border-start-0 rounded-4">
-    <figure
-      class="text-center text-dark"
-      style="margin-top: 5%; font-style: italic"
-    >
+    <figure class="text-center text-dark" style="margin-top: 5%; font-style: italic">
       <blockquote class="blockquote text-dark">
         <h1><strong> BUSCAR USUARIOS</strong></h1>
       </blockquote>
@@ -13,32 +10,18 @@
         <form class="example-form">
           <mat-form-field class="example-full-width">
             <mat-label>Cédula:</mat-label>
-            <input
-              matInput
-              placeholder="Ingrese la cédula"
-              [(ngModel)]="fenix.cedula"
-              name="cedula"
-            />
+            <input matInput placeholder="Ingrese la cédula" [(ngModel)]="fenix.cedula" name="cedula" />
           </mat-form-field>
           <mat-form-field class="example-full-width">
             <mat-label>Primer Nombre:</mat-label>
-            <input
-              matInput
-              placeholder="Ingresar un nombre"
-              [(ngModel)]="fenix.primer_nombre"
-              name="primer_nombre"
-            />
+            <input matInput placeholder="Ingresar un nombre" [(ngModel)]="fenix.primer_nombre" name="primer_nombre" />
           </mat-form-field>
           <mat-form-field class="example-full-width">
             <mat-label>Primer Apellido:</mat-label>
-            <input
-              matInput
-              placeholder="Ingrese el apellido"
-              [(ngModel)]="fenix.primer_apellido"
-              name="primer_apellido"
-            />
+            <input matInput placeholder="Ingrese el apellido" [(ngModel)]="fenix.primer_apellido"
+              name="primer_apellido" />
           </mat-form-field>
-          
+
           <button mat-raised-button color="primary" (click)="consultar()">
             Buscar
             <mat-icon>search</mat-icon>
@@ -95,15 +78,9 @@
           <ng-container matColumnDef="acciones">
             <th mat-header-cell *matHeaderCellDef>Acciones</th>
             <td mat-cell *matCellDef="let element">
-              <button
-                (click)="seleccionar(element)"
-                mat-icon-button
-                type="button"
-                class="btn btn-primary"
-                style="background-color: rgb(151, 166, 189); margin-right: 1%"
-                data-bs-toggle="modal"
-                data-bs-target="#staticBackdrop"
-              >
+              <button (click)="seleccionar(element)" mat-icon-button type="button" class="btn btn-primary"
+                style="background-color: rgb(151, 166, 189); margin-right: 1%" data-bs-toggle="modal"
+                data-bs-target="#staticBackdrop">
                 <mat-icon>person_add</mat-icon>
               </button>
             </td>
@@ -112,100 +89,50 @@
           <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
         </table>
 
-        <div
-          class="modal fade"
-          id="staticBackdrop"
-          data-bs-backdrop="static"
-          data-bs-keyboard="false"
-          tabindex="-1"
-          aria-labelledby="staticBackdropLabel"
-          aria-hidden="true"
-          (hidden.bs.modal)="limpiarFormulario()"
-        >
+        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+          aria-labelledby="staticBackdropLabel" aria-hidden="true" (hidden.bs.modal)="limpiarFormulario()">
           <div class="modal-dialog">
             <div class="modal-content">
-              <div
-                class="modal-header"
-                style="background-color: rgb(0, 122, 255)"
-              >
-                <h1
-                  class="modal-title text-center display-2 fw-bold"
-                  style="font-family: Arial, sans-serif; color: white"
-                >
+              <div class="modal-header" style="background-color: rgb(0, 122, 255)">
+                <h1 class="modal-title text-center display-2 fw-bold"
+                  style="font-family: Arial, sans-serif; color: white">
                   Asignar Usuario Responsable
                 </h1>
-                <button
-                  type="button"
-                  class="btn-close"
-                  data-bs-dismiss="modal"
-                  aria-label="Close"
-                  (click)="limpiarFormulario()"
-                ></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                  (click)="limpiarFormulario()"></button>
               </div>
               <div class="modal-body">
                 <div class="input-group mb-3">
                   <span class="input-group-text" id="basic-addon1">Cédula</span>
-                  <input
-                    disabled
-                    type="text"
-                    class="form-control"
-                    placeholder="Username"
-                    aria-label="Username"
-                    aria-describedby="basic-addon1"
-                    [value]="personaSele.cedula"
-                  />
+                  <input disabled type="text" class="form-control" placeholder="Username" aria-label="Username"
+                    aria-describedby="basic-addon1" [value]="personaSele.cedula" />
                 </div>
                 <div class="input-group mb-3">
                   <span class="input-group-text">Nombre y apellido</span>
-                  <input
-                    disabled
-                    type="text"
-                    aria-label="First name"
-                    class="form-control"
-                    [value]="personaSele.primer_nombre"
-                  />
-                  <input
-                    disabled
-                    type="text"
-                    aria-label="Last name"
-                    class="form-control"
-                    [value]="personaSele.primer_apellido"
-                  />
+                  <input disabled type="text" aria-label="First name" class="form-control"
+                    [value]="personaSele.primer_nombre" />
+                  <input disabled type="text" aria-label="Last name" class="form-control"
+                    [value]="personaSele.primer_apellido" />
                 </div>
                 <hr />
                 <mat-card-header>
-                  <mat-card-title
-                    >Ingrese los datos para el nuevo usuario</mat-card-title
-                  >
+                  <mat-card-title>Ingrese los datos para el nuevo usuario</mat-card-title>
                 </mat-card-header>
                 <hr />
                 <form [formGroup]="formulario" (ngSubmit)="guardarUsuario()">
                   <mat-form-field class="full-width" appearance="outline">
                     <mat-label>Nombre de usuario</mat-label>
-                    <input
-                      required
-                      formControlName="username"
-                      name="username"
-                      matInput
-                      placeholder="Digite su nombre de usuario"
-                      [value]="personaSele.cedula"
-                    />
+                    <input required formControlName="username" name="username" matInput
+                      placeholder="Digite su nombre de usuario" [value]="personaSele.cedula" />
                   </mat-form-field>
 
                   <mat-form-field class="full-width" appearance="outline">
                     <mat-label>Contraseña</mat-label>
-                    <input
-                      formControlName="password"
-                      type="password"
-                      matInput
-                      placeholder="Digite su contraseña"
-                    />
-                    <mat-error
-                      *ngIf="
+                    <input formControlName="password" type="password" matInput placeholder="Digite su contraseña" />
+                    <mat-error *ngIf="
                         formulario.get('password')?.invalid &&
                         formulario.get('password')?.touched
-                      "
-                    >
+                      ">
                       El campo de contraseña es obligatorio
                     </mat-error>
                   </mat-form-field>
@@ -216,30 +143,18 @@
                         {{ rol.rolNombre }}
                       </option>
                     </select>
-                    <mat-error
-                      *ngIf="
+                    <mat-error *ngIf="
                         formulario.get('rol')?.invalid &&
                         formulario.get('rol')?.touched
-                      "
-                    >
+                      ">
                       El campo de selección de rol es obligatorio
                     </mat-error>
                   </mat-form-field>
                   <div class="container text-center">
-                    <button
-                      mat-raised-button
-                      color="primary"
-                      data-bs-dismiss="modal"
-                      [disabled]="formulario.invalid"
-                    >
+                    <button mat-raised-button color="primary" data-bs-dismiss="modal" [disabled]="formulario.invalid">
                       <mat-icon>save</mat-icon>Registrar
                     </button>
-                    <button
-                      type="button"
-                      style="margin-left: 5%"
-                      class="btn btn-secondary"
-                      data-bs-dismiss="modal"
-                    >
+                    <button type="button" style="margin-left: 5%" class="btn btn-secondary" data-bs-dismiss="modal">
                       <i class="fas fa-times"></i> Cancelar
                     </button>
                   </div>
@@ -247,7 +162,7 @@
               </div>
             </div>
           </div>
-          
+
         </div>
       </div>
     </div>
@@ -260,21 +175,16 @@
       <div class="card-body">
         <div class="card-body">
           <div class="form-group">
-            <input
-              type="text"
-              class="form-control"
-              name="filterPost3"
-              placeholder="Buscar..."
-              [(ngModel)]="filterPost" 
-            />
+            <input type="text" class="form-control" name="filterPost3" placeholder="Buscar..."
+              [(ngModel)]="filterPost" />
           </div>
         </div>
 
         <div class="mat-elevation-z8 table-responsive" style="margin-bottom: 5%">
           <table mat-table [dataSource]="dataSource2.data | responsable: filterPost">
             <ng-container matColumnDef="id">
-              <th mat-header-cell *matHeaderCellDef>ID</th>
-              <td mat-cell *matCellDef="let elemento">
+              <th mat-header-cell *matHeaderCellDef [style.display]="ocultar? '' : 'none'">ID</th>
+              <td mat-cell *matCellDef="let elemento" [style.display]="ocultar? '' : 'none'">
                 {{ elemento.id }}
               </td>
             </ng-container>
@@ -300,25 +210,14 @@
             <ng-container matColumnDef="actions">
               <th mat-header-cell *matHeaderCellDef>ACCIONES</th>
               <td mat-cell *matCellDef="let elemento">
-                <button
-                  class="btn btn-danger"
-                  style="background-color: red"
-                  (click)="eliminar(elemento)"
-                  style="margin-right: 5%"
-                >
+                <button class="btn btn-danger" style="background-color: red" (click)="eliminar(elemento)"
+                  style="margin-right: 5%">
                   <i class="fas fa-user-times"></i>
                 </button>
-           
-                <button
-                  type="button"
-                  style="margin-left: 6%"
-                  class="btn btn-primary  custom-buttonArchivos"
-                  style="background-color: rgb(32, 67, 165)"
-                  data-bs-toggle="modal"
-                  data-bs-target="#exampleModal4"
-                  (click)="seleccionarUsuario(elemento)"
 
-                >
+                <button type="button" style="margin-left: 6%" class="btn btn-primary  custom-buttonArchivos"
+                  style="background-color: rgb(32, 67, 165)" data-bs-toggle="modal" data-bs-target="#exampleModal4"
+                  (click)="seleccionarUsuario(elemento)">
                   <i class="fas fa-plus-circle"></i>
                 </button>
               </td>
@@ -327,37 +226,19 @@
             <tr mat-header-row *matHeaderRowDef="columnas"></tr>
             <tr mat-row *matRowDef="let fila; columns: columnas"></tr>
           </table>
-          <mat-paginator
-          #paginator
-            [pageSizeOptions]="[1, 10, 20]"
-            showFirstLastButtons
-            aria-label="Seleccione"
-          >
+          <mat-paginator #paginator [pageSizeOptions]="[1, 10, 20]" showFirstLastButtons aria-label="Seleccione">
           </mat-paginator>
         </div>
 
 
         <div class="container" style="text-align: left">
-          <button
-            mat-fab
-            extended
-            color="primary"
-         
-            style="margin-bottom: 5%"
-            (click)="MostrarBotonDetalleEvalucaion()"
-          >
+          <button mat-fab extended color="primary" style="margin-bottom: 5%" (click)="MostrarBotonDetalleEvalucaion()">
             <mat-icon>list</mat-icon>
             LISTADO DE ASIGNACIONES
           </button>
-  
-          <button
-            mat-fab
-            extended
-            color="primary"
-            style="margin-bottom: 5%"
-            (click)="OcultarbotonDetalleEvalucaion()"
-            *ngIf="mostrarbotonDetalle"
-          >
+
+          <button mat-fab extended color="primary" style="margin-bottom: 5%" (click)="OcultarbotonDetalleEvalucaion()"
+            *ngIf="mostrarbotonDetalle">
             <span>Ocultar</span>
             <mat-icon class="hide-icon">visibility_off</mat-icon>
           </button>
@@ -369,28 +250,25 @@
 
         <div class="card" *ngIf="mostrarbotonDetalle">
           <div class="card-header">
-            <figure
-              class="text-center text-dark"
-              style="margin-top: 5%; font-style: italic"
-            >
+            <figure class="text-center text-dark" style="margin-top: 5%; font-style: italic">
               <blockquote class="blockquote text-dark">
                 <h1><strong> ASIGNACIÓN DE EVIDENCIAS</strong></h1>
               </blockquote>
             </figure>
           </div>
           <div class="card-body">
-            <div class= "table-responsive mat-elevation-z8" style="margin-bottom: 5%">
+            <div class="table-responsive mat-elevation-z8" style="margin-bottom: 5%">
               <table mat-table [dataSource]="dataSource4">
                 <ng-container matColumnDef="idasigna">
-                  <th mat-header-cell *matHeaderCellDef>ID</th>
-                  <td mat-cell *matCellDef="let elemento">
+                  <th mat-header-cell *matHeaderCellDef [style.display]="ocultar? '' : 'none'">ID</th>
+                  <td mat-cell *matCellDef="let elemento" [style.display]="ocultar? '' : 'none'">
                     {{ elemento.id_asignacion_evidencia}}
                   </td>
                 </ng-container>
                 <ng-container matColumnDef="usuario">
                   <th mat-header-cell *matHeaderCellDef>USUARIO</th>
                   <td mat-cell *matCellDef="let elemento; let i = index" [attr.rowspan]="rowspanArray[i]"
-                      [style.display]="rowspanArray[i] ? '' : 'none'">
+                    [style.display]="rowspanArray[i] ? '' : 'none'">
                     {{ elemento.usuario.persona.primer_nombre }}
                     {{ elemento.usuario.persona.primer_apellido }}
                   </td>
@@ -401,67 +279,42 @@
                     {{ elemento.evidencia.descripcion }}
                   </td>
                 </ng-container>
-            
-  
+
+
                 <ng-container matColumnDef="actions">
                   <th mat-header-cell *matHeaderCellDef>ACCIONES</th>
                   <td mat-cell *matCellDef="let element">
-                    <button
-                    class="btn btn-danger"
-                    style="background-color: red"
-                    (click)="eliminarAsignacion(element)"
-                    style="margin-right: 5%"
-                  >
-                    <i class="fas fa-user-times"></i>
-                  </button>
-                 
+                    <button class="btn btn-danger" style="background-color: red" (click)="eliminarAsignacion(element)"
+                      style="margin-right: 5%">
+                      <i class="fas fa-user-times"></i>
+                    </button>
+
                   </td>
                 </ng-container>
-  
+
                 <tr mat-header-row *matHeaderRowDef="  columnasEvidenciaAsignacion"></tr>
                 <tr mat-row *matRowDef="let fila; columns:   columnasEvidenciaAsignacion"></tr>
               </table>
-              <mat-paginator
-              #paginator3
-              [pageSizeOptions]="[5, 10, 20]"
-              showFirstLastButtons
-              aria-label="Select page of periodic elements"
-            >
-            </mat-paginator>
+              <mat-paginator #paginator3 [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
+                aria-label="Select page of periodic elements">
+              </mat-paginator>
             </div>
           </div>
         </div>
-  
 
 
 
-        <div
-          class="modal fade"
-          id="exampleModal4"
-          tabindex="-1"
-          aria-labelledby="exampleModalLabel"
-          aria-hidden="true"
-        >
+
+        <div class="modal fade" id="exampleModal4" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
           <div class="modal-dialog modal-xl">
             <div class="modal-content" style="height: 89%">
-              <div
-                class="modal-header text-center"
-                style="background-color: rgb(0, 122, 255)"
-              >
+              <div class="modal-header text-center" style="background-color: rgb(0, 122, 255)">
                 <strong>
-                  <h1
-                    class="modal-title font-weight-bold"
-                    style="font-family: Arial, sans-serif; color: white"
-                  >
+                  <h1 class="modal-title font-weight-bold" style="font-family: Arial, sans-serif; color: white">
                     Asignar Evidencia
                   </h1>
                 </strong>
-                <button
-                  type="button"
-                  class="btn-close"
-                  data-bs-dismiss="modal"
-                  aria-label="Close"
-                ></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
                 <div class="row">
@@ -477,16 +330,18 @@
                         <div class="row">
                           <div class="col-md-12">
                             <div class="form-floating mb-3">
-                              <input disabled type="text" class="form-control" id="floatingInput" [value]="usuarioSele.username" />
+                              <input disabled type="text" class="form-control" id="floatingInput"
+                                [value]="usuarioSele.username" />
                               <label for="floatingInput">Usuario</label>
                             </div>
                           </div>
                           <div class="col-md-6">
                             <div class="form-floating mb-3">
-                              <input disabled type="text" class="form-control" id="floatingInput" [value]="usuarioSele.persona" />
+                              <input disabled type="text" class="form-control" id="floatingInput"
+                                [value]="usuarioSele.persona" />
                               <label for="floatingInput">Nombres</label>
                             </div>
-                          </div> 
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -499,17 +354,14 @@
                     <div class="card">
                       <div class="card-header">
                         <h2>Listado de Evidencias</h2>
-                     
+
                       </div>
                       <div class="card-body">
-                        <div
-                          class="mat-elevation-z8"
-                          style="margin-bottom: 10%"
-                        >
+                        <div class="mat-elevation-z8" style="margin-bottom: 10%">
                           <table mat-table [dataSource]="dataSource3">
                             <ng-container matColumnDef="idevi">
-                              <th mat-header-cell *matHeaderCellDef>ID</th>
-                              <td mat-cell *matCellDef="let elemento">
+                              <th mat-header-cell *matHeaderCellDef [style.display]="ocultar? '' : 'none'">ID</th>
+                              <td mat-cell *matCellDef="let elemento" [style.display]="ocultar? '' : 'none'">
                                 {{ elemento.id_evidencia }}
                               </td>
                             </ng-container>
@@ -528,25 +380,15 @@
                                 ASIGNAR
                               </th>
                               <td mat-cell *matCellDef="let element">
-                                <button
-                                  type="button"
-                                  style="margin-left: 5%"
-                                  class="btn btn-primary"
-                                  (click)="AsignaUsuario(element)"
-                                >
+                                <button type="button" style="margin-left: 5%" class="btn btn-primary"
+                                  (click)="AsignaUsuario(element)">
                                   <i class="fas fa-plus"></i>
                                 </button>
                               </td>
                             </ng-container>
 
-                            <tr
-                              mat-header-row
-                              *matHeaderRowDef="columnasEvidencia"
-                            ></tr>
-                            <tr
-                              mat-row
-                              *matRowDef="let fila; columns: columnasEvidencia"
-                            ></tr>
+                            <tr mat-header-row *matHeaderRowDef="columnasEvidencia"></tr>
+                            <tr mat-row *matRowDef="let fila; columns: columnasEvidencia"></tr>
                           </table>
                         </div>
                       </div>
@@ -554,15 +396,8 @@
                   </div>
                 </div>
               </div>
-              <div
-                class="modal-footer"
-                style="background-color: rgb(0, 122, 255)"
-              >
-                <button
-                  type="button"
-                  class="btn btn-danger"
-                  data-bs-dismiss="modal"
-                >
+              <div class="modal-footer" style="background-color: rgb(0, 122, 255)">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
                   <i class="fas fa-times"></i> Cerrar
                 </button>
               </div>

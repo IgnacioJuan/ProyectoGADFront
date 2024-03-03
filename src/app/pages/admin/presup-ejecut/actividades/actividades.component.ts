@@ -29,7 +29,7 @@ import { totalPresupuestoGeneralProjection } from 'src/app/interface/totalPresup
 export class ListaActividadesComponent implements OnInit {
 
   act!: ActividadesPoa[];
-
+  ocultar = false;
 
   //tabla
   itemsPerPageLabel = 'Items por página';
@@ -69,7 +69,7 @@ export class ListaActividadesComponent implements OnInit {
 
   columnasUsuario: string[] = ['id_actividad', 'nombre', 'presupuesto_referencial', 'recursos_propios', 'codificado', 'devengado', 'actions'];
 
-  columnasperiodotot: string[] = ['referencia', 'fechai','inversion', 'ejecucion'];
+  columnasperiodotot: string[] = ['referencia', 'fechai', 'inversion', 'ejecucion'];
 
   @ViewChild('datosModalRef') datosModalRef: any;
   @ViewChild(MatPaginator, { static: false }) paginator?: MatPaginator;
@@ -134,7 +134,7 @@ export class ListaActividadesComponent implements OnInit {
   listaPeriodos: presupuestPeriodoProjection[] = [];
   listaPeriodostotal: totalPresupuestoGeneralProjection[] = [];
 
-  periodotot= new MatTableDataSource<totalPresupuestoGeneralProjection>();
+  periodotot = new MatTableDataSource<totalPresupuestoGeneralProjection>();
   dataSource3 = new MatTableDataSource<presupuestPeriodoProjection>();
   resultadosEncontradosporObservaciones: boolean = true;
 
@@ -149,13 +149,13 @@ export class ListaActividadesComponent implements OnInit {
 
         // Calcula los totales
         const totales = this.calcularTotales(this.listaPeriodos);
-  
+
         // Agrega los totales al final del arreglo
         this.listaPeriodos.push(totales);
-  
+
         // Asigna el arreglo con los totales a dataSource3
         this.dataSource3.data = this.listaPeriodos;
-        
+
         this.resultadosEncontradosporObservaciones =
           this.listaPeriodos.length > 0; // Actualiza la variable según si se encontraron resultados
       },
@@ -167,7 +167,7 @@ export class ListaActividadesComponent implements OnInit {
       }
     );
   }
-  
+
   // Función para calcular los totales
   calcularTotales(listaPeriodos: any[]): any {
     const totales = {
@@ -177,16 +177,16 @@ export class ListaActividadesComponent implements OnInit {
       inversion: 0,
       ejecucion: 0,
     };
-  
+
     for (const periodo of listaPeriodos) {
       // Realiza las operaciones de suma para cada propiedad
       totales.porcentaje += periodo.porcentaje;
       totales.inversion += periodo.inversion;
       totales.ejecucion += periodo.ejecucion;
     }
-  
+
     // Puedes realizar otras operaciones necesarias aquí
-  
+
     return totales;
   }
   esUltimoElemento(index: number): boolean {
@@ -196,18 +196,18 @@ export class ListaActividadesComponent implements OnInit {
     return index === this.listaPeriodostotal.length - 1;
   }
   verDetalless() {
-  
+
     this.periodoService.totalPresupuestoGeneral(this.poa.id_poa).subscribe(
       (data: any) => { // Observa que ahora esperamos un arreglo de TotalPresupuestoGeneralProjection
         this.listaPeriodostotal = data;
         this.loadingService.hide();
-  
+
         // Calcula los totales
         const totales = this.calcularTotaless(this.listaPeriodostotal);
-  
+
         // Agrega los totales al final del arreglo
         this.listaPeriodostotal.push(totales);
-  
+
         // Asigna el arreglo con los totales a dataSource3
         this.periodotot.data = this.listaPeriodostotal;
         console.log(this.periodotot.data)
@@ -216,13 +216,13 @@ export class ListaActividadesComponent implements OnInit {
       },
       (error: any) => {
         this.loadingService.hide();
-  
+
         console.error('Error al listar las observaciones:', error);
         this.resultadosEncontradosporObservaciones = false; // Si ocurre un error, no se encontraron resultados
       }
     );
   }
-  
+
   // Modifica el método calcularTotales para usar la interfaz
   calcularTotaless(listaPeriodostotal: any[]): any {
     const totales = {
@@ -232,12 +232,12 @@ export class ListaActividadesComponent implements OnInit {
       inversion: 0,
       ejecucion: 0,
     };
-  
+
     for (const periodo of listaPeriodostotal) {
       totales.inversion += periodo.inversion;
       totales.ejecucion += periodo.ejecucion;
     }
-  
+
     return totales;
   }
 }

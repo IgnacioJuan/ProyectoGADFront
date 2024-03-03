@@ -1,23 +1,23 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {Objetivoods} from "../../../../models/objetivoods";
-import {MatTableDataSource} from "@angular/material/table";
-import {MatPaginator, MatPaginatorIntl} from "@angular/material/paginator";
-import {Router} from "@angular/router";
-import {ComponentesService} from "../../../../services/componentes.service";
-import {ObjetivoPdotService} from "../../../../services/objetivo-pdot.service";
-import {ObjetivoodsService} from "../../../../services/objetivoods.service";
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
+import { Objetivoods } from "../../../../models/objetivoods";
+import { MatTableDataSource } from "@angular/material/table";
+import { MatPaginator, MatPaginatorIntl } from "@angular/material/paginator";
+import { Router } from "@angular/router";
+import { ComponentesService } from "../../../../services/componentes.service";
+import { ObjetivoPdotService } from "../../../../services/objetivo-pdot.service";
+import { ObjetivoodsService } from "../../../../services/objetivoods.service";
 import Swal from "sweetalert2";
-import {ArchivoService} from "../../../../services/archivo.service";
-import {Archivo} from "../../../../models/Archivo";
-import {Poa} from "../../../../models/Poa";
-import {AprobacionPoa} from "../../../../models/AprobacionPoa";
-import {PoaService} from "../../../../services/poa.service";
-import {LoginService} from "../../../../services/login.service";
-import {AprobacionPoaService} from "../../../../services/aprobacion-poa.service";
-import {AprobacionEvidencia} from "../../../../models/AprobacionEvidencia";
-import {AprobacionEvidenciaService} from "../../../../services/aprobacion-evidencia.service";
-import {LoadingServiceService} from "../../../../components/loading-spinner/LoadingService.service";
+import { ArchivoService } from "../../../../services/archivo.service";
+import { Archivo } from "../../../../models/Archivo";
+import { Poa } from "../../../../models/Poa";
+import { AprobacionPoa } from "../../../../models/AprobacionPoa";
+import { PoaService } from "../../../../services/poa.service";
+import { LoginService } from "../../../../services/login.service";
+import { AprobacionPoaService } from "../../../../services/aprobacion-poa.service";
+import { AprobacionEvidencia } from "../../../../models/AprobacionEvidencia";
+import { AprobacionEvidenciaService } from "../../../../services/aprobacion-evidencia.service";
+import { LoadingServiceService } from "../../../../components/loading-spinner/LoadingService.service";
 
 @Component({
   selector: 'app-evidencias',
@@ -31,7 +31,7 @@ export class EvidenciasComponent implements OnInit {
 
   //Usuario logueado
   user: any = null;
-  rol:any = null;
+  rol: any = null;
   //tabla
   itemsPerPageLabel = 'Evidencias por página';
   nextPageLabel = 'Siguiente';
@@ -56,12 +56,13 @@ export class EvidenciasComponent implements OnInit {
   };
 
   //Columnas Tabla
-  columnasObservaciones: string[] = ['observacion','estadox','fecha_aprobacion','usuario_creacion'];
+  columnasObservaciones: string[] = ['observacion', 'estadox', 'fecha_aprobacion', 'usuario_creacion'];
   columnasUsuario: string[] = [
   ];
   dataSource = new MatTableDataSource<any>();
   dataSource3 = new MatTableDataSource<AprobacionEvidencia>();
 
+  ocultar = false;
   @ViewChild('datosModalRef') datosModalRef: any;
   @ViewChild(MatPaginator, { static: false }) paginator?: MatPaginator;
 
@@ -93,7 +94,7 @@ export class EvidenciasComponent implements OnInit {
     console.log(this.rol)
     this.configurarColumnasUsuario();
   }
-  
+
   configurarColumnasUsuario() {
     this.columnasUsuario = [
       'barrio',
@@ -115,7 +116,7 @@ export class EvidenciasComponent implements OnInit {
 
   //Metodo para listar
 
-  listarPoas( estado: string): void {
+  listarPoas(estado: string): void {
     let username;
     this.loadingService.show();
     if (this.login.getUserRole() === 'RESPONSABLE') {

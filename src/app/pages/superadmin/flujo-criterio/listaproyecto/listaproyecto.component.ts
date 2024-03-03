@@ -40,12 +40,14 @@ export class ProyectosComponent {
   modelopoa: ModeloPoa = new ModeloPoa();
   proyectos: any[] = [];
 
-  public subcrite = new Proyecto(); 
+  public subcrite = new Proyecto();
   subcriterios: Proyecto[] = [];
 
   filterPost: string = "";
   filteredComponentes: any[] = [];
   resultadosEncontrados: boolean = true;
+
+  ocultar = false;
 
   dataSource = new MatTableDataSource<Proyecto>();
   columnasUsuario: string[] = ['id_proyecto', 'nombre', 'codigo', 'objetivo', 'meta', 'poa'];
@@ -63,20 +65,20 @@ export class ProyectosComponent {
     private loadingService: LoadingServiceService
 
   ) {
-    
+
     this.paginatorIntl.nextPageLabel = this.nextPageLabel;
     this.paginatorIntl.lastPageLabel = this.lastPageLabel;
-    this.paginatorIntl.firstPageLabel=this.firstPageLabel;
-    this.paginatorIntl.previousPageLabel=this.previousPageLabel;
+    this.paginatorIntl.firstPageLabel = this.firstPageLabel;
+    this.paginatorIntl.previousPageLabel = this.previousPageLabel;
     this.paginatorIntl.itemsPerPageLabel = this.itemsPerPageLabel;
-    this.paginatorIntl.getRangeLabel=this.rango;
+    this.paginatorIntl.getRangeLabel = this.rango;
   }
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator || null;
   }
   ngOnInit() {
-    
+
     this.listar()
   }
   //optimizar
@@ -93,24 +95,24 @@ export class ProyectosComponent {
       (error: any) => {
         console.error('Error al listar los proyectos:', error);
 
-            this.loadingService.hide();
+        this.loadingService.hide();
 
       }
     );
   }
   verDetalles(proyecto: any) {
-   this.router.navigate(['/sup/flujo-criterio/listarpoausu'], { state: { proyecto: proyecto, modelo: this.modelopoa } });
+    this.router.navigate(['/sup/flujo-criterio/listarpoausu'], { state: { proyecto: proyecto, modelo: this.modelopoa } });
   }
   verProyectos() {
-  this.router.navigate(['/sup/flujo-criterio/listaproyecto']);
+    this.router.navigate(['/sup/flujo-criterio/listaproyecto']);
   }
-  
+
   buscar() {
     this.filteredComponentes = this.proyectos.filter((componente) =>
       componente.nombre.toLowerCase().includes(this.filterPost.toLowerCase())
     );
     this.dataSource.data = this.filteredComponentes;
     this.resultadosEncontrados = this.filteredComponentes.length > 0;
-  }  
+  }
 
 }

@@ -1,34 +1,35 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 
-import {MatTableDataSource} from "@angular/material/table";
-import {MatPaginator, MatPaginatorIntl} from "@angular/material/paginator";
-import {Router} from "@angular/router";
+import { MatTableDataSource } from "@angular/material/table";
+import { MatPaginator, MatPaginatorIntl } from "@angular/material/paginator";
+import { Router } from "@angular/router";
 
 
 import Swal from "sweetalert2";
-import {Objetivopnd} from "../../../../models/objetivopnd";
-import {ObjetivopndService} from "../../../../services/objetivopnd.service";
-import {Componentes} from "../../../../models/Componentes";
-import {Eje} from "../../../../models/eje";
-import {LoadingServiceService} from "../../../../components/loading-spinner/LoadingService.service";
+import { Objetivopnd } from "../../../../models/objetivopnd";
+import { ObjetivopndService } from "../../../../services/objetivopnd.service";
+import { Componentes } from "../../../../models/Componentes";
+import { Eje } from "../../../../models/eje";
+import { LoadingServiceService } from "../../../../components/loading-spinner/LoadingService.service";
 
 @Component({
   selector: 'app-objetivopnd',
   templateUrl: './objetivopnd.component.html',
   styleUrls: ['./objetivopnd.component.css']
 })
-export class ObjetivopndComponent  implements OnInit {
+export class ObjetivopndComponent implements OnInit {
   formComponentes: FormGroup;
   guardadoExitoso: boolean = false;
   miModal!: ElementRef;
+  ocultar = false;
   //tabla
   itemsPerPageLabel = 'Objetivos pnd por página';
   nextPageLabel = 'Siguiente';
   lastPageLabel = 'Última';
-  firstPageLabel='Primera';
-  previousPageLabel='Anterior';
-  rango:any= (page: number, pageSize: number, length: number) => {
+  firstPageLabel = 'Primera';
+  previousPageLabel = 'Anterior';
+  rango: any = (page: number, pageSize: number, length: number) => {
     if (length == 0 || pageSize == 0) {
       return `0 de ${length}`;
     }
@@ -48,14 +49,14 @@ export class ObjetivopndComponent  implements OnInit {
   componentex: Eje = new Eje();
 
   listaComponentes: Objetivopnd[] = [];
-  numeroObjetivos:number=0;
+  numeroObjetivos: number = 0;
 
 
   //Buscar
   filterPost: string = "";
   filteredComponentes: any[] = [];
   resultadosEncontrados: boolean = true;
-//aqui esta llenandose el array de componentes
+  //aqui esta llenandose el array de componentes
   dataSource = new MatTableDataSource<Objetivopnd>();
 
   columnasUsuario: string[] = ['id_componente', 'nombre', 'actions'];
@@ -77,10 +78,10 @@ export class ObjetivopndComponent  implements OnInit {
     });
     this.paginatorIntl.nextPageLabel = this.nextPageLabel;
     this.paginatorIntl.lastPageLabel = this.lastPageLabel;
-    this.paginatorIntl.firstPageLabel=this.firstPageLabel;
-    this.paginatorIntl.previousPageLabel=this.previousPageLabel;
+    this.paginatorIntl.firstPageLabel = this.firstPageLabel;
+    this.paginatorIntl.previousPageLabel = this.previousPageLabel;
     this.paginatorIntl.itemsPerPageLabel = this.itemsPerPageLabel;
-    this.paginatorIntl.getRangeLabel=this.rango;
+    this.paginatorIntl.getRangeLabel = this.rango;
   }
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator || null;
@@ -108,7 +109,7 @@ export class ObjetivopndComponent  implements OnInit {
   guardar() {
     this.loadingService.show();
     this.componentes = this.formComponentes.value;
-    this.componentes.eje=this.componentex;
+    this.componentes.eje = this.componentex;
     this.objetivopndServicio.crearobjetivopnd(this.componentes)
       .subscribe(
         (response) => {

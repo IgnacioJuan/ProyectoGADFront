@@ -21,13 +21,13 @@ export class CrearComponent implements OnInit {
   itemsPerPageLabel = 'Programas por página';
   nextPageLabel = 'Siguiente';
   lastPageLabel = 'Última';
-  firstPageLabel='Primera';
-  previousPageLabel='Anterior';
-  rango:any= (page: number, pageSize: number, length: number) => {
+  firstPageLabel = 'Primera';
+  previousPageLabel = 'Anterior';
+  rango: any = (page: number, pageSize: number, length: number) => {
     if (length == 0 || pageSize == 0) {
       return `0 de ${length}`;
     }
-  
+
     length = Math.max(length, 0);
     const startIndex = page * pageSize;
     const endIndex =
@@ -37,20 +37,19 @@ export class CrearComponent implements OnInit {
     return `${startIndex + 1} - ${endIndex} de ${length}`;
   };
 
-
   public progra = new Programa();
   programas: Programa[] = [];
-  
 
   filterPost = '';
   dataSource = new MatTableDataSource<Programa>();
   columnasUsuario: string[] = ['id_programa', 'nombre', 'descripcion', 'actions'];
 
+  ocultar = false;
   @ViewChild('datosModalRef') datosModalRef: any;
   @ViewChild(MatPaginator, { static: false }) paginator?: MatPaginator;
 
   constructor(
-    private programaservice: ProgramaService,private paginatorIntl: MatPaginatorIntl,
+    private programaservice: ProgramaService, private paginatorIntl: MatPaginatorIntl,
     private router: Router, private fb: FormBuilder,
     private loadingService: LoadingServiceService
 
@@ -61,10 +60,10 @@ export class CrearComponent implements OnInit {
     });
     this.paginatorIntl.nextPageLabel = this.nextPageLabel;
     this.paginatorIntl.lastPageLabel = this.lastPageLabel;
-    this.paginatorIntl.firstPageLabel=this.firstPageLabel;
-    this.paginatorIntl.previousPageLabel=this.previousPageLabel;
+    this.paginatorIntl.firstPageLabel = this.firstPageLabel;
+    this.paginatorIntl.previousPageLabel = this.previousPageLabel;
     this.paginatorIntl.itemsPerPageLabel = this.itemsPerPageLabel;
-    this.paginatorIntl.getRangeLabel=this.rango;
+    this.paginatorIntl.getRangeLabel = this.rango;
   }
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator || null;
@@ -106,7 +105,7 @@ export class CrearComponent implements OnInit {
       );
 
   }
-    eliminar(id: any) {
+  eliminar(id: any) {
     Swal.fire({
       title: 'Estas seguro de eliminar el registro?',
       showDenyButton: true,
@@ -164,19 +163,19 @@ export class CrearComponent implements OnInit {
 
     this.progra.nombre = this.frmCriterio.value.nombre;
     this.progra.descripcion = this.frmCriterio.value.descripcion;
- 
- 
+
+
     this.programaservice.actualizar(this.progra.id_programa, this.progra)
       .subscribe(response => {
         this.progra = new Programa();
         this.listar();
         Swal.fire('Operacion exitosa!', 'El registro se actualizo con exito', 'success')
       },
-      (error: any) => {
-        console.error('Error al listar los programas:', error);
-        this.loadingService.hide();
+        (error: any) => {
+          console.error('Error al listar los programas:', error);
+          this.loadingService.hide();
 
-      });
+        });
 
   }
 
@@ -189,7 +188,7 @@ export class CrearComponent implements OnInit {
     } else {
       this.dataSource.data = this.programas;;
     }
-  }  
+  }
 
-} 
+}
 

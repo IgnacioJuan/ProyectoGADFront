@@ -48,7 +48,7 @@ export class AprobarRechazarDetalleAdminComponent implements OnInit {
     'acciones',
   ];
 
-
+  ocultar = false;
 
   archivoSeleccionado: string = '';
   noRegistros: any;
@@ -57,7 +57,7 @@ export class AprobarRechazarDetalleAdminComponent implements OnInit {
   isSending = false;
   spinnerValue = 0;
   spinnerInterval: any;
-  maxTime: number = 30; 
+  maxTime: number = 30;
   mostrarbotonDetalle = false;
   evidencia: Evidencia = new Evidencia();
   dataSource = new MatTableDataSource<Actividades>();
@@ -102,7 +102,7 @@ export class AprobarRechazarDetalleAdminComponent implements OnInit {
     public login: LoginService,
     private notificationService: NotificacionService,
     //private serviceObser: CriteriosService
-  ) {}
+  ) { }
 
   @ViewChild(MatPaginator, { static: false }) paginator?: MatPaginator;
   ngAfterViewInit() {
@@ -381,40 +381,39 @@ export class AprobarRechazarDetalleAdminComponent implements OnInit {
       if (index >= 0 && index < this.dataSource.data.length) {
         const idActividad = this.dataSource.data[index].id_actividad;
         console.log('idActividad:', idActividad);
-       
+
       } else {
         console.log('Índice fuera de rango');
       }
     });
   }
 
-  
+
 
 
   seleccionarTareaDetalle(element: any) {
     const idActividad = element.id_actividad
     this.noRegistros = null;
- 
+
     this.services.getObservacionByActi(idActividad).subscribe((data) => {
       this.listadoObservaciones = data;
-     
-      
-      if(data.length>0)
-      {
-        this.dataSource3.data=this.listadoObservaciones;
+
+
+      if (data.length > 0) {
+        this.dataSource3.data = this.listadoObservaciones;
         this.disableEvaluar = true;
 
-      }else{
+      } else {
         this.noRegistros = 'No hay registros disponibles.';
 
       }
     });
 
-      this.listar();
-}
+    this.listar();
+  }
 
 
-  
+
 
   listarArchivo(element: any) {
     this.archivo.getarchivoActividad(element.id_actividad).subscribe((data) => {
@@ -538,7 +537,7 @@ export class AprobarRechazarDetalleAdminComponent implements OnInit {
       confirmButtonText: 'Si, eliminarlo!',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.services.eliminarObser(id).subscribe((response) => {});
+        this.services.eliminarObser(id).subscribe((response) => { });
         this.listar();
         Swal.fire('Eliminado!', 'Registro eliminado.', 'success');
       }
@@ -613,7 +612,7 @@ export class AprobarRechazarDetalleAdminComponent implements OnInit {
   }
 
 
-  
+
   Limpiar() {
     this.message = '';
     this.subject = '';
